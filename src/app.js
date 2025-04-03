@@ -40,6 +40,18 @@ query.addEventListener("input", async () => {
   }
 });
 
+query.addEventListener("keydown", async (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    if (!goButton.disabled) {
+      goButton.click();
+    }
+  } else if (e.key === "Enter" && e.shiftKey) {
+    e.preventDefault();
+    query.value += "\n";
+  }
+});
+
 goButton.addEventListener("click", () => {
   if (query.value.length > 0) {
     let url = `${getSearchEngineUrl()}${encodeURIComponent(query.value)}`;
