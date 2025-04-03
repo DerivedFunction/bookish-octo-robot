@@ -570,6 +570,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     document.getElementById("reset").addEventListener("click", async () => {
       localStorage.clear();
+      if (chrome && chrome.permissions) {
+        await chrome.permissions.remove({
+          permissions: ["clipboardRead"],
+        });
+      }
       // Load all data first
       await loadData();
     });
@@ -579,10 +584,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 async function loadData() {
   await loadJsonData();
+
   // Then initialize UI components
+  getGreeting();
   await addSearchEngines();
   await getSearchEngine();
-  getGreeting();
+
   displayWeather(JSON.parse(localStorage.getItem("weatherData")));
   await getSuggestionButtons();
 }
