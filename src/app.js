@@ -20,25 +20,15 @@ const goButton = document.getElementById("go");
 const query = document.getElementById("search");
 clearBtn.addEventListener("click", async () => {
   query.value = "";
-  goButton.disabled = true;
-  goButton.classList.remove("enabled");
-  clearBtn.disabled = true;
-  clearBtn.classList.remove("enabled");
+  toggleButton(clearBtn, false);
+  toggleButton(goButton, false);
   await getSuggestionButtons();
 });
 query.addEventListener("input", async () => {
-  if (query.value.length > 0) {
-    goButton.disabled = false;
-    goButton.classList.add("enabled");
-    clearBtn.disabled = false;
-    clearBtn.classList.add("enabled");
-  } else {
-    goButton.disabled = true;
-    clearBtn.disabled = true;
-    goButton.classList.remove("enabled");
-    clearBtn.classList.remove("enabled");
-    await getSuggestionButtons();
-  }
+  let x = query.value.length > 0;
+  toggleButton(clearBtn, x);
+  toggleButton(goButton, x);
+  if (!x) await getSuggestionButtons();
 });
 
 query.addEventListener("keydown", async (e) => {
@@ -59,6 +49,12 @@ goButton.addEventListener("click", () => {
     window.location.href = url;
   }
 });
+
+function toggleButton(button, enabled) {
+  button.disabled = !enabled;
+  if (enabled) button.classList.add("enabled");
+  else button.classList.remove("enabled");
+}
 
 function getSearchEngineUrl() {
   let engine = JSON.parse(localStorage.getItem("selectedSearchEngine"));
@@ -282,8 +278,7 @@ async function getSuggestionButtons() {
       if (query.value.length == 0 || goButton.disabled) {
         query.value = prompt.prompt;
         query.focus();
-        clearBtn.classList.add("enabled");
-        clearBtn.disabled = false;
+        toggleButton(clearBtn, true);
         findSuggestions();
       } else {
         query.value = prompt.prompt + query.value;
@@ -316,10 +311,8 @@ function findSuggestions() {
     const text = query.value + suggestion;
     suggestionElement.addEventListener("click", () => {
       query.value = text;
-      goButton.disabled = false;
-      goButton.classList.add("enabled");
-      clearBtn.disabled = false;
-      clearBtn.classList.add("enabled");
+      toggleButton(goButton, true);
+      toggleButton(clearBtn, true);
     });
 
     suggestionContainer.appendChild(suggestionElement);
@@ -351,24 +344,17 @@ optionBtn.addEventListener("click", () => {
 });
 
 nameBtn.addEventListener("click", () => {
-  nameBtn.classList.remove("enabled");
+  toggleButton(nameBtn, false);
   if (nameInput.value.length > 0) {
     localStorage.setItem("name", nameInput.value);
   } else {
     localStorage.removeItem("name");
   }
-  nameBtn.disabled = true;
   getGreeting();
 });
 nameInput.addEventListener("input", () => {
-  nameBtn.classList.add("enabled");
-  if (nameInput.value.length > 0) {
-    nameBtn.textContent = "Submit";
-    nameBtn.disabled = false;
-  } else {
-    nameBtn.textContent = "Clear";
-    nameBtn.disabled = false;
-  }
+  toggleButton(nameBtn, true);
+  nameBtn.textContent = nameInput.value.length > 0 ? "Submit" : "Clear";
 });
 document.addEventListener("click", (e) => {
   if (!sidebar.contains(e.target) && !optionBtn.contains(e.target)) {
@@ -391,13 +377,9 @@ pasteBtn.addEventListener("click", async () => {
     const text = await navigator.clipboard.readText();
     query.value += text;
     query.focus();
-    if (query.value.length > 0) {
-      clearBtn.disabled = false;
-      clearBtn.classList.add("enabled");
-    } else {
-      clearBtn.disabled = true;
-      clearBtn.classList.remove("enabled");
-    }
+    let x = query.value.length > 0;
+    toggleButton(clearBtn, x);
+    toggleButton(goButton, x);
   } catch (err) {
     console.error("Failed to read clipboard contents: ", err);
     alert("Unable to access clipboard. Please grant permission and try again.");
@@ -477,8 +459,7 @@ async function storeWeather() {
             coord: location,
           })
         );
-        weatherBtn.classList.remove("enabled");
-        weatherBtn.disabled = true;
+        toggleButton(weatherBtn, false);
       } catch (error) {
         console.error("Error fetching coordinates:", error);
         alert("Something went wrong. Please try again.");
@@ -489,8 +470,7 @@ async function storeWeather() {
   } else {
     localStorage.removeItem("location");
     localStorage.removeItem("weatherData");
-    weatherBtn.classList.remove("enabled");
-    weatherBtn.disabled = true;
+    toggleButton(weatherBtn, false);
     displayWeather(null);
     return;
   }
@@ -579,14 +559,8 @@ async function storeWeather() {
 // Updated event listener
 weatherBtn.addEventListener("click", storeWeather);
 weatherField.addEventListener("input", () => {
-  weatherBtn.classList.add("enabled");
-  if (weatherField.value.length > 0) {
-    weatherBtn.textContent = "Submit";
-    weatherBtn.disabled = false;
-  } else {
-    weatherBtn.textContent = "Clear";
-    weatherBtn.disabled = false;
-  }
+  toggleButton(weatherBtn, true);
+  weatherBtn.textContent = weatherField.value.length > 0 ? "Submit" : "Clear";
 });
 async function loadSimple() {
   getGreeting();
@@ -685,13 +659,11 @@ const bgImgExpSelect = document.getElementById("bg-img-exp");
 const bgBtn = document.getElementById("save-bg");
 
 bgImgExpSelect.addEventListener("change", () => {
-  bgBtn.classList.add("enabled");
-  bgBtn.disabled = false;
+  toggleButton(bgBtn, true);
 });
 
 backgroundSelect.addEventListener("change", () => {
-  bgBtn.classList.add("enabled");
-  bgBtn.disabled = false;
+  toggleButton(bgBtn, true);
 });
 
 bgBtn.addEventListener("click", async () => {
@@ -752,8 +724,7 @@ bgBtn.addEventListener("click", async () => {
   if (bgData.data || selectedOption === "default") {
     await setBgOption(bgData);
   }
-  bgBtn.classList.remove("enabled");
-  bgBtn.disabled = true;
+  toggleButton(bgBtn, false);
 });
 
 // Helper function to schedule background update
@@ -1008,8 +979,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       [(weatherField, nameInput)].forEach((field) => (field.value = ""));
       [weatherBtn, nameBtn].forEach((btn) => {
         btn.textContent = "Submit";
-        btn.classList.remove("enabled");
-        btn.disabled = true;
+        toggleButton(btn, false);
       });
       [bgImgExpSelect, backgroundSelect, trOption].forEach((selectElement) => {
         Array.from(selectElement.options).forEach((option) =>
