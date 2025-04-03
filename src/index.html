@@ -22,14 +22,19 @@
     <div id="sidebar">
       <h1>Options</h1>
       <div>
-        <h2>Name</h2>
+        <div class="horizontal-container">
+          <h2>Name</h2>
+          <button id="submit-name" class="submit">Submit</button>
+        </div>
         <div class="horizontal-container">
           <input type="text" title="name" id="name-field" class="input-field" />
-          <button id="submit-name" class="submit">Submit</button>
         </div>
       </div>
       <div>
-        <h2>Weather</h2>
+        <div class="horizontal-container">
+          <h2>Weather</h2>
+          <button id="submit-weather" class="submit">Submit</button>
+        </div>
         <div class="horizontal-container">
           <input
             type="text"
@@ -38,21 +43,23 @@
             placeholder="Enter Name or Postal Code"
             class="input-field"
           />
-          <button id="submit-weather" class="submit">Submit</button>
         </div>
         <div class="horizontal-container">
           <label for="unit-toggle">Use Fahrenheit instead:</label>
           <input type="checkbox" id="unit-toggle" />
         </div>
         <div>
-          <h2>Background</h2>
+          <div class="horizontal-container">
+            <h2>Background</h2>
+            <button id="save-bg" title="Save" class="submit">Save</button>
+          </div>
           <div class="horizontal-container">
             <select title="background" id="bg-select">
               <option id="default">Default</option>
               <option id="bg-img">Pexels/Unsplash</option>
             </select>
             <select title="expiration" id="bg-img-exp">
-              <option value="never">Never</option>
+              <option value="never">Never Change</option>
               <option value="new-tab">New Tab</option>
               <option value="5-min">5 Minutes</option>
               <option value="30-min">15 Minutes</option>
@@ -62,7 +69,6 @@
               <option value="1-day">1 Day</option>
             </select>
           </div>
-          <button id="save-bg" title="Save" class="submit">Save</button>
         </div>
         <div class="horizontal-container">
           <button id="reset" title="reset">Reset to Defaults</button>

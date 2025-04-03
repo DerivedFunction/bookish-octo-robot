@@ -814,6 +814,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     const bgOption = JSON.parse(localStorage.getItem("bg-option"));
+    backgroundSelect.addEventListener("change", () => {
+      const selectedOption =
+        backgroundSelect.options[backgroundSelect.selectedIndex].id;
+      if (selectedOption === "bg-img") {
+        bgImgExpSelect.style.display = "";
+      } else {
+        bgImgExpSelect.style.display = "none";
+      }
+    });
     if (bgOption) {
       // Set background select
       for (let i = 0; i < backgroundSelect.options.length; i++) {
@@ -822,15 +831,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           break;
         }
       }
-      backgroundSelect.addEventListener("change", () => {
-        const selectedOption =
-          backgroundSelect.options[backgroundSelect.selectedIndex].id;
-        if (selectedOption === "bg-img") {
-          bgImgExpSelect.style.display = "";
-        } else {
-          bgImgExpSelect.style.display = "none";
-        }
-      });
+
       // Set expiration select for bg-img
       if (bgOption.type === "bg-img" && bgOption.expiration) {
         bgImgExpSelect.style.display = "";
@@ -843,6 +844,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       } else {
         bgImgExpSelect.style.display = "none";
       }
+    } else {
+      Array.from(bgImgExpSelect.options).forEach((option) =>
+        option.removeAttribute("selected")
+      );
+      bgImgExpSelect.style.display = "none";
+      Array.from(backgroundSelect.options).forEach((option) =>
+        option.removeAttribute("selected")
+      );
+      backgroundSelect.options[0].selected = true;
     }
 
     document.getElementById("reset").addEventListener("click", async () => {
@@ -855,6 +865,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       weatherBtn.classList.remove("enabled");
       nameBtn.disabled = true;
       weatherBtn.disabled = true;
+      Array.from(bgImgExpSelect.options).forEach((option) =>
+        option.removeAttribute("selected")
+      );
+      bgImgExpSelect.style.display = "none";
+      Array.from(backgroundSelect.options).forEach((option) =>
+        option.removeAttribute("selected")
+      );
+      backgroundSelect.options[0].selected = true;
       if (chrome && chrome.permissions) {
         await chrome.permissions.remove({ permissions: ["clipboardRead"] });
       }
