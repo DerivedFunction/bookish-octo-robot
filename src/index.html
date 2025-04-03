@@ -59,16 +59,32 @@
               <option id="bg-img">Pexels/Unsplash</option>
             </select>
             <select title="expiration" id="bg-img-exp">
-              <option value="never">Never Change</option>
-              <option value="new-tab">New Tab</option>
-              <option value="5-min">5 Minutes</option>
-              <option value="30-min">15 Minutes</option>
-              <option value="30-min">30 Minutes</option>
-              <option value="1-hour">1 Hour</option>
-              <option value="1-hour">12 Hours</option>
-              <option value="1-day">1 Day</option>
+              <option value="-1">Never Change</option>
+              <option value="0">New Tab</option>
+              <option value="5">5 Minutes</option>
+              <!-- 5 * 60 = 300 seconds -->
+              <option value="900">15 Minutes</option>
+              <!-- 15 * 60 = 900 seconds -->
+              <option value="1800">30 Minutes</option>
+              <!-- 30 * 60 = 1800 seconds -->
+              <option value="3600">1 Hour</option>
+              <!-- 60 * 60 = 3600 seconds -->
+              <option value="43200">12 Hours</option>
+              <!-- 12 * 60 * 60 = 43200 seconds -->
+              <option value="86400">1 Day</option>
+              <!-- 24 * 60 * 60 = 86400 seconds -->
             </select>
           </div>
+        </div>
+        <div class="horizontal-container">
+          Fade chatbox after inactivity:
+          <select title="transparent" id="content-transparent">
+            <option value="-1">Never Fade</option>
+            <option value="0">Instantly</option>
+            <option value="5">5 sec</option>
+            <option value="15">15 sec</option>
+            <option value="30">30 sec</option>
+          </select>
         </div>
         <div class="horizontal-container">
           <button id="reset" title="reset">Reset to Defaults</button>
@@ -82,29 +98,31 @@
           <span id="name" class="bg-text"></span>
           <span id="secondary" class="bg-text">How can I help you today?</span>
         </h1>
-        <div class="search-container">
-          <textarea
-            type="text"
-            id="search"
-            placeholder="What can I do for you?"
-            autocomplete="on"
-            value=""
-          ></textarea>
-          <div class="horizontal-container">
-            <div class="right-buttons">
-              <div class="search-engine-container">
-                <button class="search-engine-btn">Search Engine</button>
-                <ul id="search-engine-dropdown" class="dropdown-content"></ul>
+        <div id="chatbox">
+          <div class="search-container">
+            <textarea
+              type="text"
+              id="search"
+              placeholder="What can I do for you?"
+              autocomplete="on"
+              value=""
+            ></textarea>
+            <div class="horizontal-container">
+              <div class="right-buttons">
+                <div class="search-engine-container">
+                  <button class="search-engine-btn">Search Engine</button>
+                  <ul id="search-engine-dropdown" class="dropdown-content"></ul>
+                </div>
               </div>
+              <button id="clear" title="clear" class="submit"></button>
+              <button id="paste" title="paste">Paste</button>
+              <button id="go" title="Submit" disabled="" class="submit">
+                Go
+              </button>
             </div>
-            <button id="clear" title="clear" class="submit"></button>
-            <button id="paste" title="paste">Paste</button>
-            <button id="go" title="Submit" disabled="" class="submit">
-              Go
-            </button>
           </div>
+          <div class="suggestions-container"></div>
         </div>
-        <div class="suggestions-container"></div>
       </div>
     </div>
     <script src="app.js"></script>
