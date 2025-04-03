@@ -857,6 +857,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document.getElementById("reset").addEventListener("click", async () => {
       localStorage.clear();
+      resetBackground(body);
       weatherField.value = "";
       nameInput.value = "";
       weatherBtn.textContent = "Submit";
@@ -873,6 +874,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         option.removeAttribute("selected")
       );
       backgroundSelect.options[0].selected = true;
+
       if (chrome && chrome.permissions) {
         await chrome.permissions.remove({ permissions: ["clipboardRead"] });
       }
