@@ -857,7 +857,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document.getElementById("reset").addEventListener("click", async () => {
       localStorage.clear();
-      resetBackground(body);
+      resetBackground(document.body);
       weatherField.value = "";
       nameInput.value = "";
       weatherBtn.textContent = "Submit";
