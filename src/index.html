@@ -15,8 +15,8 @@
     <div id="header">
       <button id="options-button" title="Options"></button>
       <div class="extra-info">
-        <h2><span id="time">Current time</span></h2>
-        <h2><span id="weather"></span></h2>
+        <h2 class="bg-text"><span id="time">Current time</span></h2>
+        <h2 class="bg-text"><span id="weather"></span></h2>
       </div>
     </div>
     <div id="sidebar">
@@ -44,16 +44,37 @@
           <label for="unit-toggle">Use Fahrenheit instead:</label>
           <input type="checkbox" id="unit-toggle" />
         </div>
-      </div>
-      <div class="horizontal-container">
-        <button id="reset" title="reset">Reset to Defaults</button>
+        <div>
+          <h2>Background</h2>
+          <div class="horizontal-container">
+            <select title="background" id="bg-select">
+              <option id="default">Default</option>
+              <option id="bg-img">Pexels/Unsplash</option>
+            </select>
+            <select title="expiration" id="bg-img-exp">
+              <option value="never">Never</option>
+              <option value="new-tab">New Tab</option>
+              <option value="5-min">5 Minutes</option>
+              <option value="30-min">15 Minutes</option>
+              <option value="30-min">30 Minutes</option>
+              <option value="1-hour">1 Hour</option>
+              <option value="1-hour">12 Hours</option>
+              <option value="1-day">1 Day</option>
+            </select>
+          </div>
+          <button id="save-bg" title="Save" class="submit">Save</button>
+        </div>
+        <div class="horizontal-container">
+          <button id="reset" title="reset">Reset to Defaults</button>
+        </div>
       </div>
     </div>
     <div id="content">
       <div id="navigation">
         <h1>
-          <span id="greeting">Hello</span> <span id="name"></span>
-          <span id="secondary">How can I help you today?</span>
+          <span id="greeting" class="bg-text">Hello</span>
+          <span id="name" class="bg-text"></span>
+          <span id="secondary" class="bg-text">How can I help you today?</span>
         </h1>
         <div class="search-container">
           <textarea

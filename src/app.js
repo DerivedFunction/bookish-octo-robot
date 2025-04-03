@@ -1,5 +1,6 @@
 let aiList = [];
 let prompts = [];
+let wallpapers = [];
 const clearBtn = document.getElementById("clear");
 
 const searchEngineBtn = document.querySelector(".search-engine-btn");
@@ -68,27 +69,63 @@ function getSearchEngineUrl() {
   return engine.url;
 }
 
-async function loadJsonData() {
-  try {
-    let response = await fetch("ai-list.json");
-    if (!response.ok) {
-      throw new Error("Failed to load AI list data");
-    }
-    let data = await response.json();
-    aiList = data["ai-list"];
-    prompts = data["prompts"];
+async function loadJsonData(resetOptions = {}) {
+  // Define variables
+  let aiList, prompts, wallpapers;
 
-    // Store in localStorage as backup
+  // Default reset options
+  const {
+    resetAiList = false,
+    resetPrompts = false,
+    resetWallpapers = false,
+  } = resetOptions;
+
+  // Load from localStorage if available and not resetting
+  if (!resetAiList && localStorage.getItem("search-engines")) {
+    aiList = JSON.parse(localStorage.getItem("search-engines"));
+  }
+  if (!resetPrompts && localStorage.getItem("prompts")) {
+    prompts = JSON.parse(localStorage.getItem("prompts"));
+  }
+  if (!resetWallpapers && localStorage.getItem("wallpapers")) {
+    wallpapers = JSON.parse(localStorage.getItem("wallpapers"));
+  }
+
+  try {
+    // Load AI list and prompts if not already loaded or resetting
+    if (!aiList || resetAiList || !prompts || resetPrompts) {
+      let response = await fetch("ai-list.json");
+      if (!response.ok) {
+        throw new Error("Failed to load AI list data");
+      }
+      let data = await response.json();
+      if (!aiList || resetAiList) aiList = data["ai-list"];
+      if (!prompts || resetPrompts) prompts = data["prompts"];
+    }
+
+    // Load wallpapers if not already loaded or resetting
+    if (!wallpapers || resetWallpapers) {
+      let response = await fetch("sample-wallpaper.json");
+      if (!response.ok) {
+        throw new Error("Failed to load wallpaper list data");
+      }
+      let data = await response.json();
+      wallpapers = data;
+    }
+
+    // Store in localStorage
     localStorage.setItem("search-engines", JSON.stringify(aiList));
     localStorage.setItem("prompts", JSON.stringify(prompts));
+    localStorage.setItem("wallpapers", JSON.stringify(wallpapers));
 
-    return { aiList, prompts };
+    return { aiList, prompts, wallpapers };
   } catch (error) {
     console.error("Error loading JSON data:", error);
-    // Fallback to localStorage if available
+    // Fallback to empty arrays if data wasn't loaded
     return {
-      aiList: JSON.parse(localStorage.getItem("search-engines") || "[]"),
-      prompts: JSON.parse(localStorage.getItem("prompts") || "[]"),
+      aiList: aiList || [],
+      prompts: prompts || [],
+      wallpapers: wallpapers || [],
     };
   }
 }
@@ -119,7 +156,6 @@ async function getSearchEngine() {
     if (engineData.image) {
       const iconUrl = engineData.image;
       if (chrome && chrome.action) {
-        console.log(true);
         fetch(iconUrl)
           .then((response) => response.blob())
           .then((blob) => {
@@ -563,14 +599,212 @@ weatherField.addEventListener("input", () => {
   }
 });
 
+async function loadData() {
+  // Initialize UI components
+  getGreeting();
+  await addSearchEngines();
+  await getSearchEngine();
+  await getSuggestionButtons();
+  displayWeather(JSON.parse(localStorage.getItem("weatherData")));
+
+  const bgOption = JSON.parse(localStorage.getItem("bg-option"));
+  const body = document.body;
+  const now = new Date().getTime();
+  const { wallpapers: loadedWallpapers } = await loadJsonData();
+  wallpapers = loadedWallpapers;
+  if (bgOption && bgOption.data) {
+    switch (bgOption.type) {
+      case "bg-img":
+        if (bgOption.expiration === "never") {
+          // Never expires, use stored Data URL
+          applyBackgroundImage(body, bgOption.data, bgOption.lightModeText);
+        } else if (bgOption.timeExpire === 0 || now > bgOption.timeExpire) {
+          // Expired or new-tab, get new image
+          await setNewBackgroundImage(body, bgOption);
+        } else {
+          // Still valid, use stored Data URL
+          applyBackgroundImage(body, bgOption.data, bgOption.lightModeText);
+        }
+        break;
+      default:
+        resetBackground(body);
+        localStorage.removeItem("bg-option");
+        break;
+    }
+  }
+}
+
+const backgroundSelect = document.getElementById("bg-select");
+const bgText = document.getElementsByClassName("bg-text");
+const bgImgExpSelect = document.getElementById("bg-img-exp");
+const bgBtn = document.getElementById("save-bg");
+bgImgExpSelect.addEventListener("change", () => {
+  bgBtn.classList.add("enabled");
+  bgBtn.disabled = false;
+});
+backgroundSelect.addEventListener("change", () => {
+  bgBtn.classList.add("enabled");
+  bgBtn.disabled = false;
+});
+bgBtn.addEventListener("click", async () => {
+  const selectedOption =
+    backgroundSelect.options[backgroundSelect.selectedIndex].id;
+  const body = document.body;
+  let bgData = JSON.parse(localStorage.getItem("bg-option")) || {
+    type: selectedOption,
+    data: null,
+    expiration: "never",
+    timeExpire: -1,
+    lightModeText: null,
+  };
+
+  // Update type if changed
+  bgData.type = selectedOption;
+
+  switch (selectedOption) {
+    case "bg-img":
+      if (!bgData.data) {
+        // Only set a new image if there’s no existing one
+        await setNewBackgroundImage(body, bgData);
+      } else {
+        // Keep existing image, just apply it
+        applyBackgroundImage(body, bgData.data, bgData.lightModeText);
+      }
+      break;
+    default:
+      resetBackground(body);
+      bgData.data = null;
+      bgData.lightModeText = null;
+      break;
+  }
+
+  // Handle expiration for bg-img
+  if (selectedOption === "bg-img") {
+    const expirationOption =
+      bgImgExpSelect.options[bgImgExpSelect.selectedIndex].value;
+    const now = new Date().getTime();
+    const { type, time } = getExpirationDetails(expirationOption, now);
+    bgData.expiration = type;
+    bgData.timeExpire = time;
+  } else {
+    // Reset expiration for non-bg-img options
+    bgData.expiration = "never";
+    bgData.timeExpire = -1;
+  }
+
+  if (bgData.data || selectedOption === "default") {
+    localStorage.setItem("bg-option", JSON.stringify(bgData));
+  }
+  bgBtn.classList.remove("enabled");
+  bgBtn.disabled = true;
+});
+
+// Helper function to apply background image styles
+function applyBackgroundImage(body, dataUrl, lightModeText) {
+  body.style.backgroundImage = `url('${dataUrl}')`;
+  body.style.backgroundSize = "cover";
+  body.style.backgroundRepeat = "no-repeat";
+  body.style.backgroundPosition = "center";
+  body.style.backgroundColor = "";
+
+  if (lightModeText !== null && lightModeText !== undefined) {
+    Array.from(bgText).forEach((element) => {
+      element.setAttribute(
+        "style",
+        lightModeText
+          ? "color: var(--light-mode-text)"
+          : "color: var(--dark-mode-text)"
+      );
+    });
+  } else {
+    Array.from(bgText).forEach((element) => element.removeAttribute("style"));
+  }
+}
+
+// Helper function to convert blob to Data URL
+async function blobToDataURL(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+// Helper function to set a new background image
+async function setNewBackgroundImage(body, bgData = null) {
+  try {
+    if (!wallpapers || wallpapers.length === 0) {
+      const response = await fetch("sample-wallpaper.json");
+      if (!response.ok) throw new Error("Failed to load wallpaper data");
+      wallpapers = await response.json();
+    }
+
+    const randomIndex = Math.floor(Math.random() * wallpapers.length);
+    const wallpaper = wallpapers[randomIndex];
+
+    // Fetch the image as a blob and convert to Data URL
+    const imageResponse = await fetch(wallpaper.url);
+    if (!imageResponse.ok) throw new Error("Failed to fetch image");
+    const imageBlob = await imageResponse.blob();
+    const dataUrl = await blobToDataURL(imageBlob);
+
+    applyBackgroundImage(body, dataUrl, wallpaper.lightModeText);
+    if (bgData) {
+      bgData.data = dataUrl;
+      bgData.lightModeText = wallpaper.lightModeText;
+    }
+  } catch (error) {
+    console.error("Error setting new background image:", error);
+    if (bgData && bgData.data) {
+      // Fallback to previously stored Data URL
+      applyBackgroundImage(body, bgData.data, bgData.lightModeText);
+    } else {
+      // If no previous data, reset to default
+      resetBackground(body);
+    }
+  }
+}
+
+// Helper function to reset background to default
+function resetBackground(body) {
+  body.style.backgroundImage = "";
+  body.style.backgroundColor = "";
+  Array.from(bgText).forEach((element) => element.removeAttribute("style"));
+}
+
+// Helper function to calculate expiration details
+function getExpirationDetails(expirationOption, now) {
+  switch (expirationOption) {
+    case "never":
+      return { type: "never", time: -1 };
+    case "new-tab":
+      return { type: "new-tab", time: 0 };
+    case "5-min":
+      return { type: "5-min", time: now + 5 * 60 * 1000 };
+    case "15-min":
+      return { type: "15-min", time: now + 15 * 60 * 1000 };
+    case "30-min":
+      return { type: "30-min", time: now + 30 * 60 * 1000 };
+    case "1-hour":
+      return { type: "1-hour", time: now + 60 * 60 * 1000 };
+    case "12-hours":
+      return { type: "12-hours", time: now + 12 * 60 * 60 * 1000 };
+    case "1-day":
+      return { type: "1-day", time: now + 24 * 60 * 60 * 1000 };
+    default:
+      return { type: "never", time: -1 };
+  }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    loadData();
     // Add icons
     appendSvg({ image: "assets/images/options.svg" }, optionBtn, null);
     appendSvg({ image: "assets/images/clear.svg" }, clearBtn, null);
     appendSvg({ image: "assets/images/paste.svg" }, pasteBtn, "4px");
-    sidebar.style.display = "none";
+    await loadData();
+
     const unitToggle = document.getElementById("unit-toggle");
     unitToggle.checked = localStorage.getItem("weather-unit") === "imperial";
     unitToggle.addEventListener("change", () => {
@@ -578,28 +812,55 @@ document.addEventListener("DOMContentLoaded", async () => {
       localStorage.setItem("weather-unit", unit);
       displayWeather(JSON.parse(localStorage.getItem("weatherData")));
     });
+
+    const bgOption = JSON.parse(localStorage.getItem("bg-option"));
+    if (bgOption) {
+      // Set background select
+      for (let i = 0; i < backgroundSelect.options.length; i++) {
+        if (backgroundSelect.options[i].id === bgOption.type) {
+          backgroundSelect.options[i].selected = true;
+          break;
+        }
+      }
+      backgroundSelect.addEventListener("change", () => {
+        const selectedOption =
+          backgroundSelect.options[backgroundSelect.selectedIndex].id;
+        if (selectedOption === "bg-img") {
+          bgImgExpSelect.style.display = "";
+        } else {
+          bgImgExpSelect.style.display = "none";
+        }
+      });
+      // Set expiration select for bg-img
+      if (bgOption.type === "bg-img" && bgOption.expiration) {
+        bgImgExpSelect.style.display = "";
+        for (let i = 0; i < bgImgExpSelect.options.length; i++) {
+          if (bgImgExpSelect.options[i].value === bgOption.expiration) {
+            bgImgExpSelect.options[i].selected = true;
+            break;
+          }
+        }
+      } else {
+        bgImgExpSelect.style.display = "none";
+      }
+    }
+
     document.getElementById("reset").addEventListener("click", async () => {
       localStorage.clear();
+      weatherField.value = "";
+      nameInput.value = "";
+      weatherBtn.textContent = "Submit";
+      nameBtn.textContent = "Submit";
+      nameBtn.classList.remove("enabled");
+      weatherBtn.classList.remove("enabled");
+      nameBtn.disabled = true;
+      weatherBtn.disabled = true;
       if (chrome && chrome.permissions) {
-        await chrome.permissions.remove({
-          permissions: ["clipboardRead"],
-        });
+        await chrome.permissions.remove({ permissions: ["clipboardRead"] });
       }
-      // Load all data first
       await loadData();
     });
   } catch (error) {
     console.error("Error initializing application:", error);
   }
 });
-async function loadData() {
-  await loadJsonData();
-
-  // Then initialize UI components
-  getGreeting();
-  await addSearchEngines();
-  await getSearchEngine();
-
-  displayWeather(JSON.parse(localStorage.getItem("weatherData")));
-  await getSuggestionButtons();
-}

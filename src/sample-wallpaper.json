@@ -1,0 +1,129 @@
+[
+  {
+    "id": 0,
+    "name": "pexels-w-w-299285-889929",
+    "url": "https://images.pexels.com/photos/889929/pexels-photo-889929.jpeg"
+  },
+  {
+    "id": 1,
+    "name": "pexels-dreamypixel-552785",
+    "url": "https://images.pexels.com/photos/552785/pexels-photo-552785.jpeg",
+    "lightModeText": true
+  },
+  {
+    "id": 2,
+    "name": "pexels-esan-2085998",
+    "url": "https://images.pexels.com/photos/2085998/pexels-photo-2085998.jpeg",
+    "lightModeText": false
+  },
+  {
+    "id": 3,
+    "name": "pexels-felixmittermeier-2832061",
+    "url": "https://images.pexels.com/photos/2832061/pexels-photo-2832061.jpeg",
+    "lightModeText": true
+  },
+  {
+    "id": 4,
+    "name": "pexels-lkloeppel-466685",
+    "url": "https://images.pexels.com/photos/466685/pexels-photo-466685.jpeg",
+    "lightModeText": true
+  },
+  {
+    "id": 5,
+    "name": "pexels-nickkwanhk-2745258",
+    "url": "https://images.pexels.com/photos/2745258/pexels-photo-2745258.jpeg",
+    "lightModeText": true
+  },
+  {
+    "id": 6,
+    "name": "pexels-oday-hazeem-4297-106606",
+    "url": "https://images.pexels.com/photos/106606/pexels-photo-106606.jpeg",
+    "lightModeText": true
+  },
+  {
+    "id": 7,
+    "name": "pexels-photo-31422687",
+    "url": "https://images.pexels.com/photos/31422687/pexels-photo-31422687/free-photo-of-close-up-of-a-tortoise-in-its-natural-habitat.jpeg",
+    "lightModeText": false
+  },
+  {
+    "id": 8,
+    "name": "pexels-pixabay-207529",
+    "url": "https://images.pexels.com/photos/207529/pexels-photo-207529.jpeg",
+    "lightModeText": false
+  },
+  {
+    "id": 9,
+    "name": "pexels-pixabay-219692",
+    "url": "https://images.pexels.com/photos/219692/pexels-photo-219692.jpeg",
+    "lightModeText": false
+  },
+  {
+    "id": 10,
+    "name": "pexels-pixabay-262325",
+    "url": "https://images.pexels.com/photos/262325/pexels-photo-262325.jpeg",
+    "lightModeText": false
+  },
+  {
+    "id": 11,
+    "name": "unsplash-1446776811953",
+    "url": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa",
+    "lightModeText": true
+  },
+  {
+    "id": 12,
+    "name": "unsplash-1519681393784",
+    "url": "https://images.unsplash.com/photo-1519681393784-d120267933ba",
+    "lightModeText": false
+  },
+  {
+    "id": 13,
+    "name": "unsplash-1501785888041",
+    "url": "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
+    "lightModeText": true
+  },
+  {
+    "id": 14,
+    "name": "unsplash-1441974231531",
+    "url": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e",
+    "lightModeText": false
+  },
+
+  {
+    "id": 15,
+    "name": "unsplash-1507525428034",
+    "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+    "lightModeText": true
+  },
+  {
+    "id": 16,
+    "name": "unsplash-1532274402911",
+    "url": "https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5",
+    "lightModeText": false
+  },
+  {
+    "id": 17,
+    "name": "unsplash-1469474968028",
+    "url": "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
+    "lightModeText": false
+  },
+
+  {
+    "id": 18,
+    "name": "unsplash-1493246507139",
+    "url": "https://images.unsplash.com/photo-1493246507139-91e8fad9978e",
+    "lightModeText": false
+  },
+  {
+    "id": 19,
+    "name": "unsplash-1508739773434",
+    "url": "https://images.unsplash.com/photo-1508739773434-c26b3d09e071",
+    "lightModeText": true
+  },
+  {
+    "id": 20,
+    "name": "unsplash-1470071459604",
+    "url": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05",
+    "lightModeText": true
+  }
+]

@@ -15,6 +15,8 @@
   --accent-color: #000;
   --svg-color: #000;
   --danger-color: #ff4d4f;
+  --light-mode-text: #333;
+  --dark-mode-text: #e0e0e0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -34,6 +36,8 @@
     --accent-color: #fff;
     --svg-color: #fff;
     --danger-color: #ff4d4f;
+    --light-mode-text: #333;
+    --dark-mode-text: #e0e0e0;
   }
 }
 
@@ -123,7 +127,6 @@ h2 {
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  height: 100px;
   z-index: 10;
   right: 0;
 }
@@ -283,6 +286,7 @@ li:hover {
   position: absolute;
   width: 400px;
   z-index: 50;
+  display: none;
 }
 
 .input-field {
@@ -295,4 +299,38 @@ li:hover {
   font-family: inherit;
   font-size: 0.9em;
   resize: none;
+}
+
+select {
+  width: 40%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 28px;
+  background: var(--item-bg);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 1rem;
+  appearance: none; /* Remove default arrow for custom styling */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+select:hover {
+  background: var(--hover-bg);
+  border-color: var(--border-hover);
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 4px var(--accent-color);
+}
+
+option {
+  background: var(--item-bg);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 8px 12px;
 }
