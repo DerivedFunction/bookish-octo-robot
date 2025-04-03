@@ -391,11 +391,19 @@ pasteBtn.addEventListener("click", async () => {
     const text = await navigator.clipboard.readText();
     query.value += text;
     query.focus();
+    if (query.value.length > 0) {
+      clearBtn.disabled = false;
+      clearBtn.classList.add("enabled");
+    } else {
+      clearBtn.disabled = true;
+      clearBtn.classList.remove("enabled");
+    }
   } catch (err) {
     console.error("Failed to read clipboard contents: ", err);
     alert("Unable to access clipboard. Please grant permission and try again.");
   }
 });
+
 const weather = document.getElementById("weather");
 
 function displayWeather(weatherData) {
@@ -688,7 +696,7 @@ backgroundSelect.addEventListener("change", () => {
 
 bgBtn.addEventListener("click", async () => {
   const selectedOption =
-    backgroundSelect.options[backgroundSelect.selectedIndex].id;
+    backgroundSelect.options[backgroundSelect.selectedIndex].value;
   const body = document.body;
   let bgData = (await getBgOption()) || {
     type: selectedOption,
@@ -718,6 +726,7 @@ bgBtn.addEventListener("click", async () => {
   if (selectedOption === "bg-img") {
     const expirationOption =
       bgImgExpSelect.options[bgImgExpSelect.selectedIndex].value;
+    console.log(expirationOption);
     const now = new Date().getTime();
     const { time } = getExpirationDetails(expirationOption, now);
     bgData.expiration = parseInt(expirationOption);
@@ -952,7 +961,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const bgOption = await getBgOption();
     backgroundSelect.addEventListener("change", () => {
       const selectedOption =
-        backgroundSelect.options[backgroundSelect.selectedIndex].id;
+        backgroundSelect.options[backgroundSelect.selectedIndex].value;
       if (selectedOption === "bg-img") {
         bgImgExpSelect.style.display = "";
       } else {
@@ -993,8 +1002,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document.getElementById("reset").addEventListener("click", async () => {
       localStorage.clear();
+      clearBgOption();
       resetBackground(document.body);
-      [weatherField, nameInput].forEach((field) => (field.value = ""));
+      unitToggle.checked = false;
+      [(weatherField, nameInput)].forEach((field) => (field.value = ""));
       [weatherBtn, nameBtn].forEach((btn) => {
         btn.textContent = "Submit";
         btn.classList.remove("enabled");
