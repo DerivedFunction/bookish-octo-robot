@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Tab (Tabbed)</title>
+    <link
+      rel="shortcut icon"
+      href="/assets/images/icon.svg"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="header">
+      <button id="options-button" title="Options"></button>
+      <div class="extra-info">
+        <h2><span id="time">Current time</span></h2>
+        <h2><span id="weather"></span></h2>
+      </div>
+    </div>
+    <div id="sidebar">
+      <h1>Options</h1>
+      <div>
+        <h2>Name</h2>
+        <div class="horizontal-container">
+          <input type="text" title="name" id="name-field" class="input-field" />
+          <button id="submit-name" class="submit">Submit</button>
+        </div>
+      </div>
+      <div>
+        <h2>Weather</h2>
+        <div class="horizontal-container">
+          <input
+            type="text"
+            title="Weather location"
+            id="weather-field"
+            placeholder="Enter Name or Postal Code"
+            class="input-field"
+          />
+          <button id="submit-weather" class="submit">Submit</button>
+        </div>
+        <div class="horizontal-container">
+          <label for="unit-toggle">Use Fahrenheit instead:</label>
+          <input type="checkbox" id="unit-toggle" />
+        </div>
+      </div>
+      <div class="horizontal-container">
+        <button id="reset" title="reset">Reset to Defaults</button>
+      </div>
+    </div>
+    <div id="content">
+      <div id="navigation">
+        <h1>
+          <span id="greeting">Hello</span> <span id="name"></span>
+          <span id="secondary">How can I help you today?</span>
+        </h1>
+        <div class="search-container">
+          <textarea
+            type="text"
+            id="search"
+            placeholder="What can I do for you?"
+            autocomplete="on"
+            value=""
+          ></textarea>
+          <div class="horizontal-container">
+            <div class="right-buttons">
+              <div class="search-engine-container">
+                <button class="search-engine-btn">Search Engine</button>
+                <ul id="search-engine-dropdown" class="dropdown-content"></ul>
+              </div>
+            </div>
+            <button id="clear" title="clear" class="submit"></button>
+            <button id="paste" title="paste">Paste</button>
+            <button id="go" title="Submit" disabled="" class="submit">
+              Go
+            </button>
+          </div>
+        </div>
+        <div class="suggestions-container"></div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
