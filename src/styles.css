@@ -15,8 +15,6 @@
   --accent-color: #000;
   --svg-color: #000;
   --danger-color: #ff4d4f;
-  --light-mode-text: #333;
-  --dark-mode-text: #e0e0e0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -36,9 +34,43 @@
     --accent-color: #fff;
     --svg-color: #fff;
     --danger-color: #ff4d4f;
-    --light-mode-text: #333;
-    --dark-mode-text: #e0e0e0;
   }
+}
+[data-theme="light"] {
+  /* Light mode default variables */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --background: #f5f5f5;
+  --item-bg: #ffffff;
+  --text-color: #333;
+  --main-text-color: #000;
+  --secondary-text-color: #666;
+  --border-color: #ddd;
+  --hover-bg: #e8e8e8;
+  --active-bg: #d8d8d8;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+  --shadow-hover: rgba(0, 0, 0, 0.1);
+  --border-hover: #bbb;
+  --accent-color: #000;
+  --svg-color: #000;
+  --danger-color: #ff4d4f;
+}
+[data-theme="dark"] {
+  /* Dark mode variables */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --background: #1a1a1a;
+  --item-bg: #2d2d2d;
+  --text-color: #e0e0e0;
+  --main-text-color: #fff;
+  --secondary-text-color: #aaa;
+  --border-color: #444;
+  --hover-bg: #383838;
+  --active-bg: #252525;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --shadow-hover: rgba(0, 0, 0, 0.5);
+  --border-hover: #666;
+  --accent-color: #fff;
+  --svg-color: #fff;
+  --danger-color: #ff4d4f;
 }
 
 body {
@@ -123,6 +155,9 @@ h1 {
   text-align: center;
   color: var(--text-color);
   line-height: 2.25rem;
+}
+h1 span {
+  color: var(--text-color);
 }
 
 h1 #secondary {
@@ -316,7 +351,7 @@ li:hover {
 
 .input-field {
   width: 100%;
-  padding: 8px 12px;
+  padding: 8px 8px;
   border: 1px solid var(--border-color);
   border-radius: 28px;
   background: var(--item-bg);
@@ -327,10 +362,10 @@ li:hover {
 }
 select {
   margin-top: 5px;
-  width: 40%;
+  width: fit-content;
   padding: 8px 12px;
   border: 1px solid var(--border-color);
-  border-radius: 28px;
+  border-radius: 14px;
   background: var(--item-bg);
   color: var(--text-color);
   font-family: inherit;
@@ -366,4 +401,20 @@ option {
   right: 20px; /* Adjust the distance from the right */
   color: var(--secondary-text-color);
   text-align: right;
+}
+
+.file-field {
+  position: relative;
+  right: 30px;
+  bottom: 40px;
+  opacity: 0;
+  z-index: 10;
+  width: 100%;
+}
+label {
+  max-height: 60px;
+}
+fieldset {
+  border: none;
+  color: var(--text-color);
 }

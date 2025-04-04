@@ -684,6 +684,20 @@ async function loadData() {
         //change the body background color
         body.style.backgroundColor = bgOption.data;
         break;
+      case "gradient":
+        const data = bgOption.data.split(",");
+        const ang = data[0];
+        const color1 = data[1];
+        const color2 = data[2];
+        body.style.backgroundImage = `linear-gradient(${ang}deg, ${color1}, ${color2})`;
+        break;
+      case "own-img":
+        if (bgOption.url) {
+          applyBackgroundImage(body, bgOption);
+        } else {
+          resetBackground(body);
+        }
+        break;
       default:
         resetBackground(body);
         await clearBgOption();
@@ -697,9 +711,23 @@ const bgText = document.getElementsByClassName("bg-text");
 const bgImgExpSelect = document.getElementById("bg-img-exp");
 const bgBtn = document.getElementById("save-bg");
 const bgColor = document.getElementById("solid-color");
+const bgColor2 = document.getElementById("solid-color-2");
+const bgNum = document.getElementById("gradient-number");
+const ownImgInput = document.getElementById("img-file");
+const ownImgLabel = document.getElementById("img-file-label");
 bgColor.addEventListener("input", () => {
   toggleButton(bgBtn, true);
 });
+bgColor2.addEventListener("input", () => {
+  toggleButton(bgBtn, true);
+});
+bgNum.addEventListener("input", () => {
+  toggleButton(bgBtn, true);
+});
+ownImgInput.addEventListener("change", () => {
+  toggleButton(bgBtn, true);
+});
+
 bgImgExpSelect.addEventListener("change", () => {
   toggleButton(bgBtn, true);
 });
@@ -715,9 +743,11 @@ bgBtn.addEventListener("click", async () => {
   let bgData = (await getBgOption()) || {
     type: selectedOption,
     data: null,
+    url: null,
     expiration: -1,
     timeExpire: -1,
     lightModeText: null,
+    credits: null,
   };
 
   bgData.type = selectedOption;
@@ -731,13 +761,37 @@ bgBtn.addEventListener("click", async () => {
       }
       break;
     case "color":
+      resetBackground(body);
       const color = bgColor.value;
-      console.log(color);
       body.style.backgroundColor = color;
       bgData.data = color;
       bgData.url = null;
       bgData.credits = null;
       setBgOption(bgData);
+      break;
+    case "gradient":
+      resetBackground(body);
+      const color1 = bgColor.value;
+      const color2 = bgColor2.value;
+      const ang = bgNum.value ? bgNum.value : 0;
+      const gradient = `linear-gradient(${ang}deg, ${color1}, ${color2})`;
+      body.style.backgroundImage = gradient;
+      bgData.data = `${ang},${color1},${color2}`;
+      bgData.url = null;
+      bgData.credits = null;
+      setBgOption(bgData);
+      break;
+    case "own-img":
+      const file = ownImgInput.files[0];
+      if (file) {
+        bgData.url = await blobToDataURL(file);
+        bgData.credits = [file.name];
+        console.log(bgData);
+        applyBackgroundImage(body, bgData);
+        await setBgOption(bgData);
+      } else {
+        resetBackground(body);
+      }
       break;
     default:
       resetBackground(body);
@@ -797,6 +851,11 @@ function scheduleBackgroundUpdate(body, bgData, now) {
 }
 
 const credits = document.getElementById("credits");
+// Helper function to determine the theme
+function determineTheme(isLightMode) {
+  return isLightMode ? "light" : "dark";
+}
+
 // Helper function to apply background image styles
 function applyBackgroundImage(body, bgData) {
   body.style.backgroundImage = `url('${bgData.url}')`;
@@ -804,30 +863,39 @@ function applyBackgroundImage(body, bgData) {
   body.style.backgroundRepeat = "no-repeat";
   body.style.backgroundPosition = "center";
   body.style.backgroundColor = "";
-  const person = document.createElement("a");
-  person.href = bgData.credits[0];
-  person.textContent = bgData.credits[1];
-  const domain = document.createElement("a");
-  domain.textContent = bgData.credits[2];
-  domain.href = bgData.credits[3];
-  credits.innerHTML = "";
-  credits.appendChild(person);
-  credits.appendChild(document.createTextNode(" from "));
-  credits.appendChild(domain);
-  credits.setAttribute("target", "_blank");
-  credits.setAttribute("rel", "noopener noreferrer");
-  credits.style.display = "";
-  if (bgData.lightModeText !== null && bgData.lightModeText !== undefined) {
+  if (bgData.credits && bgData.credits.length == 4) {
+    const person = document.createElement("a");
+    person.href = bgData.credits[0];
+    person.textContent = bgData.credits[1];
+    const domain = document.createElement("a");
+    domain.textContent = bgData.credits[2];
+    domain.href = bgData.credits[3];
+    credits.innerHTML = "";
+    credits.appendChild(person);
+    credits.appendChild(document.createTextNode(" from "));
+    credits.appendChild(domain);
+    credits.setAttribute("target", "_blank");
+    credits.setAttribute("rel", "noopener noreferrer");
+    credits.style.display = "";
+  } else if (bgData.credits && bgData.credits.length == 1) {
+    const filename = document.createElement("span");
+    filename.textContent = bgData.credits[0];
+    credits.innerHTML = "";
+    credits.appendChild(filename);
+    credits.style.display = "";
+  }
+  setTextColor(bgData, bgData.lightModeText != null);
+}
+
+function setTextColor(bgData = null, condition = false) {
+  if (condition && bgData != null) {
     Array.from(bgText).forEach((element) => {
-      element.setAttribute(
-        "style",
-        bgData.lightModeText
-          ? "color: var(--light-mode-text)"
-          : "color: var(--dark-mode-text)"
-      );
+      element.setAttribute("data-theme", determineTheme(bgData.lightModeText));
     });
   } else {
-    Array.from(bgText).forEach((element) => element.removeAttribute("style"));
+    Array.from(bgText).forEach((element) =>
+      element.removeAttribute("data-theme")
+    );
   }
 }
 
@@ -982,6 +1050,16 @@ trOption.addEventListener("change", () => {
   updateInactivityBehavior();
 });
 
+const userThemeForm = document.getElementById("user-theme");
+userThemeForm.addEventListener("change", async (e) => {
+  localStorage.setItem("user-theme", e.target.value);
+  if (e.target.value === "auto") {
+    document.body.removeAttribute("data-theme");
+    return;
+  }
+  const lightTheme = e.target.value === "true";
+  document.body.setAttribute("data-theme", lightTheme ? "light" : "dark");
+});
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     // Add icons
@@ -992,7 +1070,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     appendSvg({ image: "assets/images/save.svg" }, bgBtn, null);
     appendSvg({ image: "assets/images/paste.svg" }, pasteBtn, "4px");
     await loadSimple();
-
     // Set initial state
     updateInactivityBehavior(); // Apply the stored inactivity setting
 
@@ -1003,13 +1080,35 @@ document.addEventListener("DOMContentLoaded", async () => {
       localStorage.setItem("weather-unit", unit);
       displayWeather(JSON.parse(localStorage.getItem("weatherData")));
     });
-
+    const storedTheme = localStorage.getItem("user-theme");
+    if (storedTheme !== null) {
+      userThemeForm.querySelectorAll("input").forEach((option) => {
+        if (option.value === storedTheme) {
+          option.checked = true;
+        }
+      });
+      if (storedTheme === "auto") {
+        document.body.removeAttribute("data-theme");
+      } else {
+        document.body.setAttribute(
+          "data-theme",
+          storedTheme === "true" ? "light" : "dark"
+        );
+      }
+    }
     await loadData();
     const bgOption = await getBgOption();
     backgroundSelect.addEventListener("change", () => {
       const selectedOption =
         backgroundSelect.options[backgroundSelect.selectedIndex].value;
-      [bgColor, bgImgExpSelect].forEach((e) => {
+      [
+        bgColor,
+        bgImgExpSelect,
+        bgColor2,
+        bgNum,
+        ownImgInput,
+        ownImgLabel,
+      ].forEach((e) => {
         e.style.display = "none";
       });
       switch (selectedOption) {
@@ -1019,11 +1118,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         case "color":
           bgColor.style.display = "";
           break;
+        case "gradient":
+          bgColor.style.display = "";
+          bgColor2.style.display = "";
+          bgNum.style.display = "";
+          break;
+        case "own-img":
+          ownImgInput.style.display = "";
+          ownImgLabel.style.display = "";
+          break;
         default:
           break;
       }
+      if (selectedOption !== "bg-img") {
+        setTextColor(); // reset text color
+      }
     });
     if (bgOption) {
+      if (bgOption.type !== "bg-img") {
+        setTextColor(); // reset text color
+      }
       // Set background select
       for (let i = 0; i < backgroundSelect.options.length; i++) {
         if (backgroundSelect.options[i].value === bgOption.type) {
@@ -1031,9 +1145,17 @@ document.addEventListener("DOMContentLoaded", async () => {
           break;
         }
       }
-      [bgImgExpSelect, bgColor].forEach((e) => {
+      [
+        bgColor,
+        bgImgExpSelect,
+        bgColor2,
+        bgNum,
+        ownImgInput,
+        ownImgLabel,
+      ].forEach((e) => {
         e.style.display = "none";
       });
+
       switch (bgOption.type) {
         // Set expiration select for bg-img
         case "bg-img":
@@ -1049,16 +1171,36 @@ document.addEventListener("DOMContentLoaded", async () => {
           bgColor.value = bgOption.data;
           bgColor.style.display = "";
           break;
+        case "gradient":
+          const bgGradient = bgOption.data.split(",");
+          bgNum.value = bgGradient[0];
+          bgColor.value = bgGradient[1];
+          bgColor2.value = bgGradient[2];
+          bgColor.style.display = "";
+          bgColor2.style.display = "";
+          bgNum.style.display = "";
+          break;
+        case "own-img":
+          ownImgInput.style.display = "";
+          ownImgLabel.style.display = "";
         default:
           break;
       }
     } else {
+      setTextColor(); // reset text color
       [bgImgExpSelect, backgroundSelect].forEach((e) => {
         Array.from(e.options).forEach((option) =>
           option.removeAttribute("selected")
         );
       });
-      [bgColor, bgImgExpSelect].forEach((e) => {
+      [
+        bgColor,
+        bgImgExpSelect,
+        bgColor2,
+        bgNum,
+        ownImgInput,
+        ownImgLabel,
+      ].forEach((e) => {
         e.style.display = "none";
       });
       backgroundSelect.options[0].selected = true;
@@ -1092,6 +1234,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
         selectElement.options[0].selected = true;
       });
+      userThemeForm.querySelectorAll("input").forEach((option) => {
+        option.checked = false;
+      });
+      document.body.removeAttribute("data-theme");
+      setTextColor();
       bgImgExpSelect.style.display = "none";
       updateInactivityBehavior();
       if (chrome && chrome.permissions) {

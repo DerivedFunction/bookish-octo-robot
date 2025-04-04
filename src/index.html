@@ -50,27 +50,29 @@
             <option value="default">Default</option>
             <option value="bg-img">Pexels/Unsplash</option>
             <option value="color">Solid Color</option>
-            <option value="video">Gradient</option>
+            <option value="gradient">Gradient</option>
             <option value="own-img">Upload Image</option>
           </select>
           <button id="save-bg" title="Save" class="submit"></button>
         </div>
         <div class="horizontal-container">
           <select title="expiration" id="bg-img-exp">
-            <option value="-1">Never Change</option>
-            <option value="0">New Tab</option>
-            <option value="300">5 Minutes</option>
+            <option value="-1">Never Change Image</option>
+            <option value="0">Change Every New Tab</option>
+            <option value="300">Change Every 5 Minutes</option>
             <!-- 5 * 60 = 300 seconds -->
-            <option value="900">15 Minutes</option>
+            <option value="900">Change Every 15 Minutes</option>
             <!-- 15 * 60 = 900 seconds -->
-            <option value="1800">30 Minutes</option>
+            <option value="1800">Change Every 30 Minutes</option>
             <!-- 30 * 60 = 1800 seconds -->
-            <option value="3600">1 Hour</option>
+            <option value="3600">Change Every Hour</option>
             <!-- 60 * 60 = 3600 seconds -->
-            <option value="43200">12 Hours</option>
+            <option value="43200">Change Every 12 Hours</option>
             <!-- 12 * 60 * 60 = 43200 seconds -->
-            <option value="86400">1 Day</option>
+            <option value="86400">Change Daily</option>
             <!-- 24 * 60 * 60 = 86400 seconds -->
+            <option value="604800">Change Weekly</option>
+            <!-- 24 * 60 * 60 * 7 = 604800 seconds -->
           </select>
           <label for="solid-color"></label>
           <input
@@ -79,7 +81,48 @@
             title="solid-color"
             class="input-field"
           />
+          <label for="solid-color-2"></label>
+          <input
+            type="color"
+            id="solid-color-2"
+            title="solid-color-2"
+            class="input-field"
+          />
+          <label for="gradient-number"></label>
+          <input
+            type="number"
+            id="gradient-number"
+            title="gradient-number"
+            class="input-field"
+            placeholder="0-360"
+            value="0"
+          />
+
+          <label for="img-file">
+            <button class="input-field" id="img-file-label">
+              Click to upload...
+            </button>
+            <input
+              type="file"
+              id="img-file"
+              title="Upload Image"
+              accept="image/*"
+              class="input-field file-field"
+          /></label>
         </div>
+      </div>
+      <div class="section">
+        <form>
+          <fieldset class="horizontal-container" id="user-theme">
+            <legend>Choose Theme</legend>
+            <input type="radio" id="auto" name="textColor" value="auto" />
+            <label for="auto">Auto</label>
+            <input type="radio" id="light" name="textColor" value="true" />
+            <label for="light">Light Mode</label><br />
+            <input type="radio" id="dark" name="textColor" value="false" />
+            <label for="dark">Dark Mode</label>
+          </fieldset>
+        </form>
       </div>
       <div class="horizontal-container section">
         Fade after inactivity:
