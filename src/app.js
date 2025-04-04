@@ -349,13 +349,23 @@ function findSuggestions() {
 }
 function updateTime() {
   const timeElement = document.getElementById("time");
+  let format = localStorage.getItem("time-format");
+  if (format === null) {
+    timeElement.textContent = "";
+    return;
+  }
   if (!timeElement) return;
 
   const now = new Date();
   const hours = now.getHours().toString().padStart(2, "0");
+  let curHour = hours;
   const minutes = now.getMinutes().toString().padStart(2, "0");
-
-  timeElement.textContent = `${hours}:${minutes}`;
+  if (format === "12") {
+    curHour = hours % 12 || 12;
+  }
+  timeElement.textContent = `${curHour}:${minutes}${
+    format == "12" ? (hours >= 12 ? "PM" : "AM") : ""
+  }`;
 }
 
 setInterval(updateTime, 5000);
@@ -641,6 +651,7 @@ weatherField.addEventListener("input", () => {
   );
 });
 async function loadSimple() {
+  updateTime();
   getGreeting();
   await addSearchEngines();
   await getSearchEngine();
@@ -1110,7 +1121,16 @@ userThemeForm.addEventListener("change", async (e) => {
   const lightTheme = e.target.value === "true";
   document.body.setAttribute("data-theme", lightTheme ? "light" : "dark");
 });
-
+const timeFormat = document.getElementById("time-format");
+timeFormat.addEventListener("change", (e) => {
+  const format = e.target.value;
+  if (format === "hide") {
+    localStorage.removeItem("time-format");
+  } else {
+    localStorage.setItem("time-format", format);
+  }
+  updateTime();
+});
 const tooltip = document.getElementById("tooltip");
 function setupTooltip(element, condition = () => true) {
   const hideTooltip = () => {
@@ -1150,6 +1170,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     appendSvg({ image: "assets/images/down.svg" }, searchEnginePickerBtn);
     appendSvg({ image: "assets/images/paste.svg" }, pasteBtn);
+
     await loadSimple();
     // Set initial state
     updateInactivityBehavior(); // Apply the stored inactivity setting
@@ -1176,6 +1197,16 @@ document.addEventListener("DOMContentLoaded", async () => {
           storedTheme === "true" ? "light" : "dark"
         );
       }
+    }
+    const storedTimeFormat = localStorage.getItem("time-format");
+    if (storedTimeFormat) {
+      timeFormat.querySelectorAll("input").forEach((option) => {
+        if (option.value === storedTimeFormat) {
+          option.checked = true;
+        }
+      });
+    } else {
+      timeFormat.querySelector("input").checked = true;
     }
     await loadData();
     const bgOption = await getBgOption();
@@ -1319,13 +1350,24 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
         selectElement.options[0].selected = true;
       });
-      userThemeForm.querySelectorAll("input").forEach((option) => {
-        option.checked = false;
+      [userThemeForm, timeFormat].forEach((form) => {
+        form.querySelectorAll("input").forEach((option) => {
+          option.checked = false;
+        });
       });
       ownImgLabel.textContent = "Click to upload...";
       document.body.removeAttribute("data-theme");
       setTextColor();
-      bgImgExpSelect.style.display = "none";
+      [
+        bgImgExpSelect,
+        bgColor,
+        bgColor2,
+        bgNum,
+        ownImgLabel,
+        ownImgInput,
+      ].forEach((e) => {
+        e.style.display = "none";
+      });
       updateInactivityBehavior();
       if (chrome && chrome.permissions) {
         await chrome.permissions.remove({
