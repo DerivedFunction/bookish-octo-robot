@@ -412,12 +412,14 @@ pasteBtn.addEventListener("click", async () => {
 });
 
 const weather = document.getElementById("weather");
-const weather_exp = 1 * 60 * 1000; // 1 minute expiration
+const weather_exp = 15 * 60 * 1000; // 15 minute expiration
 const weatherBtn = document.getElementById("submit-weather");
 const weatherField = document.getElementById("weather-field");
 
 // Existing displayWeather function (unchanged)
 function displayWeather(weatherData) {
+  let loc = JSON.parse(localStorage.getItem("location"));
+  weatherField.value = loc ? loc.name : "";
   if (!weatherData) {
     weather.textContent = "";
     return;
@@ -513,7 +515,15 @@ async function storeWeather() {
     : null;
 
   const inputValue = weatherField.value.trim();
-
+  // If the input field is empty, we want to delete the location
+  if (inputValue.length === 0) {
+    localStorage.removeItem("location");
+    localStorage.removeItem("weatherData");
+    toggleButton(weatherBtn, false); // Disable button
+    appendSvg({ image: "/assets/images/save.svg" }, weatherBtn, null, true);
+    displayWeather(null);
+    return;
+  }
   // If we have a location from localStorage, fetch weather data directly
   if (location && !inputValue) {
     if (
