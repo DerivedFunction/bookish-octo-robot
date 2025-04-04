@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tabbed",
-  "version": "1.5.1.0",
+  "version": "1.5.2.0",
   "description": "A new tab page with an AI-like user interface",
   "icons": {
     "48": "assets/images/icon.svg"
