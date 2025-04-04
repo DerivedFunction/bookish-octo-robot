@@ -725,6 +725,7 @@ bgNum.addEventListener("input", () => {
   toggleButton(bgBtn, true);
 });
 ownImgInput.addEventListener("change", () => {
+  ownImgLabel.textContent = "Click to upload again...";
   toggleButton(bgBtn, true);
 });
 
@@ -733,6 +734,7 @@ bgImgExpSelect.addEventListener("change", () => {
 });
 
 backgroundSelect.addEventListener("change", () => {
+  ownImgLabel.textContent = "Click to upload...";
   toggleButton(bgBtn, true);
 });
 
@@ -749,9 +751,17 @@ bgBtn.addEventListener("click", async () => {
     lightModeText: null,
     credits: null,
   };
-
-  bgData.type = selectedOption;
-
+  console.log(selectedOption, bgData.type);
+  if (bgData.type !== selectedOption) {
+    bgData.type = selectedOption;
+    bgData.data = null;
+    bgData.url = null;
+    bgData.expiration = -1;
+    bgData.timeExpire = -1;
+    bgData.credits = null;
+    bgData.lightModeText = null;
+  }
+  ownImgLabel.textContent = "Click to upload...";
   switch (selectedOption) {
     case "bg-img":
       if (!bgData.url) {
@@ -783,10 +793,11 @@ bgBtn.addEventListener("click", async () => {
       break;
     case "own-img":
       const file = ownImgInput.files[0];
+      console.log(file);
       if (file) {
         bgData.url = await blobToDataURL(file);
         bgData.credits = [file.name];
-        console.log(bgData);
+        ownImgLabel.textContent = file.name;
         applyBackgroundImage(body, bgData);
         await setBgOption(bgData);
       } else {
@@ -1111,6 +1122,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       ].forEach((e) => {
         e.style.display = "none";
       });
+      ownImgLabel.textContent = "Click to upload...";
       switch (selectedOption) {
         case "bg-img":
           bgImgExpSelect.style.display = "";
@@ -1181,6 +1193,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           bgNum.style.display = "";
           break;
         case "own-img":
+          ownImgLabel.textContent = bgOption.credits[0]
+            ? bgOption.credits[0]
+            : "Click to upload...";
           ownImgInput.style.display = "";
           ownImgLabel.style.display = "";
         default:
@@ -1237,6 +1252,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       userThemeForm.querySelectorAll("input").forEach((option) => {
         option.checked = false;
       });
+      ownImgLabel.textContent = "Click to upload...";
       document.body.removeAttribute("data-theme");
       setTextColor();
       bgImgExpSelect.style.display = "none";
