@@ -161,25 +161,37 @@
                   <div class="horizontal-container">
                     <button
                       class="search-engine-btn"
-                      title="current AI"
+                      title="Your current AI"
                       id="currentEngine"
+                      data-tooltip="Your current AI"
                     ></button>
                     <button
                       class="search-engine-btn"
-                      title="dropdown"
+                      title="Pick a different AI"
                       id="search-engine-picker"
+                      data-tooltip="Pick other AI models"
                     ></button>
                   </div>
                   <ul id="search-engine-dropdown" class="dropdown-content"></ul>
                 </div>
               </div>
-              <button id="clear" title="clear" class="submit"></button>
-              <button id="paste" title="paste"></button>
+              <button
+                id="clear"
+                title="Clear Message"
+                class="submit"
+                data-tooltip="Clear Message"
+              ></button>
+              <button
+                id="paste"
+                title="Paste"
+                data-tooltip="Paste from Clipboard"
+              ></button>
               <button
                 id="go"
-                title="Submit"
+                title="Submit Your Query"
                 disabled=""
                 class="submit"
+                data-tooltip="Message is empty"
               ></button>
             </div>
           </div>
@@ -188,6 +200,7 @@
       </div>
     </div>
     <div id="credits"></div>
+    <span id="tooltip">Tooltip text</span>
     <script src="/app.js"></script>
   </body>
 </html>

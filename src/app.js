@@ -7,6 +7,7 @@ const searchEnginePickerBtn = document.getElementById("search-engine-picker");
 const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.querySelector("#search-engine-dropdown");
 const suggestionContainer = document.querySelector(".suggestions-container");
+
 searchEnginePickerBtn.addEventListener("click", () => {
   dropdown.classList.toggle("active");
   if (dropdown.classList.contains("active")) {
@@ -31,13 +32,15 @@ document.addEventListener("click", (e) => {
 const goBtn = document.getElementById("go");
 const query = document.getElementById("search");
 clearBtn.addEventListener("click", async () => {
-  query.value = "";
-  query.style.height = "auto";
-  query.style.height = `${query.scrollHeight}px`;
-  toggleButton(clearBtn, false);
-  toggleButton(goBtn, false);
+  if (query.value.length > 0) {
+    query.value = "";
+    query.style.height = "auto";
+    query.style.height = `${query.scrollHeight}px`;
+    toggleButton(clearBtn, false);
+    toggleButton(goBtn, false);
+    await getSuggestionButtons();
+  }
   query.focus();
-  await getSuggestionButtons();
 });
 
 query.addEventListener("input", async () => {
@@ -1106,6 +1109,35 @@ userThemeForm.addEventListener("change", async (e) => {
   }
   const lightTheme = e.target.value === "true";
   document.body.setAttribute("data-theme", lightTheme ? "light" : "dark");
+});
+
+const tooltip = document.getElementById("tooltip");
+function setupTooltip(element, condition = () => true) {
+  const hideTooltip = () => {
+    tooltip.style.display = "none";
+  };
+
+  element.addEventListener("mouseover", () => {
+    if (!condition()) return;
+    const rect = element.getBoundingClientRect();
+    tooltip.style.left = `${rect.left + window.scrollX}px`;
+    tooltip.style.top = `${rect.top + window.scrollY - 30}px`;
+    tooltip.textContent = element.getAttribute("data-tooltip");
+    tooltip.style.display = "block";
+  });
+
+  element.addEventListener("mouseout", hideTooltip);
+  document.addEventListener("keydown", hideTooltip);
+  document.addEventListener("click", hideTooltip);
+}
+
+setupTooltip(curSearchBtn);
+setupTooltip(
+  searchEnginePickerBtn,
+  () => !dropdown.classList.contains("active")
+);
+[clearBtn, pasteBtn, goBtn].forEach((btn) => {
+  setupTooltip(btn, () => query.value.length === 0);
 });
 document.addEventListener("DOMContentLoaded", async () => {
   try {
