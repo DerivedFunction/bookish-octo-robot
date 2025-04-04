@@ -319,7 +319,6 @@ async function getSuggestionButtons() {
 }
 function findSuggestions() {
   suggestionContainer.innerHTML = ""; // Clear existing suggestions
-  console.log(prompts);
   const promptList = prompts.find((p) => p.prompt === query.value);
   if (
     !promptList ||
@@ -337,6 +336,7 @@ function findSuggestions() {
     const text = query.value + suggestion;
     suggestionElement.addEventListener("click", () => {
       query.value = text;
+      query.focus();
       toggleButton(goBtn, true);
       toggleButton(clearBtn, true);
     });
@@ -791,7 +791,6 @@ bgBtn.addEventListener("click", async () => {
     lightModeText: null,
     credits: null,
   };
-  console.log(selectedOption, bgData.type);
   if (bgData.type !== selectedOption) {
     bgData.type = selectedOption;
     bgData.data = null;
@@ -833,7 +832,6 @@ bgBtn.addEventListener("click", async () => {
       break;
     case "own-img":
       const file = ownImgInput.files[0];
-      console.log(file);
       if (file) {
         bgData.url = await blobToDataURL(file);
         bgData.credits = [file.name];
@@ -854,7 +852,6 @@ bgBtn.addEventListener("click", async () => {
   if (selectedOption === "bg-img") {
     const expirationOption =
       bgImgExpSelect.options[bgImgExpSelect.selectedIndex].value;
-    console.log(expirationOption);
     const now = new Date().getTime();
     const { time } = getExpirationDetails(expirationOption, now);
     bgData.expiration = parseInt(expirationOption);
@@ -890,7 +887,6 @@ function scheduleBackgroundUpdate(body, bgData, now) {
   }
 
   const timeUntilExpiration = bgData.timeExpire - now;
-  console.log(timeUntilExpiration);
   if (timeUntilExpiration > 0) {
     expirationTimeout = setTimeout(async () => {
       await setNewBackgroundImage(body, bgData);
