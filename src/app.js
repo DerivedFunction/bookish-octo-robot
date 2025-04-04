@@ -3,27 +3,40 @@ let prompts = [];
 let wallpapers = [];
 const clearBtn = document.getElementById("clear");
 
-const searchEngineBtn = document.querySelector(".search-engine-btn");
+const searchEnginePickerBtn = document.getElementById("search-engine-picker");
+const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.querySelector("#search-engine-dropdown");
 const suggestionContainer = document.querySelector(".suggestions-container");
-searchEngineBtn.addEventListener("click", () => {
+searchEnginePickerBtn.addEventListener("click", () => {
   dropdown.classList.toggle("active");
+  if (dropdown.classList.contains("active")) {
+    appendSvg({ image: "/assets/images/up.svg" }, searchEnginePickerBtn);
+  } else {
+    appendSvg({ image: "/assets/images/down.svg" }, searchEnginePickerBtn);
+  }
+});
+curSearchBtn.addEventListener("click", () => {
+  window.location.href = getSearchEngineUrl();
 });
 
 document.addEventListener("click", (e) => {
-  if (!searchEngineBtn.contains(e.target) && !dropdown.contains(e.target)) {
+  if (
+    !searchEnginePickerBtn.contains(e.target) &&
+    !dropdown.contains(e.target)
+  ) {
     dropdown.classList.remove("active");
   }
 });
 
-const goButton = document.getElementById("go");
+const goBtn = document.getElementById("go");
 const query = document.getElementById("search");
 clearBtn.addEventListener("click", async () => {
   query.value = "";
   query.style.height = "auto";
   query.style.height = `${query.scrollHeight}px`;
   toggleButton(clearBtn, false);
-  toggleButton(goButton, false);
+  toggleButton(goBtn, false);
+  query.focus();
   await getSuggestionButtons();
 });
 
@@ -33,15 +46,15 @@ query.addEventListener("input", async () => {
   query.style.height = `${query.scrollHeight}px`; // Recalculate height
   let x = query.value.length > 0;
   toggleButton(clearBtn, x);
-  toggleButton(goButton, x);
+  toggleButton(goBtn, x);
   if (!x) await getSuggestionButtons();
 });
 
 query.addEventListener("keydown", async (e) => {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
-    if (!goButton.disabled) {
-      goButton.click();
+    if (!goBtn.disabled) {
+      goBtn.click();
     }
   } else if (e.key === "Enter" && e.shiftKey) {
     e.preventDefault();
@@ -49,7 +62,7 @@ query.addEventListener("keydown", async (e) => {
   }
 });
 
-goButton.addEventListener("click", () => {
+goBtn.addEventListener("click", () => {
   if (query.value.length > 0) {
     let url = `${getSearchEngineUrl()}${encodeURIComponent(query.value)}`;
     window.location.href = url;
@@ -138,8 +151,8 @@ async function getSearchEngine() {
     }
 
     const engineData = JSON.parse(selectedEngine);
-    searchEngineBtn.innerHTML = "";
-    await appendSvg({ image: engineData.image }, searchEngineBtn, null);
+    curSearchBtn.innerHTML = "";
+    await appendSvg({ image: engineData.image }, curSearchBtn);
     if (engineData.image) {
       const iconUrl = engineData.image;
       if (chrome && chrome.action) {
@@ -181,7 +194,7 @@ async function addSearchEngines() {
     container.style.gap = "8px";
 
     // Add inline SVG
-    appendSvg(engine, container, "4px");
+    appendSvg(engine, container, "4px", false);
 
     // Add text
     const text = document.createElement("span");
@@ -194,6 +207,7 @@ async function addSearchEngines() {
       localStorage.setItem("selectedSearchEngine", JSON.stringify(engine));
       await getSearchEngine(); // Update the button icon immediately
       dropdown.classList.remove("active");
+      appendSvg({ image: "assets/images/down.svg" }, searchEnginePickerBtn);
     });
 
     fragment.appendChild(listItem);
@@ -201,7 +215,7 @@ async function addSearchEngines() {
   });
 }
 
-function appendSvg(object, container, gap, replace = false) {
+function appendSvg(object, container, gap = null, replace = true) {
   fetch(object.image)
     .then((response) => response.text())
     .then((svgContent) => {
@@ -283,18 +297,18 @@ async function getSuggestionButtons() {
     btn.id = prompt.id;
 
     if (prompt.image) {
-      appendSvg({ image: prompt.image }, btn, "4px");
+      appendSvg({ image: prompt.image }, btn, "4px", false);
     }
 
     btn.addEventListener("click", () => {
-      if (query.value.length == 0 || goButton.disabled) {
+      if (query.value.length == 0 || goBtn.disabled) {
         query.value = prompt.prompt;
         query.focus();
         toggleButton(clearBtn, true);
         findSuggestions();
       } else {
         query.value = prompt.prompt + query.value;
-        goButton.click();
+        goBtn.click();
       }
     });
 
@@ -323,7 +337,7 @@ function findSuggestions() {
     const text = query.value + suggestion;
     suggestionElement.addEventListener("click", () => {
       query.value = text;
-      toggleButton(goButton, true);
+      toggleButton(goBtn, true);
       toggleButton(clearBtn, true);
     });
 
@@ -373,9 +387,7 @@ nameInput.addEventListener("input", () => {
           ? "/assets/images/save.svg"
           : "/assets/images/clear.svg",
     },
-    nameBtn,
-    null,
-    true
+    nameBtn
   );
 });
 document.addEventListener("click", (e) => {
@@ -404,7 +416,7 @@ pasteBtn.addEventListener("click", async () => {
     query.focus();
     let x = query.value.length > 0;
     toggleButton(clearBtn, x);
-    toggleButton(goButton, x);
+    toggleButton(goBtn, x);
   } catch (err) {
     console.error("Failed to read clipboard contents: ", err);
     alert("Unable to access clipboard. Please grant permission and try again.");
@@ -520,7 +532,7 @@ async function storeWeather() {
     localStorage.removeItem("location");
     localStorage.removeItem("weatherData");
     toggleButton(weatherBtn, false); // Disable button
-    appendSvg({ image: "/assets/images/save.svg" }, weatherBtn, null, true);
+    appendSvg({ image: "/assets/images/save.svg" }, weatherBtn);
     displayWeather(null);
     return;
   }
@@ -622,9 +634,7 @@ weatherField.addEventListener("input", () => {
           ? "/assets/images/save.svg"
           : "/assets/images/clear.svg",
     },
-    weatherBtn,
-    null,
-    true
+    weatherBtn
   );
 });
 async function loadSimple() {
@@ -1104,12 +1114,14 @@ userThemeForm.addEventListener("change", async (e) => {
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     // Add icons
-    appendSvg({ image: "assets/images/options.svg" }, optionBtn, null);
-    appendSvg({ image: "assets/images/clear.svg" }, clearBtn, null);
-    appendSvg({ image: "assets/images/save.svg" }, nameBtn, null);
-    appendSvg({ image: "assets/images/save.svg" }, weatherBtn, null);
-    appendSvg({ image: "assets/images/save.svg" }, bgBtn, null);
-    appendSvg({ image: "assets/images/paste.svg" }, pasteBtn, "4px");
+    appendSvg({ image: "assets/images/options.svg" }, optionBtn);
+    appendSvg({ image: "assets/images/go.svg" }, goBtn);
+    appendSvg({ image: "assets/images/clear.svg" }, clearBtn);
+    [nameBtn, weatherBtn, bgBtn].forEach((btn) => {
+      appendSvg({ image: "assets/images/save.svg" }, btn);
+    });
+    appendSvg({ image: "assets/images/down.svg" }, searchEnginePickerBtn);
+    appendSvg({ image: "assets/images/paste.svg" }, pasteBtn);
     await loadSimple();
     // Set initial state
     updateInactivityBehavior(); // Apply the stored inactivity setting
@@ -1255,8 +1267,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (q) {
       localStorage.removeItem("query");
       query.value = q;
-      toggleButton(goButton, true);
-      goButton.click();
+      toggleButton(goBtn, true);
+      goBtn.click();
     }
     document.getElementById("reset").addEventListener("click", async () => {
       localStorage.clear();
@@ -1270,7 +1282,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         field.value = "";
       });
       [weatherBtn, nameBtn].forEach((btn) => {
-        appendSvg({ image: "/assets/images/save.svg" }, btn, null, true);
+        appendSvg({ image: "/assets/images/save.svg" }, btn);
         toggleButton(btn, false);
       });
       [bgImgExpSelect, backgroundSelect, trOption].forEach((selectElement) => {

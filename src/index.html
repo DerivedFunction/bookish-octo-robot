@@ -158,15 +158,29 @@
             <div class="horizontal-container">
               <div class="right-buttons">
                 <div class="search-engine-container">
-                  <button class="search-engine-btn">Search Engine</button>
+                  <div class="horizontal-container">
+                    <button
+                      class="search-engine-btn"
+                      title="current AI"
+                      id="currentEngine"
+                    ></button>
+                    <button
+                      class="search-engine-btn"
+                      title="dropdown"
+                      id="search-engine-picker"
+                    ></button>
+                  </div>
                   <ul id="search-engine-dropdown" class="dropdown-content"></ul>
                 </div>
               </div>
               <button id="clear" title="clear" class="submit"></button>
-              <button id="paste" title="paste">Paste</button>
-              <button id="go" title="Submit" disabled="" class="submit">
-                Go
-              </button>
+              <button id="paste" title="paste"></button>
+              <button
+                id="go"
+                title="Submit"
+                disabled=""
+                class="submit"
+              ></button>
             </div>
           </div>
           <div class="suggestions-container"></div>
