@@ -1,129 +1,170 @@
 [
   {
     "id": 0,
-    "name": "pexels-w-w-299285-889929",
-    "url": "https://images.pexels.com/photos/889929/pexels-photo-889929.jpeg"
+    "name": "W W",
+    "domain": "Pexels",
+    "url": "https://images.pexels.com/photos/889929/pexels-photo-889929.jpeg",
+    "credits": "https://www.pexels.com/@w-w-299285/"
   },
   {
     "id": 1,
-    "name": "pexels-dreamypixel-552785",
+    "name": "Krivec Ales",
+    "domain": "Pexels",
     "url": "https://images.pexels.com/photos/552785/pexels-photo-552785.jpeg",
-    "lightModeText": true
+    "lightModeText": true,
+    "credits": "https://www.pexels.com/@dreamypixel/"
   },
   {
     "id": 2,
-    "name": "pexels-esan-2085998",
+    "name": "Drift Shutterbug",
+    "domain": "Pexels",
     "url": "https://images.pexels.com/photos/2085998/pexels-photo-2085998.jpeg",
-    "lightModeText": false
+    "lightModeText": false,
+    "credits": "https://www.pexels.com/@esan/"
   },
   {
     "id": 3,
-    "name": "pexels-felixmittermeier-2832061",
+    "name": "Felix Mittermeier",
+    "domain": "Pexels",
     "url": "https://images.pexels.com/photos/2832061/pexels-photo-2832061.jpeg",
-    "lightModeText": true
+    "lightModeText": true,
+    "credits": "https://www.pexels.com/@felixmittermeier/"
   },
   {
     "id": 4,
-    "name": "pexels-lkloeppel-466685",
+    "name": "Lukas Loeppel",
+    "domain": "Pexels",
     "url": "https://images.pexels.com/photos/466685/pexels-photo-466685.jpeg",
-    "lightModeText": true
+    "lightModeText": true,
+    "credits": "https://www.pexels.com/@lkloeppel/"
   },
   {
     "id": 5,
-    "name": "pexels-nickkwanhk-2745258",
+    "name": "Nick Kwan",
+    "domain": "Pexels",
     "url": "https://images.pexels.com/photos/2745258/pexels-photo-2745258.jpeg",
-    "lightModeText": true
+    "lightModeText": true,
+    "credits": "https://www.pexels.com/@nickkwanhk/"
   },
   {
     "id": 6,
-    "name": "pexels-oday-hazeem-4297-106606",
+    "name": "Oday Hazeem",
+    "domain": "Pexels",
     "url": "https://images.pexels.com/photos/106606/pexels-photo-106606.jpeg",
-    "lightModeText": true
+    "lightModeText": true,
+    "credits": "https://www.pexels.com/@oday-hazeem-4297"
   },
   {
     "id": 7,
-    "name": "pexels-photo-31422687",
+    "name": "Optical Chemist",
+    "domain": "Pexels",
     "url": "https://images.pexels.com/photos/31422687/pexels-photo-31422687/free-photo-of-close-up-of-a-tortoise-in-its-natural-habitat.jpeg",
-    "lightModeText": false
+    "lightModeText": false,
+    "credits": "https://www.pexels.com/@optical-chemist-340351297/"
   },
   {
     "id": 8,
-    "name": "pexels-pixabay-207529",
+    "name": "Pixabay",
+    "domain": "Pexels",
     "url": "https://images.pexels.com/photos/207529/pexels-photo-207529.jpeg",
-    "lightModeText": false
+    "lightModeText": false,
+    "credits": "https://www.pexels.com/@pixabay/"
   },
   {
     "id": 9,
-    "name": "pexels-pixabay-219692",
+    "name": "Pixabay",
+    "domain": "Pexels",
     "url": "https://images.pexels.com/photos/219692/pexels-photo-219692.jpeg",
-    "lightModeText": false
+    "lightModeText": false,
+    "credits": "https://www.pexels.com/@pixabay/"
   },
   {
     "id": 10,
-    "name": "pexels-pixabay-262325",
+    "name": "Pixabay",
+    "domain": "Pexels",
     "url": "https://images.pexels.com/photos/262325/pexels-photo-262325.jpeg",
-    "lightModeText": false
+    "lightModeText": true,
+    "credits": "https://www.pexels.com/@pixabay/"
   },
   {
     "id": 11,
-    "name": "unsplash-1446776811953",
+    "name": "NASA",
+    "domain": "Unsplash",
     "url": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa",
-    "lightModeText": true
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@nasa"
   },
   {
     "id": 12,
-    "name": "unsplash-1519681393784",
+    "name": "Benjamin Voros",
+    "domain": "Unsplash",
     "url": "https://images.unsplash.com/photo-1519681393784-d120267933ba",
     "lightModeText": false
   },
   {
     "id": 13,
-    "name": "unsplash-1501785888041",
+    "name": "Pietro De Grandi",
+    "domain": "Unsplash",
     "url": "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
-    "lightModeText": true
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@peter_mc_greats"
   },
   {
     "id": 14,
-    "name": "unsplash-1441974231531",
+    "name": "Lukasz Szmigiel",
+    "domain": "Unsplash",
     "url": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e",
-    "lightModeText": false
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@szmigieldesign"
   },
 
   {
     "id": 15,
-    "name": "unsplash-1507525428034",
+    "name": "Sean Oulashin",
+    "domain": "Unsplash",
     "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-    "lightModeText": true
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@oulashin"
   },
   {
     "id": 16,
-    "name": "unsplash-1532274402911",
+    "name": "Mark Harpur",
+    "domain": "Unsplash",
     "url": "https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5",
-    "lightModeText": false
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@luckybeanz"
   },
   {
     "id": 17,
-    "name": "unsplash-1469474968028",
+    "name": "Urban Vintage",
+    "domain": "Unsplash",
     "url": "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
-    "lightModeText": false
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@urban_vintage"
   },
 
   {
     "id": 18,
-    "name": "unsplash-1493246507139",
+    "name": "Garrett parker",
+    "domain": "Unsplash",
     "url": "https://images.unsplash.com/photo-1493246507139-91e8fad9978e",
-    "lightModeText": false
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@garrettpsystems"
   },
   {
     "id": 19,
-    "name": "unsplash-1508739773434",
+    "name": "Cristina Gottardi",
+    "domain": "Unsplash",
     "url": "https://images.unsplash.com/photo-1508739773434-c26b3d09e071",
-    "lightModeText": true
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@cristina_gottardi"
   },
   {
     "id": 20,
-    "name": "unsplash-1470071459604",
+    "name": "v2osk",
+    "domain": "Unsplash",
     "url": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05",
-    "lightModeText": true
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@v2osk"
   }
 ]

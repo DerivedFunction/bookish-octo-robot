@@ -20,11 +20,17 @@ const goButton = document.getElementById("go");
 const query = document.getElementById("search");
 clearBtn.addEventListener("click", async () => {
   query.value = "";
+  query.style.height = "auto";
+  query.style.height = `${query.scrollHeight}px`;
   toggleButton(clearBtn, false);
   toggleButton(goButton, false);
   await getSuggestionButtons();
 });
+
 query.addEventListener("input", async () => {
+  // Set the height to match the content (scrollHeight)
+  query.style.height = "auto"; // Reset height to auto
+  query.style.height = `${query.scrollHeight}px`; // Recalculate height
   let x = query.value.length > 0;
   toggleButton(clearBtn, x);
   toggleButton(goButton, x);
@@ -195,7 +201,7 @@ async function addSearchEngines() {
   });
 }
 
-function appendSvg(object, container, gap) {
+function appendSvg(object, container, gap, replace = false) {
   fetch(object.image)
     .then((response) => response.text())
     .then((svgContent) => {
@@ -208,7 +214,17 @@ function appendSvg(object, container, gap) {
         svg.style.width = "20px";
         svg.style.height = "20px";
         if (gap) container.style.gap = gap;
-        container.insertBefore(svg, container.firstChild); // Insert icon before text
+        if (replace) {
+          // check if the current icon is the same as the new one
+          const currentIcon = container.querySelector("svg");
+          if (currentIcon && currentIcon.outerHTML !== svg.outerHTML) {
+            container.replaceChild(svg, currentIcon); // Replace existing icon
+          } else {
+            container.appendChild(svg); // Append new icon
+          }
+        } else {
+          container.insertBefore(svg, container.firstChild); // Insert icon before text
+        }
       }
     })
     .catch((error) => console.error("Error loading SVG:", error));
@@ -230,15 +246,11 @@ function getGreeting() {
   } else if (hour >= 12 && hour < 16) {
     // Afternoon: 12:00 - 15:59
     greeting = "Good Afternoon";
-  } else if (hour >= 16 && hour < 20) {
+  } else if ((hour >= 16 && hour < 24) || (hour >= 0 && hour < 4)) {
     // Evening: 16:00 - 19:59
     greeting = "Good Evening";
-  } else {
-    // Night: 20:00 - 3:59
-    greeting = "A Night Owl";
   }
-
-  x.textContent = y ? `${greeting}, ${y}!` : `${greeting}!`;
+  x.textContent = y ? `${greeting}, ${y}.` : `${greeting}.`;
 }
 
 async function getPrompt() {
@@ -354,7 +366,17 @@ nameBtn.addEventListener("click", () => {
 });
 nameInput.addEventListener("input", () => {
   toggleButton(nameBtn, true);
-  nameBtn.textContent = nameInput.value.length > 0 ? "Submit" : "Clear";
+  appendSvg(
+    {
+      image:
+        nameInput.value.length > 0
+          ? "/assets/images/save.svg"
+          : "/assets/images/clear.svg",
+    },
+    nameBtn,
+    null,
+    true
+  );
 });
 document.addEventListener("click", (e) => {
   if (!sidebar.contains(e.target) && !optionBtn.contains(e.target)) {
@@ -376,6 +398,9 @@ pasteBtn.addEventListener("click", async () => {
     }
     const text = await navigator.clipboard.readText();
     query.value += text;
+    // Set the height to match the content (scrollHeight)
+    query.style.height = "auto";
+    query.style.height = `${query.scrollHeight}px`;
     query.focus();
     let x = query.value.length > 0;
     toggleButton(clearBtn, x);
@@ -560,7 +585,17 @@ async function storeWeather() {
 weatherBtn.addEventListener("click", storeWeather);
 weatherField.addEventListener("input", () => {
   toggleButton(weatherBtn, true);
-  weatherBtn.textContent = weatherField.value.length > 0 ? "Submit" : "Clear";
+  appendSvg(
+    {
+      image:
+        weatherField.value.length > 0
+          ? "/assets/images/save.svg"
+          : "/assets/images/clear.svg",
+    },
+    weatherBtn,
+    null,
+    true
+  );
 });
 async function loadSimple() {
   getGreeting();
@@ -633,17 +668,21 @@ async function loadData() {
   const { wallpapers: loadedWallpapers } = await loadJsonData();
   wallpapers = loadedWallpapers;
 
-  if (bgOption && bgOption.data) {
+  if (bgOption && bgOption.type) {
     switch (bgOption.type) {
       case "bg-img":
         if (bgOption.expiration === -1) {
-          applyBackgroundImage(body, bgOption.data, bgOption.lightModeText);
+          applyBackgroundImage(body, bgOption);
         } else if (bgOption.timeExpire === 0 || now > bgOption.timeExpire) {
           await setNewBackgroundImage(body, bgOption);
         } else {
-          applyBackgroundImage(body, bgOption.data, bgOption.lightModeText);
+          applyBackgroundImage(body, bgOption);
           scheduleBackgroundUpdate(body, bgOption, now);
         }
+        break;
+      case "color":
+        //change the body background color
+        body.style.backgroundColor = bgOption.data;
         break;
       default:
         resetBackground(body);
@@ -657,7 +696,10 @@ const backgroundSelect = document.getElementById("bg-select");
 const bgText = document.getElementsByClassName("bg-text");
 const bgImgExpSelect = document.getElementById("bg-img-exp");
 const bgBtn = document.getElementById("save-bg");
-
+const bgColor = document.getElementById("solid-color");
+bgColor.addEventListener("input", () => {
+  toggleButton(bgBtn, true);
+});
 bgImgExpSelect.addEventListener("change", () => {
   toggleButton(bgBtn, true);
 });
@@ -682,16 +724,25 @@ bgBtn.addEventListener("click", async () => {
 
   switch (selectedOption) {
     case "bg-img":
-      if (!bgData.data) {
+      if (!bgData.url) {
         await setNewBackgroundImage(body, bgData);
       } else {
-        applyBackgroundImage(body, bgData.data, bgData.lightModeText);
+        applyBackgroundImage(body, bgData);
       }
+      break;
+    case "color":
+      const color = bgColor.value;
+      console.log(color);
+      body.style.backgroundColor = color;
+      bgData.data = color;
+      bgData.url = null;
+      bgData.credits = null;
+      setBgOption(bgData);
       break;
     default:
       resetBackground(body);
-      bgData.data = null;
-      bgData.lightModeText = null;
+      bgData.url = null;
+      bgData.credits = null;
       break;
   }
 
@@ -721,7 +772,7 @@ bgBtn.addEventListener("click", async () => {
     }
   }
 
-  if (bgData.data || selectedOption === "default") {
+  if (bgData.url || selectedOption === "default") {
     await setBgOption(bgData);
   }
   toggleButton(bgBtn, false);
@@ -745,19 +796,32 @@ function scheduleBackgroundUpdate(body, bgData, now) {
   }
 }
 
+const credits = document.getElementById("credits");
 // Helper function to apply background image styles
-function applyBackgroundImage(body, dataUrl, lightModeText) {
-  body.style.backgroundImage = `url('${dataUrl}')`;
+function applyBackgroundImage(body, bgData) {
+  body.style.backgroundImage = `url('${bgData.url}')`;
   body.style.backgroundSize = "cover";
   body.style.backgroundRepeat = "no-repeat";
   body.style.backgroundPosition = "center";
   body.style.backgroundColor = "";
-
-  if (lightModeText !== null && lightModeText !== undefined) {
+  const person = document.createElement("a");
+  person.href = bgData.credits[0];
+  person.textContent = bgData.credits[1];
+  const domain = document.createElement("a");
+  domain.textContent = bgData.credits[2];
+  domain.href = bgData.credits[3];
+  credits.innerHTML = "";
+  credits.appendChild(person);
+  credits.appendChild(document.createTextNode(" from "));
+  credits.appendChild(domain);
+  credits.setAttribute("target", "_blank");
+  credits.setAttribute("rel", "noopener noreferrer");
+  credits.style.display = "";
+  if (bgData.lightModeText !== null && bgData.lightModeText !== undefined) {
     Array.from(bgText).forEach((element) => {
       element.setAttribute(
         "style",
-        lightModeText
+        bgData.lightModeText
           ? "color: var(--light-mode-text)"
           : "color: var(--dark-mode-text)"
       );
@@ -794,9 +858,14 @@ async function setNewBackgroundImage(body, bgData = null) {
     const imageBlob = await imageResponse.blob();
     const dataUrl = await blobToDataURL(imageBlob);
 
-    applyBackgroundImage(body, dataUrl, wallpaper.lightModeText);
     if (bgData) {
-      bgData.data = dataUrl;
+      bgData.url = dataUrl;
+      bgData.credits = [
+        wallpaper.credits,
+        wallpaper.name,
+        wallpaper.domain,
+        wallpaper.url,
+      ];
       bgData.lightModeText = wallpaper.lightModeText;
       const { time } = getExpirationDetails(
         bgData.expiration,
@@ -804,10 +873,11 @@ async function setNewBackgroundImage(body, bgData = null) {
       );
       bgData.timeExpire = time;
     }
+    applyBackgroundImage(body, bgData);
   } catch (error) {
     console.error("Error setting new background image:", error);
-    if (bgData && bgData.data) {
-      applyBackgroundImage(body, bgData.data, bgData.lightModeText);
+    if (bgData && bgData.url) {
+      applyBackgroundImage(body, bgData);
     } else {
       resetBackground(body);
     }
@@ -818,6 +888,8 @@ async function setNewBackgroundImage(body, bgData = null) {
 function resetBackground(body) {
   body.style.backgroundImage = "";
   body.style.backgroundColor = "";
+  credits.innerHTML = "";
+  credits.style.display = "none";
   Array.from(bgText).forEach((element) => element.removeAttribute("style"));
 }
 
@@ -915,6 +987,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Add icons
     appendSvg({ image: "assets/images/options.svg" }, optionBtn, null);
     appendSvg({ image: "assets/images/clear.svg" }, clearBtn, null);
+    appendSvg({ image: "assets/images/save.svg" }, nameBtn, null);
+    appendSvg({ image: "assets/images/save.svg" }, weatherBtn, null);
+    appendSvg({ image: "assets/images/save.svg" }, bgBtn, null);
     appendSvg({ image: "assets/images/paste.svg" }, pasteBtn, "4px");
     await loadSimple();
 
@@ -928,15 +1003,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       localStorage.setItem("weather-unit", unit);
       displayWeather(JSON.parse(localStorage.getItem("weatherData")));
     });
+
     await loadData();
     const bgOption = await getBgOption();
     backgroundSelect.addEventListener("change", () => {
       const selectedOption =
         backgroundSelect.options[backgroundSelect.selectedIndex].value;
-      if (selectedOption === "bg-img") {
-        bgImgExpSelect.style.display = "";
-      } else {
-        bgImgExpSelect.style.display = "none";
+      [bgColor, bgImgExpSelect].forEach((e) => {
+        e.style.display = "none";
+      });
+      switch (selectedOption) {
+        case "bg-img":
+          bgImgExpSelect.style.display = "";
+          break;
+        case "color":
+          bgColor.style.display = "";
+          break;
+        default:
+          break;
       }
     });
     if (bgOption) {
@@ -947,38 +1031,59 @@ document.addEventListener("DOMContentLoaded", async () => {
           break;
         }
       }
-
-      // Set expiration select for bg-img
-      if (bgOption.type === "bg-img") {
-        bgImgExpSelect.style.display = "";
-        for (let i = 0; i < bgImgExpSelect.options.length; i++) {
-          if (bgImgExpSelect.options[i].value == bgOption.expiration) {
-            bgImgExpSelect.options[i].selected = true;
-            break;
+      [bgImgExpSelect, bgColor].forEach((e) => {
+        e.style.display = "none";
+      });
+      switch (bgOption.type) {
+        // Set expiration select for bg-img
+        case "bg-img":
+          bgImgExpSelect.style.display = "";
+          for (let i = 0; i < bgImgExpSelect.options.length; i++) {
+            if (bgImgExpSelect.options[i].value == bgOption.expiration) {
+              bgImgExpSelect.options[i].selected = true;
+              break;
+            }
           }
-        }
-      } else {
-        bgImgExpSelect.style.display = "none";
+          break;
+        case "color":
+          bgColor.value = bgOption.data;
+          bgColor.style.display = "";
+          break;
+        default:
+          break;
       }
     } else {
-      Array.from(bgImgExpSelect.options).forEach((option) =>
-        option.removeAttribute("selected")
-      );
-      bgImgExpSelect.style.display = "none";
-      Array.from(backgroundSelect.options).forEach((option) =>
-        option.removeAttribute("selected")
-      );
+      [bgImgExpSelect, backgroundSelect].forEach((e) => {
+        Array.from(e.options).forEach((option) =>
+          option.removeAttribute("selected")
+        );
+      });
+      [bgColor, bgImgExpSelect].forEach((e) => {
+        e.style.display = "none";
+      });
       backgroundSelect.options[0].selected = true;
     }
-
+    // Gets the query from context menu
+    let q = localStorage.getItem("query");
+    if (q) {
+      localStorage.removeItem("query");
+      query.value = q;
+      toggleButton(goButton, true);
+      goButton.click();
+    }
     document.getElementById("reset").addEventListener("click", async () => {
       localStorage.clear();
       clearBgOption();
       resetBackground(document.body);
-      unitToggle.checked = false;
-      [(weatherField, nameInput)].forEach((field) => (field.value = ""));
+      [unitToggle].forEach((toggle) => {
+        toggle.checked = false;
+      });
+
+      [weatherField, nameInput].forEach((field) => {
+        field.value = "";
+      });
       [weatherBtn, nameBtn].forEach((btn) => {
-        btn.textContent = "Submit";
+        appendSvg({ image: "/assets/images/save.svg" }, btn, null, true);
         toggleButton(btn, false);
       });
       [bgImgExpSelect, backgroundSelect, trOption].forEach((selectElement) => {
@@ -990,7 +1095,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       bgImgExpSelect.style.display = "none";
       updateInactivityBehavior();
       if (chrome && chrome.permissions) {
-        await chrome.permissions.remove({ permissions: ["clipboardRead"] });
+        await chrome.permissions.remove({
+          permissions: ["clipboardRead"],
+        });
       }
       await loadSimple();
       await loadData();

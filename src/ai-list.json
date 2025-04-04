@@ -50,7 +50,8 @@
         "Find the roots of the quadratic equation x² - 5x + 6 = 0",
         "Calculate the velocity of a ball dropped from 20 meters after 2 seconds",
         "Write a Python function to reverse a string"
-      ]
+      ],
+      "context": ["selection"]
     },
     {
       "id": "Research",
@@ -60,7 +61,8 @@
         "The best gaming laptop under $1500",
         "Top programming languages for web development",
         "Latest AI trends in natural language processing"
-      ]
+      ],
+      "context": ["selection", "page"]
     },
     {
       "id": "Summarize",
@@ -70,7 +72,8 @@
         "The use Generative AI in education",
         "The paper 'Attention Is All You Need' on transformers",
         "Chapter 1 of 'To Kill a Mockingbird'"
-      ]
+      ],
+      "context": ["selection", "page", "link"]
     },
     {
       "id": "Explain",
@@ -80,7 +83,8 @@
         "How the merge sort algorithm works",
         "The concept of superposition in quantum mechanics",
         "What is supervised learning in machine learning"
-      ]
+      ],
+      "context": ["selection", "page", "link"]
     },
     {
       "id": "Analyze",
@@ -90,7 +94,8 @@
         "Interest in AI over time",
         "The trend of the S&P 500",
         "The previous presidential election"
-      ]
+      ],
+      "context": ["selection", "page", "link"]
     },
     {
       "id": "Create Image",
@@ -100,7 +105,8 @@
         "a futuristic robot",
         "a car in a parking lot",
         "a cute kitten"
-      ]
+      ],
+      "context": ["selection"]
     },
     {
       "id": "Code",
@@ -110,7 +116,8 @@
         "A Python implementation of bubble sort",
         "A REST API endpoint in Node.js to fetch user data",
         "A React component for a to-do list"
-      ]
+      ],
+      "context": ["selection", "page"]
     }
   ]
 }

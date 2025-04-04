@@ -9,7 +9,7 @@
       href="/assets/images/icon.svg"
       type="image/x-icon"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <div id="header">
@@ -21,21 +21,16 @@
     </div>
     <div id="sidebar">
       <h1>Options</h1>
-      <div>
+      <div class="section">
         <div class="horizontal-container">
-          <h2>Name</h2>
-          <button id="submit-name" class="submit">Submit</button>
-        </div>
-        <div class="horizontal-container">
+          <span>Name</span>
           <input type="text" title="name" id="name-field" class="input-field" />
+          <button id="submit-name" class="submit" title="submit"></button>
         </div>
       </div>
-      <div>
+      <div class="section">
         <div class="horizontal-container">
-          <h2>Weather</h2>
-          <button id="submit-weather" class="submit">Submit</button>
-        </div>
-        <div class="horizontal-container">
+          <span>Weather</span>
           <input
             type="text"
             title="Weather location"
@@ -43,54 +38,64 @@
             placeholder="Enter Name or Postal Code"
             class="input-field"
           />
+          <button id="submit-weather" class="submit" title="submit"></button>
         </div>
+        <input type="checkbox" id="unit-toggle" />
+        <label for="unit-toggle">Use &#176;F instead of &#176;C</label>
+      </div>
+      <div class="section">
         <div class="horizontal-container">
-          <label for="unit-toggle">Use Fahrenheit instead:</label>
-          <input type="checkbox" id="unit-toggle" />
-        </div>
-        <div>
-          <div class="horizontal-container">
-            <h2>Background</h2>
-            <button id="save-bg" title="Save" class="submit">Save</button>
-          </div>
-          <div class="horizontal-container">
-            <select title="background" id="bg-select">
-              <option value="default">Default</option>
-              <option value="bg-img">Pexels/Unsplash</option>
-            </select>
-            <select title="expiration" id="bg-img-exp">
-              <option value="-1">Never Change</option>
-              <option value="0">New Tab</option>
-              <option value="300">5 Minutes</option>
-              <!-- 5 * 60 = 300 seconds -->
-              <option value="900">15 Minutes</option>
-              <!-- 15 * 60 = 900 seconds -->
-              <option value="1800">30 Minutes</option>
-              <!-- 30 * 60 = 1800 seconds -->
-              <option value="3600">1 Hour</option>
-              <!-- 60 * 60 = 3600 seconds -->
-              <option value="43200">12 Hours</option>
-              <!-- 12 * 60 * 60 = 43200 seconds -->
-              <option value="86400">1 Day</option>
-              <!-- 24 * 60 * 60 = 86400 seconds -->
-            </select>
-          </div>
-        </div>
-        <div class="horizontal-container">
-          Fade chatbox after inactivity:
-          <select title="transparent" id="content-transparent">
-            <option value="-1">Never Fade</option>
-            <option value="0">Instantly</option>
-            <option value="5">5 sec</option>
-            <option value="15">15 sec</option>
-            <option value="30">30 sec</option>
+          <span>Background</span>
+          <select title="background" id="bg-select">
+            <option value="default">Default</option>
+            <option value="bg-img">Pexels/Unsplash</option>
+            <option value="color">Solid Color</option>
+            <option value="video">Gradient</option>
+            <option value="own-img">Upload Image</option>
           </select>
+          <button id="save-bg" title="Save" class="submit"></button>
         </div>
         <div class="horizontal-container">
-          <button id="reset" title="reset">Reset to Defaults</button>
+          <select title="expiration" id="bg-img-exp">
+            <option value="-1">Never Change</option>
+            <option value="0">New Tab</option>
+            <option value="300">5 Minutes</option>
+            <!-- 5 * 60 = 300 seconds -->
+            <option value="900">15 Minutes</option>
+            <!-- 15 * 60 = 900 seconds -->
+            <option value="1800">30 Minutes</option>
+            <!-- 30 * 60 = 1800 seconds -->
+            <option value="3600">1 Hour</option>
+            <!-- 60 * 60 = 3600 seconds -->
+            <option value="43200">12 Hours</option>
+            <!-- 12 * 60 * 60 = 43200 seconds -->
+            <option value="86400">1 Day</option>
+            <!-- 24 * 60 * 60 = 86400 seconds -->
+          </select>
+          <label for="solid-color"></label>
+          <input
+            type="color"
+            id="solid-color"
+            title="solid-color"
+            class="input-field"
+          />
         </div>
       </div>
+      <div class="horizontal-container section">
+        Fade after inactivity:
+        <select title="transparent" id="content-transparent">
+          <option value="-1">Never Fade</option>
+          <option value="0">Instantly</option>
+          <option value="5">5 sec</option>
+          <option value="15">15 sec</option>
+          <option value="30">30 sec</option>
+        </select>
+      </div>
+      <div class="horizontal-container">
+        <button id="reset" title="reset">Reset to Defaults</button>
+      </div>
     </div>
+
     <div id="content">
       <div id="navigation">
         <h1>
@@ -125,6 +130,7 @@
         </div>
       </div>
     </div>
-    <script src="app.js"></script>
+    <div id="credits"></div>
+    <script src="/app.js"></script>
   </body>
 </html>

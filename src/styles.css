@@ -48,6 +48,14 @@ body {
   background: var(--background);
   color: var(--text-color);
   font-size: large;
+  overflow: hidden;
+}
+
+a {
+  color: var(--text-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 button {
   padding: 10px 10px;
@@ -62,6 +70,7 @@ button {
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
+  margin-top: 5px;
 }
 
 button:hover,
@@ -153,8 +162,9 @@ h2 {
 
 #search {
   width: 100%;
-  height: 100px;
-  padding: 8px 12px;
+  min-height: 50px;
+  max-height: 200px;
+  height: auto;
   border: none;
   border-radius: 0;
   background: transparent;
@@ -177,8 +187,16 @@ h2 {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 20px;
   align-items: center;
+}
+.horizontal-container.right-buttons {
+  margin-top: 20px;
+}
+.section {
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 5px 5px;
+  margin-top: 5px;
 }
 
 .submit {
@@ -249,6 +267,8 @@ h2 {
   z-index: 10;
   transition: all 0.2s ease;
   padding: 0;
+  max-height: 200px; /* Limit the height */
+  overflow-y: auto; /* Enable vertical scrolling when content overflows */
 }
 #search-engine-dropdown {
   position: absolute;
@@ -281,7 +301,6 @@ li:hover {
 }
 
 #sidebar {
-  border-radius: 0 1rem 1rem 0;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
   background-color: var(--background);
   border: 1px solid var(--border-color);
@@ -306,8 +325,8 @@ li:hover {
   font-size: 0.9em;
   resize: none;
 }
-
 select {
+  margin-top: 5px;
   width: 40%;
   padding: 8px 12px;
   border: 1px solid var(--border-color);
@@ -339,4 +358,12 @@ option {
   font-family: inherit;
   font-size: 1rem;
   padding: 8px 12px;
+}
+
+#credits {
+  position: fixed;
+  bottom: 20px; /* Adjust the distance from the bottom */
+  right: 20px; /* Adjust the distance from the right */
+  color: var(--secondary-text-color);
+  text-align: right;
 }
