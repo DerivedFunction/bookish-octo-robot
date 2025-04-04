@@ -352,7 +352,7 @@ optionBtn.addEventListener("click", () => {
   sidebar.style.display = "block";
   nameInput.value = localStorage.getItem("name") || "";
   let x = JSON.parse(localStorage.getItem("location"));
-  weatherField.value = x ? (x.zip ? x.zip : x.coord ? x.coord : "") : "";
+  weatherField.value = x ? x.name : "";
 });
 
 nameBtn.addEventListener("click", () => {
@@ -412,115 +412,40 @@ pasteBtn.addEventListener("click", async () => {
 });
 
 const weather = document.getElementById("weather");
+const weather_exp = 1 * 60 * 1000; // 1 minute expiration
+const weatherBtn = document.getElementById("submit-weather");
+const weatherField = document.getElementById("weather-field");
 
+// Existing displayWeather function (unchanged)
 function displayWeather(weatherData) {
   if (!weatherData) {
     weather.textContent = "";
     return;
   }
+  const now = new Date().getTime();
+  if (now - weatherData.timestamp > weather_exp) {
+    weather.textContent = "";
+    localStorage.removeItem("weatherData");
+    console.log("Weather data expired, fetching again...");
+    storeWeather();
+    return;
+  }
   const currentUnit = localStorage.getItem("weather-unit") || "metric";
   const temperature =
     currentUnit === "imperial"
-      ? ((weatherData.temperature * 9) / 5 + 32).toFixed(1)
+      ? ((weatherData.temperature * 9) / 5 + 32).toFixed(1) // C to F
       : weatherData.temperature.toFixed(1);
   const unitSymbol = currentUnit === "imperial" ? "°F" : "°C";
 
   weather.textContent = `${weatherData.condition}, ${temperature}${unitSymbol}`;
 }
 
-const weatherBtn = document.getElementById("submit-weather");
-const weatherField = document.getElementById("weather-field");
-
-async function storeWeather() {
-  const cachedWeather = JSON.parse(localStorage.getItem("weatherData"));
-  const now = new Date().getTime();
-  let location = JSON.parse(localStorage.getItem("location"))
-    ? JSON.parse(localStorage.getItem("location")).coord
-    : null;
-
-  const postalCode = weatherField.value.trim();
-
-  // Handle location input from weatherField
-  if (postalCode) {
-    // Check if postalCode is already in lat,lon format
-    const coords = postalCode.split(",");
-    if (
-      coords.length === 2 &&
-      !isNaN(parseFloat(coords[0])) &&
-      !isNaN(parseFloat(coords[1]))
-    ) {
-      // Input is latitude,longitude
-      location = `${parseFloat(coords[0]).toFixed(6)},${parseFloat(
-        coords[1]
-      ).toFixed(6)}`;
-      localStorage.setItem(
-        "location",
-        JSON.stringify({
-          zip: postalCode,
-          coord: location,
-        })
-      );
-    } else {
-      // Treat as postal code and fetch coordinates
-      try {
-        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
-          postalCode
-        )}&count=1`;
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (!data.results || data.results.length === 0) {
-          alert("Location not found. Try using lat,lon format.");
-          weather.textContent = "";
-          return;
-        }
-
-        const { latitude: lat, longitude: lon, name } = data.results[0];
-        location = `${lat},${lon}`;
-        localStorage.setItem(
-          "location",
-          JSON.stringify({
-            zip: postalCode,
-            coord: location,
-          })
-        );
-        toggleButton(weatherBtn, false);
-      } catch (error) {
-        console.error("Error fetching coordinates:", error);
-        alert("Something went wrong. Please try again.");
-        weather.textContent = "Unable to fetch weather.";
-        return;
-      }
-    }
-  } else {
-    localStorage.removeItem("location");
-    localStorage.removeItem("weatherData");
-    toggleButton(weatherBtn, false);
-    displayWeather(null);
-    return;
-  }
-
-  // If no location available, clear weather display
-  if (!location) {
-    weather.textContent = "";
-    return;
-  }
-
-  // Check cache: same location and less than 15 minutes old
-  if (
-    cachedWeather &&
-    now - cachedWeather.timestamp < 15 * 60 * 1000 &&
-    cachedWeather.location === location
-  ) {
-    displayWeather(cachedWeather);
-    return;
-  }
-
-  // Fetch weather data
+// New function to fetch weather data
+async function fetchWeather(location) {
   try {
     const [lat, lon] = location.split(",");
     const response = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=celsius`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch weather data");
@@ -560,16 +485,14 @@ async function storeWeather() {
     };
     const condition =
       weatherDescriptions[currentWeather.weathercode] || "Unknown";
-
-    const unit = localStorage.getItem("weather-unit") || "metric";
-    const temperature = currentWeather.temperature;
-    const unitSymbol = "°C";
+    const temperature = currentWeather.temperature; // Always Celsius
+    const unitSymbol = "°C"; // Stored unit is always Celsius
 
     const weatherData = {
       condition,
       temperature,
       unitSymbol,
-      timestamp: now,
+      timestamp: new Date().getTime(),
       location,
     };
 
@@ -581,10 +504,107 @@ async function storeWeather() {
   }
 }
 
-// Updated event listener
+// Updated storeWeather function
+async function storeWeather() {
+  const cachedWeather = JSON.parse(localStorage.getItem("weatherData"));
+  const now = new Date().getTime();
+  let location = JSON.parse(localStorage.getItem("location"))
+    ? JSON.parse(localStorage.getItem("location")).coord
+    : null;
+
+  const inputValue = weatherField.value.trim();
+
+  // If we have a location from localStorage, fetch weather data directly
+  if (location && !inputValue) {
+    if (
+      cachedWeather &&
+      now - cachedWeather.timestamp < weather_exp &&
+      cachedWeather.location === location
+    ) {
+      displayWeather(cachedWeather);
+      return;
+    }
+    await fetchWeather(location);
+    return;
+  }
+
+  // Handle location input from weatherField
+  if (inputValue) {
+    const coords = inputValue.split(",");
+    if (coords.length === 2 && coords.every((c) => !isNaN(parseFloat(c)))) {
+      // Input is latitude,longitude
+      location = coords.map((c) => parseFloat(c).toFixed(6)).join(",");
+      localStorage.setItem(
+        "location",
+        JSON.stringify({
+          name: inputValue,
+          zip: null,
+          coord: location,
+        })
+      );
+    } else {
+      // Treat as postal code or name and fetch coordinates
+      try {
+        const response = await fetch(
+          `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+            inputValue
+          )}&count=1`
+        );
+        const data = await response.json();
+
+        if (!data.results?.length) {
+          alert("Location not found. Try using lat,lon format.");
+          weather.textContent = "";
+          return;
+        }
+
+        const { latitude: lat, longitude: lon } = data.results[0];
+        location = `${lat},${lon}`;
+        localStorage.setItem(
+          "location",
+          JSON.stringify({
+            name: inputValue,
+            zip: inputValue,
+            coord: location,
+          })
+        );
+        toggleButton(weatherBtn, false); // Disable the button
+      } catch (error) {
+        console.error("Error fetching coordinates:", error);
+        alert("Something went wrong. Please try again.");
+        weather.textContent = "Unable to fetch weather.";
+        return;
+      }
+    }
+  } else if (!location) {
+    localStorage.removeItem("location");
+    localStorage.removeItem("weatherData");
+    toggleButton(weatherBtn, false); // Disable button
+    displayWeather(null);
+    return;
+  }
+
+  if (!location) {
+    weather.textContent = "";
+    return;
+  }
+
+  // Check cache and fetch if needed
+  if (
+    cachedWeather &&
+    now - cachedWeather.timestamp < weather_exp &&
+    cachedWeather.location === location
+  ) {
+    displayWeather(cachedWeather);
+  } else {
+    await fetchWeather(location);
+  }
+}
+
+// Event listeners
 weatherBtn.addEventListener("click", storeWeather);
 weatherField.addEventListener("input", () => {
-  toggleButton(weatherBtn, true);
+  toggleButton(weatherBtn, true); // Enable button
   appendSvg(
     {
       image:
