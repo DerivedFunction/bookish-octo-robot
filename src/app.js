@@ -191,7 +191,6 @@ async function getSearchEngine() {
     }
 
     const engineData = JSON.parse(selectedEngine);
-    curSearchBtn.innerHTML = "";
     await appendSvg({ image: engineData.image }, curSearchBtn);
     if (engineData.image) {
       const iconUrl = engineData.image;
@@ -375,7 +374,8 @@ async function getSuggestionButtons() {
 }
 
 async function findSuggestions() {
-  const promptList = await getPrompt().find((p) => p.prompt === query.value);
+  const prompts = await getPrompt();
+  const promptList = prompts.find((p) => p.prompt === query.value);
   if (
     !promptList ||
     !promptList.suggestions ||
