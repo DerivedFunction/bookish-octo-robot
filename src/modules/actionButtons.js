@@ -1,0 +1,69 @@
+import { readText } from "./backgroundImage.js";
+import { query, queryEvents, MAX_LIMIT } from "./query.js";
+import { setupTooltip } from "./tooltip.js";
+import { getSearchEngineUrl } from "./searchEngine.js";
+import { appendSvg } from "./appendSvg.js";
+
+export const clearBtn = document.getElementById("clear");
+clearBtn.addEventListener("click", async () => {
+  if (query.value.length > 0) {
+    query.value = "";
+    await queryEvents();
+  }
+  query.focus();
+});
+export const pasteBtn = document.getElementById("paste");
+pasteBtn.addEventListener("click", async () => {
+  try {
+    const permissionStatus = await chrome.permissions.request({
+      permissions: ["clipboardRead"],
+    });
+    if (!permissionStatus) {
+      alert(
+        "Permission to access clipboard is denied. Please enable it in your browser settings."
+      );
+      return;
+    }
+    const text = await navigator.clipboard.readText();
+    query.value += text;
+    query.focus();
+  } catch (err) {
+    console.error("Failed to read clipboard contents: ", err);
+    alert("Unable to access clipboard. Please grant permission and try again.");
+  }
+});
+export const goBtn = document.getElementById("go");
+goBtn.addEventListener("click", async () => {
+  if (query.value.length > 0 && query.value.length < MAX_LIMIT) {
+    let url = `${await getSearchEngineUrl()}${encodeURIComponent(query.value)}`;
+    window.location.href = url;
+  }
+});
+export const fakeFileBtn = document.getElementById("fake-file-upload");
+export const fileUploadInput = document.getElementById("fake-file");
+fileUploadInput.addEventListener("change", () => {
+  const file = fileUploadInput.files[0];
+  if (file) {
+    readText(file).then((text) => {
+      query.value += `${file.name}:\n${text}`;
+      query.focus();
+    });
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  appendSvg({ image: "assets/images/buttons/go.svg" }, goBtn);
+  appendSvg({ image: "assets/images/buttons/clear.svg" }, clearBtn);
+  appendSvg({ image: "assets/images/buttons/paste.svg" }, pasteBtn);
+  appendSvg({ image: "assets/images/buttons/file.svg" }, fakeFileBtn);
+  let q = localStorage.getItem("query");
+  if (q) {
+    localStorage.removeItem("query");
+    query.value = q;
+    toggleButton(goBtn, true);
+    goBtn.click();
+  }
+  [clearBtn, pasteBtn, goBtn, fakeFileBtn].forEach((btn) => {
+    setupTooltip(btn, () => query.value.length === 0);
+  });
+});
