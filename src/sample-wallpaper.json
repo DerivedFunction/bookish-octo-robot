@@ -139,7 +139,7 @@
     "name": "Urban Vintage",
     "domain": "Unsplash",
     "url": "https://images.unsplash.com/photo-1469474968028-56623f02e42e",
-    "lightModeText": false,
+    "lightModeText": true,
     "credits": "https://unsplash.com/@urban_vintage"
   },
 

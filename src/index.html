@@ -13,9 +13,9 @@
   </head>
   <body>
     <div id="header">
-      <button id="options-button" title="Options"></button>
+      <button id="options-button" title="Options" class="bg-text"></button>
       <div class="extra-info">
-        <h2 class="bg-text"><span id="time">Current time</span></h2>
+        <h2 class="bg-text"><span id="time"></span></h2>
         <h2 class="bg-text"><span id="weather"></span></h2>
       </div>
     </div>
@@ -25,7 +25,7 @@
         <div class="horizontal-container">
           <span>Name</span>
           <input type="text" title="name" id="name-field" class="input-field" />
-          <button id="submit-name" class="submit" title="submit"></button>
+          <button id="submit-name" class="submit" title="Save"></button>
         </div>
       </div>
       <div class="section">
@@ -38,7 +38,7 @@
             placeholder="Enter Name or Postal Code"
             class="input-field"
           />
-          <button id="submit-weather" class="submit" title="submit"></button>
+          <button id="submit-weather" class="submit" title="Save"></button>
         </div>
         <input type="checkbox" id="unit-toggle" />
         <label for="unit-toggle">Use &#176;F instead of &#176;C</label>
@@ -95,20 +95,20 @@
             title="gradient-number"
             class="input-field"
             placeholder="0-360"
+            min="0"
+            max="360"
             value="0"
           />
-
-          <label for="img-file">
-            <button class="input-field" id="img-file-label">
-              Click to upload...
-            </button>
-            <input
-              type="file"
-              id="img-file"
-              title="Upload Image"
-              accept="image/*"
-              class="input-field file-field"
-          /></label>
+          <label for="img-file" id="img-file-label" class="button-format"
+            >Click to upload...</label
+          >
+          <input
+            id="img-file"
+            type="file"
+            title="Upload Image"
+            accept="image/*"
+            hidden="true"
+          />
         </div>
       </div>
       <div class="section">
@@ -139,7 +139,7 @@
       </div>
       <div class="horizontal-container section">
         Fade after inactivity:
-        <select title="transparent" id="content-transparent">
+        <select title="Inactivity Duration" id="content-transparent">
           <option value="-1">Never Fade</option>
           <option value="0">Instantly</option>
           <option value="5">5 sec</option>
@@ -148,7 +148,7 @@
         </select>
       </div>
       <div class="horizontal-container">
-        <button id="reset" title="reset">Reset to Defaults</button>
+        <button id="reset" title="Reset to Defaults">Reset to Defaults</button>
       </div>
     </div>
 
@@ -173,17 +173,30 @@
                 <div class="search-engine-container">
                   <div class="horizontal-container">
                     <button
-                      class="search-engine-btn"
                       title="Your current AI"
                       id="currentEngine"
                       data-tooltip="Your current AI"
                     ></button>
                     <button
-                      class="search-engine-btn"
-                      title="Pick a different AI"
+                      title="Pick other AI Chatbots"
                       id="search-engine-picker"
-                      data-tooltip="Pick other AI models"
+                      data-tooltip="Pick other AI Chatbots"
                     ></button>
+                    <label
+                      title="Add file's text to query"
+                      data-tooltip="Add file's text to
+                      query"
+                      class="button-format"
+                      for="fake-file"
+                      id="fake-file-upload"
+                    >
+                    </label>
+                    <input
+                      id="fake-file"
+                      type="file"
+                      accept="text/*"
+                      hidden="true"
+                    />
                   </div>
                   <ul id="search-engine-dropdown" class="dropdown-content"></ul>
                 </div>
@@ -201,18 +214,20 @@
               ></button>
               <button
                 id="go"
-                title="Submit Your Query"
+                title="Go"
                 disabled=""
                 class="submit"
                 data-tooltip="Message is empty"
               ></button>
             </div>
           </div>
-          <div class="suggestions-container"></div>
+          <span id="char-count" class="bg-text"></span>
+          <div id="suggestions" class="suggestions-container"></div>
+          <div id="suggestions-result" class="suggestions-container"></div>
         </div>
       </div>
     </div>
-    <div id="credits"></div>
+    <div id="credits" class="bg-text"></div>
     <span id="tooltip">Tooltip text</span>
     <script src="/app.js"></script>
   </body>

@@ -1,13 +1,17 @@
 let aiList = [];
 let prompts = [];
 let wallpapers = [];
+const MAX_LIMIT = 5000; // max char count
 const clearBtn = document.getElementById("clear");
 
 const searchEnginePickerBtn = document.getElementById("search-engine-picker");
 const curSearchBtn = document.getElementById("currentEngine");
-const dropdown = document.querySelector("#search-engine-dropdown");
-const suggestionContainer = document.querySelector(".suggestions-container");
-
+const dropdown = document.getElementById("search-engine-dropdown");
+const suggestionContainer = document.getElementById("suggestions");
+const suggestionResult = document.getElementById("suggestions-result");
+const fakeFileBtn = document.getElementById("fake-file-upload");
+const fileUploadInput = document.getElementById("fake-file");
+const charCount = document.getElementById("char-count");
 searchEnginePickerBtn.addEventListener("click", () => {
   dropdown.classList.toggle("active");
   if (dropdown.classList.contains("active")) {
@@ -34,29 +38,34 @@ const query = document.getElementById("search");
 clearBtn.addEventListener("click", async () => {
   if (query.value.length > 0) {
     query.value = "";
-    query.style.height = "auto";
-    query.style.height = `${query.scrollHeight}px`;
-    toggleButton(clearBtn, false);
-    toggleButton(goBtn, false);
-    await getSuggestionButtons();
+    await queryEvents();
   }
   query.focus();
+});
+fileUploadInput.addEventListener("change", () => {
+  const file = fileUploadInput.files[0];
+  if (file) {
+    readText(file).then((text) => {
+      query.value += `${file.name}:\n${text}`;
+      query.focus();
+    });
+  }
 });
 
 query.addEventListener("input", async () => {
   // Set the height to match the content (scrollHeight)
-  query.style.height = "auto"; // Reset height to auto
-  query.style.height = `${query.scrollHeight}px`; // Recalculate height
-  let x = query.value.length > 0;
-  toggleButton(clearBtn, x);
-  toggleButton(goBtn, x);
-  if (!x) await getSuggestionButtons();
+  await queryEvents();
+});
+query.addEventListener("focus", async () => {
+  suggestionResult.innerHTML = "";
+  // Set the height to match the content (scrollHeight)
+  await queryEvents();
 });
 
 query.addEventListener("keydown", async (e) => {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
-    if (!goBtn.disabled) {
+    if (!goBtn.disabled && query.value.length < MAX_LIMIT) {
       goBtn.click();
     }
   } else if (e.key === "Enter" && e.shiftKey) {
@@ -66,11 +75,33 @@ query.addEventListener("keydown", async (e) => {
 });
 
 goBtn.addEventListener("click", () => {
-  if (query.value.length > 0) {
+  if (query.value.length > 0 && query.value.length < MAX_LIMIT) {
     let url = `${getSearchEngineUrl()}${encodeURIComponent(query.value)}`;
     window.location.href = url;
   }
 });
+
+async function queryEvents() {
+  query.style.height = "auto"; // Reset height to auto
+  query.style.height = `${query.scrollHeight}px`; // Recalculate height
+  let x = query.value.length > 0;
+  toggleButton(clearBtn, x);
+  toggleButton(goBtn, x);
+  getCharCount();
+}
+
+function getCharCount() {
+  const charLength = query.value.length;
+  charCount.textContent = `${charLength}/${MAX_LIMIT}`;
+
+  if (charLength >= MAX_LIMIT * 0.9) {
+    charCount.style.color = "var(--danger-color)";
+  } else if (charLength >= MAX_LIMIT * 0.7) {
+    charCount.style.color = "var(--warning-color)";
+  } else {
+    charCount.style.color = ""; // Reset to default color
+  }
+}
 
 function toggleButton(button, enabled) {
   button.disabled = !enabled;
@@ -85,6 +116,14 @@ function getSearchEngineUrl() {
   }
 
   return engine.url;
+}
+function getSearchEngineName() {
+  let engine = JSON.parse(localStorage.getItem("selectedSearchEngine"));
+  if (!engine) {
+    engine = getSearchEngine();
+  }
+
+  return engine.name;
 }
 
 async function loadJsonData(resetOptions = {}) {
@@ -277,19 +316,13 @@ async function getPrompt() {
   }
   return prompts;
 }
-
 async function getSuggestionButtons() {
-  if (document.getElementById("Solve")) {
-    return; // If the button with id="solve" exists, do nothing
-  }
-
+  suggestionResult.innerHTML = "";
   const promptList = await getPrompt();
   if (!Array.isArray(promptList) || promptList.length === 0) {
     console.warn("No prompts available");
     return;
   }
-
-  suggestionContainer.innerHTML = ""; // Clear existing buttons
   const fragment = document.createDocumentFragment(); // Use a fragment for better performance
 
   promptList.forEach((prompt) => {
@@ -304,15 +337,13 @@ async function getSuggestionButtons() {
     }
 
     btn.addEventListener("click", () => {
-      if (query.value.length == 0 || goBtn.disabled) {
+      if (goBtn.disabled) {
         query.value = prompt.prompt;
-        query.focus();
         toggleButton(clearBtn, true);
-        findSuggestions();
       } else {
         query.value = prompt.prompt + query.value;
-        goBtn.click();
       }
+      findSuggestions();
     });
 
     fragment.appendChild(btn); // Append button to the fragment
@@ -320,8 +351,9 @@ async function getSuggestionButtons() {
 
   suggestionContainer.appendChild(fragment); // Append the fragment to the container
 }
+
 function findSuggestions() {
-  suggestionContainer.innerHTML = ""; // Clear existing suggestions
+  suggestionResult.innerHTML = "";
   const promptList = prompts.find((p) => p.prompt === query.value);
   if (
     !promptList ||
@@ -331,7 +363,6 @@ function findSuggestions() {
     console.warn("No suggestions available for the current prompt");
     return;
   }
-
   promptList.suggestions.forEach((suggestion) => {
     const suggestionElement = document.createElement("button");
     suggestionElement.className = "suggestion-item";
@@ -339,12 +370,10 @@ function findSuggestions() {
     const text = query.value + suggestion;
     suggestionElement.addEventListener("click", () => {
       query.value = text;
+      suggestionResult.innerHTML = "";
       query.focus();
-      toggleButton(goBtn, true);
-      toggleButton(clearBtn, true);
     });
-
-    suggestionContainer.appendChild(suggestionElement);
+    suggestionResult.appendChild(suggestionElement);
   });
 }
 function updateTime() {
@@ -423,13 +452,7 @@ pasteBtn.addEventListener("click", async () => {
     }
     const text = await navigator.clipboard.readText();
     query.value += text;
-    // Set the height to match the content (scrollHeight)
-    query.style.height = "auto";
-    query.style.height = `${query.scrollHeight}px`;
     query.focus();
-    let x = query.value.length > 0;
-    toggleButton(clearBtn, x);
-    toggleButton(goBtn, x);
   } catch (err) {
     console.error("Failed to read clipboard contents: ", err);
     alert("Unable to access clipboard. Please grant permission and try again.");
@@ -969,6 +992,14 @@ async function blobToDataURL(blob) {
     reader.readAsDataURL(blob);
   });
 }
+async function readText(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsText(blob);
+  });
+}
 
 // Helper function to set a new background image
 async function setNewBackgroundImage(body, bgData = null) {
@@ -1132,7 +1163,7 @@ timeFormat.addEventListener("change", (e) => {
   updateTime();
 });
 const tooltip = document.getElementById("tooltip");
-function setupTooltip(element, condition = () => true) {
+function setupTooltip(element, condition = () => true, message = null) {
   const hideTooltip = () => {
     tooltip.style.display = "none";
   };
@@ -1142,25 +1173,32 @@ function setupTooltip(element, condition = () => true) {
     const rect = element.getBoundingClientRect();
     tooltip.style.left = `${rect.left + window.scrollX}px`;
     tooltip.style.top = `${rect.top + window.scrollY - 30}px`;
-    tooltip.textContent = element.getAttribute("data-tooltip");
+    tooltip.textContent = message
+      ? message
+      : element.getAttribute("data-tooltip");
     tooltip.style.display = "block";
   });
 
   element.addEventListener("mouseout", hideTooltip);
-  document.addEventListener("keydown", hideTooltip);
+  document.addEventListener("keydown", () => {
+    hideTooltip();
+    if (!document.activeElement || document.activeElement.tagName !== "INPUT") {
+      query.focus();
+    }
+  });
   document.addEventListener("click", hideTooltip);
 }
-
-setupTooltip(curSearchBtn);
+setupTooltip(curSearchBtn, () => true, `Search with ${getSearchEngineName()}`);
 setupTooltip(
   searchEnginePickerBtn,
   () => !dropdown.classList.contains("active")
 );
-[clearBtn, pasteBtn, goBtn].forEach((btn) => {
+[clearBtn, pasteBtn, goBtn, fakeFileBtn].forEach((btn) => {
   setupTooltip(btn, () => query.value.length === 0);
 });
 document.addEventListener("DOMContentLoaded", async () => {
   try {
+    query.value = "";
     // Add icons
     appendSvg({ image: "assets/images/options.svg" }, optionBtn);
     appendSvg({ image: "assets/images/go.svg" }, goBtn);
@@ -1170,7 +1208,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     appendSvg({ image: "assets/images/down.svg" }, searchEnginePickerBtn);
     appendSvg({ image: "assets/images/paste.svg" }, pasteBtn);
-
+    appendSvg({ image: "assets/images/file.svg" }, fakeFileBtn);
     await loadSimple();
     // Set initial state
     updateInactivityBehavior(); // Apply the stored inactivity setting
@@ -1213,14 +1251,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     backgroundSelect.addEventListener("change", () => {
       const selectedOption =
         backgroundSelect.options[backgroundSelect.selectedIndex].value;
-      [
-        bgColor,
-        bgImgExpSelect,
-        bgColor2,
-        bgNum,
-        ownImgInput,
-        ownImgLabel,
-      ].forEach((e) => {
+      [bgColor, bgImgExpSelect, bgColor2, bgNum, ownImgLabel].forEach((e) => {
         e.style.display = "none";
       });
       ownImgLabel.textContent = "Click to upload...";
@@ -1237,7 +1268,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           bgNum.style.display = "";
           break;
         case "own-img":
-          ownImgInput.style.display = "";
           ownImgLabel.style.display = "";
           break;
         default:
@@ -1258,14 +1288,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           break;
         }
       }
-      [
-        bgColor,
-        bgImgExpSelect,
-        bgColor2,
-        bgNum,
-        ownImgInput,
-        ownImgLabel,
-      ].forEach((e) => {
+      [bgColor, bgImgExpSelect, bgColor2, bgNum, ownImgLabel].forEach((e) => {
         e.style.display = "none";
       });
 
@@ -1297,7 +1320,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           ownImgLabel.textContent = bgOption.credits[0]
             ? bgOption.credits[0]
             : "Click to upload...";
-          ownImgInput.style.display = "";
+
           ownImgLabel.style.display = "";
         default:
           break;
@@ -1309,14 +1332,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           option.removeAttribute("selected")
         );
       });
-      [
-        bgColor,
-        bgImgExpSelect,
-        bgColor2,
-        bgNum,
-        ownImgInput,
-        ownImgLabel,
-      ].forEach((e) => {
+      [bgColor, bgImgExpSelect, bgColor2, bgNum, ownImgLabel].forEach((e) => {
         e.style.display = "none";
       });
       backgroundSelect.options[0].selected = true;
@@ -1358,14 +1374,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       ownImgLabel.textContent = "Click to upload...";
       document.body.removeAttribute("data-theme");
       setTextColor();
-      [
-        bgImgExpSelect,
-        bgColor,
-        bgColor2,
-        bgNum,
-        ownImgLabel,
-        ownImgInput,
-      ].forEach((e) => {
+      [bgImgExpSelect, bgColor, bgColor2, bgNum, ownImgLabel].forEach((e) => {
         e.style.display = "none";
       });
       updateInactivityBehavior();
