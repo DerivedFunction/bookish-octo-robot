@@ -8,6 +8,7 @@ export const weatherBtn = document.getElementById("submit-weather");
 export const weatherField = document.getElementById("weather-field");
 // Existing displayWeather function (unchanged)
 export function displayWeather(weatherData) {
+  console.log("fetching weather");
   let loc = JSON.parse(localStorage.getItem("location"));
   weatherField.value = loc ? loc.name : "";
   if (!weatherData) {
@@ -213,7 +214,6 @@ weatherField.addEventListener("input", () => {
   );
 });
 document.addEventListener("DOMContentLoaded", () => {
-  weatherField.value = "";
   appendSvg({ image: "assets/images/buttons/save.svg" }, weatherBtn);
   const unitToggle = document.getElementById("unit-toggle");
   unitToggle.checked = localStorage.getItem("weather-unit") === "imperial";
@@ -222,6 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("weather-unit", unit);
     displayWeather(JSON.parse(localStorage.getItem("weatherData")));
   });
+  displayWeather(JSON.parse(localStorage.getItem("weatherData")));
   document.getElementById("reset").addEventListener("click", async () => {
     localStorage.removeItem("weatherData");
     unitToggle.checked = false;
