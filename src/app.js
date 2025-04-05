@@ -647,7 +647,6 @@ async function storeWeather() {
         const data = await response.json();
 
         if (!data.results?.length) {
-          alert("Location not found. Try using lat,lon format.");
           weather.textContent = "";
           return;
         }
@@ -665,7 +664,6 @@ async function storeWeather() {
         toggleButton(weatherBtn, false); // Disable the button
       } catch (error) {
         console.error("Error fetching coordinates:", error);
-        alert("Something went wrong. Please try again.");
         weather.textContent = "Unable to fetch weather.";
         return;
       }
