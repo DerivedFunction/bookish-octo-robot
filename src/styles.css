@@ -325,9 +325,9 @@ li:hover {
 
 .input-field {
   width: 100%;
-  padding: 8px 8px;
+  padding: 3px 3px;
   border: 1px solid var(--border-color);
-  border-radius: 28px;
+  border-radius: 14px;
   background: var(--item-bg);
   color: var(--text-color);
   font-family: inherit;
@@ -394,7 +394,5 @@ fieldset {
 }
 
 #char-count {
-  display: block;
   font-size: 0.75rem; /* Tiny text size */
-  color: var(--secondary-text-color); /* Optional: Use secondary text color */
 }

@@ -13,7 +13,7 @@
   </head>
   <body>
     <div id="header">
-      <button id="options-button" title="Options" class="bg-text"></button>
+      <button id="options-button" class="bg-text"></button>
       <div class="extra-info">
         <h2 class="bg-text"><span id="time"></span></h2>
         <h2 class="bg-text"><span id="weather"></span></h2>
@@ -24,21 +24,41 @@
       <div class="section">
         <div class="horizontal-container">
           <span>Name</span>
-          <input type="text" title="name" id="name-field" class="input-field" />
-          <button id="submit-name" class="submit" title="Save"></button>
+          <input type="text" id="name-field" class="input-field" />
+          <button id="submit-name" class="submit"></button>
         </div>
+      </div>
+      <div class="section">
+        <form>
+          <fieldset id="greeting-form">
+            <input type="radio" id="formal" name="greeting" value="formal" />
+            <label for="formal">Formal</label>
+            <legend>Greeting Type</legend>
+            <input
+              type="radio"
+              id="informal"
+              name="greeting"
+              value="informal"
+            />
+            <label for="informal">Informal</label>
+
+            <input type="radio" id="custom" name="greeting" value="custom" />
+            <label for="custom">Custom</label>
+            <input type="radio" id="none" name="greeting" value="none" />
+            <label for="none">None</label>
+          </fieldset>
+        </form>
       </div>
       <div class="section">
         <div class="horizontal-container">
           <span>Weather</span>
           <input
             type="text"
-            title="Weather location"
             id="weather-field"
             placeholder="Enter Name or Postal Code"
             class="input-field"
           />
-          <button id="submit-weather" class="submit" title="Save"></button>
+          <button id="submit-weather" class="submit"></button>
         </div>
         <input type="checkbox" id="unit-toggle" />
         <label for="unit-toggle">Use &#176;F instead of &#176;C</label>
@@ -46,17 +66,17 @@
       <div class="section">
         <div class="horizontal-container">
           <span>Background</span>
-          <select title="background" id="bg-select">
+          <select id="bg-select">
             <option value="default">Default</option>
             <option value="bg-img">Pexels/Unsplash</option>
             <option value="color">Solid Color</option>
             <option value="gradient">Gradient</option>
             <option value="own-img">Upload Image</option>
           </select>
-          <button id="save-bg" title="Save" class="submit"></button>
+          <button id="save-bg" class="submit"></button>
         </div>
         <div class="horizontal-container">
-          <select title="expiration" id="bg-img-exp">
+          <select id="bg-img-exp">
             <option value="-1">Never Change Image</option>
             <option value="0">Change Every New Tab</option>
             <option value="300">Change Every 5 Minutes</option>
@@ -75,24 +95,13 @@
             <!-- 24 * 60 * 60 * 7 = 604800 seconds -->
           </select>
           <label for="solid-color"></label>
-          <input
-            type="color"
-            id="solid-color"
-            title="solid-color"
-            class="input-field"
-          />
+          <input type="color" id="solid-color" class="input-field" />
           <label for="solid-color-2"></label>
-          <input
-            type="color"
-            id="solid-color-2"
-            title="solid-color-2"
-            class="input-field"
-          />
+          <input type="color" id="solid-color-2" class="input-field" />
           <label for="gradient-number"></label>
           <input
             type="number"
             id="gradient-number"
-            title="gradient-number"
             class="input-field"
             placeholder="0-360"
             min="0"
@@ -102,24 +111,18 @@
           <label for="img-file" id="img-file-label" class="button-format"
             >Click to upload...</label
           >
-          <input
-            id="img-file"
-            type="file"
-            title="Upload Image"
-            accept="image/*"
-            hidden="true"
-          />
+          <input id="img-file" type="file" accept="image/*" hidden="true" />
         </div>
       </div>
       <div class="section">
         <form>
           <fieldset class="horizontal-container" id="user-theme">
             <legend>Choose Theme</legend>
-            <input type="radio" id="auto" name="textColor" value="auto" />
+            <input type="radio" id="auto" name="theme" value="auto" />
             <label for="auto">Auto</label>
-            <input type="radio" id="light" name="textColor" value="true" />
+            <input type="radio" id="light" name="theme" value="true" />
             <label for="light">Light Mode</label><br />
-            <input type="radio" id="dark" name="textColor" value="false" />
+            <input type="radio" id="dark" name="theme" value="false" />
             <label for="dark">Dark Mode</label>
           </fieldset>
         </form>
@@ -128,18 +131,18 @@
         <form>
           <fieldset class="horizontal-container" id="time-format">
             <legend>Choose Time Format</legend>
-            <input type="radio" id="none" name="textColor" value="hide" />
+            <input type="radio" id="none" name="time" value="hide" />
             <label for="none">Hide</label>
-            <input type="radio" id="24" name="textColor" value="24" />
+            <input type="radio" id="24" name="time" value="24" />
             <label for="24">24 Hours</label>
-            <input type="radio" id="12" name="textColor" value="12" />
+            <input type="radio" id="12" name="time" value="12" />
             <label for="12">12 Hours</label>
           </fieldset>
         </form>
       </div>
       <div class="horizontal-container section">
         Fade after inactivity:
-        <select title="Inactivity Duration" id="content-transparent">
+        <select id="content-transparent">
           <option value="-1">Never Fade</option>
           <option value="0">Instantly</option>
           <option value="5">5 sec</option>
@@ -148,13 +151,13 @@
         </select>
       </div>
       <div class="horizontal-container">
-        <button id="reset" title="Reset to Defaults">Reset to Defaults</button>
+        <button id="reset">Reset to Defaults</button>
       </div>
     </div>
 
     <div id="content">
       <div id="navigation">
-        <h1>
+        <h1 id="greeting-container">
           <span id="greeting" class="bg-text">Hello</span>
           <span id="name" class="bg-text"></span>
           <span id="secondary" class="bg-text">How can I help you today?</span>
@@ -173,17 +176,14 @@
                 <div class="search-engine-container">
                   <div class="horizontal-container">
                     <button
-                      title="Your current AI"
                       id="currentEngine"
                       data-tooltip="Your current AI"
                     ></button>
                     <button
-                      title="Pick other AI Chatbots"
                       id="search-engine-picker"
                       data-tooltip="Pick other AI Chatbots"
                     ></button>
                     <label
-                      title="Add file's text to query"
                       data-tooltip="Add file's text to
                       query"
                       class="button-format"
@@ -201,27 +201,22 @@
                   <ul id="search-engine-dropdown" class="dropdown-content"></ul>
                 </div>
               </div>
+              <span id="char-count"></span>
               <button
                 id="clear"
-                title="Clear Message"
                 class="submit"
                 data-tooltip="Clear Message"
               ></button>
-              <button
-                id="paste"
-                title="Paste"
-                data-tooltip="Paste from Clipboard"
-              ></button>
+              <button id="paste" data-tooltip="Paste from Clipboard"></button>
               <button
                 id="go"
-                title="Go"
                 disabled=""
                 class="submit"
                 data-tooltip="Message is empty"
               ></button>
             </div>
           </div>
-          <span id="char-count" class="bg-text"></span>
+
           <div id="suggestions" class="suggestions-container"></div>
           <div id="suggestions-result" class="suggestions-container"></div>
         </div>

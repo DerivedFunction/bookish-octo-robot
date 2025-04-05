@@ -15,9 +15,15 @@ const charCount = document.getElementById("char-count");
 searchEnginePickerBtn.addEventListener("click", () => {
   dropdown.classList.toggle("active");
   if (dropdown.classList.contains("active")) {
-    appendSvg({ image: "/assets/images/up.svg" }, searchEnginePickerBtn);
+    appendSvg(
+      { image: "/assets/images/buttons/up.svg" },
+      searchEnginePickerBtn
+    );
   } else {
-    appendSvg({ image: "/assets/images/down.svg" }, searchEnginePickerBtn);
+    appendSvg(
+      { image: "/assets/images/buttons/down.svg" },
+      searchEnginePickerBtn
+    );
   }
 });
 curSearchBtn.addEventListener("click", () => {
@@ -54,10 +60,12 @@ fileUploadInput.addEventListener("change", () => {
 
 query.addEventListener("input", async () => {
   // Set the height to match the content (scrollHeight)
+  chatbox.style.opacity = "1.0";
   await queryEvents();
 });
 query.addEventListener("focus", async () => {
   suggestionResult.innerHTML = "";
+  chatbox.style.opacity = "1.0";
   // Set the height to match the content (scrollHeight)
   await queryEvents();
 });
@@ -221,10 +229,8 @@ async function getSearchEngine() {
 async function addSearchEngines() {
   let searchEngines = await getSearchEngineList();
   const list = document.getElementById("search-engine-dropdown");
-  list.innerHTML = ""; // Clear existing items
-
+  const fragment = document.createDocumentFragment();
   searchEngines.forEach((engine) => {
-    const fragment = document.createDocumentFragment();
     const listItem = document.createElement("li");
     listItem.className = "search-engine-option";
     listItem.setAttribute("data-link", engine.url);
@@ -249,12 +255,15 @@ async function addSearchEngines() {
       localStorage.setItem("selectedSearchEngine", JSON.stringify(engine));
       await getSearchEngine(); // Update the button icon immediately
       dropdown.classList.remove("active");
-      appendSvg({ image: "assets/images/down.svg" }, searchEnginePickerBtn);
+      appendSvg(
+        { image: "assets/images/buttons/down.svg" },
+        searchEnginePickerBtn
+      );
     });
 
     fragment.appendChild(listItem);
-    list.appendChild(fragment);
   });
+  list.replaceChildren(fragment);
 }
 
 function appendSvg(object, container, gap = null, replace = true) {
@@ -285,28 +294,53 @@ function appendSvg(object, container, gap = null, replace = true) {
     })
     .catch((error) => console.error("Error loading SVG:", error));
 }
-
+const greeting = document.getElementById("greeting-form");
+const greetingContainer = document.getElementById("greeting-container");
+const custGreeting = document.getElementById("custom-greeting-msg");
+greeting.addEventListener("change", async (e) => {
+  localStorage.setItem("greeting", e.target.value);
+  if (e.target.value === "custom") {
+    let x = prompt("Enter greeting", "Hi");
+    localStorage.setItem("greeting", x ? x : "Hi");
+  }
+  getGreeting();
+});
 function getGreeting() {
   let x = document.getElementById("greeting");
   let y = localStorage.getItem("name");
-  if (!x) return;
-
+  let z = localStorage.getItem("greeting");
+  if (!z) {
+    localStorage.setItem("greeting", "formal");
+    z = "formal";
+  }
   const now = new Date();
   const hour = now.getHours();
 
-  let greeting;
-
-  if (hour >= 4 && hour < 12) {
-    // Morning: 4:00 - 11:59
-    greeting = "Good Morning";
-  } else if (hour >= 12 && hour < 16) {
-    // Afternoon: 12:00 - 15:59
-    greeting = "Good Afternoon";
-  } else if ((hour >= 16 && hour < 24) || (hour >= 0 && hour < 4)) {
-    // Evening: 16:00 - 19:59
-    greeting = "Good Evening";
+  let greeting = "";
+  switch (z) {
+    case "formal":
+      if (hour >= 4 && hour < 12) {
+        // Morning: 4:00 - 11:59
+        greeting = "Good Morning";
+      } else if (hour >= 12 && hour < 16) {
+        // Afternoon: 12:00 - 15:59
+        greeting = "Good Afternoon";
+      } else if ((hour >= 16 && hour < 24) || (hour >= 0 && hour < 4)) {
+        // Evening: 16:00 - 19:59
+        greeting = "Good Evening";
+      }
+      break;
+    case "informal":
+      greeting = "Hello";
+      break;
+    case "none":
+      greeting = null;
+      break;
+    default:
+      greeting = z;
   }
   x.textContent = y ? `${greeting}, ${y}.` : `${greeting}.`;
+  greetingContainer.style.display = !greeting ? "none" : "";
 }
 
 async function getPrompt() {
@@ -318,6 +352,7 @@ async function getPrompt() {
 }
 async function getSuggestionButtons() {
   suggestionResult.innerHTML = "";
+
   const promptList = await getPrompt();
   if (!Array.isArray(promptList) || promptList.length === 0) {
     console.warn("No prompts available");
@@ -339,6 +374,7 @@ async function getSuggestionButtons() {
     btn.addEventListener("click", () => {
       if (goBtn.disabled) {
         query.value = prompt.prompt;
+        getCharCount();
         toggleButton(clearBtn, true);
       } else {
         query.value = prompt.prompt + query.value;
@@ -348,12 +384,10 @@ async function getSuggestionButtons() {
 
     fragment.appendChild(btn); // Append button to the fragment
   });
-
-  suggestionContainer.appendChild(fragment); // Append the fragment to the container
+  suggestionContainer.replaceChildren(fragment); // Append the fragment to the container
 }
 
 function findSuggestions() {
-  suggestionResult.innerHTML = "";
   const promptList = prompts.find((p) => p.prompt === query.value);
   if (
     !promptList ||
@@ -363,6 +397,7 @@ function findSuggestions() {
     console.warn("No suggestions available for the current prompt");
     return;
   }
+  const fragment = document.createDocumentFragment();
   promptList.suggestions.forEach((suggestion) => {
     const suggestionElement = document.createElement("button");
     suggestionElement.className = "suggestion-item";
@@ -373,8 +408,9 @@ function findSuggestions() {
       suggestionResult.innerHTML = "";
       query.focus();
     });
-    suggestionResult.appendChild(suggestionElement);
+    fragment.appendChild(suggestionElement);
   });
+  suggestionResult.replaceChildren(fragment);
 }
 function updateTime() {
   const timeElement = document.getElementById("time");
@@ -426,8 +462,8 @@ nameInput.addEventListener("input", () => {
     {
       image:
         nameInput.value.length > 0
-          ? "/assets/images/save.svg"
-          : "/assets/images/clear.svg",
+          ? "/assets/images/buttons/save.svg"
+          : "/assets/images/buttons/clear.svg",
     },
     nameBtn
   );
@@ -568,7 +604,7 @@ async function storeWeather() {
     localStorage.removeItem("location");
     localStorage.removeItem("weatherData");
     toggleButton(weatherBtn, false); // Disable button
-    appendSvg({ image: "/assets/images/save.svg" }, weatherBtn);
+    appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn);
     displayWeather(null);
     return;
   }
@@ -667,8 +703,8 @@ weatherField.addEventListener("input", () => {
     {
       image:
         weatherField.value.length > 0
-          ? "/assets/images/save.svg"
-          : "/assets/images/clear.svg",
+          ? "/assets/images/buttons/save.svg"
+          : "/assets/images/buttons/clear.svg",
     },
     weatherBtn
   );
@@ -1101,13 +1137,13 @@ function updateInactivityBehavior() {
   } else if (timeoutSeconds === 0) {
     // Instantly fade when not hovered
     if (!chatbox.matches(":hover")) {
-      chatbox.style.opacity = "0.3";
+      chatbox.style.opacity = "0.1";
     }
   } else {
     // Delayed fade when not hovered
     if (!chatbox.matches(":hover")) {
       inactivityTimeout = setTimeout(() => {
-        chatbox.style.opacity = "0.3";
+        chatbox.style.opacity = "0.1";
       }, timeoutSeconds * 1000);
     }
   }
@@ -1125,7 +1161,6 @@ chatbox.addEventListener("mouseenter", () => {
 chatbox.addEventListener("mouseleave", () => {
   const timeoutSeconds = parseInt(inactivitySetting);
   if (timeoutSeconds === -1) return; // Never fade
-
   if (timeoutSeconds === 0) {
     chatbox.style.opacity = "0.3";
   } else {
@@ -1200,15 +1235,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     query.value = "";
     // Add icons
-    appendSvg({ image: "assets/images/options.svg" }, optionBtn);
-    appendSvg({ image: "assets/images/go.svg" }, goBtn);
-    appendSvg({ image: "assets/images/clear.svg" }, clearBtn);
+    appendSvg({ image: "assets/images/buttons/options.svg" }, optionBtn);
+    appendSvg({ image: "assets/images/buttons/go.svg" }, goBtn);
+    appendSvg({ image: "assets/images/buttons/clear.svg" }, clearBtn);
     [nameBtn, weatherBtn, bgBtn].forEach((btn) => {
-      appendSvg({ image: "assets/images/save.svg" }, btn);
+      appendSvg({ image: "assets/images/buttons/save.svg" }, btn);
     });
-    appendSvg({ image: "assets/images/down.svg" }, searchEnginePickerBtn);
-    appendSvg({ image: "assets/images/paste.svg" }, pasteBtn);
-    appendSvg({ image: "assets/images/file.svg" }, fakeFileBtn);
+    appendSvg(
+      { image: "assets/images/buttons/down.svg" },
+      searchEnginePickerBtn
+    );
+    appendSvg({ image: "assets/images/buttons/paste.svg" }, pasteBtn);
+    appendSvg({ image: "assets/images/buttons/file.svg" }, fakeFileBtn);
     await loadSimple();
     // Set initial state
     updateInactivityBehavior(); // Apply the stored inactivity setting
@@ -1245,6 +1283,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     } else {
       timeFormat.querySelector("input").checked = true;
+    }
+    const storedGreeting = localStorage.getItem("greeting");
+    const options = Array.from(greeting.querySelectorAll("input"));
+    if (storedGreeting) {
+      let x = false;
+      options.forEach((option) => {
+        if (option.value === storedGreeting) {
+          option.checked = true;
+          x = true;
+        }
+      });
+      if (!x) options[2].checked = true;
+    } else {
+      options[0].checked = true;
     }
     await loadData();
     const bgOption = await getBgOption();
@@ -1357,7 +1409,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         field.value = "";
       });
       [weatherBtn, nameBtn].forEach((btn) => {
-        appendSvg({ image: "/assets/images/save.svg" }, btn);
+        appendSvg({ image: "/assets/images/buttons/save.svg" }, btn);
         toggleButton(btn, false);
       });
       [bgImgExpSelect, backgroundSelect, trOption].forEach((selectElement) => {
@@ -1366,7 +1418,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
         selectElement.options[0].selected = true;
       });
-      [userThemeForm, timeFormat].forEach((form) => {
+      [userThemeForm, timeFormat, greeting].forEach((form) => {
         form.querySelectorAll("input").forEach((option) => {
           option.checked = false;
         });
