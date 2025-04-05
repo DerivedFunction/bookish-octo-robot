@@ -1,6 +1,3 @@
-let aiList = [];
-let prompts = [];
-let wallpapers = [];
 const MAX_LIMIT = 5000; // max char count
 const clearBtn = document.getElementById("clear");
 
@@ -133,59 +130,52 @@ function getSearchEngineName() {
 
   return engine.name;
 }
-
-async function loadJsonData(resetOptions = {}) {
-  // Default reset options
-  const {
-    resetAiList = false,
-    resetPrompts = false,
-    resetWallpapers = false,
-  } = resetOptions;
-
+async function loadJsonData(type) {
   try {
-    // Load AI list and prompts if not already loaded or resetting
-    if (
-      aiList.length === 0 ||
-      resetAiList ||
-      prompts.length === 0 ||
-      resetPrompts
-    ) {
-      let response = await fetch("ai-list.json");
+    // Object to store only the requested data
+    const result = {};
+
+    // Fetch only the specified data type
+    if (type === "ai" || type === null) {
+      const response = await fetch("ai-list.json");
       if (!response.ok) {
         throw new Error("Failed to load AI list data");
       }
-      let data = await response.json();
-      aiList = data["ai-list"];
-      prompts = data["prompts"];
+      const data = await response.json();
+      result.aiList = data["ai-list"];
+      result.prompts = data["prompts"];
     }
 
-    // Load wallpapers if not already loaded or resetting
-    if (wallpapers.length === 0 || resetWallpapers) {
-      let response = await fetch("sample-wallpaper.json");
+    if (type === "wallpapers" || type === null) {
+      console.log("fetching wallpapers");
+      const response = await fetch("sample-wallpaper.json");
       if (!response.ok) {
         throw new Error("Failed to load wallpaper list data");
       }
-      let data = await response.json();
-      wallpapers = data;
+      const data = await response.json();
+      result.wallpapers = data;
     }
-    return { aiList, prompts, wallpapers };
-  } catch (error) {
-    console.error("Error loading JSON data:", error);
-    // Fallback to empty arrays if data wasn't loaded
+
+    // Ensure all properties are defined, even if not requested
     return {
-      aiList: aiList || [],
-      prompts: prompts || [],
-      wallpapers: wallpapers || [],
+      aiList: result.aiList || [],
+      prompts: result.prompts || [],
+      wallpapers: result.wallpapers || [],
+    };
+  } catch (error) {
+    console.error(`Error loading ${type} JSON data:`, error);
+    // Return all properties as empty arrays on error
+    return {
+      aiList: [],
+      prompts: [],
+      wallpapers: [],
     };
   }
 }
 
 async function getSearchEngineList() {
-  if (aiList.length === 0) {
-    const { aiList: loadedList } = await loadJsonData();
-    return loadedList;
-  }
-  return aiList;
+  const { aiList: loadedList } = await loadJsonData("ai");
+  return loadedList;
 }
 
 async function getSearchEngine() {
@@ -344,11 +334,8 @@ function getGreeting() {
 }
 
 async function getPrompt() {
-  if (prompts.length === 0) {
-    const { prompts: loadedPrompts } = await loadJsonData();
-    return loadedPrompts;
-  }
-  return prompts;
+  const { prompts: loadedPrompts } = await loadJsonData("ai");
+  return loadedPrompts;
 }
 async function getSuggestionButtons() {
   suggestionResult.innerHTML = "";
@@ -387,8 +374,8 @@ async function getSuggestionButtons() {
   suggestionContainer.replaceChildren(fragment); // Append the fragment to the container
 }
 
-function findSuggestions() {
-  const promptList = prompts.find((p) => p.prompt === query.value);
+async function findSuggestions() {
+  const promptList = await getPrompt().find((p) => p.prompt === query.value);
   if (
     !promptList ||
     !promptList.suggestions ||
@@ -776,8 +763,6 @@ async function loadData() {
   let bgOption = await getBgOption();
   const body = document.body;
   const now = new Date().getTime();
-  const { wallpapers: loadedWallpapers } = await loadJsonData();
-  wallpapers = loadedWallpapers;
 
   if (bgOption && bgOption.type) {
     switch (bgOption.type) {
@@ -976,11 +961,11 @@ function determineTheme(isLightMode) {
 
 // Helper function to apply background image styles
 function applyBackgroundImage(body, bgData) {
+  body.style.backgroundColor = "";
   body.style.backgroundImage = `url('${bgData.url}')`;
   body.style.backgroundSize = "cover";
   body.style.backgroundRepeat = "no-repeat";
   body.style.backgroundPosition = "center";
-  body.style.backgroundColor = "";
   if (bgData.credits && bgData.credits.length == 4) {
     const person = document.createElement("a");
     person.href = bgData.credits[0];
@@ -1038,15 +1023,9 @@ async function readText(blob) {
 // Helper function to set a new background image
 async function setNewBackgroundImage(body, bgData = null) {
   try {
-    if (!wallpapers || wallpapers.length === 0) {
-      const response = await fetch("sample-wallpaper.json");
-      if (!response.ok) throw new Error("Failed to load wallpaper data");
-      wallpapers = await response.json();
-    }
-
+    const { wallpapers: wallpapers } = await loadJsonData("wallpapers");
     const randomIndex = Math.floor(Math.random() * wallpapers.length);
     const wallpaper = wallpapers[randomIndex];
-
     const imageResponse = await fetch(wallpaper.url);
     if (!imageResponse.ok) throw new Error("Failed to fetch image");
     const imageBlob = await imageResponse.blob();
@@ -1158,12 +1137,12 @@ chatbox.addEventListener("mouseenter", () => {
 
 chatbox.addEventListener("mouseleave", () => {
   const timeoutSeconds = parseInt(inactivitySetting);
-  if (timeoutSeconds === -1) return; // Never fade
+  if (timeoutSeconds === -1 || query.matches(":focus")) return; // Never fade
   if (timeoutSeconds === 0) {
-    chatbox.style.opacity = "0.3";
+    chatbox.style.opacity = "0.1";
   } else {
     inactivityTimeout = setTimeout(() => {
-      chatbox.style.opacity = "0.3";
+      chatbox.style.opacity = "0.1";
     }, timeoutSeconds * 1000);
   }
 });
