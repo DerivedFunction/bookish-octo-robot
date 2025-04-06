@@ -70,7 +70,9 @@ async function fetchWeather() {
     displayWeather();
   } catch (error) {
     console.error("Error fetching weather data:", error);
-    weather.textContent = "Unable to fetch weather.";
+    weather.textContent = "--";
+    localStorage.removeItem("location");
+    localStorage.removeItem("weatherData");
   }
 }
 // Updated storeWeather function
@@ -147,6 +149,8 @@ async function storeWeather() {
       } catch (error) {
         console.error("Error fetching coordinates:", error);
         weather.textContent = "--";
+        localStorage.removeItem("location");
+        localStorage.removeItem("weatherData");
         return;
       }
     }
