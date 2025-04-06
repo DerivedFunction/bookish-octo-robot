@@ -1,99 +1,70 @@
 import { toggleButton, loadJsonData } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
-let expirationTimeout = null; // To store the timeout reference
+let expirationTimeout = null;
 
-// IndexedDB setup
-const dbName = "BackgroundDB";
-const storeName = "bgOptions";
-let db;
-function openDB() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(dbName, 1);
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => {
-      db = request.result;
-      resolve(db);
-    };
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-      db.createObjectStore(storeName, { keyPath: "id" });
-    };
-  });
-}
-export async function getBgOption() {
-  if (!db) await openDB();
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction([storeName], "readonly");
-    const store = transaction.objectStore(storeName);
-    const request = store.get("bg-option");
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve(request.result || null);
-  });
+// LocalStorage functions for bgOption
+function getBgOption() {
+  const bgOption = localStorage.getItem("bg-option");
+  return bgOption ? JSON.parse(bgOption) : null;
 }
 
-async function setBgOption(bgData) {
-  if (!db) await openDB();
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction([storeName], "readwrite");
-    const store = transaction.objectStore(storeName);
-    const data = { id: "bg-option", ...bgData };
-    const request = store.put(data);
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve();
-  });
+function setBgOption(bgData) {
+  try {
+    localStorage.setItem("bg-option", JSON.stringify(bgData));
+  } catch (error) {
+    if (error.name === "QuotaExceededError") {
+      console.warn("LocalStorage quota exceeded, setting data to null:", error);
+      bgData.data = null; // Set data to null if quota is exceeded
+      localStorage.setItem("bg-option", JSON.stringify(bgData));
+    } else {
+      throw error; // Re-throw other errors
+    }
+  }
 }
-export async function clearBgOption() {
-  if (!db) await openDB();
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction([storeName], "readwrite");
-    const store = transaction.objectStore(storeName);
-    const request = store.delete("bg-option");
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve();
-  });
+
+function clearBgOption() {
+  localStorage.removeItem("bg-option");
 }
+
 export async function loadData() {
-  let bgOption = await getBgOption();
+  const bgOption = getBgOption();
   const body = document.body;
-  const now = new Date().getTime();
+  const now = Date.now();
 
   if (bgOption && bgOption.type) {
     switch (bgOption.type) {
       case "bg-img":
         if (bgOption.expiration === -1) {
-          applyBackgroundImage(body, bgOption);
+          await applyBackgroundImage(body, bgOption);
         } else if (bgOption.timeExpire === 0 || now > bgOption.timeExpire) {
           await setNewBackgroundImage(body, bgOption);
         } else {
-          applyBackgroundImage(body, bgOption);
+          await applyBackgroundImage(body, bgOption);
           scheduleBackgroundUpdate(body, bgOption, now);
         }
         break;
       case "color":
-        //change the body background color
         body.style.backgroundColor = bgOption.data;
         break;
       case "gradient":
-        const data = bgOption.data.split(",");
-        const ang = data[0];
-        const color1 = data[1];
-        const color2 = data[2];
+        const [ang, color1, color2] = bgOption.data.split(",");
         body.style.backgroundImage = `linear-gradient(${ang}deg, ${color1}, ${color2})`;
         break;
       case "own-img":
         if (bgOption.url) {
-          applyBackgroundImage(body, bgOption);
+          await applyBackgroundImage(body, bgOption);
         } else {
           resetBackground(body);
         }
         break;
       default:
         resetBackground(body);
-        await clearBgOption();
+        clearBgOption();
         break;
     }
   }
 }
+
 export const backgroundSelect = document.getElementById("bg-select");
 const bgText = document.getElementsByClassName("bg-text");
 export const bgImgExpSelect = document.getElementById("bg-img-exp");
@@ -103,31 +74,25 @@ export const bgColor2 = document.getElementById("solid-color-2");
 export const bgNum = document.getElementById("gradient-number");
 const ownImgInput = document.getElementById("img-file");
 export const ownImgLabel = document.getElementById("img-file-label");
-bgColor.addEventListener("input", () => {
-  toggleButton(bgBtn, true);
-});
-bgColor2.addEventListener("input", () => {
-  toggleButton(bgBtn, true);
-});
-bgNum.addEventListener("input", () => {
-  toggleButton(bgBtn, true);
-});
+
+bgColor.addEventListener("input", () => toggleButton(bgBtn, true));
+bgColor2.addEventListener("input", () => toggleButton(bgBtn, true));
+bgNum.addEventListener("input", () => toggleButton(bgBtn, true));
 ownImgInput.addEventListener("change", () => {
   ownImgLabel.textContent = "Click to upload again...";
   toggleButton(bgBtn, true);
 });
-bgImgExpSelect.addEventListener("change", () => {
-  toggleButton(bgBtn, true);
-});
+bgImgExpSelect.addEventListener("change", () => toggleButton(bgBtn, true));
 backgroundSelect.addEventListener("change", () => {
   ownImgLabel.textContent = "Click to upload...";
   toggleButton(bgBtn, true);
 });
+
 bgBtn.addEventListener("click", async () => {
   const selectedOption =
     backgroundSelect.options[backgroundSelect.selectedIndex].value;
   const body = document.body;
-  let bgData = (await getBgOption()) || {
+  let bgData = getBgOption() || {
     type: selectedOption,
     data: null,
     url: null,
@@ -136,22 +101,27 @@ bgBtn.addEventListener("click", async () => {
     lightModeText: null,
     credits: null,
   };
+
   if (bgData.type !== selectedOption) {
-    bgData.type = selectedOption;
-    bgData.data = null;
-    bgData.url = null;
-    bgData.expiration = -1;
-    bgData.timeExpire = -1;
-    bgData.credits = null;
-    bgData.lightModeText = null;
+    bgData = {
+      ...bgData,
+      type: selectedOption,
+      data: null,
+      url: null,
+      expiration: -1,
+      timeExpire: -1,
+      credits: null,
+      lightModeText: null,
+    };
   }
   ownImgLabel.textContent = "Click to upload...";
+
   switch (selectedOption) {
     case "bg-img":
       if (!bgData.url) {
         await setNewBackgroundImage(body, bgData);
       } else {
-        applyBackgroundImage(body, bgData);
+        await applyBackgroundImage(body, bgData);
       }
       break;
     case "color":
@@ -167,7 +137,7 @@ bgBtn.addEventListener("click", async () => {
       resetBackground(body);
       const color1 = bgColor.value;
       const color2 = bgColor2.value;
-      const ang = bgNum.value ? bgNum.value : 0;
+      const ang = bgNum.value || 0;
       const gradient = `linear-gradient(${ang}deg, ${color1}, ${color2})`;
       body.style.backgroundImage = gradient;
       bgData.data = `${ang},${color1},${color2}`;
@@ -178,11 +148,12 @@ bgBtn.addEventListener("click", async () => {
     case "own-img":
       const file = ownImgInput.files[0];
       if (file) {
-        bgData.url = await blobToDataURL(file);
+        bgData.url = await blobToDataURL(file); // Store data:image/ in url for own-img
+        bgData.data = null; // No need for data here
         bgData.credits = [file.name];
         ownImgLabel.textContent = file.name;
-        applyBackgroundImage(body, bgData);
-        await setBgOption(bgData);
+        await applyBackgroundImage(body, bgData);
+        setBgOption(bgData);
       } else {
         resetBackground(body);
       }
@@ -197,7 +168,7 @@ bgBtn.addEventListener("click", async () => {
   if (selectedOption === "bg-img") {
     const expirationOption =
       bgImgExpSelect.options[bgImgExpSelect.selectedIndex].value;
-    const now = new Date().getTime();
+    const now = Date.now();
     const { time } = getExpirationDetails(expirationOption, now);
     bgData.expiration = parseInt(expirationOption);
     bgData.timeExpire = time;
@@ -220,11 +191,11 @@ bgBtn.addEventListener("click", async () => {
   }
 
   if (bgData.url || selectedOption === "default") {
-    await setBgOption(bgData);
+    setBgOption(bgData);
   }
   toggleButton(bgBtn, false);
 });
-// Helper function to schedule background update
+
 function scheduleBackgroundUpdate(body, bgData, now) {
   if (expirationTimeout) {
     clearTimeout(expirationTimeout);
@@ -234,25 +205,39 @@ function scheduleBackgroundUpdate(body, bgData, now) {
   if (timeUntilExpiration > 0) {
     expirationTimeout = setTimeout(async () => {
       await setNewBackgroundImage(body, bgData);
-      await setBgOption(bgData); // Update with new image data
-      const newNow = new Date().getTime();
+      setBgOption(bgData);
+      const newNow = Date.now();
       scheduleBackgroundUpdate(body, bgData, newNow);
     }, timeUntilExpiration);
   }
 }
+
 const credits = document.getElementById("credits");
-// Helper function to determine the theme
+
 function determineTheme(isLightMode) {
   return isLightMode ? "light" : "dark";
 }
-// Helper function to apply background image styles
-function applyBackgroundImage(body, bgData) {
+
+async function applyBackgroundImage(body, bgData) {
   body.style.backgroundColor = "";
-  body.style.backgroundImage = `url('${bgData.url}')`;
+  let imageUrl;
+
+  if (bgData.type === "bg-img") {
+    // Use data:image/ if available, otherwise fall back to HTTPS URL
+    imageUrl = bgData.data || bgData.url;
+  } else if (bgData.type === "own-img") {
+    // For own-img, use the data:image/ stored in url
+    imageUrl = bgData.url;
+  } else {
+    imageUrl = bgData.url; // Fallback for unexpected cases
+  }
+
+  body.style.backgroundImage = `url('${imageUrl}')`;
   body.style.backgroundSize = "cover";
   body.style.backgroundRepeat = "no-repeat";
   body.style.backgroundPosition = "center";
-  if (bgData.credits && bgData.credits.length == 4) {
+
+  if (bgData.credits && bgData.credits.length === 4) {
     const person = document.createElement("a");
     person.href = bgData.credits[0];
     person.textContent = bgData.credits[1];
@@ -266,7 +251,7 @@ function applyBackgroundImage(body, bgData) {
     credits.setAttribute("target", "_blank");
     credits.setAttribute("rel", "noopener noreferrer");
     credits.style.display = "";
-  } else if (bgData.credits && bgData.credits.length == 1) {
+  } else if (bgData.credits && bgData.credits.length === 1) {
     const filename = document.createElement("span");
     filename.textContent = bgData.credits[0];
     credits.innerHTML = "";
@@ -275,6 +260,7 @@ function applyBackgroundImage(body, bgData) {
   }
   setTextColor(bgData, bgData.lightModeText != null);
 }
+
 export function setTextColor(bgData = null, condition = false) {
   if (condition && bgData != null) {
     Array.from(bgText).forEach((element) => {
@@ -286,7 +272,6 @@ export function setTextColor(bgData = null, condition = false) {
     );
   }
 }
-// Helper function to convert blob to Data URL
 
 async function blobToDataURL(blob) {
   return new Promise((resolve, reject) => {
@@ -296,6 +281,7 @@ async function blobToDataURL(blob) {
     reader.readAsDataURL(blob);
   });
 }
+
 export async function readText(blob) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -304,11 +290,10 @@ export async function readText(blob) {
     reader.readAsText(blob);
   });
 }
-// Helper function to set a new background image
 
 async function setNewBackgroundImage(body, bgData = null) {
   try {
-    const { wallpapers: wallpapers } = await loadJsonData("wallpapers");
+    const { wallpapers } = await loadJsonData("wallpapers");
     const randomIndex = Math.floor(Math.random() * wallpapers.length);
     const wallpaper = wallpapers[randomIndex];
     const imageResponse = await fetch(wallpaper.url);
@@ -317,7 +302,8 @@ async function setNewBackgroundImage(body, bgData = null) {
     const dataUrl = await blobToDataURL(imageBlob);
 
     if (bgData) {
-      bgData.url = dataUrl;
+      bgData.url = wallpaper.url; // Always store HTTPS URL
+      bgData.data = dataUrl; // Attempt to store data:image/
       bgData.credits = [
         wallpaper.credits,
         wallpaper.name,
@@ -325,23 +311,21 @@ async function setNewBackgroundImage(body, bgData = null) {
         wallpaper.url,
       ];
       bgData.lightModeText = wallpaper.lightModeText;
-      const { time } = getExpirationDetails(
-        bgData.expiration,
-        new Date().getTime()
-      );
+      const { time } = getExpirationDetails(bgData.expiration, Date.now());
       bgData.timeExpire = time;
     }
-    applyBackgroundImage(body, bgData);
+    await applyBackgroundImage(body, bgData);
+    setBgOption(bgData); // Save after applying, handles quota exceeded
   } catch (error) {
     console.error("Error setting new background image:", error);
     if (bgData && bgData.url) {
-      applyBackgroundImage(body, bgData);
+      await applyBackgroundImage(body, bgData);
     } else {
       resetBackground(body);
     }
   }
 }
-// Helper function to reset background to default
+
 export function resetBackground(body) {
   body.style.backgroundImage = "";
   body.style.backgroundColor = "";
@@ -349,20 +333,20 @@ export function resetBackground(body) {
   credits.style.display = "none";
   Array.from(bgText).forEach((element) => element.removeAttribute("style"));
 }
-// Simplified helper function to calculate expiration details
+
 function getExpirationDetails(expirationOption, now) {
   const seconds = parseInt(expirationOption);
   if (seconds === -1 || seconds === 0) {
     return { time: seconds };
   } else {
-    return { time: now + seconds * 1000 }; // Convert seconds to milliseconds
+    return { time: now + seconds * 1000 };
   }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "assets/images/buttons/save.svg" }, bgBtn);
-  await loadData();
-  const bgOption = await getBgOption();
+
+  const bgOption = getBgOption();
   backgroundSelect.addEventListener("change", () => {
     const selectedOption =
       backgroundSelect.options[backgroundSelect.selectedIndex].value;
@@ -389,14 +373,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         break;
     }
     if (selectedOption !== "bg-img") {
-      setTextColor(); // reset text color
+      setTextColor();
     }
   });
+
   if (bgOption) {
     if (bgOption.type !== "bg-img") {
-      setTextColor(); // reset text color
+      setTextColor();
     }
-    // Set background select
     for (let i = 0; i < backgroundSelect.options.length; i++) {
       if (backgroundSelect.options[i].value === bgOption.type) {
         backgroundSelect.options[i].selected = true;
@@ -408,7 +392,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     switch (bgOption.type) {
-      // Set expiration select for bg-img
       case "bg-img":
         bgImgExpSelect.style.display = "";
         for (let i = 0; i < bgImgExpSelect.options.length; i++) {
@@ -435,13 +418,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         ownImgLabel.textContent = bgOption.credits[0]
           ? bgOption.credits[0]
           : "Click to upload...";
-
         ownImgLabel.style.display = "";
+        break;
       default:
         break;
     }
   } else {
-    setTextColor(); // reset text color
+    setTextColor();
     [bgImgExpSelect, backgroundSelect].forEach((e) => {
       Array.from(e.options).forEach((option) =>
         option.removeAttribute("selected")
@@ -452,12 +435,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     backgroundSelect.options[0].selected = true;
   }
+  await loadData();
   document.getElementById("reset").addEventListener("click", async () => {
     clearBgOption();
     resetBackground(document.body);
     setTextColor();
     ownImgLabel.textContent = "Click to upload...";
-    [bgImgExpSelect, backgroundSelect, trOption].forEach((selectElement) => {
+    [bgImgExpSelect, backgroundSelect].forEach((selectElement) => {
       Array.from(selectElement.options).forEach((option) =>
         option.removeAttribute("selected")
       );

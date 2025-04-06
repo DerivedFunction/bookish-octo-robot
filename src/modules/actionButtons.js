@@ -1,4 +1,4 @@
-import { readText } from "./backgroundImage.js";
+import { readText } from "../app.js";
 import { query, queryEvents, MAX_LIMIT } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
 import { getSearchEngineUrl } from "./searchEngine.js";

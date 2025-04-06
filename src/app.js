@@ -4,7 +4,14 @@ export function toggleButton(button, enabled) {
   if (enabled) button.classList.add("enabled");
   else button.classList.remove("enabled");
 }
-
+export async function readText(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsText(blob);
+  });
+}
 export async function loadJsonData(type) {
   try {
     // Object to store only the requested data
