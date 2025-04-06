@@ -139,6 +139,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "assets/images/buttons/down.svg" }, searchEnginePickerBtn);
   await addSearchEngines();
   await getSearchEngine();
+  goToLink();
+  window.addEventListener("storage", (e) => {
+    if (e.key === "query") {
+      goToLink();
+    }
+  });
+  document.getElementById("reset").addEventListener("click", async () => {
+    localStorage.removeItem("currentEngine");
+    await addSearchEngines();
+    await getSearchEngine();
+  });
+});
+
+function goToLink() {
   let q = localStorage.getItem("query");
   if (q) {
     localStorage.removeItem("query");
@@ -146,9 +160,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     toggleButton(goBtn, true);
     goBtn.click();
   }
-  document.getElementById("reset").addEventListener("click", async () => {
-    localStorage.removeItem("currentEngine");
-    await addSearchEngines();
-    await getSearchEngine();
-  });
-});
+}
