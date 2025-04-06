@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sidebar (Tabbed)</title>
+    <link
+      rel="shortcut icon"
+      href="/assets/images/icon.svg"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div id="header">
+      <button id="options-button" class="bg-text"></button>
+      <div class="extra-info">
+        <h2 class="bg-text"><span id="time"></span></h2>
+        <h2 class="bg-text"><span id="weather"></span></h2>
+      </div>
+    </div>
+    <div id="sidebar">
+      <h1>Options</h1>
+      <div class="section">
+        <div class="horizontal-container">
+          <span>Name</span>
+          <input type="text" id="name-field" class="input-field" />
+          <button id="submit-name" class="submit"></button>
+        </div>
+      </div>
+      <div class="section">
+        <form>
+          <fieldset id="greeting-form">
+            <input type="radio" id="formal" name="greeting" value="formal" />
+            <label for="formal">Formal</label>
+            <legend>Greeting Type</legend>
+            <input
+              type="radio"
+              id="informal"
+              name="greeting"
+              value="informal"
+            />
+            <label for="informal">Informal</label>
+
+            <input type="radio" id="custom" name="greeting" value="custom" />
+            <label for="custom">Custom</label>
+            <input type="radio" id="no-greeting" name="greeting" value="none" />
+            <label for="no-greeting">None</label>
+          </fieldset>
+        </form>
+      </div>
+      <div class="section">
+        <div class="horizontal-container">
+          <span>Weather</span>
+          <input
+            type="text"
+            id="weather-field"
+            placeholder="Enter Name or Postal Code"
+            class="input-field"
+          />
+          <button id="submit-weather" class="submit"></button>
+        </div>
+        <div id="unit-toggle-label">
+          <input type="checkbox" id="unit-toggle" />
+          <label for="unit-toggle">Use &#176;F instead of &#176;C</label>
+        </div>
+      </div>
+      <div class="section">
+        <div class="horizontal-container">
+          <span>Background</span>
+          <select id="bg-select">
+            <option value="default">Default</option>
+            <option value="bg-img">Pexels/Unsplash</option>
+            <option value="color">Solid Color</option>
+            <option value="gradient">Gradient</option>
+            <option value="own-img">Upload Image</option>
+          </select>
+          <button id="save-bg" class="submit"></button>
+        </div>
+        <div class="horizontal-container">
+          <select id="bg-img-exp">
+            <option value="-1">Never Change Image</option>
+            <option value="0">Change Every New Tab</option>
+            <option value="300">Change Every 5 Minutes</option>
+            <!-- 5 * 60 = 300 seconds -->
+            <option value="900">Change Every 15 Minutes</option>
+            <!-- 15 * 60 = 900 seconds -->
+            <option value="1800">Change Every 30 Minutes</option>
+            <!-- 30 * 60 = 1800 seconds -->
+            <option value="3600">Change Every Hour</option>
+            <!-- 60 * 60 = 3600 seconds -->
+            <option value="43200">Change Every 12 Hours</option>
+            <!-- 12 * 60 * 60 = 43200 seconds -->
+            <option value="86400">Change Daily</option>
+            <!-- 24 * 60 * 60 = 86400 seconds -->
+            <option value="604800">Change Weekly</option>
+            <!-- 24 * 60 * 60 * 7 = 604800 seconds -->
+          </select>
+          <label for="solid-color"></label>
+          <input type="color" id="solid-color" class="input-field" />
+          <label for="solid-color-2"></label>
+          <input type="color" id="solid-color-2" class="input-field" />
+          <label for="gradient-number"></label>
+          <input
+            type="number"
+            id="gradient-number"
+            class="input-field"
+            placeholder="0-360"
+            min="0"
+            max="360"
+            value="0"
+          />
+          <label for="img-file" id="img-file-label" class="button-format"
+            >Click to upload...</label
+          >
+          <input id="img-file" type="file" accept="image/*" hidden="true" />
+        </div>
+      </div>
+      <div class="section">
+        <form>
+          <fieldset class="horizontal-container" id="user-theme">
+            <legend>Choose Theme</legend>
+            <input type="radio" id="auto" name="theme" value="auto" />
+            <label for="auto">Auto</label>
+            <input type="radio" id="light" name="theme" value="true" />
+            <label for="light">Light Mode</label><br />
+            <input type="radio" id="dark" name="theme" value="false" />
+            <label for="dark">Dark Mode</label>
+          </fieldset>
+        </form>
+      </div>
+      <div class="section">
+        <form>
+          <fieldset class="horizontal-container" id="time-format">
+            <legend>Choose Time Format</legend>
+            <input type="radio" id="no-time" name="time" value="hide" />
+            <label for="no-time">Hide</label>
+            <input type="radio" id="24" name="time" value="24" />
+            <label for="24">24 Hours</label>
+            <input type="radio" id="12" name="time" value="12" />
+            <label for="12">12 Hours</label>
+          </fieldset>
+        </form>
+      </div>
+      <div class="horizontal-container section">
+        Fade after inactivity:
+        <select id="content-transparent">
+          <option value="-1">Never Fade</option>
+          <option value="0">Instantly</option>
+          <option value="5">5 sec</option>
+          <option value="15">15 sec</option>
+          <option value="30">30 sec</option>
+        </select>
+      </div>
+      <div class="horizontal-container">
+        <button id="reset">Reset to Defaults</button>
+      </div>
+    </div>
+
+    <div id="content">
+      <div id="navigation">
+        <h1 id="greeting-container">
+          <span id="greeting" class="bg-text"></span>
+          <span id="name" class="bg-text"></span>
+          <span id="secondary" class="bg-text">How can I help you today?</span>
+        </h1>
+        <div id="chatbox">
+          <div class="search-container">
+            <textarea
+              type="text"
+              id="search"
+              placeholder="What can I do for you?"
+              autocomplete="on"
+              value=""
+            ></textarea>
+            <div class="horizontal-container">
+              <div class="right-buttons">
+                <div class="search-engine-container">
+                  <div class="horizontal-container">
+                    <button
+                      id="currentEngine"
+                      data-tooltip="Your current AI"
+                    ></button>
+                    <button
+                      id="search-engine-picker"
+                      data-tooltip="Pick other AI Chatbots"
+                    ></button>
+                    <label
+                      data-tooltip="Add file's text to
+                      query"
+                      class="button-format"
+                      for="fake-file"
+                      id="fake-file-upload"
+                    >
+                    </label>
+                    <input
+                      id="fake-file"
+                      type="file"
+                      accept="text/*"
+                      hidden="true"
+                    />
+                  </div>
+                  <ul id="search-engine-dropdown" class="dropdown-content"></ul>
+                </div>
+              </div>
+              <span id="char-count"></span>
+              <button
+                id="clear"
+                class="submit"
+                data-tooltip="Clear Message"
+              ></button>
+              <button id="paste" data-tooltip="Paste from Clipboard"></button>
+              <button
+                id="go"
+                disabled=""
+                class="submit"
+                data-tooltip="Message is empty"
+              ></button>
+            </div>
+          </div>
+
+          <div id="suggestions" class="suggestions-container"></div>
+          <div id="suggestions-result" class="suggestions-container"></div>
+        </div>
+      </div>
+    </div>
+    <div id="credits" class="bg-text"></div>
+    <span id="tooltip">Tooltip text</span>
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>

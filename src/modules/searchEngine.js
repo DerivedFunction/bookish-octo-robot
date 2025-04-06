@@ -139,12 +139,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "assets/images/buttons/down.svg" }, searchEnginePickerBtn);
   await addSearchEngines();
   await getSearchEngine();
-  goToLink();
-  window.addEventListener("storage", (e) => {
-    if (e.key === "query") {
-      goToLink();
-    }
-  });
+  if (window.location.href.split("/").pop() === "sidebar.html") {
+    goToLink;
+    window.addEventListener("storage", (e) => {
+      if (e.key === "query") {
+        goToLink();
+      }
+    });
+  }
   document.getElementById("reset").addEventListener("click", async () => {
     localStorage.removeItem("currentEngine");
     await addSearchEngines();

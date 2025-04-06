@@ -5,17 +5,19 @@ function handleContextMenuError() {
 
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
   // AI searches
-  let query;
+  let prompt = info.menuItemId;
+  let query = prompt == "paste" ? "" : prompt;
   if (info.selectionText) {
-    query = info.menuItemId + " " + info.selectionText;
+    query = `${query} ${info.selectionText}`;
   } else if (info.linkUrl) {
-    query = info.menuItemId + " " + info.linkUrl;
+    query = `${query} ${info.linkUrl}`;
   } else {
-    query = info.menuItemId + " " + tab.url;
+    query = `${query} ${tab.url}`;
   }
   localStorage.setItem("query", query);
+  console.log(`Sending ${query} to sidebar...`);
   browser.sidebarAction.setPanel({
-    panel: `index.html`,
+    panel: `sidebar.html`,
   });
   browser.sidebarAction.open();
 });
@@ -45,7 +47,15 @@ async function loadMenu() {
       },
       () => void browser.runtime.lastError
     );
-
+    browser.contextMenus.create(
+      {
+        id: "paste",
+        title: "Paste Selection Into Prompt",
+        parentId: "search",
+        contexts: ["selection", "link"],
+      },
+      () => void browser.runtime.lastError
+    );
     prompts.forEach((type) => {
       browser.contextMenus.create(
         {
