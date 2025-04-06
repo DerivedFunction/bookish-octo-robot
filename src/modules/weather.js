@@ -226,6 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("reset").addEventListener("click", async () => {
     localStorage.removeItem("weatherData");
     unitToggle.checked = false;
+    weatherField.value = "";
     appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn);
     toggleButton(weatherBtn, false);
     displayWeather();

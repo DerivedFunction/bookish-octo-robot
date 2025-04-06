@@ -56,13 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
   appendSvg({ image: "assets/images/buttons/clear.svg" }, clearBtn);
   appendSvg({ image: "assets/images/buttons/paste.svg" }, pasteBtn);
   appendSvg({ image: "assets/images/buttons/file.svg" }, fakeFileBtn);
-  let q = localStorage.getItem("query");
-  if (q) {
-    localStorage.removeItem("query");
-    query.value = q;
-    toggleButton(goBtn, true);
-    goBtn.click();
-  }
   [clearBtn, pasteBtn, goBtn, fakeFileBtn].forEach((btn) => {
     setupTooltip(btn, () => query.value.length === 0);
   });

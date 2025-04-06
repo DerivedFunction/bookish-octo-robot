@@ -1,6 +1,8 @@
-import { loadJsonData } from "../app.js";
+import { loadJsonData, toggleButton } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
 import { setupTooltip } from "./tooltip.js";
+import { goBtn } from "./actionButtons.js";
+import { query } from "./query.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
 export const searchEnginePickerBtn = document.getElementById(
@@ -137,6 +139,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "assets/images/buttons/down.svg" }, searchEnginePickerBtn);
   await addSearchEngines();
   await getSearchEngine();
+  let q = localStorage.getItem("query");
+  if (q) {
+    localStorage.removeItem("query");
+    query.value = q;
+    toggleButton(goBtn, true);
+    goBtn.click();
+  }
   document.getElementById("reset").addEventListener("click", async () => {
     localStorage.removeItem("currentEngine");
     await addSearchEngines();
