@@ -139,11 +139,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "assets/images/buttons/down.svg" }, searchEnginePickerBtn);
   await addSearchEngines();
   await getSearchEngine();
+  let x = await getSearchEngineUrl();
   if (window.location.href.split("/").pop() === "sidebar.html") {
-    await goToLink();
+    console.log("Sidebar opened, listening for queries");
+    goToLink(x);
     window.addEventListener("storage", async (e) => {
       if (e.key === "query") {
-        await goToLink();
+        goToLink(x);
       }
     });
   }
@@ -154,12 +156,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 });
 
-async function goToLink() {
+function goToLink(x) {
   let q = localStorage.getItem("query");
   if (q) {
     localStorage.removeItem("query");
-    query.value = q;
-    let url = `${await getSearchEngineUrl()}${encodeURIComponent(query.value)}`;
+    let url = `${x}${encodeURIComponent(q)}`;
+    console.log(`Query found. Going to ${url}`);
     window.location.href = url;
   }
 }
