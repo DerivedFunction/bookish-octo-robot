@@ -140,10 +140,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   await addSearchEngines();
   await getSearchEngine();
   if (window.location.href.split("/").pop() === "sidebar.html") {
-    goToLink;
-    window.addEventListener("storage", (e) => {
+    await goToLink();
+    window.addEventListener("storage", async (e) => {
       if (e.key === "query") {
-        goToLink();
+        await goToLink();
       }
     });
   }
@@ -154,12 +154,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 });
 
-function goToLink() {
+async function goToLink() {
   let q = localStorage.getItem("query");
   if (q) {
     localStorage.removeItem("query");
     query.value = q;
-    toggleButton(goBtn, true);
-    goBtn.click();
+    let url = `${await getSearchEngineUrl()}${encodeURIComponent(query.value)}`;
+    window.location.href = url;
   }
 }

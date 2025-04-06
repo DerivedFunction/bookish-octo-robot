@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Tabbed: AI chatbox in New Tab Page and Sidebar",
+  "name": "Tabbed: AI chatbox in New Tab/Sidebar",
   "short_name": "Tabbed",
   "version": "1.5.5.2",
   "description": "A new tab page and sidebar with an AI-like user interface",
