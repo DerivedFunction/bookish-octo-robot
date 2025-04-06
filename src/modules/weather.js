@@ -6,37 +6,13 @@ const weather_exp = 15 * 60 * 1000; // 15 minute expiration
 
 export const weatherBtn = document.getElementById("submit-weather");
 export const weatherField = document.getElementById("weather-field");
-// Existing displayWeather function (unchanged)
-export function displayWeather(weatherData) {
-  console.log("fetching weather");
-  let loc = JSON.parse(localStorage.getItem("location"));
-  weatherField.value = loc ? loc.name : "";
-  if (!weatherData) {
-    weather.textContent = "";
-    return;
-  }
-  const now = new Date().getTime();
-  if (now - weatherData.timestamp > weather_exp) {
-    weather.textContent = "";
-    localStorage.removeItem("weatherData");
-    console.log("Weather data expired, fetching again...");
-    storeWeather();
-    return;
-  }
-  const currentUnit = localStorage.getItem("weather-unit") || "metric";
-  const temperature =
-    currentUnit === "imperial"
-      ? ((weatherData.temperature * 9) / 5 + 32).toFixed(1) // C to F
-      : weatherData.temperature.toFixed(1);
-  const unitSymbol = currentUnit === "imperial" ? "°F" : "°C";
 
-  weather.textContent = `${weatherData.condition}, ${temperature}${unitSymbol}`;
-}
 // New function to fetch weather data
-
-async function fetchWeather(location) {
+async function fetchWeather() {
   try {
-    const [lat, lon] = location.split(",");
+    console.log("Fetching weather from api.open-meteo.com");
+    const location = JSON.parse(localStorage.getItem("location"));
+    const [lat, lon] = location.coord.split(",");
     const response = await fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=celsius`
     );
@@ -82,28 +58,26 @@ async function fetchWeather(location) {
     const unitSymbol = "°C"; // Stored unit is always Celsius
 
     const weatherData = {
+      inputValue: weatherField.value.trim(),
       condition,
       temperature,
       unitSymbol,
       timestamp: new Date().getTime(),
-      location,
+      coord: location.coord,
     };
 
     localStorage.setItem("weatherData", JSON.stringify(weatherData));
-    displayWeather(weatherData);
+    displayWeather();
   } catch (error) {
     console.error("Error fetching weather data:", error);
     weather.textContent = "Unable to fetch weather.";
   }
 }
 // Updated storeWeather function
-
 async function storeWeather() {
   const cachedWeather = JSON.parse(localStorage.getItem("weatherData"));
   const now = new Date().getTime();
-  let location = JSON.parse(localStorage.getItem("location"))
-    ? JSON.parse(localStorage.getItem("location")).coord
-    : null;
+  let location = JSON.parse(localStorage.getItem("location"));
 
   const inputValue = weatherField.value.trim();
   // If the input field is empty, we want to delete the location
@@ -112,25 +86,28 @@ async function storeWeather() {
     localStorage.removeItem("weatherData");
     toggleButton(weatherBtn, false); // Disable button
     appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn);
-    displayWeather(null);
+    await displayWeather();
     return;
   }
-  // If we have a location from localStorage, fetch weather data directly
-  if (location && !inputValue) {
+  // If we have a location from localStorage, and it is the same as our input
+  // fetch weather data directly from our cache
+  if (location && inputValue === location.inputValue) {
     if (
       cachedWeather &&
       now - cachedWeather.timestamp < weather_exp &&
-      cachedWeather.location === location
+      cachedWeather.inputValue === location.inputValue
     ) {
-      displayWeather(cachedWeather);
-      return;
+      // We have cache weather data
+      await displayWeather();
+    } else {
+      await fetchWeather();
     }
-    await fetchWeather(location);
     return;
   }
 
   // Handle location input from weatherField
   if (inputValue) {
+    console.log("Fetching weather from api.open-meteo.com");
     const coords = inputValue.split(",");
     if (coords.length === 2 && coords.every((c) => !isNaN(parseFloat(c)))) {
       // Input is latitude,longitude
@@ -138,8 +115,7 @@ async function storeWeather() {
       localStorage.setItem(
         "location",
         JSON.stringify({
-          name: inputValue,
-          zip: null,
+          inputValue: inputValue,
           coord: location,
         })
       );
@@ -163,15 +139,14 @@ async function storeWeather() {
         localStorage.setItem(
           "location",
           JSON.stringify({
-            name: inputValue,
-            zip: inputValue,
+            inputValue: inputValue,
             coord: location,
           })
         );
         toggleButton(weatherBtn, false); // Disable the button
       } catch (error) {
         console.error("Error fetching coordinates:", error);
-        weather.textContent = "Unable to fetch weather.";
+        weather.textContent = "--";
         return;
       }
     }
@@ -179,7 +154,7 @@ async function storeWeather() {
     localStorage.removeItem("location");
     localStorage.removeItem("weatherData");
     toggleButton(weatherBtn, false); // Disable button
-    displayWeather(null);
+    await displayWeather();
     return;
   }
 
@@ -192,11 +167,11 @@ async function storeWeather() {
   if (
     cachedWeather &&
     now - cachedWeather.timestamp < weather_exp &&
-    cachedWeather.location === location
+    cachedWeather.coord === location.coord
   ) {
-    displayWeather(cachedWeather);
+    await displayWeather();
   } else {
-    await fetchWeather(location);
+    await fetchWeather();
   }
 }
 // Event listeners
@@ -213,22 +188,63 @@ weatherField.addEventListener("input", () => {
     weatherBtn
   );
 });
-document.addEventListener("DOMContentLoaded", () => {
+
+export async function displayWeather() {
+  const weatherData = JSON.parse(localStorage.getItem("weatherData"));
+  let loc = JSON.parse(localStorage.getItem("location"));
+  console.log("Fetching weather", loc);
+  weatherField.value = loc ? loc.inputValue : "";
+  // If no weatherData but we have a location, fetch it
+  if (!weatherData && loc) {
+    console.log("No weather data but location exists");
+    await storeWeather();
+    return;
+  }
+
+  // If still no weatherData (and no location), clear display
+  if (!weatherData) {
+    console.log("Still no weather data. Probably because it is not set.");
+    weather.textContent = "";
+    return;
+  }
+
+  const now = new Date().getTime();
+  if (now - weatherData.timestamp > weather_exp) {
+    weather.textContent = "";
+    console.log("Weather data expired, fetching again...");
+    await fetchWeather();
+    return;
+  }
+
+  const currentUnit = localStorage.getItem("weather-unit") || "metric";
+  const temperature =
+    currentUnit === "imperial"
+      ? ((weatherData.temperature * 9) / 5 + 32).toFixed(1)
+      : weatherData.temperature.toFixed(1);
+  const unitSymbol = currentUnit === "imperial" ? "°F" : "°C";
+
+  weather.textContent = `${weatherData.condition}, ${temperature}${unitSymbol}`;
+}
+
+// In the DOMContentLoaded event listener:
+document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "assets/images/buttons/save.svg" }, weatherBtn);
   const unitToggle = document.getElementById("unit-toggle");
   unitToggle.checked = localStorage.getItem("weather-unit") === "imperial";
-  unitToggle.addEventListener("change", () => {
+  unitToggle.addEventListener("change", async () => {
     const unit = unitToggle.checked ? "imperial" : "metric";
     localStorage.setItem("weather-unit", unit);
-    displayWeather(JSON.parse(localStorage.getItem("weatherData")));
+    await displayWeather();
   });
-  displayWeather(JSON.parse(localStorage.getItem("weatherData")));
+
+  await displayWeather();
+
   document.getElementById("reset").addEventListener("click", async () => {
     localStorage.removeItem("weatherData");
     unitToggle.checked = false;
     weatherField.value = "";
     appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn);
     toggleButton(weatherBtn, false);
-    displayWeather();
+    await displayWeather();
   });
 });

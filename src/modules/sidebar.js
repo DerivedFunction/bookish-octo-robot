@@ -6,7 +6,7 @@ optionBtn.addEventListener("click", () => {
   sidebar.style.display = "block";
   nameInput.value = localStorage.getItem("name") || "";
   let x = JSON.parse(localStorage.getItem("location"));
-  weatherField.value = x ? x.name : "";
+  weatherField.value = x ? x.inputValue : "";
 });
 const sidebar = document.getElementById("sidebar");
 document.addEventListener("click", (e) => {
