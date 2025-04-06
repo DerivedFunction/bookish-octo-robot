@@ -1,4 +1,6 @@
+# Tabbed: AI chatbot in New Tab and Sidebar
 A new tab page with an AI-like user interface.
+
 **Features**
 *Basic*
 - Clean UI adapted from ChatGPT and Grok
