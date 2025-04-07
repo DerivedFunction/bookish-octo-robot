@@ -93,7 +93,7 @@ async function getCoords() {
 
   const inputValue = weatherField.value.trim();
   if (inputValue.length === 0) {
-    clearFields();
+    clearFields(true);
     appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn); // Default 20px
     await displayWeather();
     return;
@@ -135,7 +135,7 @@ async function getCoords() {
 
         if (!data.results?.length) {
           console.log("Bad location.");
-          clearFields();
+          clearFields(true);
           return;
         }
 
@@ -241,10 +241,10 @@ export async function displayWeather() {
 }
 
 // Clear fields
-function clearFields() {
+function clearFields(removeLocation = false) {
   weather.textContent = "";
   weatherField.value = "";
-  localStorage.removeItem("location");
+  if (removeLocation) localStorage.removeItem("location");
   localStorage.removeItem("weatherData");
   container.style.display = "none";
   toggleButton(weatherBtn, false);
@@ -277,7 +277,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await displayWeather();
 
   document.getElementById("reset").addEventListener("click", async () => {
-    clearFields();
+    clearFields(true);
     appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn); // Default 20px
     await displayWeather();
   });
