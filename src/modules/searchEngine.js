@@ -59,6 +59,12 @@ export async function addSearchEngines() {
 
     listItem.addEventListener("click", async () => {
       localStorage.setItem("selectedSearchEngine", JSON.stringify(engine));
+      await browser.runtime.sendMessage({
+        // Send a message to the background script to update the contextMenu
+        message: "selectedSearchEngine",
+        engine: engine,
+      });
+
       await getSearchEngine(); // Update the button icon immediately
       dropdown.classList.remove("active");
       appendSvg(

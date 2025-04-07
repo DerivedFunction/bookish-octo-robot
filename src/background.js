@@ -1,8 +1,3 @@
-// Reusable function to handle context menu creation errors
-function handleContextMenuError() {
-  void browser.runtime.lastError;
-}
-
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
   // AI searches
   let prompt = info.menuItemId;
@@ -37,7 +32,6 @@ async function loadMenu() {
   // Remove existing quick-access menu
   await browser.contextMenus.remove("search").catch(() => {});
   const search = getSearchEngine();
-  console.log(search.name);
   if (search) {
     browser.contextMenus.create(
       {
@@ -74,10 +68,6 @@ function updateMenu() {
     title: "Ask " + `${getSearchEngine().name}`,
   });
 }
-// Initial menu setup
-let prompts = [];
-getPrompts();
-
 async function getPrompts() {
   let response = await fetch("ai-list.json");
   if (!response.ok) {
@@ -88,9 +78,14 @@ async function getPrompts() {
   await loadMenu();
 }
 // Listen for changes in localStorage and update menus accordingly
-window.addEventListener("storage", (event) => {
-  if (event.key === "selectedSearchEngine") {
+browser.runtime.onMessage.addListener((e) => {
+  if (e.message && e.message === "selectedSearchEngine") {
+    console.log("Search engine changed", e.engine.name);
     getSearchEngine();
     updateMenu();
   }
 });
+
+// Initial menu setup
+let prompts = [];
+getPrompts();
