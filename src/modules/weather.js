@@ -189,7 +189,7 @@ function getWeatherIcon(weatherCode, weatherTime, sunrise, sunset) {
 export async function displayWeather() {
   const weatherData = JSON.parse(localStorage.getItem("weatherData"));
   let loc = JSON.parse(localStorage.getItem("location"));
-  console.log("Fetching weather", loc);
+  console.log("Fetching weather", loc, weatherData);
 
   if (!loc) {
     //No location means we don't have anything
@@ -226,7 +226,6 @@ export async function displayWeather() {
     weatherData.sunrise,
     weatherData.sunset
   )}`;
-  console.log(WEATHER_CONDITIONS[weatherData.weathercode]);
   weather.innerHTML = `${temperature}${unitSymbol}`;
   appendSvg(
     {
