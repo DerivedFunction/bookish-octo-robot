@@ -226,7 +226,7 @@ export async function displayWeather() {
     weatherData.sunrise,
     weatherData.sunset
   )}`;
-  weather.innerHTML = `${temperature}${unitSymbol}`;
+  weather.textContent = `${temperature}${unitSymbol}`;
   appendSvg(
     {
       image: iconPath,
