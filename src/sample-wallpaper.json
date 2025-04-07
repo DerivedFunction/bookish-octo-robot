@@ -225,7 +225,7 @@
     "url": "https://images.unsplash.com/photo-1499678329028-101435549a4e",
     "lightModeText": false,
     "credits": "https://unsplash.com/@andersjilden"
-  }.,
+  },
   {
     "id": 28,
     "name": "Breno Machado",
@@ -326,9 +326,9 @@
     "id": 40,
     "name": "Bailey Zindel",
     "domain": "Unsplash",
-    "url": "https://unsplash.com/@baileyzindel",
+    "url": "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
     "lightModeText": true,
-    "credits": "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+    "credits": "https://unsplash.com/@baileyzindel"
   },
   {
     "id": 41,
