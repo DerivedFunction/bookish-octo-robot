@@ -62,9 +62,16 @@ async function findSuggestions() {
     const suggestionElement = document.createElement("button");
     suggestionElement.className = "suggestion-item";
     suggestionElement.textContent = suggestion;
-    const text = query.value + suggestion;
+    suggestionElement.setAttribute(
+      "data-replace",
+      promptList.replace ? promptList.replace : false
+    );
     suggestionElement.addEventListener("click", () => {
-      query.value = text;
+      query.value = `${
+        suggestionElement.getAttribute("data-replace") === "true"
+          ? suggestion
+          : query.value + suggestion
+      }: `;
       suggestionResult.innerHTML = "";
       query.focus();
     });

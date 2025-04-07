@@ -46,11 +46,8 @@
       "id": "Solve",
       "prompt": "Solve the following problem and give step-by-step logic: ",
       "image": "/assets/images/prompts/solve.svg",
-      "suggestions": [
-        "Find the roots of the quadratic equation x² - 5x + 6 = 0",
-        "Calculate the velocity of a ball dropped from 20 meters after 2 seconds",
-        "Write a Python function to reverse a string"
-      ],
+      "suggestions": ["Give a quick answer", "Check my answer"],
+      "replace": true,
       "context": ["selection"]
     },
     {
@@ -58,10 +55,14 @@
       "prompt": "Research and compare, give the best explanation or idea for this topic: ",
       "image": "/assets/images/prompts/research.svg",
       "suggestions": [
-        "The best gaming laptop under $1500",
-        "Top programming languages for web development",
-        "Latest AI trends in natural language processing"
+        "Compare options",
+        "Find pros and cons",
+        "Summarize key points",
+        "Explain this in detail",
+        "Give me the best idea",
+        "Find latest info"
       ],
+      "replace": true,
       "context": ["selection", "page"]
     },
     {
@@ -69,21 +70,22 @@
       "prompt": "Summarize briefly and concisely, with bullet points on key terms: ",
       "image": "/assets/images/prompts/summarize.svg",
       "suggestions": [
-        "The use Generative AI in education",
-        "The paper 'Attention Is All You Need' on transformers",
-        "Chapter 1 of 'To Kill a Mockingbird'"
+        "Summarize key points",
+        "List main ideas",
+        "Give a quick summary",
+        "Highlight important terms",
+        "Break this down into bullets",
+        "Summarize in simple words"
       ],
+      "replace": true,
       "context": ["selection", "page", "link"]
     },
     {
       "id": "Explain",
-      "prompt": "Explain thoroughly and include easy-to-understand examples: ",
+      "prompt": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:",
       "image": "/assets/images/prompts/explain.svg",
-      "suggestions": [
-        "How the merge sort algorithm works",
-        "The concept of superposition in quantum mechanics",
-        "What is supervised learning in machine learning"
-      ],
+      "suggestions": ["Explain briefly", "ELI5"],
+      "replace": true,
       "context": ["selection", "page", "link"]
     },
     {
@@ -91,10 +93,15 @@
       "prompt": "Analyze the following: ",
       "image": "/assets/images/prompts/analyze.svg",
       "suggestions": [
-        "Interest in AI over time",
-        "The trend of the S&P 500",
-        "The previous presidential election"
+        "Analyze pros and cons",
+        "Break down the details",
+        "Find patterns or trends",
+        "Give critical insights",
+        "Spot strengths and weaknesses",
+        "Explain your analysis",
+        "Analyze and spot errors"
       ],
+      "replace": true,
       "context": ["selection", "page", "link"]
     },
     {
@@ -102,21 +109,27 @@
       "prompt": "Generate an image of ",
       "image": "/assets/images/prompts/image.svg",
       "suggestions": [
-        "a futuristic robot",
-        "a car in a parking lot",
-        "a cute kitten"
+        "a realistic photo",
+        "a 3D render",
+        "a 2D illustration",
+        "an anime-style image",
+        "an icon",
+        "a logo"
       ],
+      "replace": false,
       "context": ["selection"]
     },
     {
       "id": "Code",
-      "prompt": "Code, debug (if needed), and explain: ",
+      "prompt": "Code and explain: ",
       "image": "/assets/images/prompts/code.svg",
       "suggestions": [
-        "A Python implementation of bubble sort",
-        "A REST API endpoint in Node.js to fetch user data",
-        "A React component for a to-do list"
+        "Fix errors with my code",
+        "Explain this error message",
+        "Refactor this code",
+        "Generate code documentation"
       ],
+      "replace": true,
       "context": ["selection", "page"]
     }
   ]
