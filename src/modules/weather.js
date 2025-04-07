@@ -1,6 +1,5 @@
 import { toggleButton } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
-
 const weather = document.getElementById("weather");
 const weather_exp = 15 * 60 * 1000; // 15 minute expiration
 
@@ -8,55 +7,62 @@ export const weatherBtn = document.getElementById("submit-weather");
 export const weatherField = document.getElementById("weather-field");
 export const unitToggle = document.getElementById("unit-toggle");
 export const container = document.getElementById("unit-toggle-label");
-// New function to fetch weather data
+
+// Single constant for weather codes, descriptions, and icons
+const WEATHER_CONDITIONS = {
+  0: { description: "Clear sky", iconBase: "sun/moon" },
+  1: { description: "Mainly clear", iconBase: "suncloud/mooncloud" },
+  2: { description: "Partly cloudy", iconBase: "suncloud/mooncloud" },
+  3: { description: "Overcast", iconBase: "cloud" },
+  45: { description: "Fog", iconBase: "fog" },
+  48: { description: "Depositing rime fog", iconBase: "fog" },
+  51: { description: "Drizzle: Light intensity", iconBase: "drizzle" },
+  53: { description: "Drizzle: Moderate intensity", iconBase: "drizzle" },
+  55: { description: "Drizzle: Dense intensity", iconBase: "drizzle" },
+  56: { description: "Freezing Drizzle: Light intensity", iconBase: "drizzle" },
+  57: { description: "Freezing Drizzle: Dense intensity", iconBase: "drizzle" },
+  61: { description: "Rain: Slight intensity", iconBase: "rain" },
+  63: { description: "Rain: Moderate intensity", iconBase: "rain" },
+  65: { description: "Rain: Heavy intensity", iconBase: "rain" },
+  66: { description: "Freezing Rain: Light intensity", iconBase: "rain" },
+  67: { description: "Freezing Rain: Heavy intensity", iconBase: "rain" },
+  71: { description: "Snow fall: Slight intensity", iconBase: "snow" },
+  73: { description: "Snow fall: Moderate intensity", iconBase: "snow" },
+  75: { description: "Snow fall: Heavy intensity", iconBase: "snow" },
+  77: { description: "Snow grains", iconBase: "snow" },
+  80: { description: "Rain showers: Slight intensity", iconBase: "rain" },
+  81: { description: "Rain showers: Moderate intensity", iconBase: "rain" },
+  82: { description: "Rain showers: Violent intensity", iconBase: "rain" },
+  85: { description: "Snow showers: Slight intensity", iconBase: "snow" },
+  86: { description: "Snow showers: Heavy intensity", iconBase: "snow" },
+  95: {
+    description: "Thunderstorm: Slight or moderate",
+    iconBase: "lightning",
+  },
+  96: { description: "Thunderstorm with slight hail", iconBase: "lightning" },
+  99: { description: "Thunderstorm with heavy hail", iconBase: "lightning" },
+};
+
+// Fetch weather data
 async function fetchWeather() {
   try {
     console.log("Fetching weather from api.open-meteo.com");
     const location = JSON.parse(localStorage.getItem("location"));
     const [lat, lon] = location.coord.split(",");
     const response = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=celsius`
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=sunrise,sunset&temperature_unit=celsius&timezone=auto`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch weather data");
     }
     const data = await response.json();
     const currentWeather = data.current_weather;
+    const daily = data.daily;
 
-    const weatherDescriptions = {
-      0: "Clear sky",
-      1: "Mainly clear",
-      2: "Partly cloudy",
-      3: "Overcast",
-      45: "Fog",
-      48: "Depositing rime fog",
-      51: "Drizzle: Light intensity",
-      53: "Drizzle: Moderate intensity",
-      55: "Drizzle: Dense intensity",
-      56: "Freezing Drizzle: Light intensity",
-      57: "Freezing Drizzle: Dense intensity",
-      61: "Rain: Slight intensity",
-      63: "Rain: Moderate intensity",
-      65: "Rain: Heavy intensity",
-      66: "Freezing Rain: Light intensity",
-      67: "Freezing Rain: Heavy intensity",
-      71: "Snow fall: Slight intensity",
-      73: "Snow fall: Moderate intensity",
-      75: "Snow fall: Heavy intensity",
-      77: "Snow grains",
-      80: "Rain showers: Slight intensity",
-      81: "Rain showers: Moderate intensity",
-      82: "Rain showers: Violent intensity",
-      85: "Snow showers: Slight intensity",
-      86: "Snow showers: Heavy intensity",
-      95: "Thunderstorm: Slight or moderate",
-      96: "Thunderstorm with slight hail",
-      99: "Thunderstorm with heavy hail",
-    };
     const condition =
-      weatherDescriptions[currentWeather.weathercode] || "Unknown";
-    const temperature = currentWeather.temperature; // Always Celsius
-    const unitSymbol = "°C"; // Stored unit is always Celsius
+      WEATHER_CONDITIONS[currentWeather.weathercode]?.description || "Unknown";
+    const temperature = currentWeather.temperature;
+    const unitSymbol = "°C";
 
     const weatherData = {
       inputValue: weatherField.value.trim(),
@@ -65,6 +71,10 @@ async function fetchWeather() {
       unitSymbol,
       timestamp: new Date().getTime(),
       coord: location.coord,
+      weathercode: currentWeather.weathercode,
+      sunrise: daily.sunrise[0],
+      sunset: daily.sunset[0],
+      weatherTime: currentWeather.time,
     };
 
     localStorage.setItem("weatherData", JSON.stringify(weatherData));
@@ -75,28 +85,26 @@ async function fetchWeather() {
   }
 }
 
+// Get coordinates and fetch weather
 async function getCoords() {
   const cachedWeather = JSON.parse(localStorage.getItem("weatherData"));
   const now = new Date().getTime();
   let location = JSON.parse(localStorage.getItem("location"));
 
   const inputValue = weatherField.value.trim();
-  // If the input field is empty, we want to delete the location
   if (inputValue.length === 0) {
     clearFields();
-    appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn);
+    appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn); // Default 20px
     await displayWeather();
     return;
   }
-  // If we have a location from localStorage, and it is the same as our input
-  // fetch weather data directly from our cache
+
   if (location && inputValue === location.inputValue) {
     if (
       cachedWeather &&
       now - cachedWeather.timestamp < weather_exp &&
       cachedWeather.inputValue === location.inputValue
     ) {
-      // We have cache weather data
       await displayWeather();
     } else {
       await fetchWeather();
@@ -104,11 +112,9 @@ async function getCoords() {
     return;
   }
 
-  // Handle location input from weatherField
   if (inputValue) {
     const coords = inputValue.split(",");
     if (coords.length === 2 && coords.every((c) => !isNaN(parseFloat(c)))) {
-      // Input is latitude,longitude
       location = coords.map((c) => parseFloat(c).toFixed(6)).join(",");
       localStorage.setItem(
         "location",
@@ -118,7 +124,6 @@ async function getCoords() {
         })
       );
     } else {
-      // Treat as postal code or name and fetch coordinates
       try {
         console.log("Fetching coordinates from api.open-meteo.com");
         const response = await fetch(
@@ -143,7 +148,7 @@ async function getCoords() {
             coord: location,
           })
         );
-        toggleButton(weatherBtn, false); // Disable the button
+        toggleButton(weatherBtn, false);
         await fetchWeather();
         return;
       } catch (error) {
@@ -158,30 +163,29 @@ async function getCoords() {
     return;
   }
 }
-// Event listeners
-weatherBtn.addEventListener("click", getCoords);
-weatherField.addEventListener("input", () => {
-  toggleButton(weatherBtn, true); // Enable button
-  appendSvg(
-    {
-      image:
-        weatherField.value.length > 0
-          ? "/assets/images/buttons/save.svg"
-          : "/assets/images/buttons/clear.svg",
-    },
-    weatherBtn
-  );
-});
 
-function clearFields() {
-  weather.textContent = "";
-  weatherField.value = "";
-  localStorage.removeItem("location");
-  localStorage.removeItem("weatherData");
-  container.style.display = "none";
-  toggleButton(weatherBtn, false);
+// Icon selection based on time
+function getWeatherIcon(weatherCode, weatherTime, sunrise, sunset) {
+  const now = new Date(weatherTime || Date.now());
+  const sunriseTime = new Date(sunrise);
+  const sunsetTime = new Date(sunset);
+  const isDay = now >= sunriseTime && now < sunsetTime;
+
+  const condition = WEATHER_CONDITIONS[weatherCode] || {
+    iconBase: "cloud",
+  };
+  const iconBase = condition.iconBase;
+
+  if (iconBase === "sun/moon") {
+    return isDay ? "sun.svg" : "moon.svg";
+  } else if (iconBase === "suncloud/mooncloud") {
+    return isDay ? "suncloud.svg" : "mooncloud.svg";
+  } else {
+    return `${iconBase}.svg`;
+  }
 }
 
+// Display weather with icon
 export async function displayWeather() {
   const weatherData = JSON.parse(localStorage.getItem("weatherData"));
   let loc = JSON.parse(localStorage.getItem("location"));
@@ -216,14 +220,54 @@ export async function displayWeather() {
       : weatherData.temperature.toFixed(1);
   const unitSymbol = currentUnit === "imperial" ? "°F" : "°C";
 
-  weather.textContent = `${weatherData.condition}, ${temperature}${unitSymbol}`;
+  const iconPath = `/assets/images/weather/${getWeatherIcon(
+    weatherData.weathercode,
+    weatherData.weatherTime,
+    weatherData.sunrise,
+    weatherData.sunset
+  )}`;
+  console.log(WEATHER_CONDITIONS[weatherData.weathercode]);
+  weather.innerHTML = `${temperature}${unitSymbol}`;
+  appendSvg(
+    {
+      image: iconPath,
+      size: "40px",
+      description: WEATHER_CONDITIONS[weatherData.weathercode].description,
+    },
+    weather,
+    "5px",
+    false
+  ); // Custom size for weather icons
   container.style.display = "";
 }
 
-// In the DOMContentLoaded event listener:
-document.addEventListener("DOMContentLoaded", async () => {
-  appendSvg({ image: "assets/images/buttons/save.svg" }, weatherBtn);
+// Clear fields
+function clearFields() {
+  weather.textContent = "";
+  weatherField.value = "";
+  localStorage.removeItem("location");
+  localStorage.removeItem("weatherData");
+  container.style.display = "none";
+  toggleButton(weatherBtn, false);
+}
 
+// Event listeners
+weatherBtn.addEventListener("click", getCoords);
+weatherField.addEventListener("input", () => {
+  toggleButton(weatherBtn, true);
+  appendSvg(
+    {
+      image:
+        weatherField.value.length > 0
+          ? "/assets/images/buttons/save.svg"
+          : "/assets/images/buttons/clear.svg",
+    },
+    weatherBtn
+  ); // Default 20px for buttons
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+  appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn); // Default 20px
   unitToggle.checked = localStorage.getItem("weather-unit") === "imperial";
   unitToggle.addEventListener("change", async () => {
     const unit = unitToggle.checked ? "imperial" : "metric";
@@ -235,7 +279,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("reset").addEventListener("click", async () => {
     clearFields();
-    appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn);
+    appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn); // Default 20px
     await displayWeather();
   });
 });

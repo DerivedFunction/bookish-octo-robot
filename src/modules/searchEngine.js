@@ -113,7 +113,13 @@ export async function getSearchEngine() {
     }
 
     const engineData = JSON.parse(selectedEngine);
-    appendSvg({ image: engineData.image }, curSearchBtn);
+    appendSvg(
+      {
+        image: engineData.image,
+        description: `Search with ${engineData.name}`,
+      },
+      curSearchBtn
+    );
     if (engineData.image) {
       const iconUrl = engineData.image;
       if (chrome && chrome.action) {
@@ -136,8 +142,6 @@ export async function getSearchEngine() {
     return null;
   }
 }
-
-setupTooltip(curSearchBtn, () => true, "Your current AI chatbot");
 
 document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "assets/images/buttons/down.svg" }, searchEnginePickerBtn);

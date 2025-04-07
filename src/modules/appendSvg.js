@@ -1,3 +1,5 @@
+import { setupTooltip } from "./tooltip.js";
+
 export function appendSvg(object, container, gap = null, replace = true) {
   fetch(object.image)
     .then((response) => response.text())
@@ -6,13 +8,14 @@ export function appendSvg(object, container, gap = null, replace = true) {
       const svgDoc = parser.parseFromString(svgContent, "image/svg+xml");
       const svg = svgDoc.querySelector("svg");
       if (svg) {
-        svg.setAttribute("width", "20");
-        svg.setAttribute("height", "20");
-        svg.style.width = "20px";
-        svg.style.height = "20px";
+        // Use provided size or default to 20px
+        const size = object.size || "20px";
+        svg.setAttribute("width", size);
+        svg.setAttribute("height", size);
+        svg.style.width = size;
+        svg.style.height = size;
         if (gap) container.style.gap = gap;
         if (replace) {
-          // check if the current icon is the same as the new one
           const currentIcon = container.querySelector("svg");
           if (currentIcon && currentIcon.outerHTML !== svg.outerHTML) {
             container.replaceChild(svg, currentIcon); // Replace existing icon
@@ -21,6 +24,9 @@ export function appendSvg(object, container, gap = null, replace = true) {
           }
         } else {
           container.insertBefore(svg, container.firstChild); // Insert icon before text
+        }
+        if (object.description) {
+          setupTooltip(svg, () => svg.matches(":hover"), object.description);
         }
       }
     })

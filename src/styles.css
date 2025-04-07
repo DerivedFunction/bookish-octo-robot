@@ -149,6 +149,10 @@ button:active {
   color: var(--secondary-text-color);
   text-align: right;
 }
+#weather {
+  display: flex;
+  align-items: center;
+}
 #content {
   display: flex;
   justify-content: center; /* Horizontal centering */
