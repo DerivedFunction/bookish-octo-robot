@@ -83,9 +83,7 @@ async function getCoords() {
   const inputValue = weatherField.value.trim();
   // If the input field is empty, we want to delete the location
   if (inputValue.length === 0) {
-    localStorage.removeItem("location");
-    localStorage.removeItem("weatherData");
-    toggleButton(weatherBtn, false); // Disable button
+    clearFields();
     appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn);
     await displayWeather();
     return;

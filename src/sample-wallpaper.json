@@ -4,6 +4,7 @@
     "name": "W W",
     "domain": "Pexels",
     "url": "https://images.pexels.com/photos/889929/pexels-photo-889929.jpeg",
+    "lightModeText": false,
     "credits": "https://www.pexels.com/@w-w-299285/"
   },
   {
@@ -99,7 +100,9 @@
     "name": "Benjamin Voros",
     "domain": "Unsplash",
     "url": "https://images.unsplash.com/photo-1519681393784-d120267933ba",
-    "lightModeText": false
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@vorosbenisop"
+
   },
   {
     "id": 13,
@@ -166,5 +169,270 @@
     "url": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05",
     "lightModeText": true,
     "credits": "https://unsplash.com/@v2osk"
+  },
+  {
+    "id": 21,
+    "name": "Scott Lord",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1743710426934-89887ca897d8",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@darkcatimages"
+  },
+  {
+    "id": 22,
+    "name": "Zetong Li",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1743653537429-a94889a6fd47",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@zetong"
+  },
+  {
+    "id": 23,
+    "name": "Colby Thomas",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1455156218388-5e61b526818b",
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@jrnxf"
+  },
+  {
+    "id": 24,
+    "name": "Federica Galli",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1508255139162-e1f7b7288ab7",
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@fedechanw"
+  },
+  {
+    "id": 25,
+    "name": "Cosmic Timetraveler",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1432958576632-8a39f6b97dc7",
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@cosmictimetraveler"
+  },
+  {
+    "id": 26,
+    "name": "Tianshu Liu",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1542640244-7e672d6cef4e",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@tianshu"
+  },
+  {
+    "id": 27,
+    "name": "Anders Jildén",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1499678329028-101435549a4e",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@andersjilden"
+  }.,
+  {
+    "id": 28,
+    "name": "Breno Machado",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1431440869543-efaf3388c585",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@brenomachado"
+  },
+  {
+    "id": 29,
+    "name": "Jonatan Pie",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1491466424936-e304919aada7",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@r3dmax"
+  },
+  {
+    "id": 30,
+    "name": "Jonatan Pie",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1484950763426-56b5bf172dbb",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@r3dmax"
+  },
+  {
+    "id": 31,
+    "name": "jms",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1482784160316-6eb046863ece",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@jmsdono"
+  },
+  {
+    "id": 32,
+    "name": "Qingbao Meng",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1501854140801-50d01698950b",
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@ideasboom"
+  },
+  {
+    "id": 33,
+    "name": "Štefan Štefančík",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1466854076813-4aa9ac0fc347",
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@cikstefan"
+  },
+  {
+    "id": 34,
+    "name": "Štefan Štefančík",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1466853817435-05b43fe45b39",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@cikstefan"
+  },
+  {
+    "id": 35,
+    "name": "Nitish Meena",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1444090542259-0af8fa96557e",
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@nitishm"
+  },
+  {
+    "id": 36,
+    "name": "NASA",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1451187580459-43490279c0fa",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@nasa"
+  },
+  {
+    "id": 37,
+    "name": "Christian Joudrey",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1464254786740-b97e5420c299",
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@cjoudrey"
+  },
+  {
+    "id": 38,
+    "name": "Dino Reichmuth",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1464983953574-0892a716854b",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@dinoreichmuth"
+  },
+  {
+    "id": 39,
+    "name": "Johannes Plenio",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1500673922987-e212871fec22",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@jplenio"
+  },
+  {
+    "id": 40,
+    "name": "Bailey Zindel",
+    "domain": "Unsplash",
+    "url": "https://unsplash.com/@baileyzindel",
+    "lightModeText": true,
+    "credits": "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+  },
+  {
+    "id": 41,
+    "name": "Vincent Guth",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1483347756197-71ef80e95f73",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@vingtcent"
+  },
+  {
+    "id": 42,
+    "name": "Luca Micheli",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1511300636408-a63a89df3482",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@lucamicheli"
+  },
+  {
+    "id": 43,
+    "name": "Denys Nevozhai",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1477519242566-6ae87c31d212",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@dnevozhai"
+  },
+  {
+    "id": 44,
+    "name": "Adam Kool",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1426604966848-d7adac402bff",
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@adamkool"
+  },
+  {
+    "id": 45,
+    "name": "Kace Rodriguez",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1461301214746-1e109215d6d3",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@kace"
+  },
+  {
+    "id": 46,
+    "name": "Ishan @seefromthesky",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1470214304380-aadaedcfff84",
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@seefromthesky"
+  },
+  {
+    "id": 47,
+    "name": "Arnaud STECKLE",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1551368321-dddf8a05c459",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@arnaudsteckle"
+  },
+  {
+    "id": 48,
+    "name": "Damian Markutt",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1542749191-320c458c8435",
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@wildandfree_photography"
+  },
+  {
+    "id": 49,
+    "name": "Arnaud STECKLE",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1562083589-3bf71182e9c2",
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@arnaudsteckle"
+  },
+  {
+    "id": 50,
+    "name": "Roberto Nickson",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1569697344606-0409c7559ad9",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@rpnickson"
+  },
+  {
+    "id": 51,
+    "name": "S&B Vonlanthen",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1509565840034-3c385bbe6451",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@blavon"
+  },
+  {
+    "id": 52,
+    "name": "Patrick Fore",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1437413646517-e98caade5a58",
+    "lightModeText": false,
+    "credits": "https://unsplash.com/@patrickian4"
+  },
+  {
+    "id": 53,
+    "name": "Luca Micheli",
+    "domain": "Unsplash",
+    "url": "https://images.unsplash.com/photo-1518098268026-4e89f1a2cd8e",
+    "lightModeText": true,
+    "credits": "https://unsplash.com/@lucamicheli"
   }
+
 ]
