@@ -1,8 +1,6 @@
-import { loadJsonData, toggleButton } from "../app.js";
+import { loadJsonData } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
 import { setupTooltip } from "./tooltip.js";
-import { goBtn } from "./actionButtons.js";
-import { query } from "./query.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
 export const searchEnginePickerBtn = document.getElementById(
