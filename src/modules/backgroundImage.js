@@ -1,7 +1,71 @@
 import { toggleButton, loadJsonData } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
-let expirationTimeout = null;
 
+let expirationTimeout = null;
+const CACHE_NAME = "bg-image-cache";
+
+// Dummy base URL for own-img (must be a valid HTTPS URL)
+const DUMMY_OWN_IMG_URL = "https://bookish.octo.robot/own-img";
+
+// Store image data in cache with a valid Request object
+async function putInCache(key, imageData) {
+  try {
+    const cache = await caches.open(CACHE_NAME);
+    // Use the key if it's a valid URL, otherwise use the dummy URL
+    const cacheKey =
+      key.startsWith("http://") || key.startsWith("https://")
+        ? key
+        : DUMMY_OWN_IMG_URL;
+    const request = new Request(cacheKey);
+    const response = new Response(imageData, {
+      headers: { "Content-Type": "image/jpeg" }, // Adjust based on image type if needed
+    });
+    await cache.put(request, response);
+  } catch (error) {
+    console.error("Error caching image data:", error);
+    throw error;
+  }
+}
+
+// Retrieve image data with a cache-first strategy
+async function getCachedImageData(key) {
+  try {
+    const cache = await caches.open(CACHE_NAME);
+    const cacheKey =
+      key.startsWith("http://") || key.startsWith("https://")
+        ? key
+        : DUMMY_OWN_IMG_URL;
+    const request = new Request(cacheKey);
+
+    // Check the cache first
+    const responseFromCache = await cache.match(request);
+    if (responseFromCache) {
+      const blob = await responseFromCache.blob();
+      return await blobToDataURL(blob);
+    }
+
+    // If not in cache, return null (we'll handle fetching elsewhere)
+    return null;
+  } catch (error) {
+    console.error("Error retrieving cached image data:", error);
+    return null;
+  }
+}
+
+// Clear cached image data
+async function clearCachedImageData(key) {
+  try {
+    const cache = await caches.open(CACHE_NAME);
+    const cacheKey =
+      key.startsWith("http://") || key.startsWith("https://")
+        ? key
+        : DUMMY_OWN_IMG_URL;
+    const request = new Request(cacheKey);
+    await cache.delete(request);
+  } catch (error) {
+    console.error("Error clearing cached image data:", error);
+  }
+}
 // LocalStorage functions for bgOption
 function getBgOption() {
   const bgOption = localStorage.getItem("bg-option");
@@ -10,14 +74,22 @@ function getBgOption() {
 
 function setBgOption(bgData) {
   try {
-    localStorage.setItem("bg-option", JSON.stringify(bgData));
+    // Store metadata without data in localStorage
+    const metadata = {
+      type: bgData.type,
+      url: bgData.url,
+      expiration: bgData.expiration,
+      timeExpire: bgData.timeExpire,
+      credits: bgData.credits,
+      lightModeText: bgData.lightModeText,
+    };
+    localStorage.setItem("bg-option", JSON.stringify(metadata));
   } catch (error) {
     if (error.name === "QuotaExceededError") {
-      console.warn("LocalStorage quota exceeded, setting data to null:", error);
-      bgData.data = null; // Set data to null if quota is exceeded
-      localStorage.setItem("bg-option", JSON.stringify(bgData));
+      console.warn("LocalStorage quota exceeded:", error);
+      // Handle quota exceeded if needed, though data is no longer stored here
     } else {
-      throw error; // Re-throw other errors
+      throw error;
     }
   }
 }
@@ -35,30 +107,27 @@ export async function loadData() {
     switch (bgOption.type) {
       case "bg-img":
         if (bgOption.expiration === -1) {
-          await applyBackgroundImage(body, bgOption);
+          await clearCachedImageData(bgOption.url);
+          await applyBackgroundImage(bgOption);
         } else if (bgOption.timeExpire === 0 || now > bgOption.timeExpire) {
           await setNewBackgroundImage(body, bgOption);
         } else {
-          await applyBackgroundImage(body, bgOption);
+          await applyBackgroundImage(bgOption);
           scheduleBackgroundUpdate(body, bgOption, now);
         }
         break;
       case "color":
-        body.style.backgroundColor = bgOption.data;
+        body.style.backgroundColor = bgOption.url; // Treat url as color value
         break;
       case "gradient":
-        const [ang, color1, color2] = bgOption.data.split(",");
+        const [ang, color1, color2] = bgOption.url.split(",");
         body.style.backgroundImage = `linear-gradient(${ang}deg, ${color1}, ${color2})`;
         break;
       case "own-img":
-        if (bgOption.url) {
-          await applyBackgroundImage(body, bgOption);
-        } else {
-          resetBackground(body);
-        }
+        await applyBackgroundImage(bgOption);
         break;
       default:
-        resetBackground(body);
+        resetBackground();
         clearBgOption();
         break;
     }
@@ -92,9 +161,8 @@ bgBtn.addEventListener("click", async () => {
   const selectedOption =
     backgroundSelect.options[backgroundSelect.selectedIndex].value;
   const body = document.body;
-  let bgData = getBgOption() || {
+  let bgData = (await getBgOption()) || {
     type: selectedOption,
-    data: null,
     url: null,
     expiration: -1,
     timeExpire: -1,
@@ -106,7 +174,6 @@ bgBtn.addEventListener("click", async () => {
     bgData = {
       ...bgData,
       type: selectedOption,
-      data: null,
       url: null,
       expiration: -1,
       timeExpire: -1,
@@ -121,45 +188,43 @@ bgBtn.addEventListener("click", async () => {
       if (!bgData.url) {
         await setNewBackgroundImage(body, bgData);
       } else {
-        await applyBackgroundImage(body, bgData);
+        await applyBackgroundImage(bgData);
       }
       break;
     case "color":
-      resetBackground(body);
+      resetBackground();
       const color = bgColor.value;
       body.style.backgroundColor = color;
-      bgData.data = color;
       bgData.url = null;
       bgData.credits = null;
       setBgOption(bgData);
       break;
     case "gradient":
-      resetBackground(body);
+      resetBackground();
       const color1 = bgColor.value;
       const color2 = bgColor2.value;
       const ang = bgNum.value || 0;
       const gradient = `linear-gradient(${ang}deg, ${color1}, ${color2})`;
       body.style.backgroundImage = gradient;
-      bgData.data = `${ang},${color1},${color2}`;
-      bgData.url = null;
+      bgData.url = `${ang},${color1},${color2}`; // Store gradient as url
       bgData.credits = null;
       setBgOption(bgData);
       break;
     case "own-img":
       const file = ownImgInput.files[0];
       if (file) {
-        bgData.url = await blobToDataURL(file); // Store data:image/ in url for own-img
-        bgData.data = null; // No need for data here
+        await putInCache(DUMMY_OWN_IMG_URL, file); // Cache under dummy URL
+        bgData.url = null; // No HTTPS URL for user-uploaded images
         bgData.credits = [file.name];
         ownImgLabel.textContent = file.name;
-        await applyBackgroundImage(body, bgData);
+        await applyBackgroundImage(bgData);
         setBgOption(bgData);
       } else {
-        resetBackground(body);
+        resetBackground();
       }
       break;
     default:
-      resetBackground(body);
+      resetBackground();
       bgData.url = null;
       bgData.credits = null;
       break;
@@ -190,7 +255,11 @@ bgBtn.addEventListener("click", async () => {
     }
   }
 
-  if (bgData.url || selectedOption === "default") {
+  if (
+    bgData.url ||
+    selectedOption === "default" ||
+    selectedOption === "own-img"
+  ) {
     setBgOption(bgData);
   }
   toggleButton(bgBtn, false);
@@ -218,16 +287,38 @@ function determineTheme(isLightMode) {
   return isLightMode ? "light" : "dark";
 }
 
-async function applyBackgroundImage(body, bgData) {
+async function applyBackgroundImage(bgData) {
+  const body = document.body;
   body.style.backgroundColor = "";
   let imageUrl;
 
   if (bgData.type === "bg-img") {
-    // Use data:image/ if available, otherwise fall back to HTTPS URL
-    imageUrl = bgData.data || bgData.url;
+    // Try cache first, fall back to HTTPS URL
+    imageUrl = await getCachedImageData(bgData.url);
+    if (!imageUrl) {
+      // If not in cache, use the HTTPS URL and attempt to re-cache it
+      try {
+        const response = await fetch(bgData.url);
+        if (response.ok) {
+          const blob = await response.blob();
+          await putInCache(bgData.url, blob);
+          imageUrl = await blobToDataURL(blob);
+        } else {
+          imageUrl = bgData.url; // Fallback to URL directly
+        }
+      } catch (error) {
+        console.error("Error fetching bg-img:", error);
+        imageUrl = bgData.url; // Use URL as last resort
+      }
+    }
   } else if (bgData.type === "own-img") {
-    // For own-img, use the data:image/ stored in url
-    imageUrl = bgData.url;
+    // Try cache first
+    imageUrl = await getCachedImageData(DUMMY_OWN_IMG_URL);
+    if (!imageUrl) {
+      console.warn("No cached image data found for own-img");
+      resetBackground();
+      return;
+    }
   } else {
     imageUrl = bgData.url; // Fallback for unexpected cases
   }
@@ -282,28 +373,22 @@ async function blobToDataURL(blob) {
   });
 }
 
-export async function readText(blob) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsText(blob);
-  });
-}
-
 async function setNewBackgroundImage(body, bgData = null) {
   try {
     const { wallpapers } = await loadJsonData("wallpapers");
     const randomIndex = Math.floor(Math.random() * wallpapers.length);
     const wallpaper = wallpapers[randomIndex];
+
+    // Fetch the image
     const imageResponse = await fetch(wallpaper.url);
     if (!imageResponse.ok) throw new Error("Failed to fetch image");
     const imageBlob = await imageResponse.blob();
-    const dataUrl = await blobToDataURL(imageBlob);
+
+    // Cache the image data
+    await putInCache(wallpaper.url, imageBlob);
 
     if (bgData) {
-      bgData.url = wallpaper.url; // Always store HTTPS URL
-      bgData.data = dataUrl; // Attempt to store data:image/
+      bgData.url = wallpaper.url; // Store HTTPS URL in bg-option.url
       bgData.credits = [
         wallpaper.credits,
         wallpaper.name,
@@ -314,24 +399,25 @@ async function setNewBackgroundImage(body, bgData = null) {
       const { time } = getExpirationDetails(bgData.expiration, Date.now());
       bgData.timeExpire = time;
     }
-    await applyBackgroundImage(body, bgData);
-    setBgOption(bgData); // Save after applying, handles quota exceeded
+    await applyBackgroundImage(bgData);
+    setBgOption(bgData); // Save metadata to localStorage
   } catch (error) {
     console.error("Error setting new background image:", error);
     if (bgData && bgData.url) {
-      await applyBackgroundImage(body, bgData);
+      await applyBackgroundImage(bgData);
     } else {
-      resetBackground(body);
+      resetBackground();
     }
   }
 }
 
-export function resetBackground(body) {
-  body.style.backgroundImage = "";
-  body.style.backgroundColor = "";
+export function resetBackground() {
+  document.body.style.backgroundImage = "";
+  document.body.style.backgroundColor = "";
   credits.innerHTML = "";
   credits.style.display = "none";
   Array.from(bgText).forEach((element) => element.removeAttribute("style"));
+  clearCachedImageData(DUMMY_OWN_IMG_URL); // Clear own-img cache
 }
 
 function getExpirationDetails(expirationOption, now) {
@@ -438,7 +524,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadData();
   document.getElementById("reset").addEventListener("click", async () => {
     clearBgOption();
-    resetBackground(document.body);
+    resetBackground();
     setTextColor();
     ownImgLabel.textContent = "Click to upload...";
     [bgImgExpSelect, backgroundSelect].forEach((selectElement) => {

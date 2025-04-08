@@ -123,17 +123,9 @@ export async function getSearchEngine() {
     if (engineData.image) {
       const iconUrl = engineData.image;
       if (chrome && chrome.action) {
-        fetch(iconUrl)
-          .then((response) => response.blob())
-          .then((blob) => {
-            const objectUrl = URL.createObjectURL(blob);
-            chrome.action.setIcon({ path: objectUrl });
-            if (browser && browser.sidebarAction)
-              browser.sidebarAction.setIcon({ path: objectUrl });
-          })
-          .catch((error) =>
-            console.error("Error setting browser action icon:", error)
-          );
+        chrome.action.setIcon({ path: iconUrl });
+        if (browser && browser.sidebarAction)
+          browser.sidebarAction.setIcon({ path: iconUrl });
       }
     }
     return engineData;

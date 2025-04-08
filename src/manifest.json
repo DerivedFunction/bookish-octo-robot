@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tabbed: AI chatbox in New Tab/Sidebar",
   "short_name": "Tabbed",
-  "version": "1.0.1.5",
+  "version": "1.0.2.0",
   "description": "A new tab page and sidebar with an AI-like user interface",
   "icons": {
     "48": "assets/images/icon.svg"
@@ -35,5 +35,5 @@
     "homepage": "index.html"
   },
   "optional_permissions": ["clipboardRead"],
-  "permissions": ["contextMenus", "storage"]
+  "permissions": ["contextMenus"]
 }
