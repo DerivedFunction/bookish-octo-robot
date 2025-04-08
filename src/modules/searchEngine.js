@@ -59,7 +59,7 @@ export async function addSearchEngines() {
 
     listItem.addEventListener("click", async () => {
       localStorage.setItem("selectedSearchEngine", JSON.stringify(engine));
-      await browser.runtime.sendMessage({
+      await chrome.runtime.sendMessage({
         // Send a message to the background script to update the contextMenu
         message: "selectedSearchEngine",
         engine: engine,
@@ -122,11 +122,11 @@ export async function getSearchEngine() {
     );
     if (engineData.image) {
       const iconUrl = engineData.image;
-      if (chrome && chrome.action) {
-        chrome.action.setIcon({ path: iconUrl });
+      chrome.action.setIcon({ path: iconUrl });
+      try {
         if (browser && browser.sidebarAction)
           browser.sidebarAction.setIcon({ path: iconUrl });
-      }
+      } catch (error) {}
     }
     return engineData;
   } catch (error) {
@@ -140,7 +140,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   await addSearchEngines();
   await getSearchEngine();
   let x = await getSearchEngineUrl();
-  if (window.location.href.split("/").pop() === "sidebar.html") {
+  let y = window.location.href.split("/").pop();
+  console.log(y);
+  if (y === "sidebar.html") {
     console.log("Sidebar opened, listening for queries");
     goToLink(x);
     window.addEventListener("storage", async (e) => {
