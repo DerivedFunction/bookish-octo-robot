@@ -12,8 +12,11 @@ A new tab page with an AI-like user interface.
 - Paste text into the prompt
 - Seven default suggestion ideas to save time on commands.
   ![Sample 3](./samples/Sample_3.png)
+- Click on the Extension Icon:
+  - To launch your current AI chatbot in a new Tab (Chrome only)
+  - To launch the sidebar (Firefox only)
 
-### Sidebar features
+### Sidebar features (Firefox Only)
 
 - Open the sidebar to access the chatbots as well.
   ![Sample 4](./samples/Sample_4.png)
