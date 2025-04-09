@@ -6,9 +6,26 @@ const dropdown = document.getElementById("search-engine-dropdown");
 export const searchEnginePickerBtn = document.getElementById(
   "search-engine-picker"
 );
-let selectedSearchEngine = null;
+export let selectedSearchEngine = null;
 
 searchEnginePickerBtn.addEventListener("click", () => {
+  toggleDropdown();
+});
+curSearchBtn.addEventListener("click", async () => {
+  if (!selectedSearchEngine) {
+    searchEnginePickerBtn.click();
+    toggleDropdown();
+  } else window.location.href = getSearchEngineUrl();
+});
+document.addEventListener("click", (e) => {
+  if (
+    !searchEnginePickerBtn.contains(e.target) &&
+    !dropdown.contains(e.target)
+  ) {
+    dropdown.classList.remove("active");
+  }
+});
+function toggleDropdown() {
   dropdown.classList.toggle("active");
   if (dropdown.classList.contains("active")) {
     appendSvg(
@@ -21,18 +38,8 @@ searchEnginePickerBtn.addEventListener("click", () => {
       searchEnginePickerBtn
     );
   }
-});
-curSearchBtn.addEventListener("click", async () => {
-  window.location.href = getSearchEngineUrl();
-});
-document.addEventListener("click", (e) => {
-  if (
-    !searchEnginePickerBtn.contains(e.target) &&
-    !dropdown.contains(e.target)
-  ) {
-    dropdown.classList.remove("active");
-  }
-});
+}
+
 export async function addSearchEngines() {
   let searchEngines = await getSearchEngineList();
   const list = document.getElementById("search-engine-dropdown");
@@ -102,7 +109,6 @@ export async function getSearchEngine() {
       if (engines.length === 0) throw new Error("No search engines available");
 
       selectedEngine = engines[0];
-      console.log(selectedEngine);
       await chrome.storage.local.set({ engine: selectedEngine });
       x = await chrome.storage.local.get("engine");
       selectedEngine = x["engine"];
@@ -112,18 +118,20 @@ export async function getSearchEngine() {
     const engineData = selectedEngine;
     appendSvg(
       {
-        image: engineData.image,
-        description: `Search with ${engineData.name}`,
+        image: engineData ? engineData.image : "/assets/images/ai/default.svg",
+        description: engineData
+          ? `Search with ${engineData.name}`
+          : "Set an AI Chatbot",
       },
       curSearchBtn
     );
-    if (engineData.image) {
-      const iconUrl = engineData.image;
-      await chrome.action.setIcon({ path: iconUrl });
-      try {
-        if (br && br.sidebarAction) br.sidebarAction.setIcon({ path: iconUrl });
-      } catch (error) {}
-    }
+
+    const iconUrl = engineData.image;
+    await chrome.action.setIcon({ path: iconUrl });
+    try {
+      browser.sidebarAction.setIcon({ path: iconUrl });
+    } catch (error) {}
+
     selectedSearchEngine = engineData;
   } catch (error) {
     console.error("Error setting up search engine:", error);
