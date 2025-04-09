@@ -121,8 +121,7 @@ export async function getSearchEngine() {
       const iconUrl = engineData.image;
       await chrome.action.setIcon({ path: iconUrl });
       try {
-        if (browser && browser.sidebarAction)
-          browser.sidebarAction.setIcon({ path: iconUrl });
+        if (br && br.sidebarAction) br.sidebarAction.setIcon({ path: iconUrl });
       } catch (error) {}
     }
     selectedSearchEngine = engineData;
@@ -149,7 +148,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   chrome.runtime.onMessage.addListener(async (e) => {
     if (e.message && e.message === "selectedSearchEngine") {
-      getSearchEngine();
+      await getSearchEngine();
     }
   });
   document.getElementById("reset").addEventListener("click", async () => {

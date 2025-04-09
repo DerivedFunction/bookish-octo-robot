@@ -1,6 +1,5 @@
 // Ensure 'browser' is defined (for Chrome compatibility without polyfill)
-const browser = window.browser || window.chrome;
-browser.contextMenus.onClicked.addListener(async (info, tab) => {
+chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   // AI searches
   let prompt = info.menuItemId;
   let query = prompt == "paste" ? "" : prompt;
@@ -11,18 +10,21 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
   } else {
     query = `${query} ${tab.url}`;
   }
-
+  query = query.trim();
   try {
     browser.sidebarAction.setPanel({
       panel: `sidebar.html`,
     });
     browser.sidebarAction.open();
+    console.log(`Sending ${query} to sidebar...`);
+    chrome.storage.local.set({ query: query });
   } catch (error) {
-    console.log("Probably in Chrome");
-    browser.sidePanel.open({ windowId: tab.windowId });
+    console.log("Probably in Chrome. Cannot use Side Panel");
+    console.log(`Opening ${query} in new tab...`);
+    let x = await getSearchEngine();
+    let url = `${x.url}${encodeURIComponent(query)}`;
+    chrome.tabs.create({ url: url });
   }
-  console.log(`Sending ${query} to sidebar...`);
-  browser.storage.local.set({ query: query });
 });
 
 async function getSearchEngine() {
@@ -39,18 +41,18 @@ async function getSearchEngine() {
 // Load the context menus dynamically
 async function loadMenu() {
   // Remove existing quick-access menu
-  await browser.contextMenus.remove("search").catch(() => {});
+  await chrome.contextMenus.remove("search").catch(() => {});
   const search = await getSearchEngine();
   if (search) {
-    browser.contextMenus.create(
+    chrome.contextMenus.create(
       {
         id: "search",
         title: "Ask " + `${search.name}`,
         contexts: ["selection", "link", "page"],
       },
-      () => void browser.runtime.lastError
+      () => void chrome.runtime.lastError
     );
-    browser.contextMenus.create(
+    chrome.contextMenus.create(
       {
         id: "paste",
         title: "Paste Selection Into Prompt",
@@ -87,7 +89,7 @@ async function getPrompts() {
   await loadMenu();
 }
 // Listen for changes in localStorage and update menus accordingly
-browser.runtime.onMessage.addListener(async (e) => {
+chrome.runtime.onMessage.addListener(async (e) => {
   if (e.message && e.message === "selectedSearchEngine") {
     console.log("Search engine changed", e.engine.name);
     updateMenu(e.engine);
