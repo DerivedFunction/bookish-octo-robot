@@ -35,7 +35,7 @@ pasteBtn.addEventListener("click", async () => {
 export const goBtn = document.getElementById("go");
 goBtn.addEventListener("click", async () => {
   if (query.value.length > 0 && query.value.length < MAX_LIMIT) {
-    let url = `${await getSearchEngineUrl()}${encodeURIComponent(query.value)}`;
+    let url = `${getSearchEngineUrl()}${encodeURIComponent(query.value)}`;
     window.location.href = url;
   }
 });

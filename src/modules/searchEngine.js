@@ -6,6 +6,7 @@ const dropdown = document.getElementById("search-engine-dropdown");
 export const searchEnginePickerBtn = document.getElementById(
   "search-engine-picker"
 );
+let selectedSearchEngine = null;
 
 searchEnginePickerBtn.addEventListener("click", () => {
   dropdown.classList.toggle("active");
@@ -22,7 +23,7 @@ searchEnginePickerBtn.addEventListener("click", () => {
   }
 });
 curSearchBtn.addEventListener("click", async () => {
-  window.location.href = await getSearchEngineUrl();
+  window.location.href = getSearchEngineUrl();
 });
 document.addEventListener("click", (e) => {
   if (
@@ -58,7 +59,7 @@ export async function addSearchEngines() {
     listItem.appendChild(container);
 
     listItem.addEventListener("click", async () => {
-      localStorage.setItem("selectedSearchEngine", JSON.stringify(engine));
+      await chrome.storage.local.set({ engine: engine });
       await chrome.runtime.sendMessage({
         // Send a message to the background script to update the contextMenu
         message: "selectedSearchEngine",
@@ -76,25 +77,17 @@ export async function addSearchEngines() {
     fragment.appendChild(listItem);
   });
   list.replaceChildren(fragment);
+  await getSearchEngine();
 }
 setupTooltip(
   searchEnginePickerBtn,
   () => !dropdown.classList.contains("active")
 );
-export async function getSearchEngineUrl() {
-  let engine = JSON.parse(localStorage.getItem("selectedSearchEngine"));
-  if (!engine) {
-    engine = await getSearchEngine();
-  }
-  return engine.url;
+export function getSearchEngineUrl() {
+  return selectedSearchEngine.url;
 }
-export async function getSearchEngineName() {
-  let engine = JSON.parse(localStorage.getItem("selectedSearchEngine"));
-  if (!engine) {
-    engine = await getSearchEngine();
-  }
-  console.log(engine.name);
-  return engine.name;
+export function getSearchEngineName() {
+  return selectedSearchEngine.name;
 }
 export async function getSearchEngineList() {
   const { aiList: loadedList } = await loadJsonData("ai");
@@ -102,17 +95,21 @@ export async function getSearchEngineList() {
 }
 export async function getSearchEngine() {
   try {
-    let selectedEngine = localStorage.getItem("selectedSearchEngine");
-
-    if (!selectedEngine) {
+    let selectedEngine;
+    let x = await chrome.storage.local.get("engine");
+    if (!x) {
       const engines = await getSearchEngineList();
       if (engines.length === 0) throw new Error("No search engines available");
 
-      selectedEngine = JSON.stringify(engines[0]);
-      localStorage.setItem("selectedSearchEngine", selectedEngine);
+      selectedEngine = engines[0];
+      console.log(selectedEngine);
+      await chrome.storage.local.set({ engine: selectedEngine });
+      x = await chrome.storage.local.get("engine");
+      selectedEngine = x["engine"];
+    } else {
+      selectedEngine = x["engine"];
     }
-
-    const engineData = JSON.parse(selectedEngine);
+    const engineData = selectedEngine;
     appendSvg(
       {
         image: engineData.image,
@@ -122,47 +119,51 @@ export async function getSearchEngine() {
     );
     if (engineData.image) {
       const iconUrl = engineData.image;
-      chrome.action.setIcon({ path: iconUrl });
+      await chrome.action.setIcon({ path: iconUrl });
       try {
         if (browser && browser.sidebarAction)
           browser.sidebarAction.setIcon({ path: iconUrl });
       } catch (error) {}
     }
-    return engineData;
+    selectedSearchEngine = engineData;
   } catch (error) {
     console.error("Error setting up search engine:", error);
-    return null;
+    selectedSearchEngine = null;
   }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "assets/images/buttons/down.svg" }, searchEnginePickerBtn);
   await addSearchEngines();
-  await getSearchEngine();
-  let x = await getSearchEngineUrl();
   let y = window.location.href.split("/").pop();
-  console.log(y);
   if (y === "sidebar.html") {
     console.log("Sidebar opened, listening for queries");
-    goToLink(x);
-    window.addEventListener("storage", async (e) => {
-      if (e.key === "query") {
-        goToLink(x);
+    goToLink();
+    chrome.storage.onChanged.addListener(async function (changes) {
+      for (var key in changes) {
+        if (key === "query") {
+          goToLink();
+        }
       }
     });
   }
+  chrome.runtime.onMessage.addListener(async (e) => {
+    if (e.message && e.message === "selectedSearchEngine") {
+      getSearchEngine();
+    }
+  });
   document.getElementById("reset").addEventListener("click", async () => {
-    localStorage.removeItem("currentEngine");
+    await chrome.storage.local.remove("engine");
     await addSearchEngines();
-    await getSearchEngine();
   });
 });
 
-function goToLink(x) {
-  let q = localStorage.getItem("query");
-  if (q) {
-    localStorage.removeItem("query");
-    let url = `${x}${encodeURIComponent(q)}`;
+async function goToLink() {
+  let x = getSearchEngineUrl();
+  let q = await chrome.storage.local.get("query");
+  if (q["query"] && q["query"].trim().length > 0) {
+    chrome.storage.local.remove("query");
+    let url = `${x}${encodeURIComponent(q["query"].trim())}`;
     console.log(`Query found. Going to ${url}`);
     window.location.href = url;
   }

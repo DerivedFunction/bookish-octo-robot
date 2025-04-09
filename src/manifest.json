@@ -35,5 +35,5 @@
     "homepage": "index.html"
   },
   "optional_permissions": ["clipboardRead"],
-  "permissions": ["contextMenus"]
+  "permissions": ["contextMenus", "storage"]
 }

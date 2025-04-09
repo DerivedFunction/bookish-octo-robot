@@ -1,3 +1,5 @@
+// Ensure 'browser' is defined (for Chrome compatibility without polyfill)
+const browser = window.browser || window.chrome;
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
   // AI searches
   let prompt = info.menuItemId;
@@ -9,17 +11,24 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
   } else {
     query = `${query} ${tab.url}`;
   }
-  localStorage.setItem("query", query);
+
+  try {
+    browser.sidebarAction.setPanel({
+      panel: `sidebar.html`,
+    });
+    browser.sidebarAction.open();
+  } catch (error) {
+    console.log("Probably in Chrome");
+    browser.sidePanel.open({ windowId: tab.windowId });
+  }
   console.log(`Sending ${query} to sidebar...`);
-  browser.sidebarAction.setPanel({
-    panel: `sidebar.html`,
-  });
-  browser.sidebarAction.open();
+  browser.storage.local.set({ query: query });
 });
 
-function getSearchEngine() {
+async function getSearchEngine() {
+  let x = await chrome.storage.local.get("engine");
   return (
-    JSON.parse(localStorage.getItem("selectedSearchEngine")) || {
+    x["engine"] || {
       name: "Grok",
       url: "https://www.grok.com/?q=",
       image: "/assets/images/ai/grok.svg",
@@ -31,7 +40,7 @@ function getSearchEngine() {
 async function loadMenu() {
   // Remove existing quick-access menu
   await browser.contextMenus.remove("search").catch(() => {});
-  const search = getSearchEngine();
+  const search = await getSearchEngine();
   if (search) {
     browser.contextMenus.create(
       {
@@ -48,24 +57,24 @@ async function loadMenu() {
         parentId: "search",
         contexts: ["selection", "link"],
       },
-      () => void browser.runtime.lastError
+      () => void chrome.runtime.lastError
     );
     prompts.forEach((type) => {
-      browser.contextMenus.create(
+      chrome.contextMenus.create(
         {
           id: type.prompt,
           title: type.id,
           parentId: "search",
           contexts: type.context,
         },
-        () => void browser.runtime.lastError
+        () => void chrome.runtime.lastError
       );
     });
   }
 }
-function updateMenu() {
-  browser.contextMenus.update("search", {
-    title: "Ask " + `${getSearchEngine().name}`,
+function updateMenu(engine) {
+  chrome.contextMenus.update("search", {
+    title: "Ask " + `${engine.name}`,
   });
 }
 async function getPrompts() {
@@ -78,11 +87,10 @@ async function getPrompts() {
   await loadMenu();
 }
 // Listen for changes in localStorage and update menus accordingly
-browser.runtime.onMessage.addListener((e) => {
+browser.runtime.onMessage.addListener(async (e) => {
   if (e.message && e.message === "selectedSearchEngine") {
     console.log("Search engine changed", e.engine.name);
-    getSearchEngine();
-    updateMenu();
+    updateMenu(e.engine);
   }
 });
 
