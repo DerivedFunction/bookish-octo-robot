@@ -1,4 +1,4 @@
-import { readText, toggleButton } from "../app.js";
+import { readText } from "../app.js";
 import { query, queryEvents, MAX_LIMIT } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
 import { getSearchEngineUrl, toggleDropdown } from "./searchEngine.js";
@@ -24,9 +24,9 @@ pasteBtn.addEventListener("click", async () => {
       );
       return;
     }
+    query.focus();
     const text = await navigator.clipboard.readText();
     query.value += text;
-    query.focus();
   } catch (err) {
     console.error("Failed to read clipboard contents: ", err);
     alert("Unable to access clipboard. Please grant permission and try again.");
