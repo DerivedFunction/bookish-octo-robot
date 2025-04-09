@@ -58,11 +58,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     document.getElementById("reset").addEventListener("click", async () => {
       localStorage.clear();
-      if (chrome && chrome.permissions) {
+      chrome.storage.local.clear();
+      if (chrome.permissions) {
         await chrome.permissions.remove({
           permissions: ["clipboardRead"],
         });
       }
+      await chrome.runtime.sendMessage({
+        // Send a message to the background script to remove the contextMenu
+        message: "reset",
+      });
     });
   } catch (error) {
     console.error("Error initializing application:", error);

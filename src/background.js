@@ -22,26 +22,26 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     console.log("Probably in Chrome. Cannot use Side Panel");
     console.log(`Opening ${query} in new tab...`);
     let x = await getSearchEngine();
-    let url = `${x.url}${encodeURIComponent(query)}`;
-    chrome.tabs.create({ url: url });
+    if (x) {
+      let url = `${x.url}${encodeURIComponent(query)}`;
+      chrome.tabs.create({ url: url });
+    }
   }
 });
 
 async function getSearchEngine() {
   let x = await chrome.storage.local.get("engine");
-  return (
-    x["engine"] || {
-      name: "Grok",
-      url: "https://www.grok.com/?q=",
-      image: "/assets/images/ai/grok.svg",
-    }
-  );
+  return x["engine"] || null;
 }
 
+async function deleteMenu() {
+  await chrome.contextMenus.remove("search").catch(() => {});
+  menusCreated = false;
+}
 // Load the context menus dynamically
 async function loadMenu() {
   // Remove existing quick-access menu
-  await chrome.contextMenus.remove("search").catch(() => {});
+  deleteMenu();
   const search = await getSearchEngine();
   if (search) {
     chrome.contextMenus.create(
@@ -72,6 +72,9 @@ async function loadMenu() {
         () => void chrome.runtime.lastError
       );
     });
+    menusCreated = true;
+  } else {
+    console.log("No AI chatbots selected.");
   }
 }
 function updateMenu(engine) {
@@ -91,11 +94,33 @@ async function getPrompts() {
 // Listen for changes in localStorage and update menus accordingly
 chrome.runtime.onMessage.addListener(async (e) => {
   if (e.message && e.message === "selectedSearchEngine") {
-    console.log("Search engine changed", e.engine.name);
-    updateMenu(e.engine);
+    console.log("AI chatbot changed", e.engine.name);
+    if (menusCreated) updateMenu(e.engine);
+    else loadMenu();
+  } else if (e.message && e.message === "reset") {
+    console.log("Removing context menus");
+    deleteMenu();
   }
 });
 
 // Initial menu setup
 let prompts = [];
+let menusCreated = false;
 getPrompts();
+
+chrome.action.onClicked.addListener(async () => {
+  try {
+    browser.sidebarAction.setPanel({
+      panel: `sidebar.html`,
+    });
+    browser.sidebarAction.open();
+  } catch (error) {
+    console.log("Probably in Chrome. Cannot use Side Panel");
+    console.log(`Opening new tab...`);
+    let x = await getSearchEngine();
+    if (x) {
+      let url = `${x.url}`;
+      chrome.tabs.create({ url: url });
+    }
+  }
+});

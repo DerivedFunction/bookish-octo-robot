@@ -1,7 +1,7 @@
-import { readText } from "../app.js";
+import { readText, toggleButton } from "../app.js";
 import { query, queryEvents, MAX_LIMIT } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
-import { getSearchEngineUrl } from "./searchEngine.js";
+import { getSearchEngineUrl, toggleDropdown } from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js";
 
 export const clearBtn = document.getElementById("clear");
@@ -34,8 +34,13 @@ pasteBtn.addEventListener("click", async () => {
 });
 export const goBtn = document.getElementById("go");
 goBtn.addEventListener("click", async () => {
+  let x = getSearchEngineUrl();
+  if (!x) {
+    toggleDropdown();
+    return;
+  }
   if (query.value.length > 0 && query.value.length < MAX_LIMIT) {
-    let url = `${getSearchEngineUrl()}${encodeURIComponent(query.value)}`;
+    let url = `${x}${encodeURIComponent(query.value)}`;
     window.location.href = url;
   }
 });

@@ -13,19 +13,11 @@ searchEnginePickerBtn.addEventListener("click", () => {
 });
 curSearchBtn.addEventListener("click", async () => {
   if (!selectedSearchEngine) {
-    searchEnginePickerBtn.click();
     toggleDropdown();
   } else window.location.href = getSearchEngineUrl();
 });
-document.addEventListener("click", (e) => {
-  if (
-    !searchEnginePickerBtn.contains(e.target) &&
-    !dropdown.contains(e.target)
-  ) {
-    dropdown.classList.remove("active");
-  }
-});
-function toggleDropdown() {
+
+export function toggleDropdown() {
   dropdown.classList.toggle("active");
   if (dropdown.classList.contains("active")) {
     appendSvg(
@@ -91,10 +83,12 @@ setupTooltip(
   () => !dropdown.classList.contains("active")
 );
 export function getSearchEngineUrl() {
-  return selectedSearchEngine.url;
+  if (selectedSearchEngine) return selectedSearchEngine.url;
+  else return null;
 }
 export function getSearchEngineName() {
-  return selectedSearchEngine.name;
+  if (selectedSearchEngine) selectedSearchEngine.name;
+  else return null;
 }
 export async function getSearchEngineList() {
   const { aiList: loadedList } = await loadJsonData("ai");
@@ -126,13 +120,15 @@ export async function getSearchEngine() {
       curSearchBtn
     );
 
-    const iconUrl = engineData.image;
-    await chrome.action.setIcon({ path: iconUrl });
-    try {
-      browser.sidebarAction.setIcon({ path: iconUrl });
-    } catch (error) {}
+    if (engineData) {
+      const iconUrl = engineData.image;
+      await chrome.action.setIcon({ path: iconUrl });
+      try {
+        browser.sidebarAction.setIcon({ path: iconUrl });
+      } catch (error) {}
 
-    selectedSearchEngine = engineData;
+      selectedSearchEngine = engineData;
+    }
   } catch (error) {
     console.error("Error setting up search engine:", error);
     selectedSearchEngine = null;
@@ -161,7 +157,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
   document.getElementById("reset").addEventListener("click", async () => {
     await chrome.storage.local.remove("engine");
+    selectedSearchEngine = null;
     await addSearchEngines();
+    await chrome.action.setIcon({ path: "/assets/images/icon.svg" });
+    try {
+      browser.sidebarAction.setIcon({ path: "/assets/images/icon.svg" });
+    } catch (error) {}
   });
 });
 
