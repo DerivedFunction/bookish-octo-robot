@@ -161,7 +161,7 @@ async function getPermissionStatus() {
   let hasPermissions = false;
 
   hasPermissions = await chrome.permissions.contains(PERMISSIONS);
-  console.log("Permission status:", hasPermissions);
+  console.log("Experimental permission status:", hasPermissions);
 
   content_scripts.checked = hasPermissions;
   localStorage.setItem("Experimental", content_scripts.checked);
