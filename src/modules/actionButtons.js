@@ -71,7 +71,12 @@ goBtn.addEventListener("click", async () => {
       // Run experimental content scripts
       console.log("Experimental features enabled. Going to experimental AI");
       await chrome.storage.local.set({ query: query.value });
-      window.location.href = x;
+      const [tab] = await chrome.tabs.query({
+        active: true,
+        lastFocusedWindow: true,
+      });
+      await chrome.tabs.create({ url: x });
+      await chrome.tabs.remove(tab.id);
       return;
     }
   } else {

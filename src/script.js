@@ -32,8 +32,8 @@ async function getTextInput(query, type, attribute) {
         break;
     }
   } else {
-    console.error(`Element not found: ${attribute}. Running again.`);
-    setTimeout(await runAfterFullLoad(), 1000);
+    console.log(`Element not found: ${attribute}. Running again.`);
+    setTimeout(await getTextInput(), 2000);
   }
 }
 
@@ -44,7 +44,7 @@ async function clickButton(attribute) {
       await chrome.storage.local.remove("query");
       button.click();
     } else {
-      console.error(`Button not found: ${attribute}`);
+      console.log(`Button not found: ${attribute}`);
     }
-  }, 1000);
+  }, 2000);
 }

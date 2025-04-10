@@ -15,7 +15,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   query = query.trim();
   console.log(`Sending ${query} to sidebar...`);
   chrome.storage.local.set({ query });
-  browser.runtime.sendMessage({
+  chrome.runtime.sendMessage({
     // Send a message to the sidebar
     message: "sendQuery",
   });
@@ -25,8 +25,6 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     });
     browser.sidebarAction.open();
   } catch (error) {
-    console.log("Probably in Chrome. Cannot use Side Panel");
-    console.log(`Opening ${query} in new tab...`);
     let x = await getSearchEngine();
     if (x) {
       let url;
@@ -133,8 +131,8 @@ const lastInjected = {}; // key: tabId, value: timestamp
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete" && tab.url) {
     const urlSubstrings = ["https://gemini.google.com/app"];
-    const isMatchingUrl = urlSubstrings.some((substring) =>
-      tab.url.includes(substring)
+    const isMatchingUrl = urlSubstrings.some(
+      (substring) => tab.url === substring
     );
     if (isMatchingUrl) {
       const now = Date.now();
