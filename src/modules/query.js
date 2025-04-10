@@ -36,7 +36,6 @@ export const MAX_LIMIT = 5000; // max char count
 export function getCharCount() {
   const charLength = query.value.length;
   charCount.textContent = `${charLength}/${MAX_LIMIT}`;
-
   if (charLength >= MAX_LIMIT * 0.9) {
     charCount.style.color = "var(--danger-color)";
   } else if (charLength >= MAX_LIMIT * 0.7) {
