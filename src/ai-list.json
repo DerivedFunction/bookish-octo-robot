@@ -52,7 +52,11 @@
       "id": "Solve",
       "prompt": "Solve the following problem and give step-by-step logic: ",
       "image": "/assets/images/prompts/solve.svg",
-      "suggestions": ["Give a quick answer", "Check my answer"],
+      "suggestions": [
+        "Give a Quick Answer",
+        "Check My Answer",
+        "Fill in the Blanks"
+      ],
       "replace": true,
       "context": ["selection"]
     },
@@ -61,12 +65,9 @@
       "prompt": "Research and compare, give the best explanation or idea for this topic: ",
       "image": "/assets/images/prompts/research.svg",
       "suggestions": [
-        "Compare options",
-        "Find pros and cons",
-        "Summarize key points",
-        "Explain this in detail",
-        "Give me the best idea",
-        "Find latest info"
+        "Compare Options",
+        "Explain This in Detail",
+        "Find Latest Info"
       ],
       "replace": true,
       "context": ["selection", "page"]
@@ -76,12 +77,10 @@
       "prompt": "Summarize briefly and concisely, with bullet points on key terms: ",
       "image": "/assets/images/prompts/summarize.svg",
       "suggestions": [
-        "Summarize key points",
-        "List main ideas",
-        "Give a quick summary",
-        "Highlight important terms",
-        "Break this down into bullets",
-        "Summarize in simple words"
+        "Give a Quick Summary",
+        "Paraphrase",
+        "Highlight Important Terms",
+        "Summarize in Simple Words"
       ],
       "replace": true,
       "context": ["selection", "page", "link"]
@@ -99,13 +98,11 @@
       "prompt": "Analyze the following: ",
       "image": "/assets/images/prompts/analyze.svg",
       "suggestions": [
-        "Analyze pros and cons",
-        "Break down the details",
-        "Find patterns or trends",
-        "Give critical insights",
-        "Spot strengths and weaknesses",
-        "Explain your analysis",
-        "Analyze and spot errors"
+        "Analyze Pros and Cons",
+        "Find Patterns or Trends",
+        "Give Critical Insights",
+        "Spot Strengths and Weaknesses",
+        "Analyze and Spot Errors"
       ],
       "replace": true,
       "context": ["selection", "page", "link"]
@@ -115,12 +112,12 @@
       "prompt": "Generate an image of ",
       "image": "/assets/images/prompts/image.svg",
       "suggestions": [
-        "a realistic photo",
-        "a 3D render",
-        "a 2D illustration",
-        "an anime-style image",
-        "an icon",
-        "a logo"
+        "a Realistic Photo",
+        "a 3D Render",
+        "a 2D Illustration",
+        "an Anime-Style Image",
+        "an Icon",
+        "a Logo"
       ],
       "replace": false,
       "context": ["selection"]
@@ -130,10 +127,25 @@
       "prompt": "Code and explain: ",
       "image": "/assets/images/prompts/code.svg",
       "suggestions": [
-        "Fix errors with my code",
-        "Explain this error message",
-        "Refactor this code",
-        "Generate code documentation"
+        "Fix Errors With My Code",
+        "Explain This Error Message",
+        "Refactor This Code",
+        "Generate Code Documentation",
+        "Generate Code Tests",
+        "Review and Comment"
+      ],
+      "replace": true,
+      "context": ["selection", "page"]
+    },
+    {
+      "id": "Generate",
+      "prompt": "Create a plan or idea: ",
+      "image": "/assets/images/prompts/generate.svg",
+      "suggestions": [
+        "Brainstorm Ideas",
+        "Make a Plan",
+        "Write a Draft",
+        "Create an Outline"
       ],
       "replace": true,
       "context": ["selection", "page"]
