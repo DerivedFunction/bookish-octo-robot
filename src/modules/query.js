@@ -1,6 +1,7 @@
 import { clearBtn, goBtn } from "./actionButtons.js";
 import { toggleButton } from "../app.js";
 import { suggestionResult } from "./suggestions.js";
+import { getSearchEngineUrl, toggleDropdown } from "./searchEngine.js";
 export const query = document.getElementById("search");
 query.addEventListener("input", async () => {
   // Set the height to match the content (scrollHeight)
@@ -18,6 +19,9 @@ query.addEventListener("keydown", async (e) => {
     e.preventDefault();
     if (!goBtn.disabled && query.value.length < MAX_LIMIT) {
       goBtn.click();
+    } else if (goBtn.disabled) {
+      let y = await getSearchEngineUrl();
+      if (!y) toggleDropdown("open");
     }
   } else if (e.key === "Enter" && e.shiftKey) {
     e.preventDefault();
@@ -29,7 +33,8 @@ export async function queryEvents() {
   query.style.height = `${query.scrollHeight}px`; // Recalculate height
   let x = query.value.length > 0;
   toggleButton(clearBtn, x);
-  toggleButton(goBtn, x);
+  let y = await getSearchEngineUrl();
+  toggleButton(goBtn, x && y);
   getCharCount();
 }
 export const MAX_LIMIT = 5000; // max char count

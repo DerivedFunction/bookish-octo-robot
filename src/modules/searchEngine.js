@@ -24,13 +24,21 @@ document.addEventListener("click", (e) => {
     !dropdown.contains(e.target) &&
     !searchEnginePickerBtn.contains(e.target)
   ) {
-    toggleDropdown(true);
+    toggleDropdown("remove");
   }
 });
 
-export function toggleDropdown(remove = false) {
-  if (remove) dropdown.classList.remove("active");
-  else dropdown.classList.toggle("active");
+export function toggleDropdown(remove = "none") {
+  switch (remove) {
+    case "remove":
+      dropdown.classList.remove("active");
+      break;
+    case "open":
+      dropdown.classList.add("active");
+      break;
+    default:
+      dropdown.classList.toggle("active");
+  }
   if (dropdown.classList.contains("active")) {
     appendSvg(
       { image: "/assets/images/buttons/up.svg" },
