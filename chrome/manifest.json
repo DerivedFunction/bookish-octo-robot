@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tabbed: AI chatbox in New Tab",
   "short_name": "Tabbed",
-  "version": "1.0.2.0",
+  "version": "1.0.2.2",
   "description": "A new tab page with an AI-like user interface",
   "icons": {
     "16": "assets/images/icon.png",
@@ -23,6 +23,13 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-  "optional_permissions": ["clipboardRead"],
-  "permissions": ["contextMenus", "storage", "tabs"]
+  "permissions": ["contextMenus", "storage", "tabs"],
+  "optional_permissions": ["clipboardRead", "scripting", "tabs", "activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["*://gemini.google.com/app"],
+      "js": ["script.js"],
+      "all_frames": true
+    }
+  ]
 }
