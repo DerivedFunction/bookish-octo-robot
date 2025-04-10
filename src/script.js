@@ -33,7 +33,7 @@ async function getTextInput(query, type, attribute) {
     }
   } else {
     console.log(`Element not found: ${attribute}. Running again.`);
-    setTimeout(await getTextInput(), 2000);
+    setTimeout(await getTextInput(query, type, attribute), 2000);
   }
 }
 
