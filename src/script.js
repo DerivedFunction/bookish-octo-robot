@@ -1,6 +1,6 @@
 // script.js
 (async () => {
-  setTimeout(await runAfterFullLoad(), 1000);
+  setTimeout(await runAfterFullLoad(), 3000);
 })();
 async function runAfterFullLoad() {
   console.log("Running query injection.");

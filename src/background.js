@@ -127,7 +127,7 @@ chrome.action.onClicked.addListener(async () => {
   }
 });
 
-const cooldownTime = 5000; // 5 seconds cooldown
+const cooldownTime = 8000; // 8 seconds cooldown
 const lastInjected = {}; // key: tabId, value: timestamp
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
