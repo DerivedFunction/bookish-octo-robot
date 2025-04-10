@@ -4,7 +4,7 @@ import { setupTooltip } from "./tooltip.js";
 import { showToast } from "./toaster.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
-export const content_scripts = document.getElementById("content-scripts");
+
 export const searchEnginePickerBtn = document.getElementById(
   "search-engine-picker"
 );
@@ -17,51 +17,6 @@ curSearchBtn.addEventListener("click", async () => {
   if (!selectedSearchEngine) {
     toggleDropdown();
   } else window.location.href = getSearchEngineUrl();
-});
-
-content_scripts.addEventListener("click", async () => {
-  if (content_scripts.checked) {
-    await chrome.permissions.request(
-      {
-        permissions: ["scripting", "tabs", "activeTab"],
-        origins: ["*://gemini.google.com/"],
-      },
-      async (granted) => {
-        if (granted) {
-          try {
-            await chrome.scripting.registerContentScripts([
-              {
-                id: "gemini",
-                matches: ["*://gemini.google.com/*"],
-                js: ["script.js"],
-                runAt: "document_end",
-                allFrames: true,
-              },
-            ]);
-            console.log("Experimental features enabled");
-          } catch (err) {
-            console.error("Failed to register content script:", err);
-            content_scripts.checked = false;
-            localStorage.setItem("Experimental", false);
-          }
-        } else {
-          try {
-            await chrome.scripting.unregisterContentScripts({
-              ids: ["gemini"],
-            });
-            console.log("Experimental features disabled");
-          } catch (err) {
-            console.error("Failed to unregister content script:", err);
-          }
-          content_scripts.checked = false;
-          localStorage.setItem("Experimental", false);
-          showToast("Enable Experimental Features", "danger");
-          return;
-        }
-      }
-    );
-  }
-  localStorage.setItem("Experimental", content_scripts.checked);
 });
 
 export function toggleDropdown() {
@@ -191,49 +146,154 @@ export async function getSearchEngine() {
   }
 }
 
+const PERMISSIONS = {
+  permissions: ["scripting", "tabs", "activeTab"],
+  origins: ["*://gemini.google.com/"],
+};
+export const content_scripts = document.getElementById("content-scripts");
+
+async function getPermissionStatus() {
+  let hasPermissions = false;
+
+  hasPermissions = await chrome.permissions.contains(PERMISSIONS);
+  console.log("Permission status:", hasPermissions);
+
+  content_scripts.checked = hasPermissions;
+  localStorage.setItem("Experimental", content_scripts.checked);
+  return hasPermissions;
+}
+
+content_scripts.addEventListener("click", async () => {
+  if (content_scripts.checked) {
+    try {
+      await chrome.permissions.request(PERMISSIONS, async (granted) => {
+        if (granted) {
+          try {
+            await chrome.scripting.registerContentScripts([
+              {
+                id: "gemini",
+                matches: ["*://gemini.google.com/*"],
+                js: ["script.js"],
+                runAt: "document_end",
+                allFrames: true,
+              },
+            ]);
+          } catch (error) {}
+        }
+        await getPermissionStatus();
+      });
+    } catch (error) {}
+  } else {
+    await removePermissions();
+  }
+  await getPermissionStatus();
+});
+
 document.addEventListener("DOMContentLoaded", async () => {
-  content_scripts.checked = localStorage.getItem("Experimental") === "true";
-  appendSvg({ image: "assets/images/buttons/down.svg" }, searchEnginePickerBtn);
-  await addSearchEngines();
-  let y = window.location.href.split("/").pop();
-  if (y === "sidebar.html") {
-    console.log("Sidebar opened, listening for queries");
-    goToLink();
-    chrome.storage.onChanged.addListener(async function (changes) {
-      for (var key in changes) {
-        if (key === "query") {
-          goToLink();
+  try {
+    await getPermissionStatus();
+
+    try {
+      appendSvg(
+        { image: "assets/images/buttons/down.svg" },
+        searchEnginePickerBtn
+      );
+    } catch (error) {
+      console.error("Error appending SVG:", error);
+    }
+
+    try {
+      await addSearchEngines();
+    } catch (error) {
+      console.error("Error adding search engines:", error);
+    }
+
+    const path = window.location.href.split("/").pop();
+    if (path === "sidebar.html") {
+      console.log("Sidebar opened, listening for queries");
+      try {
+        goToLink();
+      } catch (error) {
+        console.error("Error in goToLink:", error);
+      }
+
+      chrome.storage.onChanged.addListener((changes) => {
+        if (changes.query) {
+          try {
+            goToLink();
+          } catch (error) {
+            console.error("Error in storage change goToLink:", error);
+          }
+        }
+      });
+    }
+
+    chrome.runtime.onMessage.addListener(async (e) => {
+      if (e?.message === "selectedSearchEngine") {
+        try {
+          await getSearchEngine();
+        } catch (error) {
+          console.error("Error getting search engine:", error);
         }
       }
     });
-  }
-  chrome.runtime.onMessage.addListener(async (e) => {
-    if (e.message && e.message === "selectedSearchEngine") {
-      await getSearchEngine();
-    }
-  });
-  document.getElementById("reset").addEventListener("click", async () => {
-    await chrome.storage.local.remove("engine");
-    selectedSearchEngine = null;
+
+    document.getElementById("reset").addEventListener("click", async () => {
+      try {
+        await chrome.storage.local.remove("engine");
+        selectedSearchEngine = null;
+
+        await removePermissions();
+
+        try {
+          await addSearchEngines();
+        } catch (error) {
+          console.error("Error adding search engines in reset:", error);
+        }
+
+        try {
+          await chrome.action.setIcon({ path: "/assets/images/icon.svg" });
+        } catch (error) {
+          console.error("Error setting action icon:", error);
+        }
+
+        try {
+          await browser.sidebarAction.setIcon({
+            path: "/assets/images/icon.svg",
+          });
+        } catch (error) {
+          console.error("Error setting sidebar icon:", error);
+        }
+      } catch (error) {
+        console.error("Reset error:", error);
+      }
+    });
+  } catch (error) {
+    console.error("Error during initialization:", error);
     content_scripts.checked = false;
-    if (chrome.permissions) {
-      await chrome.permissions.remove({
-        permissions: ["scripting", "tabs", "activeTab"],
-        origins: ["https://gemini.google.com/*"],
-      });
-    }
-    await addSearchEngines();
-    await chrome.action.setIcon({ path: "/assets/images/icon.svg" });
-    try {
-      browser.sidebarAction.setIcon({ path: "/assets/images/icon.svg" });
-    } catch (error) {}
-  });
+    localStorage.setItem("Experimental", false);
+  }
 });
+
+async function removePermissions() {
+  try {
+    await chrome.scripting.unregisterContentScripts({ ids: ["gemini"] });
+    console.log("Experimental features disabled");
+  } catch (error) {
+    console.error("Error unregistering content scripts:", error);
+  }
+  try {
+    await chrome.permissions.remove(PERMISSIONS);
+  } catch (error) {
+    console.error("Error removing permissions in reset:", error);
+  }
+  localStorage.removeItem("Experimental");
+  content_scripts.checked = false;
+}
 
 async function goToLink() {
   let x = getSearchEngineUrl();
   let { query: q } = await chrome.storage.local.get("query");
-  chrome.runtime.sendMessage({ message: "injectScript" });
   if (q && q.trim().length > 0) {
     // We enabled content scripts
     if (checkEnabled()) {
