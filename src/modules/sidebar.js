@@ -14,7 +14,10 @@ document.addEventListener("click", (e) => {
     sidebar.style.display = "none";
   }
 });
-
+const closeBtn = document.getElementById("close-options");
+closeBtn.addEventListener("click", () => {
+  sidebar.style.display = "none";
+});
 document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "assets/images/buttons/options.svg" }, optionBtn);
 });
