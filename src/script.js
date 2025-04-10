@@ -1,17 +1,15 @@
+let hasRan = false;
 // script.js
 (async () => {
-  console.log("Script injected");
-  await runAfterFullLoad();
+  setTimeout(await runAfterFullLoad(), 1000);
 })();
 async function runAfterFullLoad() {
-  console.log("Content script injected and running on:", window.location.href);
+  console.log("Running query injection.");
   let { query } = await chrome.storage.local.get("query");
   const currentUrl = window.location.href;
-  console.log(currentUrl, query);
-
   if (!query || query.trim().length === 0 || query === undefined) return;
-
-  if (currentUrl.includes("gemini.google.com/app")) {
+  if (currentUrl === "https://gemini.google.com/app") {
+    // New chat
     await getTextInput(
       query,
       "textContent",
@@ -25,7 +23,7 @@ async function getTextInput(query, type, attribute) {
   let x = query.trim();
   const element = document.querySelector(attribute);
   console.log(`Injecting ${element} via ${type} of query: ${x}`);
-  if (element !== undefined) {
+  if (element) {
     switch (type) {
       case "value":
         element.value = x;
@@ -36,16 +34,17 @@ async function getTextInput(query, type, attribute) {
     }
   } else {
     console.error(`Element not found: ${attribute}. Running again.`);
-    await runAfterFullLoad();
+    setTimeout(await runAfterFullLoad(), 1000);
   }
 }
 
-function clickButton(attribute) {
+async function clickButton(attribute) {
   setTimeout(async () => {
     const button = document.querySelector(attribute);
-    if (button) {
-      button.click();
+    if (button && !hasRan) {
       await chrome.storage.local.remove("query");
+      button.click();
+      hasRan = true;
     } else {
       console.error(`Button not found: ${attribute}`);
     }

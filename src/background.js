@@ -14,7 +14,11 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   }
   query = query.trim();
   console.log(`Sending ${query} to sidebar...`);
-  chrome.storage.local.set({ query: query });
+  chrome.storage.local.set({ query });
+  browser.runtime.sendMessage({
+    // Send a message to the sidebar
+    message: "sendQuery",
+  });
   try {
     browser.sidebarAction.setPanel({
       panel: `sidebar.html`,
@@ -116,23 +120,12 @@ let menusCreated = false;
 getPrompts();
 
 chrome.action.onClicked.addListener(async () => {
-  try {
-    browser.sidebarAction.setPanel({
-      panel: `sidebar.html`,
-    });
-    browser.sidebarAction.open();
-  } catch (error) {
-    console.log("Probably in Chrome. Cannot use Side Panel");
-    console.log(`Opening new tab...`);
-    let x = await getSearchEngine();
-    if (x) {
-      let url = `${x.url}`;
-      chrome.tabs.create({ url: url });
-    }
+  let x = await getSearchEngine();
+  if (x) {
+    let url = `${x.url}`;
+    chrome.tabs.create({ url: url });
   }
 });
-
-// background.js
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete" && tab.url) {

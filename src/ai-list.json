@@ -16,7 +16,7 @@
       "image": "/assets/images/ai/chatgpt.svg"
     },
     {
-      "name": "Gemini (Experimental)",
+      "name": "Gemini",
       "url": "https://gemini.google.com/app",
       "image": "/assets/images/ai/gemini.svg",
       "experimental": true

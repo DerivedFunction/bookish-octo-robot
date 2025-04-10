@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tabbed: AI chatbox in New Tab",
   "short_name": "Tabbed",
-  "version": "1.0.2.3",
+  "version": "1.0.2.5",
   "description": "A new tab page with an AI-like user interface",
   "icons": {
     "16": "assets/images/icon.png",

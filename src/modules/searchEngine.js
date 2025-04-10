@@ -42,8 +42,13 @@ export async function addSearchEngines() {
     const listItem = document.createElement("li");
     listItem.className = "search-engine-option";
     listItem.setAttribute("data-link", engine.url);
-    if (engine.experimental !== undefined)
+    if (engine.experimental !== undefined) {
       listItem.setAttribute("data-exp", engine.experimental);
+      listItem.addEventListener("click", async () => {
+        const x = await getPermissionStatus();
+        if (!x) showToast("Enable Experimental Features", "warning");
+      });
+    }
     // Create container for icon and text
     const container = document.createElement("div");
     container.style.display = "flex";
@@ -212,17 +217,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (path === "sidebar.html") {
       console.log("Sidebar opened, listening for queries");
       try {
-        goToLink();
+        await goToLink();
       } catch (error) {
         console.error("Error in goToLink:", error);
       }
-
-      chrome.storage.onChanged.addListener((changes) => {
-        if (changes.query) {
+      chrome.runtime.onMessage.addListener(async (e) => {
+        if (e?.message === "sendQuery") {
           try {
-            goToLink();
+            await goToLink();
           } catch (error) {
-            console.error("Error in storage change goToLink:", error);
+            console.error("Error receiving query", error);
           }
         }
       });
