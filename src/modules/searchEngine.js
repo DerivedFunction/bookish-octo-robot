@@ -19,8 +19,18 @@ curSearchBtn.addEventListener("click", async () => {
   } else window.location.href = getSearchEngineUrl();
 });
 
-export function toggleDropdown() {
-  dropdown.classList.toggle("active");
+document.addEventListener("click", (e) => {
+  if (
+    !dropdown.contains(e.target) &&
+    !searchEnginePickerBtn.contains(e.target)
+  ) {
+    toggleDropdown(true);
+  }
+});
+
+export function toggleDropdown(remove = false) {
+  if (remove) dropdown.classList.remove("active");
+  else dropdown.classList.toggle("active");
   if (dropdown.classList.contains("active")) {
     appendSvg(
       { image: "/assets/images/buttons/up.svg" },
