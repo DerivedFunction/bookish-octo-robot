@@ -12,7 +12,10 @@
       "id": "bookish-octo-robot@DerivedFunction"
     }
   },
-  "background": { "scripts": ["background.js"] },
+  "background": {
+    "service_worker": "background.js",
+    "scripts": ["background.js"]
+  },
   "action": {
     "default_icon": {
       "16": "assets/images/icon.svg",
@@ -34,6 +37,13 @@
   "chrome_settings_overrides": {
     "homepage": "index.html"
   },
-  "optional_permissions": ["clipboardRead"],
-  "permissions": ["contextMenus", "storage"]
+  "optional_permissions": ["clipboardRead", "scripting", "tabs", "activeTab"],
+  "permissions": ["storage", "contextMenus"],
+  "content_scripts": [
+    {
+      "matches": ["*://gemini.google.com/app"],
+      "js": ["script.js"],
+      "all_frames": true
+    }
+  ]
 }

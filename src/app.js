@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       chrome.storage.local.clear();
       if (chrome.permissions) {
         await chrome.permissions.remove({
-          permissions: ["clipboardRead"],
+          permissions: ["clipboardRead", "scripting", "tabs", "activeTab"],
         });
       }
       await chrome.runtime.sendMessage({

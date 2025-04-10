@@ -16,6 +16,12 @@
       "image": "/assets/images/ai/chatgpt.svg"
     },
     {
+      "name": "Gemini (Experimental)",
+      "url": "https://gemini.google.com/app",
+      "image": "/assets/images/ai/gemini.svg",
+      "experimental": true
+    },
+    {
       "name": "Mistral",
       "url": "https://chat.mistral.ai/chat?q=",
       "image": "/assets/images/ai/mistral.svg"

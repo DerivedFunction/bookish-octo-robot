@@ -13,7 +13,6 @@
   --shadow-hover: rgba(0, 0, 0, 0.1);
   --border-hover: #bbb;
   --accent-color: #000;
-  --svg-color: #000;
   --warning-color: #ffa500;
   --danger-color: #ff4d4f;
 }
@@ -33,7 +32,6 @@
     --shadow-hover: rgba(0, 0, 0, 0.5);
     --border-hover: #666;
     --accent-color: #fff;
-    --svg-color: #fff;
     --warning-color: #ffa500;
     --danger-color: #ff4d4f;
   }
@@ -53,7 +51,6 @@
   --shadow-hover: rgba(0, 0, 0, 0.1);
   --border-hover: #bbb;
   --accent-color: #000;
-  --svg-color: #000;
   --warning-color: #ffa500;
   --danger-color: #ff4d4f;
 }
@@ -72,7 +69,6 @@
   --shadow-hover: rgba(0, 0, 0, 0.5);
   --border-hover: #666;
   --accent-color: #fff;
-  --svg-color: #fff;
   --warning-color: #ffa500;
   --danger-color: #ff4d4f;
 }
