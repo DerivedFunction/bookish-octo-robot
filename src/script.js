@@ -1,4 +1,3 @@
-let hasRan = false;
 // script.js
 (async () => {
   setTimeout(await runAfterFullLoad(), 1000);
@@ -41,10 +40,9 @@ async function getTextInput(query, type, attribute) {
 async function clickButton(attribute) {
   setTimeout(async () => {
     const button = document.querySelector(attribute);
-    if (button && !hasRan) {
+    if (button) {
       await chrome.storage.local.remove("query");
       button.click();
-      hasRan = true;
     } else {
       console.error(`Button not found: ${attribute}`);
     }

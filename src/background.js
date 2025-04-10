@@ -127,29 +127,39 @@ chrome.action.onClicked.addListener(async () => {
   }
 });
 
+const cooldownTime = 5000; // 5 seconds cooldown
+const lastInjected = {}; // key: tabId, value: timestamp
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === "complete" && tab.url) {
-    const urlSubstrings = ["gemini.google.com/app"];
+    const urlSubstrings = ["https://gemini.google.com/app"];
     const isMatchingUrl = urlSubstrings.some((substring) =>
       tab.url.includes(substring)
     );
     if (isMatchingUrl) {
-      chrome.scripting.executeScript(
-        {
-          target: { tabId: tabId },
-          files: ["script.js"],
-        },
-        (results) => {
-          if (chrome.runtime.lastError) {
-            console.error(
-              "Script injection failed: ",
-              chrome.runtime.lastError.message
-            );
-          } else {
-            console.log("Script injection succeeded, results:", results);
+      const now = Date.now();
+      if (!lastInjected[tabId] || now - lastInjected[tabId] > cooldownTime) {
+        lastInjected[tabId] = now;
+
+        chrome.scripting.executeScript(
+          {
+            target: { tabId: tabId },
+            files: ["script.js"],
+          },
+          (results) => {
+            if (chrome.runtime.lastError) {
+              console.error(
+                "Script injection failed: ",
+                chrome.runtime.lastError.message
+              );
+            } else {
+              console.log("Script injection succeeded, results:", results);
+            }
           }
-        }
-      );
+        );
+      } else {
+        console.log(`Cooldown active for tab ${tabId}. Skipping injection.`);
+      }
     }
   }
 });
