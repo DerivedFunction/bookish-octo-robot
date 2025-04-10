@@ -30,9 +30,6 @@ async function getTextInput(query, type, attribute) {
       case "value":
         element.value = x;
         break;
-      case "innerHTML":
-        element.innerHTML = x;
-        break;
       case "textContent":
         element.textContent = x;
         break;
