@@ -1,8 +1,11 @@
-import { loadJsonData } from "../app.js";
+import { loadJsonData, toggleButton } from "../app.js";
+import { goBtn } from "./actionButtons.js";
 import { appendSvg } from "./appendSvg.js";
+import { query } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
+export const content_scripts = document.getElementById("content-scripts");
 export const searchEnginePickerBtn = document.getElementById(
   "search-engine-picker"
 );
@@ -15,6 +18,22 @@ curSearchBtn.addEventListener("click", async () => {
   if (!selectedSearchEngine) {
     toggleDropdown();
   } else window.location.href = getSearchEngineUrl();
+});
+content_scripts.addEventListener("click", async () => {
+  if (content_scripts.checked) {
+    const granted = await chrome.permissions.request({
+      permissions: ["scripting", "tabs", "activeTab"],
+    });
+
+    if (!granted) {
+      content_scripts.checked = false;
+      alert("Experimental features not enabled.");
+      return;
+    } else {
+      console.log("Experimental features enabled");
+    }
+  }
+  localStorage.setItem("Experimental", content_scripts.checked);
 });
 
 export function toggleDropdown() {
@@ -40,7 +59,8 @@ export async function addSearchEngines() {
     const listItem = document.createElement("li");
     listItem.className = "search-engine-option";
     listItem.setAttribute("data-link", engine.url);
-
+    if (engine.experimental !== undefined)
+      listItem.setAttribute("data-exp", engine.experimental);
     // Create container for icon and text
     const container = document.createElement("div");
     container.style.display = "flex";
@@ -87,8 +107,16 @@ export function getSearchEngineUrl() {
   else return null;
 }
 export function getSearchEngineName() {
-  if (selectedSearchEngine) selectedSearchEngine.name;
+  if (selectedSearchEngine) return selectedSearchEngine.name;
   else return null;
+}
+// true (needs content scripts), false (doesn't need it), or null (no content scripts at all)
+export function isSearchEngineExp() {
+  if (selectedSearchEngine) return selectedSearchEngine.experimental;
+  else return null;
+}
+export function checkEnabled() {
+  return localStorage.getItem("Experimental") === "true";
 }
 export async function getSearchEngineList() {
   const { aiList: loadedList } = await loadJsonData("ai");
@@ -136,6 +164,7 @@ export async function getSearchEngine() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  content_scripts.checked = localStorage.getItem("Experimental") === "true";
   appendSvg({ image: "assets/images/buttons/down.svg" }, searchEnginePickerBtn);
   await addSearchEngines();
   let y = window.location.href.split("/").pop();
@@ -158,6 +187,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("reset").addEventListener("click", async () => {
     await chrome.storage.local.remove("engine");
     selectedSearchEngine = null;
+    content_scripts.checked = false;
+    if (chrome.permissions) {
+      await chrome.permissions.remove({
+        permissions: ["scripting", "tabs", "activeTab"],
+      });
+    }
     await addSearchEngines();
     await chrome.action.setIcon({ path: "/assets/images/icon.svg" });
     try {
@@ -168,10 +203,32 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function goToLink() {
   let x = getSearchEngineUrl();
-  let q = await chrome.storage.local.get("query");
-  if (q["query"] && q["query"].trim().length > 0) {
-    chrome.storage.local.remove("query");
-    let url = `${x}${encodeURIComponent(q["query"].trim())}`;
+  let { query: q } = await chrome.storage.local.get("query");
+
+  if (q && q.trim().length > 0) {
+    // We enabled content scripts
+    if (checkEnabled()) {
+      // Content scripts supports this experimental feature
+      if (isSearchEngineExp()) {
+        window.location.href = new URL(x);
+      } else {
+        // Go regularly
+        getQueryLink();
+      }
+    } else {
+      //check is not enabled
+      if (!isSearchEngineExp()) {
+        // Not an experimental one
+        getQueryLink();
+      } else {
+        alert("Enable experimental features");
+      }
+    }
+  }
+
+  async function getQueryLink() {
+    await chrome.storage.local.remove("query");
+    let url = new URL(`${x}${encodeURIComponent(q.trim())}`);
     console.log(`Query found. Going to ${url}`);
     window.location.href = url;
   }

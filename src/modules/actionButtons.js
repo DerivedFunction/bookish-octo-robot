@@ -1,7 +1,12 @@
-import { readText } from "../app.js";
+import { readText, toggleButton } from "../app.js";
 import { query, queryEvents, MAX_LIMIT } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
-import { getSearchEngineUrl, toggleDropdown } from "./searchEngine.js";
+import {
+  checkEnabled,
+  getSearchEngineUrl,
+  isSearchEngineExp,
+  toggleDropdown,
+} from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js";
 
 export const clearBtn = document.getElementById("clear");
@@ -35,14 +40,40 @@ pasteBtn.addEventListener("click", async () => {
 export const goBtn = document.getElementById("go");
 goBtn.addEventListener("click", async () => {
   let x = getSearchEngineUrl();
+  let y = checkEnabled();
+  let z = isSearchEngineExp();
   if (!x) {
     toggleDropdown();
     return;
   }
+
   if (query.value.length > 0 && query.value.length < MAX_LIMIT) {
-    let url = `${x}${encodeURIComponent(query.value)}`;
-    window.location.href = url;
+    let url = new URL(`${x}${encodeURIComponent(query.value)}`);
+    if (y) {
+      // Not an experimental one
+      if (!z) {
+        window.location.href = url;
+        return;
+      } else {
+        // Run experimental content scripts
+        console.log("Experimental features enabled. Going to experimental AI");
+        await chrome.storage.local.set({ query: query.value });
+        window.location.href = new URL(x);
+        return;
+      }
+    } else {
+      if (z) {
+        // the current engine requires content scripts, but we have not enabled it
+        alert("Enable experimental features to use this");
+        toggleButton(goBtn, false);
+        return;
+      } else {
+        // We don't need content scripts
+        window.location.href = url;
+      }
+    }
   }
+  toggleButton(goBtn, false);
 });
 export const fakeFileBtn = document.getElementById("fake-file-upload");
 export const fileUploadInput = document.getElementById("fake-file");

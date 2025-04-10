@@ -1,4 +1,3 @@
-// Ensure 'browser' is defined (for Chrome compatibility without polyfill)
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   // AI searches
   let prompt = info.menuItemId;
@@ -11,27 +10,32 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     query = `${query} ${tab.url}`;
   }
   query = query.trim();
+  console.log(`Sending ${query} to sidebar...`);
+  chrome.storage.local.set({ query: query });
   try {
     browser.sidebarAction.setPanel({
       panel: `sidebar.html`,
     });
     browser.sidebarAction.open();
-    console.log(`Sending ${query} to sidebar...`);
-    chrome.storage.local.set({ query: query });
   } catch (error) {
     console.log("Probably in Chrome. Cannot use Side Panel");
     console.log(`Opening ${query} in new tab...`);
     let x = await getSearchEngine();
     if (x) {
-      let url = `${x.url}${encodeURIComponent(query)}`;
+      let url;
+      if (x.experimental) {
+        url = new URL(`${x.url}`);
+      } else {
+        url = new URL(`${x.url}${encodeURIComponent(query)}`);
+      }
       chrome.tabs.create({ url: url });
     }
   }
 });
 
 async function getSearchEngine() {
-  let x = await chrome.storage.local.get("engine");
-  return x["engine"] || null;
+  let { engine: x } = await chrome.storage.local.get("engine");
+  return x || null;
 }
 
 async function deleteMenu() {
@@ -124,3 +128,35 @@ chrome.action.onClicked.addListener(async () => {
     }
   }
 });
+
+// background.js
+try {
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status === "complete" && tab.url) {
+      const urlSubstrings = ["gemini.google.com/app"];
+      const isMatchingUrl = urlSubstrings.some((substring) =>
+        tab.url.includes(substring)
+      );
+      if (isMatchingUrl) {
+        chrome.scripting.executeScript(
+          {
+            target: { tabId: tabId },
+            files: ["script.js"],
+          },
+          (results) => {
+            if (chrome.runtime.lastError) {
+              console.error(
+                "Script injection failed: ",
+                chrome.runtime.lastError.message
+              );
+            } else {
+              console.log("Script injection succeeded, results:", results);
+            }
+          }
+        );
+      }
+    }
+  });
+} catch {
+  console.log("Experimental Permissions not enabled.");
+}
