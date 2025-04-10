@@ -97,11 +97,11 @@ async function getPrompts() {
 }
 // Listen for changes in localStorage and update menus accordingly
 chrome.runtime.onMessage.addListener(async (e) => {
-  if (e.message && e.message === "selectedSearchEngine") {
+  if (e.message === "selectedSearchEngine") {
     console.log("AI chatbot changed", e.engine.name);
     if (menusCreated) updateMenu(e.engine);
     else loadMenu();
-  } else if (e.message && e.message === "reset") {
+  } else if (e.message === "reset") {
     console.log("Removing context menus");
     deleteMenu();
   }

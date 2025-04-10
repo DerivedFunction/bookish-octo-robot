@@ -38,11 +38,5 @@
   },
   "optional_permissions": ["clipboardRead", "scripting", "tabs", "activeTab"],
   "permissions": ["storage", "contextMenus"],
-  "content_scripts": [
-    {
-      "matches": ["*://gemini.google.com/app"],
-      "js": ["script.js"],
-      "all_frames": true
-    }
-  ]
+  "optional_host_permissions": ["*://gemini.google.com/"]
 }

@@ -1,4 +1,5 @@
 import "./modules/index.js";
+import { showToast } from "./modules/toaster.js";
 export function toggleButton(button, enabled) {
   button.disabled = !enabled;
   if (enabled) button.classList.add("enabled");
@@ -68,6 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Send a message to the background script to remove the contextMenu
         message: "reset",
       });
+      showToast("All options and data cleared");
     });
   } catch (error) {
     console.error("Error initializing application:", error);

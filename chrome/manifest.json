@@ -24,12 +24,5 @@
     "newtab": "index.html"
   },
   "permissions": ["contextMenus", "storage", "tabs"],
-  "optional_permissions": ["clipboardRead", "scripting", "tabs", "activeTab"],
-  "content_scripts": [
-    {
-      "matches": ["*://gemini.google.com/app"],
-      "js": ["script.js"],
-      "all_frames": true
-    }
-  ]
+  "optional_permissions": ["clipboardRead", "scripting", "tabs", "activeTab"]
 }

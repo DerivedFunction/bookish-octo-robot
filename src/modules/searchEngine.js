@@ -1,8 +1,7 @@
-import { loadJsonData, toggleButton } from "../app.js";
-import { goBtn } from "./actionButtons.js";
+import { loadJsonData } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
-import { query } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
+import { showToast } from "./toaster.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
 export const content_scripts = document.getElementById("content-scripts");
@@ -19,19 +18,48 @@ curSearchBtn.addEventListener("click", async () => {
     toggleDropdown();
   } else window.location.href = getSearchEngineUrl();
 });
+
 content_scripts.addEventListener("click", async () => {
   if (content_scripts.checked) {
-    const granted = await chrome.permissions.request({
-      permissions: ["scripting", "tabs", "activeTab"],
-    });
-
-    if (!granted) {
-      content_scripts.checked = false;
-      alert("Experimental features not enabled.");
-      return;
-    } else {
-      console.log("Experimental features enabled");
-    }
+    await chrome.permissions.request(
+      {
+        permissions: ["scripting", "tabs", "activeTab"],
+        origins: ["*://gemini.google.com/"],
+      },
+      async (granted) => {
+        if (granted) {
+          try {
+            await chrome.scripting.registerContentScripts([
+              {
+                id: "gemini",
+                matches: ["*://gemini.google.com/*"],
+                js: ["script.js"],
+                runAt: "document_end",
+                allFrames: true,
+              },
+            ]);
+            console.log("Experimental features enabled");
+          } catch (err) {
+            console.error("Failed to register content script:", err);
+            content_scripts.checked = false;
+            localStorage.setItem("Experimental", false);
+          }
+        } else {
+          try {
+            await chrome.scripting.unregisterContentScripts({
+              ids: ["gemini"],
+            });
+            console.log("Experimental features disabled");
+          } catch (err) {
+            console.error("Failed to unregister content script:", err);
+          }
+          content_scripts.checked = false;
+          localStorage.setItem("Experimental", false);
+          showToast("Enable Experimental Features", "danger");
+          return;
+        }
+      }
+    );
   }
   localStorage.setItem("Experimental", content_scripts.checked);
 });
@@ -191,6 +219,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (chrome.permissions) {
       await chrome.permissions.remove({
         permissions: ["scripting", "tabs", "activeTab"],
+        origins: ["https://gemini.google.com/*"],
       });
     }
     await addSearchEngines();
@@ -204,13 +233,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function goToLink() {
   let x = getSearchEngineUrl();
   let { query: q } = await chrome.storage.local.get("query");
-
+  chrome.runtime.sendMessage({ message: "injectScript" });
   if (q && q.trim().length > 0) {
     // We enabled content scripts
     if (checkEnabled()) {
       // Content scripts supports this experimental feature
       if (isSearchEngineExp()) {
-        window.location.href = new URL(x);
+        chrome.tabs.create({ url: x });
+        showToast(
+          "Sidebar feature is not supported. Opened in new tab",
+          "warning"
+        );
       } else {
         // Go regularly
         getQueryLink();
@@ -221,7 +254,7 @@ async function goToLink() {
         // Not an experimental one
         getQueryLink();
       } else {
-        alert("Enable experimental features");
+        showToast("Enable Experimental Features", "danger");
       }
     }
   }

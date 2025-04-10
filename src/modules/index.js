@@ -9,6 +9,7 @@ import "./searchEngine.js";
 import "./sidebar.js";
 import "./suggestions.js";
 import "./theme.js";
+import "./toaster.js";
 import "./tooltip.js";
 import "./updateTime.js";
 import "./weather.js";
