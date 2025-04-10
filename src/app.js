@@ -1,5 +1,4 @@
 import "./modules/index.js";
-import { showToast } from "./modules/toaster.js";
 export function toggleButton(button, enabled) {
   button.disabled = !enabled;
   if (enabled) button.classList.add("enabled");

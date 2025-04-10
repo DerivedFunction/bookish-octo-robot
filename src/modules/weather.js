@@ -1,5 +1,6 @@
 import { toggleButton } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
+import { showToast } from "./toaster.js";
 const weather = document.getElementById("weather");
 const weather_exp = 15 * 60 * 1000; // 15 minute expiration
 
@@ -53,7 +54,7 @@ async function fetchWeather() {
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=sunrise,sunset&temperature_unit=celsius&timezone=auto`
     );
     if (!response.ok) {
-      throw new Error("Failed to fetch weather data");
+      showToast("Failed to fetch weather data", "danger");
     }
     const data = await response.json();
     const currentWeather = data.current_weather;
@@ -80,7 +81,7 @@ async function fetchWeather() {
     localStorage.setItem("weatherData", JSON.stringify(weatherData));
     displayWeather();
   } catch (error) {
-    console.error("Error fetching weather data:", error);
+    showToast("Error fetching weather data", "danger");
     clearFields();
   }
 }
@@ -152,7 +153,7 @@ async function getCoords() {
         await fetchWeather();
         return;
       } catch (error) {
-        console.error("Error fetching coordinates:", error);
+        showToast("Error fetching coordinates", "danger");
         clearFields();
         return;
       }

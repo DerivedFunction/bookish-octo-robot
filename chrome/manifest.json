@@ -17,12 +17,10 @@
       "48": "assets/images/icon.png"
     }
   },
-  "side_panel": {
-    "default_path": "sidebar.html"
-  },
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-  "permissions": ["contextMenus", "storage", "tabs"],
-  "optional_permissions": ["clipboardRead", "scripting", "tabs", "activeTab"]
+  "optional_permissions": ["clipboardRead", "scripting", "activeTab"],
+  "permissions": ["storage", "contextMenus", "tabs"],
+  "optional_host_permissions": ["*://gemini.google.com/"]
 }
