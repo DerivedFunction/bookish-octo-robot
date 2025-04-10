@@ -147,7 +147,7 @@ export async function getSearchEngine() {
 }
 
 const PERMISSIONS = {
-  permissions: ["scripting", "tabs", "activeTab"],
+  permissions: ["scripting", "activeTab"],
   origins: ["*://gemini.google.com/"],
 };
 export const content_scripts = document.getElementById("content-scripts");
@@ -261,9 +261,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           await browser.sidebarAction.setIcon({
             path: "/assets/images/icon.svg",
           });
-        } catch (error) {
-          console.error("Error setting sidebar icon:", error);
-        }
+        } catch (error) {}
       } catch (error) {
         console.error("Reset error:", error);
       }
@@ -277,17 +275,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function removePermissions() {
   try {
-    await chrome.scripting.unregisterContentScripts({ ids: ["gemini"] });
-    console.log("Experimental features disabled");
-  } catch (error) {
-    console.error("Error unregistering content scripts:", error);
-  }
+    await chrome.scripting
+      .unregisterContentScripts()
+      .then(() => {
+        console.log("Content scripts unregistered successfully.");
+      })
+      .catch(() => {});
+  } catch {}
   try {
     await chrome.permissions.remove(PERMISSIONS);
-  } catch (error) {
-    console.error("Error removing permissions in reset:", error);
-  }
-  localStorage.removeItem("Experimental");
+  } catch {}
   content_scripts.checked = false;
 }
 
@@ -321,7 +318,7 @@ async function goToLink() {
 
   async function getQueryLink() {
     await chrome.storage.local.remove("query");
-    let url = new URL(`${x}${encodeURIComponent(q.trim())}`);
+    let url = `${x}${encodeURIComponent(q.trim())}`;
     console.log(`Query found. Going to ${url}`);
     window.location.href = url;
   }

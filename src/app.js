@@ -59,12 +59,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     document.getElementById("reset").addEventListener("click", async () => {
       localStorage.clear();
-      chrome.storage.local.clear();
-      if (chrome.permissions) {
-        await chrome.permissions.remove({
-          permissions: ["clipboardRead", "scripting", "tabs", "activeTab"],
-        });
-      }
+      await chrome.storage.local.clear();
+      await caches.keys().then((keyList) =>
+        Promise.all(
+          keyList.map((key) => {
+            return caches.delete(key);
+          })
+        )
+      );
       await chrome.runtime.sendMessage({
         // Send a message to the background script to remove the contextMenu
         message: "reset",

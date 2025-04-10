@@ -41,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
     timeFormat.querySelector("input").checked = true;
   }
   document.getElementById("reset").addEventListener("click", async () => {
-    localStorage.removeItem("time-format");
     timeFormat.querySelectorAll("input").forEach((option) => {
       option.checked = false;
     });

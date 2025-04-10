@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   document.getElementById("reset").addEventListener("click", async () => {
-    localStorage.removeItem("user-theme");
     document.body.removeAttribute("data-theme");
     userThemeForm.querySelectorAll("input").forEach((option) => {
       option.checked = false;

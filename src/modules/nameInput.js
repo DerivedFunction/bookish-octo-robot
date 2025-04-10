@@ -28,7 +28,6 @@ nameInput.addEventListener("input", () => {
 document.addEventListener("DOMContentLoaded", () => {
   appendSvg({ image: "assets/images/buttons/save.svg" }, nameBtn);
   document.getElementById("reset").addEventListener("click", async () => {
-    localStorage.removeItem("name");
     nameInput.value = "";
     appendSvg({ image: "/assets/images/buttons/save.svg" }, nameBtn);
     toggleButton(nameBtn, false);

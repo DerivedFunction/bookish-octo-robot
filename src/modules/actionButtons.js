@@ -61,7 +61,7 @@ goBtn.addEventListener("click", async () => {
     return;
   }
 
-  let url = new URL(`${x}${encodeURIComponent(query.value)}`);
+  let url = `${x}${encodeURIComponent(query.value)}`;
   if (y) {
     // Not an experimental one
     if (!z) {
@@ -71,7 +71,7 @@ goBtn.addEventListener("click", async () => {
       // Run experimental content scripts
       console.log("Experimental features enabled. Going to experimental AI");
       await chrome.storage.local.set({ query: query.value });
-      window.location.href = new URL(x);
+      window.location.href = x;
       return;
     }
   } else {
@@ -105,5 +105,8 @@ document.addEventListener("DOMContentLoaded", () => {
   appendSvg({ image: "assets/images/buttons/file.svg" }, fakeFileBtn);
   [clearBtn, pasteBtn, goBtn, fakeFileBtn].forEach((btn) => {
     setupTooltip(btn, () => query.value.length === 0);
+  });
+  document.getElementById("reset").addEventListener("click", async () => {
+    await chrome.permissions.remove({ permissions: ["clipboardRead"] });
   });
 });

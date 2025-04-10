@@ -54,7 +54,6 @@ async function findSuggestions() {
     !promptList.suggestions ||
     promptList.suggestions.length === 0
   ) {
-    console.warn("No suggestions available for the current prompt");
     return;
   }
   const fragment = document.createDocumentFragment();

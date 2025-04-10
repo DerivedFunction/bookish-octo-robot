@@ -1,3 +1,6 @@
+const manifest = chrome.runtime.getManifest();
+const optionalPermissions = manifest.optional_permissions || [];
+const optionalHostPermissions = manifest.optional_host_permissions || [];
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   // AI searches
   let prompt = info.menuItemId;
@@ -24,9 +27,9 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     if (x) {
       let url;
       if (x.experimental) {
-        url = new URL(`${x.url}`);
+        url = x.url;
       } else {
-        url = new URL(`${x.url}${encodeURIComponent(query)}`);
+        url = `${x.url}${encodeURIComponent(query)}`;
       }
       chrome.tabs.create({ url: url });
     }
@@ -130,33 +133,30 @@ chrome.action.onClicked.addListener(async () => {
 });
 
 // background.js
-try {
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === "complete" && tab.url) {
-      const urlSubstrings = ["gemini.google.com/app"];
-      const isMatchingUrl = urlSubstrings.some((substring) =>
-        tab.url.includes(substring)
-      );
-      if (isMatchingUrl) {
-        chrome.scripting.executeScript(
-          {
-            target: { tabId: tabId },
-            files: ["script.js"],
-          },
-          (results) => {
-            if (chrome.runtime.lastError) {
-              console.error(
-                "Script injection failed: ",
-                chrome.runtime.lastError.message
-              );
-            } else {
-              console.log("Script injection succeeded, results:", results);
-            }
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === "complete" && tab.url) {
+    const urlSubstrings = ["gemini.google.com/app"];
+    const isMatchingUrl = urlSubstrings.some((substring) =>
+      tab.url.includes(substring)
+    );
+    if (isMatchingUrl) {
+      chrome.scripting.executeScript(
+        {
+          target: { tabId: tabId },
+          files: ["script.js"],
+        },
+        (results) => {
+          if (chrome.runtime.lastError) {
+            console.error(
+              "Script injection failed: ",
+              chrome.runtime.lastError.message
+            );
+          } else {
+            console.log("Script injection succeeded, results:", results);
           }
-        );
-      }
+        }
+      );
     }
-  });
-} catch {
-  console.log("Experimental Permissions not enabled.");
-}
+  }
+});

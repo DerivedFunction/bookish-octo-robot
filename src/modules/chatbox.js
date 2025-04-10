@@ -74,7 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   document.getElementById("reset").addEventListener("click", () => {
-    localStorage.removeItem("inactivity");
     updateInactivityBehavior;
   });
   updateInactivityBehavior(); // Apply the stored inactivity setting
