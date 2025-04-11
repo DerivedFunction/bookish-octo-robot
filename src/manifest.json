@@ -21,6 +21,7 @@
       "32": "assets/images/icon.svg"
     }
   },
+  "options_page": "index.html",
   "sidebar_action": {
     "default_icon": {
       "16": "assets/images/icon.svg",
