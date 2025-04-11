@@ -34,6 +34,7 @@ pasteBtn.addEventListener("click", async () => {
     query.focus();
     const text = await navigator.clipboard.readText();
     query.value += text;
+    await queryEvents();
   } catch (err) {
     showToast("Unable to access clipboard.", "warning");
   }
