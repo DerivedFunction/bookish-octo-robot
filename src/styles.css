@@ -318,7 +318,7 @@ li:hover {
   overflow-y: auto;
   padding: 0 1rem;
   position: absolute;
-  width: 400px;
+  width: 500px;
   z-index: 50;
   display: none;
 }
