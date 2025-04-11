@@ -195,7 +195,7 @@ bgBtn.addEventListener("click", async () => {
       resetBackground();
       const color = bgColor.value;
       body.style.backgroundColor = color;
-      bgData.url = null;
+      bgData.url = color;
       bgData.credits = null;
       setBgOption(bgData);
       break;
@@ -488,11 +488,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         break;
       case "color":
-        bgColor.value = bgOption.data;
+        bgColor.value = bgOption.url;
         bgColor.style.display = "";
         break;
       case "gradient":
-        const bgGradient = bgOption.data.split(",");
+        const bgGradient = bgOption.url.split(",");
         bgNum.value = bgGradient[0];
         bgColor.value = bgGradient[1];
         bgColor2.value = bgGradient[2];
