@@ -120,7 +120,7 @@ getPrompts();
 chrome.action.onClicked.addListener(async () => {
   let x = await getSearchEngine();
   if (x) {
-    let url = `${x.url}`;
+    let url = new URL(x.url).hostname;
     chrome.tabs.create({ url: url });
   }
 });

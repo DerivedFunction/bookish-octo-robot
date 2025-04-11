@@ -16,7 +16,7 @@ searchEnginePickerBtn.addEventListener("click", () => {
 curSearchBtn.addEventListener("click", async () => {
   if (!selectedSearchEngine) {
     toggleDropdown();
-  } else window.location.href = getSearchEngineUrl();
+  } else window.location.href = getSearchEngineUrlHostName();
 });
 
 document.addEventListener("click", (e) => {
@@ -111,6 +111,12 @@ setupTooltip(
 export function getSearchEngineUrl() {
   if (selectedSearchEngine) return selectedSearchEngine.url;
   else return null;
+}
+export function getSearchEngineUrlHostName() {
+  if (selectedSearchEngine) {
+    let url = new URL(selectedSearchEngine.url).hostname;
+    return url;
+  } else return null;
 }
 export function getSearchEngineName() {
   if (selectedSearchEngine) return selectedSearchEngine.name;
@@ -311,7 +317,7 @@ async function removePermissions() {
 }
 
 async function goToLink() {
-  let x = getSearchEngineUrl();
+  let x = getSearchEngineUrlHostName();
   let { query: q } = await chrome.storage.local.get("query");
   if (q && q.trim().length > 0) {
     // We enabled content scripts
