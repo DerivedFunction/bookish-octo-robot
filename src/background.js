@@ -9,8 +9,10 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     query = `${query} ${info.selectionText}`;
   } else if (info.linkUrl) {
     query = `${query} ${info.linkUrl}`;
-  } else {
+  } else if (tab.url) {
     query = `${query} ${tab.url}`;
+  } else {
+    query = "";
   }
   query = query.trim();
   console.log(`Sending ${query} to sidebar...`);
