@@ -129,6 +129,7 @@ chrome.action.onClicked.addListener(async () => {
       return url.href;
     }
     let url = hostnameToURL(new URL(x.url).hostname);
+    if (url.includes("huggingface")) url += "chat";
     chrome.tabs.create({ url: url });
   }
 });

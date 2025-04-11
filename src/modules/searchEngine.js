@@ -121,6 +121,7 @@ export function getSearchEngineUrlHostName() {
       return url.href;
     }
     let url = hostnameToURL(new URL(selectedSearchEngine.url).hostname);
+    if (url.includes("huggingface")) url += "chat";
     return url;
   } else return null;
 }
