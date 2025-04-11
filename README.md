@@ -4,7 +4,7 @@ A new tab page with an AI-like user interface.
 ![Sample 1](./samples/Sample_1.png)
 ## How to run from source
 ### Chrome
-- Run `compile.sh` move the files from `src` to the `chrome/src` folder.
+- Run `compile.sh` to move the files from `src` to the `chrome/src` folder.
 - Go to [`chrome://extensions`] and enable Developer mode
 - Load the unpacked extension by selecting the `chrome/src` folder where the `manifest.json` resides.
 ### Firefox
