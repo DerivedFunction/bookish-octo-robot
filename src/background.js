@@ -120,7 +120,13 @@ getPrompts();
 chrome.action.onClicked.addListener(async () => {
   let x = await getSearchEngine();
   if (x) {
-    let url = new URL(x.url).hostname;
+    function hostnameToURL(hostname) {
+      // the inital value of the URL object can be anything
+      const url = new URL("https://example.com");
+      url.hostname = hostname;
+      return url.href;
+    }
+    let url = hostnameToURL(new URL(x.url).hostname);
     chrome.tabs.create({ url: url });
   }
 });

@@ -114,7 +114,13 @@ export function getSearchEngineUrl() {
 }
 export function getSearchEngineUrlHostName() {
   if (selectedSearchEngine) {
-    let url = new URL(selectedSearchEngine.url).hostname;
+    function hostnameToURL(hostname) {
+      // the inital value of the URL object can be anything
+      const url = new URL("https://example.com");
+      url.hostname = hostname;
+      return url.href;
+    }
+    let url = hostnameToURL(new URL(selectedSearchEngine.url).hostname);
     return url;
   } else return null;
 }
@@ -317,14 +323,14 @@ async function removePermissions() {
 }
 
 async function goToLink() {
-  let x = getSearchEngineUrlHostName();
+  let x = getSearchEngineUrl();
   let { query: q } = await chrome.storage.local.get("query");
   if (q && q.trim().length > 0) {
     // We enabled content scripts
     if (checkEnabled()) {
       // Content scripts supports this experimental feature
       if (isSearchEngineExp()) {
-        chrome.tabs.create({ url: x });
+        chrome.tabs.create({ url: getSearchEngineUrlHostName() });
         showToast(
           "Sidebar feature is not supported. Opened in new tab",
           "warning"
