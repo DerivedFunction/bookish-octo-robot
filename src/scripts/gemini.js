@@ -16,21 +16,17 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 async function runAfterFullLoad() {
   console.log("Running query injection.");
-  let { query } = await chrome.storage.local.get("query");
-  const currentUrl = window.location.href;
-  if (!query || query.trim().length === 0 || query === undefined) return;
-
-  await getTextInput(query, "textContent", ".ql-editor.textarea.new-input-ui");
-  clickButton(".send-button");
+  await getTextInput("textContent", ".ql-editor.textarea.new-input-ui");
 }
 
 async function getTextInput(
-  query,
   type,
   attribute,
   maxRetries = 10,
   retryDelay = 3000
 ) {
+  let { query } = await chrome.storage.local.get("query");
+  if (!query || query.trim().length === 0 || query === undefined) return;
   let attempts = 0;
   let x = query.trim();
 
@@ -50,7 +46,8 @@ async function getTextInput(
           element.textContent = x;
           break;
       }
-      return; // Exit if element is found and updated
+      clickButton(".send-button");
+      return;
     } else {
       console.log(
         `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
@@ -79,7 +76,6 @@ async function clickButton(attribute) {
       chrome.storage.local.remove("query");
       button.click();
       console.log(`Clicked button: ${attribute}`);
-
       // Send a message after the button click
       chrome.runtime.sendMessage({ buttonClicked: true }, function (response) {
         if (chrome.runtime.lastError) {
@@ -92,4 +88,5 @@ async function clickButton(attribute) {
       console.log(`Button not found: ${attribute}`);
     }
   }, 1000);
+  return;
 }
