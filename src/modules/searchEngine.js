@@ -266,7 +266,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
     });
-
+    document
+      .getElementById("remove-script")
+      .addEventListener("click", async () => {
+        await removePermissions();
+        await getPermissionStatus();
+      });
     document.getElementById("reset").addEventListener("click", async () => {
       try {
         await chrome.storage.local.remove("engine");
