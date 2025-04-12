@@ -193,8 +193,12 @@ async function getPermissionStatus() {
 
   hasPermissions = await chrome.permissions.contains(PERMISSIONS);
   console.log("Experimental permission status:", hasPermissions);
-
-  content_scripts.checked = hasPermissions;
+  let hasScripts = false;
+  try {
+    const scripts = await chrome.scripting.getRegisteredContentScripts();
+    hasScripts = scripts.some((script) => script.id === "gemini");
+  } catch {}
+  content_scripts.checked = hasPermissions && hasScripts;
   localStorage.setItem("Experimental", content_scripts.checked);
   return hasPermissions;
 }
@@ -209,7 +213,7 @@ content_scripts.addEventListener("click", async () => {
               {
                 id: "gemini",
                 matches: ["*://gemini.google.com/*"],
-                js: ["script.js"],
+                js: ["/scripts/gemini.js"],
                 runAt: "document_end",
                 allFrames: true,
               },
@@ -310,12 +314,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function removePermissions() {
   try {
-    await chrome.scripting
-      .unregisterContentScripts()
-      .then(() => {
-        console.log("Content scripts unregistered successfully.");
-      })
-      .catch(() => {});
+    const scripts = await chrome.scripting.getRegisteredContentScripts();
+    if (scripts.some((script) => script.id === "gemini"))
+      await chrome.scripting.unregisterContentScripts({ ids: ["gemini"] });
   } catch {}
   try {
     await chrome.permissions.remove(PERMISSIONS);
