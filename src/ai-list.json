@@ -129,9 +129,9 @@
       "prompt": "Code and explain: ",
       "image": "/assets/images/prompts/code.svg",
       "suggestions": [
-        "Fix Errors With My Code",
+        "Fix Errors",
         "Explain This Error Message",
-        "Refactor This Code",
+        "Refactor",
         "Generate Code Documentation",
         "Generate Code Tests",
         "Review and Comment"
