@@ -70,14 +70,8 @@ goBtn.addEventListener("click", async () => {
       return;
     } else {
       // Run experimental content scripts
-      console.log("Experimental features enabled. Going to experimental AI");
       await chrome.storage.local.set({ query: query.value });
-      const [tab] = await chrome.tabs.query({
-        active: true,
-        lastFocusedWindow: true,
-      });
-      await chrome.tabs.create({ url: x });
-      await chrome.tabs.remove(tab.id);
+      window.location.href = x;
       return;
     }
   } else {

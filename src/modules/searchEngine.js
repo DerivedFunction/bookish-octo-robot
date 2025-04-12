@@ -63,8 +63,24 @@ export async function addSearchEngines() {
     if (engine.experimental !== undefined) {
       listItem.setAttribute("data-exp", engine.experimental);
       listItem.addEventListener("click", async () => {
-        const x = await getPermissionStatus();
-        if (!x) showToast("Enable Experimental Features", "warning");
+        await chrome.permissions.request(PERMISSIONS, async (granted) => {
+          if (granted) {
+            try {
+              await chrome.scripting.registerContentScripts([
+                {
+                  id: "gemini",
+                  matches: ["*://gemini.google.com/*"],
+                  js: ["/scripts/gemini.js"],
+                  runAt: "document_end",
+                  allFrames: true,
+                },
+              ]);
+            } catch (error) {}
+          } else {
+            showToast("Enable permissions to use Gemini", "warning");
+          }
+          await getPermissionStatus();
+        });
       });
     }
     // Create container for icon and text
@@ -134,8 +150,9 @@ export function isSearchEngineExp() {
   if (selectedSearchEngine) return selectedSearchEngine.experimental;
   else return null;
 }
-export function checkEnabled() {
-  return localStorage.getItem("Experimental") === "true";
+export async function checkEnabled() {
+  let { Experimental: x } = await chrome.storage.local.get("Experimental");
+  return x;
 }
 export async function getSearchEngineList() {
   const { aiList: loadedList } = await loadJsonData("ai");
@@ -186,48 +203,21 @@ const PERMISSIONS = {
   permissions: ["scripting"],
   origins: ["*://gemini.google.com/"],
 };
-export const content_scripts = document.getElementById("content-scripts");
 
+let hasPermissions = false;
+let hasScripts = false;
 async function getPermissionStatus() {
-  let hasPermissions = false;
-
   hasPermissions = await chrome.permissions.contains(PERMISSIONS);
-  console.log("Experimental permission status:", hasPermissions);
-  let hasScripts = false;
   try {
     const scripts = await chrome.scripting.getRegisteredContentScripts();
     hasScripts = scripts.some((script) => script.id === "gemini");
   } catch {}
-  content_scripts.checked = hasPermissions && hasScripts;
-  localStorage.setItem("Experimental", content_scripts.checked);
+  console.log(
+    `Gemini permission status: ${hasPermissions}, script: ${hasScripts}`
+  );
+  chrome.storage.local.set({ Experimental: hasPermissions && hasScripts });
   return hasPermissions;
 }
-
-content_scripts.addEventListener("click", async () => {
-  if (content_scripts.checked) {
-    try {
-      await chrome.permissions.request(PERMISSIONS, async (granted) => {
-        if (granted) {
-          try {
-            await chrome.scripting.registerContentScripts([
-              {
-                id: "gemini",
-                matches: ["*://gemini.google.com/*"],
-                js: ["/scripts/gemini.js"],
-                runAt: "document_end",
-                allFrames: true,
-              },
-            ]);
-          } catch (error) {}
-        }
-        await getPermissionStatus();
-      });
-    } catch (error) {}
-  } else {
-    await removePermissions();
-  }
-  await getPermissionStatus();
-});
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
@@ -307,21 +297,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   } catch (error) {
     console.error("Error during initialization:", error);
-    content_scripts.checked = false;
-    localStorage.setItem("Experimental", false);
+    chrome.storage.local.set({ Experimental: false });
   }
 });
 
 async function removePermissions() {
   try {
     const scripts = await chrome.scripting.getRegisteredContentScripts();
-    if (scripts.some((script) => script.id === "gemini"))
+    if (scripts.some((script) => script.id === "gemini")) {
       await chrome.scripting.unregisterContentScripts({ ids: ["gemini"] });
+      console.log("Removing scripts");
+    }
   } catch {}
   try {
     await chrome.permissions.remove(PERMISSIONS);
   } catch {}
-  content_scripts.checked = false;
 }
 
 async function goToLink() {
@@ -332,11 +322,7 @@ async function goToLink() {
     if (checkEnabled()) {
       // Content scripts supports this experimental feature
       if (isSearchEngineExp()) {
-        chrome.tabs.create({ url: getSearchEngineUrlHostName() });
-        showToast(
-          "Sidebar feature is not supported. Opened in new tab",
-          "warning"
-        );
+        window.location.href = x;
       } else {
         // Go regularly
         getQueryLink();
