@@ -41,10 +41,10 @@ pasteBtn.addEventListener("click", async () => {
 });
 export const goBtn = document.getElementById("go");
 goBtn.addEventListener("click", async () => {
-  let x = getSearchEngineUrl();
-  let y = checkEnabled();
-  let z = isSearchEngineExp();
-  if (!x) {
+  let sUrl = getSearchEngineUrl();
+  let hasPerm = await checkEnabled();
+  let isExp = isSearchEngineExp();
+  if (!sUrl) {
     toggleDropdown();
     return;
   }
@@ -62,20 +62,20 @@ goBtn.addEventListener("click", async () => {
     return;
   }
 
-  let url = `${x}${encodeURIComponent(query.value)}`;
-  if (y) {
+  let url = `${sUrl}${encodeURIComponent(query.value)}`;
+  if (hasPerm) {
     // Not an experimental one
-    if (!z) {
+    if (!isExp) {
       window.location.href = url;
       return;
     } else {
       // Run experimental content scripts
       await chrome.storage.local.set({ query: query.value });
-      window.location.href = x;
+      window.location.href = sUrl;
       return;
     }
   } else {
-    if (z) {
+    if (isExp) {
       // the current engine requires content scripts, but we have not enabled it
       showToast("Enable Experimental Features", "warning");
       toggleButton(goBtn, false);

@@ -206,15 +206,21 @@ const PERMISSIONS = {
 
 let hasPermissions = false;
 let hasScripts = false;
+const gemSection = document.getElementById("Gemini-script");
 async function getPermissionStatus() {
   hasPermissions = await chrome.permissions.contains(PERMISSIONS);
   try {
     const scripts = await chrome.scripting.getRegisteredContentScripts();
     hasScripts = scripts.some((script) => script.id === "gemini");
-  } catch {}
+  } catch {
+    // Since we don't have scripting permissions
+    hasScripts = false;
+  }
   console.log(
     `Gemini permission status: ${hasPermissions}, script: ${hasScripts}`
   );
+  if (hasPermissions || hasScripts) gemSection.style.display = "";
+  else gemSection.style.display = "none";
   chrome.storage.local.set({ Experimental: hasPermissions && hasScripts });
   return hasPermissions;
 }
@@ -227,6 +233,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       appendSvg(
         { image: "assets/images/buttons/down.svg" },
         searchEnginePickerBtn
+      );
+      appendSvg(
+        { image: "assets/images/buttons/clear.svg" },
+        document.getElementById("remove-script")
       );
     } catch (error) {
       console.error("Error appending SVG:", error);
@@ -324,7 +334,8 @@ async function goToLink() {
   let { query: q } = await chrome.storage.local.get("query");
   if (q && q.trim().length > 0) {
     // We enabled content scripts
-    if (checkEnabled()) {
+    let enabled = await checkEnabled();
+    if (enabled) {
       // Content scripts supports this experimental feature
       if (isSearchEngineExp()) {
         window.location.href = x;

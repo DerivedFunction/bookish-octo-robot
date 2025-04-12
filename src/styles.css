@@ -120,7 +120,7 @@ button:hover,
   transform: rotate(360deg);
 }
 
-#reset:hover {
+.clear:hover {
   background: var(--danger-color);
   border-color: transparent;
   color: var(--hover-bg);
