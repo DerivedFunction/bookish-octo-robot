@@ -67,13 +67,9 @@
     },
     {
       "id": "Research",
-      "prompt": "Research and compare, give the best explanation or idea for this topic: ",
+      "prompt": "Research ",
       "image": "/assets/images/prompts/research.svg",
-      "suggestions": [
-        "Compare Options",
-        "Explain This in Detail",
-        "Find Latest Info"
-      ],
+      "suggestions": ["Compare Options", "Find Latest Info"],
       "replace": true,
       "context": ["editable", "selection", "page"]
     },
@@ -94,7 +90,7 @@
       "id": "Explain",
       "prompt": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:",
       "image": "/assets/images/prompts/explain.svg",
-      "suggestions": ["Explain briefly", "ELI5"],
+      "suggestions": ["Explain briefly", "ELI5", "Explain in Detail"],
       "replace": true,
       "context": ["editable", "selection", "page", "link"]
     },
@@ -108,7 +104,7 @@
         "Find Patterns or Trends",
         "Give Critical Insights",
         "Spot Strengths and Weaknesses",
-        "Analyze and Spot Errors"
+        "Fix Errors"
       ],
       "replace": true,
       "context": ["editable", "selection", "page", "link"]
