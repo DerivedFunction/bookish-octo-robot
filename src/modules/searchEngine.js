@@ -8,13 +8,13 @@ const dropdown = document.getElementById("search-engine-dropdown");
 export const searchEnginePickerBtn = document.getElementById(
   "search-engine-picker"
 );
-export let selectedSearchEngine = null;
+export let selectedEngine = null;
 
 searchEnginePickerBtn.addEventListener("click", () => {
   toggleDropdown();
 });
 curSearchBtn.addEventListener("click", async () => {
-  if (!selectedSearchEngine) {
+  if (!selectedEngine) {
     toggleDropdown();
   } else window.location.href = getSearchEngineUrlHostName();
 });
@@ -63,24 +63,7 @@ export async function addSearchEngines() {
     if (engine.experimental !== undefined) {
       listItem.setAttribute("data-exp", engine.experimental);
       listItem.addEventListener("click", async () => {
-        await chrome.permissions.request(PERMISSIONS, async (granted) => {
-          if (granted) {
-            try {
-              await chrome.scripting.registerContentScripts([
-                {
-                  id: "gemini",
-                  matches: ["*://gemini.google.com/*"],
-                  js: ["/scripts/gemini.js"],
-                  runAt: "document_end",
-                  allFrames: true,
-                },
-              ]);
-            } catch (error) {}
-          } else {
-            showToast("Enable permissions to use Gemini", "warning");
-          }
-          await getPermissionStatus();
-        });
+        await getPermissions();
       });
     }
     // Create container for icon and text
@@ -124,30 +107,54 @@ setupTooltip(
   searchEnginePickerBtn,
   () => !dropdown.classList.contains("active")
 );
+
+export async function getPermissions() {
+  await chrome.permissions.request(PERMISSIONS, async (granted) => {
+    if (granted) {
+      try {
+        await chrome.scripting.registerContentScripts([
+          {
+            id: "gemini",
+            matches: ["*://gemini.google.com/*"],
+            js: ["/scripts/gemini.js"],
+            runAt: "document_end",
+            allFrames: true,
+          },
+        ]);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      showToast("Enable Permissions to search with Gemini", "warning");
+    }
+    await getPermissionStatus();
+  });
+}
+
 export function getSearchEngineUrl() {
-  if (selectedSearchEngine) return selectedSearchEngine.url;
+  if (selectedEngine) return selectedEngine.url;
   else return null;
 }
 export function getSearchEngineUrlHostName() {
-  if (selectedSearchEngine) {
+  if (selectedEngine) {
     function hostnameToURL(hostname) {
       // the inital value of the URL object can be anything
       const url = new URL("https://example.com");
       url.hostname = hostname;
       return url.href;
     }
-    let url = hostnameToURL(new URL(selectedSearchEngine.url).hostname);
+    let url = hostnameToURL(new URL(selectedEngine.url).hostname);
     if (url.includes("huggingface")) url += "chat";
     return url;
   } else return null;
 }
 export function getSearchEngineName() {
-  if (selectedSearchEngine) return selectedSearchEngine.name;
+  if (selectedEngine) return selectedEngine.name;
   else return null;
 }
 // true (needs content scripts), false (doesn't need it), or null (no content scripts at all)
 export function isSearchEngineExp() {
-  if (selectedSearchEngine) return selectedSearchEngine.experimental;
+  if (selectedEngine) return selectedEngine.experimental;
   else return null;
 }
 export async function checkEnabled() {
@@ -160,42 +167,31 @@ export async function getSearchEngineList() {
 }
 export async function getSearchEngine() {
   try {
-    let selectedEngine;
-    let x = await chrome.storage.local.get("engine");
-    if (!x) {
-      const engines = await getSearchEngineList();
-      if (engines.length === 0) throw new Error("No search engines available");
-
-      selectedEngine = engines[0];
-      await chrome.storage.local.set({ engine: selectedEngine });
-      x = await chrome.storage.local.get("engine");
-      selectedEngine = x["engine"];
-    } else {
-      selectedEngine = x["engine"];
-    }
-    const engineData = selectedEngine;
+    const { engine } = await chrome.storage.local.get("engine");
+    selectedEngine = engine;
     appendSvg(
       {
-        image: engineData ? engineData.image : "/assets/images/ai/default.svg",
-        description: engineData
-          ? `Search with ${engineData.name}`
+        image: selectedEngine
+          ? selectedEngine.image
+          : "/assets/images/ai/default.svg",
+        description: selectedEngine
+          ? `Search with ${selectedEngine.name}`
           : "Set an AI Chatbot",
       },
       curSearchBtn
     );
-
-    if (engineData) {
-      const iconUrl = engineData.image;
+    gemSection.style.display = "none";
+    if (selectedEngine) {
+      const iconUrl = selectedEngine.image;
       await chrome.action.setIcon({ path: iconUrl });
       try {
         browser.sidebarAction.setIcon({ path: iconUrl });
       } catch (error) {}
-
-      selectedSearchEngine = engineData;
+      if (selectedEngine.experimental) gemSection.style.display = "";
     }
   } catch (error) {
     console.error("Error setting up search engine:", error);
-    selectedSearchEngine = null;
+    selectedEngine = null;
   }
 }
 
@@ -206,7 +202,8 @@ const PERMISSIONS = {
 
 let hasPermissions = false;
 let hasScripts = false;
-const gemSection = document.getElementById("Gemini-script");
+const gemSection = document.getElementById("remove-script");
+setupTooltip(gemSection, () => true, "Toggle Permissions");
 async function getPermissionStatus() {
   hasPermissions = await chrome.permissions.contains(PERMISSIONS);
   try {
@@ -219,8 +216,15 @@ async function getPermissionStatus() {
   console.log(
     `Gemini permission status: ${hasPermissions}, script: ${hasScripts}`
   );
-  if (hasPermissions || hasScripts) gemSection.style.display = "";
-  else gemSection.style.display = "none";
+  let img = `assets/images/buttons/${
+    hasScripts ? "unlocked.svg" : "locked.svg"
+  }`;
+  appendSvg(
+    {
+      image: img,
+    },
+    gemSection
+  );
   chrome.storage.local.set({ Experimental: hasPermissions && hasScripts });
   return hasPermissions;
 }
@@ -233,10 +237,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       appendSvg(
         { image: "assets/images/buttons/down.svg" },
         searchEnginePickerBtn
-      );
-      appendSvg(
-        { image: "assets/images/buttons/clear.svg" },
-        document.getElementById("remove-script")
       );
     } catch (error) {
       console.error("Error appending SVG:", error);
@@ -276,16 +276,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
     });
-    document
-      .getElementById("remove-script")
-      .addEventListener("click", async () => {
-        await removePermissions();
-        await getPermissionStatus();
-      });
+    gemSection.addEventListener("click", async () => {
+      if (!hasScripts || !hasPermissions) await getPermissions();
+      else await removePermissions();
+    });
     document.getElementById("reset").addEventListener("click", async () => {
       try {
         await chrome.storage.local.remove("engine");
-        selectedSearchEngine = null;
+        selectedEngine = null;
 
         await removePermissions();
 
@@ -327,6 +325,7 @@ async function removePermissions() {
   try {
     await chrome.permissions.remove(PERMISSIONS);
   } catch {}
+  await getPermissionStatus();
 }
 
 async function goToLink() {

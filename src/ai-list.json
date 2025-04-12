@@ -63,7 +63,7 @@
         "Fill in the Blanks"
       ],
       "replace": true,
-      "context": ["selection"]
+      "context": ["editable", "selection"]
     },
     {
       "id": "Research",
@@ -75,7 +75,7 @@
         "Find Latest Info"
       ],
       "replace": true,
-      "context": ["selection", "page"]
+      "context": ["editable", "selection", "page"]
     },
     {
       "id": "Summarize",
@@ -88,7 +88,7 @@
         "Summarize in Simple Words"
       ],
       "replace": true,
-      "context": ["selection", "page", "link"]
+      "context": ["editable", "selection", "page", "link"]
     },
     {
       "id": "Explain",
@@ -96,7 +96,7 @@
       "image": "/assets/images/prompts/explain.svg",
       "suggestions": ["Explain briefly", "ELI5"],
       "replace": true,
-      "context": ["selection", "page", "link"]
+      "context": ["editable", "selection", "page", "link"]
     },
     {
       "id": "Analyze",
@@ -104,13 +104,14 @@
       "image": "/assets/images/prompts/analyze.svg",
       "suggestions": [
         "Analyze Pros and Cons",
+        "Fact Check",
         "Find Patterns or Trends",
         "Give Critical Insights",
         "Spot Strengths and Weaknesses",
         "Analyze and Spot Errors"
       ],
       "replace": true,
-      "context": ["selection", "page", "link"]
+      "context": ["editable", "selection", "page", "link"]
     },
     {
       "id": "Create Image",
@@ -125,7 +126,7 @@
         "a Logo"
       ],
       "replace": false,
-      "context": ["selection"]
+      "context": ["editable", "selection"]
     },
     {
       "id": "Code",
@@ -140,7 +141,7 @@
         "Review and Comment"
       ],
       "replace": true,
-      "context": ["selection", "page"]
+      "context": ["editable", "selection", "page"]
     },
     {
       "id": "Generate",
@@ -153,7 +154,7 @@
         "Create an Outline"
       ],
       "replace": true,
-      "context": ["selection", "page"]
+      "context": ["editable", "selection", "page"]
     }
   ]
 }

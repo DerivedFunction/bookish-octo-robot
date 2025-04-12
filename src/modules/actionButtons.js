@@ -77,7 +77,7 @@ goBtn.addEventListener("click", async () => {
   } else {
     if (isExp) {
       // the current engine requires content scripts, but we have not enabled it
-      showToast("Enable Experimental Features", "warning");
+      showToast("Gemini may not work without permissions", "warning");
       toggleButton(goBtn, false);
       return;
     } else {
