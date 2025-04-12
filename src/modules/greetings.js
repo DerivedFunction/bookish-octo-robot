@@ -65,6 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   document.getElementById("reset").addEventListener("click", async () => {
+    localStorage.removeItem("greeting");
+    localStorage.removeItem("name");
     greeting.querySelectorAll("input").forEach((option) => {
       option.checked = false;
     });

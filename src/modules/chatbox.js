@@ -74,7 +74,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   document.getElementById("reset").addEventListener("click", () => {
-    updateInactivityBehavior;
+    localStorage.removeItem("inactivity");
+    for (let i = 0; i < trOption.options.length; i++) {
+      trOption.options[i].selected = false;
+    }
+    updateInactivityBehavior();
   });
   updateInactivityBehavior(); // Apply the stored inactivity setting
 });
