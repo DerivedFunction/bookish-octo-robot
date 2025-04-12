@@ -183,7 +183,7 @@ export async function getSearchEngine() {
 }
 
 const PERMISSIONS = {
-  permissions: ["scripting", "activeTab"],
+  permissions: ["scripting"],
   origins: ["*://gemini.google.com/"],
 };
 export const content_scripts = document.getElementById("content-scripts");

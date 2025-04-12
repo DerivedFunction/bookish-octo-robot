@@ -21,7 +21,7 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-  "optional_permissions": ["clipboardRead", "scripting", "tabs", "activeTab"],
+  "optional_permissions": ["clipboardRead", "scripting"],
   "permissions": ["storage", "contextMenus"],
   "optional_host_permissions": ["*://gemini.google.com/"]
 }
