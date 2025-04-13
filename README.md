@@ -31,12 +31,12 @@ A new tab page with an AI-like user interface.
 - Clean UI adapted from ChatGPT and Grok
 - Ability to switch between different AI chatbots/websites
 - Paste text into the prompt
-- Seven default suggestion ideas to save time on commands.
+- Eight default suggestion ideas to save time on commands.
   ![Sample 3](./samples/Sample_3.png)
 - Click on the Extension Icon:
-  - To launch your current AI chatbot in a new Tab (Chrome only)
-  - To launch the sidebar (Firefox only)
-
+  - To launch your current AI chatbot in a new Tab.
+- Permissions are optional but extend the basic features. You can revoke them any time by pressing "reset" in the options menu.
+- Context menus provide suggestions as your browse and select text.
 ### Sidebar features (Firefox Only)
 
 - Open the sidebar to access the chatbots as well.
@@ -51,4 +51,5 @@ A new tab page with an AI-like user interface.
 - Set light/dark mode
 - Set the background Image using Unsplash/Pexels, or your own image.
 - Fade the chatbox after inactivity
+- Gemini is currently supported using Experimental content scripts (Permissions: scripting). You can revoke them at any time by pressing "reset" or the "beaker" button.
   ![Sample 1](./samples/Sample_2.png)
