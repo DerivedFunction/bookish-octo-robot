@@ -256,8 +256,9 @@ async function getPermissionStatus() {
 }
 
 async function removePermissions(all = false) {
+  const name = getSearchEngineName();
+  // Remove the scripts
   try {
-    const name = getSearchEngineName();
     const scripts = await chrome.scripting.getRegisteredContentScripts();
     if (all) {
       // Unregister all scripts sequentially to ensure completion
@@ -280,7 +281,15 @@ async function removePermissions(all = false) {
   } catch (error) {
     console.error("Error in removePermissions:", error);
   }
-
+  // We clicked reset button
+  try {
+    if (all) {
+      await chrome.permissions.remove(PERMISSIONS);
+      console.log("Removed ALL permissions:", PERMISSIONS);
+    }
+  } catch (error) {
+    console.error("Error in removePermissions:", error);
+  }
   await getPermissionStatus();
 }
 
