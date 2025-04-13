@@ -50,6 +50,12 @@
       "name": "Meta",
       "url": "https://www.meta.ai/?q=",
       "image": "/assets/images/ai/meta.svg"
+    },
+    {
+      "name": "DeepSeek",
+      "url": "https://chat.deepseek.com/",
+      "image": "/assets/images/ai/deepseek.svg",
+      "experimental": true
     }
   ],
   "prompts": [
