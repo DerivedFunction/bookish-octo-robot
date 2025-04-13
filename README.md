@@ -35,8 +35,8 @@ A new tab page with an AI-like user interface.
 - [HuggingFace](https://huggingface.co/chat/)
 - [DeepSeek](https://chat.deepseek.com/) (Experimental)
 - [Gemini](https://gemini.google.com/app) (Experimental)
-- [Claude](https://claude.ai/new)(requires manual clicking)
-- [Meta AI](https://meta.ai) (requires manual clicking)
+- [Claude](https://claude.ai/new) (requires manual clicking)
+- [Meta](https://meta.ai) (requires manual clicking)
 - [Google (AI Mode)](https://google.com)
 
 ### Basic
