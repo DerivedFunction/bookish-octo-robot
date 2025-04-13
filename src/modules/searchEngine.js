@@ -92,6 +92,7 @@ export async function addSearchEngines() {
         message: "selectedSearchEngine",
         engine: engine,
       });
+      await getPermissionStatus();
     });
 
     fragment.appendChild(listItem);
