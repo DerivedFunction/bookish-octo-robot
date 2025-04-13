@@ -38,12 +38,22 @@ export async function loadJsonData(type) {
       const data = await response.json();
       result.wallpapers = data;
     }
+    if (type === "scripts" || type === null) {
+      console.log("fetching scripts");
+      const response = await fetch("scripts.json");
+      if (!response.ok) {
+        throw new Error("Failed to load scripts");
+      }
+      const data = await response.json();
+      result.scripts = data;
+    }
 
     // Ensure all properties are defined, even if not requested
     return {
       aiList: result.aiList || [],
       prompts: result.prompts || [],
       wallpapers: result.wallpapers || [],
+      scripts: result.scripts || [],
     };
   } catch (error) {
     console.error(`Error loading ${type} JSON data:`, error);
@@ -52,6 +62,7 @@ export async function loadJsonData(type) {
       aiList: [],
       prompts: [],
       wallpapers: [],
+      scripts: [],
     };
   }
 }

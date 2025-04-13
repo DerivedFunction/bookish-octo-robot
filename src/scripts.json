@@ -1,0 +1,83 @@
+{
+  "scriptConfigs": {
+    "Gemini": {
+      "matches": ["*://gemini.google.com/*"],
+      "js": ["/scripts/gemini.js"]
+    },
+    "DeepSeek": {
+      "matches": ["*://chat.deepseek.com/*"],
+      "js": ["/scripts/deepseek.js"]
+    },
+    "ChatGPT": {
+      "matches": ["*://*.chatgpt.com/*"],
+      "js": ["/scripts/chatgpt.js"]
+    },
+    "Grok": {
+      "matches": ["*://*.grok.com/*"],
+      "js": ["/scripts/grok.js"]
+    },
+    "Copilot": {
+      "matches": ["*://copilot.microsoft.com/*"],
+      "js": ["/scripts/copilot.js"]
+    },
+    "Claude": {
+      "matches": ["*://*.claude.ai/*"],
+      "js": ["/scripts/claude.js"]
+    },
+    "Perplexity": {
+      "matches": ["*://*.perplexity.ai/*"],
+      "js": ["/scripts/perplexity.js"]
+    },
+    "Mistral": {
+      "matches": ["*://chat.mistral.ai/*"],
+      "js": ["/scripts/mistral.js"]
+    },
+    "Meta": { "matches": ["*://*.meta.ai/*"], "js": ["/scripts/meta.js"] },
+    "HuggingFace": {
+      "matches": ["*://huggingface.co/chat/*"],
+      "js": ["/scripts/hug.js"]
+    }
+  },
+  "permissionsConfig": {
+    "Gemini": {
+      "permissions": ["scripting"],
+      "origins": ["*://gemini.google.com/*"]
+    },
+    "DeepSeek": {
+      "permissions": ["scripting"],
+      "origins": ["*://chat.deepseek.com/*"]
+    },
+    "ChatGPT": {
+      "permissions": ["scripting"],
+      "origins": ["*://*.chatgpt.com/*"]
+    },
+    "Grok": {
+      "permissions": ["scripting"],
+      "origins": ["*://*.grok.com/*"]
+    },
+    "Copilot": {
+      "permissions": ["scripting"],
+      "origins": ["*://copilot.microsoft.com/*"]
+    },
+    "Claude": {
+      "permissions": ["scripting"],
+      "origins": ["*://*.claude.ai/*"]
+    },
+    "Perplexity": {
+      "permissions": ["scripting"],
+      "origins": ["*://*.perplexity.ai/*"]
+    },
+    "Mistral": {
+      "permissions": ["scripting"],
+      "origins": ["*://chat.mistral.ai/*"]
+    },
+    "Meta": {
+      "permissions": ["scripting"],
+      "origins": ["*://*.meta.ai/*"]
+    },
+    "HuggingFace": {
+      "permissions": ["scripting"],
+      "origins": ["*://*.huggingface.co/chat/*"]
+    }
+  }
+}

@@ -179,87 +179,9 @@ let hasPermissions = false;
 let hasScripts = false;
 const gemSection = document.getElementById("remove-script");
 setupTooltip(gemSection, () => true, "Toggle Permissions");
-const scriptConfigs = {
-  Gemini: {
-    matches: ["*://gemini.google.com/*"],
-    js: ["/scripts/gemini.js"],
-  },
-  DeepSeek: {
-    matches: ["*://chat.deepseek.com/*"],
-    js: ["/scripts/deepseek.js"],
-  },
-  ChatGPT: {
-    matches: ["*://*.chatgpt.com/*"],
-    js: ["/scripts/chatgpt.js"],
-  },
-  Grok: {
-    matches: ["*://*.grok.com/*"],
-    js: ["/scripts/grok.js"],
-  },
-  Copilot: {
-    matches: ["*://copilot.microsoft.com/*"],
-    js: ["/scripts/copilot.js"],
-  },
-  Claude: {
-    matches: ["*://*.claude.ai/*"],
-    js: ["/scripts/claude.js"],
-  },
-  Perplexity: {
-    matches: ["*://*.perplexity.ai/*"],
-    js: ["/scripts/perplexity.js"],
-  },
-  Mistral: {
-    matches: ["*://chat.mistral.ai/*"],
-    js: ["/scripts/mistral.js"],
-  },
-  Meta: { matches: ["*://*.meta.ai/*"], js: ["/scripts/meta.js"] },
-  HuggingFace: {
-    matches: ["*://huggingface.co/chat/*"],
-    js: ["/scripts/hug.js"],
-  },
-};
-const permissionsConfig = {
-  Gemini: {
-    permissions: ["scripting"],
-    origins: ["*://gemini.google.com/*"],
-  },
-  DeepSeek: {
-    permissions: ["scripting"],
-    origins: ["*://chat.deepseek.com/*"],
-  },
-  ChatGPT: {
-    permissions: ["scripting"],
-    origins: ["*://*.chatgpt.com/*"],
-  },
-  Grok: {
-    permissions: ["scripting"],
-    origins: ["*://*.grok.com/*"],
-  },
-  Copilot: {
-    permissions: ["scripting"],
-    origins: ["*://copilot.microsoft.com/*"],
-  },
-  Claude: {
-    permissions: ["scripting"],
-    origins: ["*://*.claude.ai/*"],
-  },
-  Perplexity: {
-    permissions: ["scripting"],
-    origins: ["*://*.perplexity.ai/*"],
-  },
-  Mistral: {
-    permissions: ["scripting"],
-    origins: ["*://chat.mistral.ai/*"],
-  },
-  Meta: {
-    permissions: ["scripting"],
-    origins: ["*://*.meta.ai/*"],
-  },
-  HuggingFace: {
-    permissions: ["scripting"],
-    origins: ["*://*.huggingface.co/chat/*"],
-  },
-};
+let permissionsConfig = null;
+let scriptConfigs = null;
+console.log(permissionsConfig, scriptConfigs);
 async function registerScriptForEngine(name) {
   if (!scriptConfigs[name]) return;
   await chrome.scripting.registerContentScripts([
@@ -363,6 +285,9 @@ async function removePermissions(all = false) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  const { scripts } = await loadJsonData("scripts");
+  permissionsConfig = scripts["permissionsConfig"];
+  scriptConfigs = scripts["scriptConfigs"];
   try {
     try {
       appendSvg(
