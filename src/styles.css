@@ -461,3 +461,45 @@ fieldset {
     transform: translateY(-20px);
   }
 }
+/* Animation for unlocking (when changing to unlocked.svg) */
+@keyframes unlock {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Animation for locking (when changing to locked.svg) */
+@keyframes lock {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Apply animations based on state */
+#remove-script.unlocked {
+  animation: unlock 0.5s ease-in-out;
+}
+
+#remove-script.locked {
+  animation: lock 0.4s ease-out;
+}
