@@ -2,7 +2,8 @@
 
 A new tab page with an AI-like user interface.
 ![Promo](./samples/Promo.png)
-![Sample 1](./samples/Sample_1.png)
+## Youtube Video
+[![Sample 1](./samples/Sample_1.png)](https://www.youtube.com/watch?v=PDgovF1dNBg)
 
 ## How to run from source
 
@@ -34,8 +35,8 @@ A new tab page with an AI-like user interface.
 - [HuggingFace](https://huggingface.co/chat/)
 - [DeepSeek](https://chat.deepseek.com/) (Experimental)
 - [Gemini](https://gemini.google.com/app) (Experimental)
-- [Claude](https://claude.ai/new)(requires manual clicking)
-- [Meta AI](https://meta.ai) (requires manual clicking)
+- [Claude](https://claude.ai/new) (requires manual clicking)
+- [Meta](https://meta.ai) (requires manual clicking)
 - [Google (AI Mode)](https://google.com)
 
 ### Basic
