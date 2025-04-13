@@ -63,7 +63,7 @@ export async function addSearchEngines() {
     if (engine.experimental !== undefined) {
       listItem.setAttribute("data-exp", engine.experimental);
       listItem.addEventListener("click", async () => {
-        await getPermissions();
+        await getPermissions(engine);
       });
     }
     // Create container for icon and text
@@ -84,18 +84,17 @@ export async function addSearchEngines() {
 
     listItem.addEventListener("click", async () => {
       await chrome.storage.local.set({ engine: engine });
-      await chrome.runtime.sendMessage({
-        // Send a message to the background script to update the contextMenu
-        message: "selectedSearchEngine",
-        engine: engine,
-      });
-
       await getSearchEngine(); // Update the button icon immediately
       dropdown.classList.remove("active");
       appendSvg(
         { image: "assets/images/buttons/down.svg" },
         searchEnginePickerBtn
       );
+      await chrome.runtime.sendMessage({
+        // Send a message to the background script to update the contextMenu
+        message: "selectedSearchEngine",
+        engine: engine,
+      });
     });
 
     fragment.appendChild(listItem);
@@ -107,29 +106,6 @@ setupTooltip(
   searchEnginePickerBtn,
   () => !dropdown.classList.contains("active")
 );
-
-export async function getPermissions() {
-  await chrome.permissions.request(PERMISSIONS, async (granted) => {
-    if (granted) {
-      try {
-        await chrome.scripting.registerContentScripts([
-          {
-            id: "gemini",
-            matches: ["*://gemini.google.com/*"],
-            js: ["/scripts/gemini.js"],
-            runAt: "document_end",
-            allFrames: true,
-          },
-        ]);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      showToast("Enable Permissions to search with Gemini", "warning");
-    }
-    await getPermissionStatus();
-  });
-}
 
 export function getSearchEngineUrl() {
   if (selectedEngine) return selectedEngine.url;
@@ -193,28 +169,76 @@ export async function getSearchEngine() {
     console.error("Error setting up search engine:", error);
     selectedEngine = null;
   }
+  return selectedEngine;
 }
 
 const PERMISSIONS = {
   permissions: ["scripting"],
-  origins: ["*://gemini.google.com/"],
 };
 
 let hasPermissions = false;
 let hasScripts = false;
 const gemSection = document.getElementById("remove-script");
 setupTooltip(gemSection, () => true, "Toggle Permissions");
+async function registerScriptForEngine(name) {
+  const scriptConfigs = {
+    Gemini: {
+      matches: ["*://gemini.google.com/*"],
+      js: ["/scripts/gemini.js"],
+    },
+    DeepSeek: {
+      matches: ["*://chat.deepseek.com/*"],
+      js: ["/scripts/deepseek.js"],
+    },
+  };
+  if (!scriptConfigs[name]) return;
+  await chrome.scripting.registerContentScripts([
+    {
+      id: name,
+      ...scriptConfigs[name],
+      runAt: "document_end",
+      allFrames: true,
+    },
+  ]);
+}
+export async function getPermissions(engine) {
+  const name = engine.name;
+  const permissions = {
+    Gemini: {
+      permissions: ["scripting"],
+      origins: ["*://gemini.google.com/*"],
+    },
+    DeepSeek: {
+      permissions: ["scripting"],
+      origins: ["*://chat.deepseek.com/*"],
+    },
+  }[name];
+  if (!permissions) return;
+  const granted = await chrome.permissions.request(permissions);
+  if (granted) {
+    try {
+      await registerScriptForEngine(name);
+    } catch (error) {
+      console.error("Script registration failed:", error);
+    }
+  } else {
+    showToast(`Enable Permissions to search with ${name}`, "warning");
+  }
+  await getPermissionStatus();
+}
 async function getPermissionStatus() {
   hasPermissions = await chrome.permissions.contains(PERMISSIONS);
+  await getSearchEngine();
+  let name = getSearchEngineName();
   try {
     const scripts = await chrome.scripting.getRegisteredContentScripts();
-    hasScripts = scripts.some((script) => script.id === "gemini");
+    hasScripts = scripts.some((script) => script.id === name);
   } catch {
     // Since we don't have scripting permissions
     hasScripts = false;
   }
   console.log(
-    `Gemini permission status: ${hasPermissions}, script: ${hasScripts}`
+    `${name} permission status: ${hasPermissions}, script: ${hasScripts}`
   );
   let img = `assets/images/buttons/${
     hasScripts ? "unlocked.svg" : "locked.svg"
@@ -229,10 +253,37 @@ async function getPermissionStatus() {
   return hasPermissions;
 }
 
+async function removePermissions(all = false) {
+  try {
+    const name = getSearchEngineName();
+    const scripts = await chrome.scripting.getRegisteredContentScripts();
+    if (all) {
+      // Unregister all scripts sequentially to ensure completion
+      for (const script of scripts) {
+        await chrome.scripting.unregisterContentScripts({ ids: [script.id] });
+        console.log(`Unregistered script: ${script.id}`);
+      }
+    } else if (scripts.some((script) => script.id === name)) {
+      await chrome.scripting.unregisterContentScripts({ ids: [name] });
+      console.log(`Unregistered script: ${name}`);
+    }
+
+    // Check if any scripts remain
+    const remainingScripts =
+      await chrome.scripting.getRegisteredContentScripts();
+    if (remainingScripts.length === 0) {
+      await chrome.permissions.remove(PERMISSIONS);
+      console.log("Removed permissions:", PERMISSIONS);
+    }
+  } catch (error) {
+    console.error("Error in removePermissions:", error);
+  }
+
+  await getPermissionStatus();
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    await getPermissionStatus();
-
     try {
       appendSvg(
         { image: "assets/images/buttons/down.svg" },
@@ -247,7 +298,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       console.error("Error adding search engines:", error);
     }
-
+    await getPermissionStatus();
     const path = window.location.href.split("/").pop();
     if (path === "sidebar.html") {
       console.log("Sidebar opened, listening for queries");
@@ -277,7 +328,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
     gemSection.addEventListener("click", async () => {
-      if (!hasScripts || !hasPermissions) await getPermissions();
+      if (!hasScripts || !hasPermissions) await getPermissions(selectedEngine);
       else await removePermissions();
     });
     document.getElementById("reset").addEventListener("click", async () => {
@@ -285,7 +336,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         await chrome.storage.local.remove("engine");
         selectedEngine = null;
 
-        await removePermissions();
+        await removePermissions(true);
 
         try {
           await addSearchEngines();
@@ -313,20 +364,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     chrome.storage.local.set({ Experimental: false });
   }
 });
-
-async function removePermissions() {
-  try {
-    const scripts = await chrome.scripting.getRegisteredContentScripts();
-    if (scripts.some((script) => script.id === "gemini")) {
-      await chrome.scripting.unregisterContentScripts({ ids: ["gemini"] });
-      console.log("Removing scripts");
-    }
-  } catch {}
-  try {
-    await chrome.permissions.remove(PERMISSIONS);
-  } catch {}
-  await getPermissionStatus();
-}
 
 async function goToLink() {
   let x = getSearchEngineUrl();
