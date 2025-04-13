@@ -232,7 +232,9 @@ async function getPermissionStatus() {
   let name = getSearchEngineName();
   try {
     const scripts = await chrome.scripting.getRegisteredContentScripts();
-    hasScripts = scripts.some((script) => script.id === name);
+    hasScripts = name
+      ? scripts.some((script) => script.id === name)
+      : scripts.length > 0;
   } catch {
     // Since we don't have scripting permissions
     hasScripts = false;
