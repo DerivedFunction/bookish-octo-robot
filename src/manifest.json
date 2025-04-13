@@ -40,7 +40,15 @@
   "optional_permissions": ["clipboardRead", "scripting"],
   "permissions": ["storage", "contextMenus"],
   "optional_host_permissions": [
+    "*://*.chatgpt.com/",
+    "*://copilot.microsoft.com/",
+    "*://*.claude.ai/",
+    "*://*.grok.com/",
+    "*://*.perplexity.ai/",
     "*://gemini.google.com/",
-    "*://chat.deepseek.com/"
+    "*://chat.deepseek.com/",
+    "*://chat.mistral.ai/*",
+    "*://*.meta.ai/*",
+    "*://*.huggingface.co/chat/*"
   ]
 }

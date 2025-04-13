@@ -3,12 +3,14 @@
     {
       "name": "ChatGPT",
       "url": "https://chatgpt.com/?q=",
-      "image": "/assets/images/ai/chatgpt.svg"
+      "image": "/assets/images/ai/chatgpt.svg",
+      "experimental": true
     },
     {
       "name": "Copilot",
       "url": "https://copilot.microsoft.com/?q=",
-      "image": "/assets/images/ai/copilot.svg"
+      "image": "/assets/images/ai/copilot.svg",
+      "experimental": true
     },
     {
       "name": "Gemini",
@@ -19,7 +21,8 @@
     {
       "name": "Grok",
       "url": "https://grok.com/?q=",
-      "image": "/assets/images/ai/grok.svg"
+      "image": "/assets/images/ai/grok.svg",
+      "experimental": true
     },
     {
       "name": "DeepSeek",
@@ -30,27 +33,32 @@
     {
       "name": "Claude",
       "url": "https://claude.ai/new?q=",
-      "image": "/assets/images/ai/claude.svg"
+      "image": "/assets/images/ai/claude.svg",
+      "experimental": true
     },
     {
       "name": "Perplexity",
       "url": "https://www.perplexity.ai/search/new?q=",
-      "image": "/assets/images/ai/perplexity.svg"
+      "image": "/assets/images/ai/perplexity.svg",
+      "experimental": true
     },
     {
       "name": "Mistral",
       "url": "https://chat.mistral.ai/chat?q=",
-      "image": "/assets/images/ai/mistral.svg"
+      "image": "/assets/images/ai/mistral.svg",
+      "experimental": true
     },
     {
       "name": "Meta",
       "url": "https://www.meta.ai/?q=",
-      "image": "/assets/images/ai/meta.svg"
+      "image": "/assets/images/ai/meta.svg",
+      "experimental": true
     },
     {
       "name": "HuggingFace",
       "url": "https://huggingface.co/chat/?q=",
-      "image": "/assets/images/ai/hug.svg"
+      "image": "/assets/images/ai/hug.svg",
+      "experimental": true
     },
     {
       "name": "Google (AI mode)",

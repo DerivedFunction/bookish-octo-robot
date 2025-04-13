@@ -130,6 +130,7 @@ chrome.action.onClicked.addListener(async () => {
     }
     let url = hostnameToURL(new URL(x.url).hostname);
     if (url.includes("huggingface")) url += "chat";
+    if (url.includes("gemini")) url += "app";
     chrome.tabs.create({ url: url });
   }
 });

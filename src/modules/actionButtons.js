@@ -3,13 +3,15 @@ import { query, queryEvents, MAX_LIMIT } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
 import {
   checkEnabled,
+  getSearchEngineName,
   getSearchEngineUrl,
+  getSearchEngineUrlHostName,
   isSearchEngineExp,
   toggleDropdown,
 } from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js";
 import { showToast } from "./toaster.js";
-
+export const needPerm = ["Gemini", "DeepSeek"];
 export const clearBtn = document.getElementById("clear");
 clearBtn.addEventListener("click", async () => {
   if (query.value.length > 0) {
@@ -44,6 +46,8 @@ goBtn.addEventListener("click", async () => {
   let sUrl = getSearchEngineUrl();
   let hasPerm = await checkEnabled();
   let isExp = isSearchEngineExp();
+  let name = getSearchEngineName();
+  let hostname = getSearchEngineUrlHostName();
   if (!sUrl) {
     toggleDropdown();
     return;
@@ -71,14 +75,19 @@ goBtn.addEventListener("click", async () => {
     } else {
       // Run experimental content scripts
       await chrome.storage.local.set({ query: query.value });
-      window.location.href = sUrl;
+      window.location.href = hostname;
       return;
     }
   } else {
     if (isExp) {
       // the current engine requires content scripts, but we have not enabled it
-      showToast(`${sUrl} may not work without permissions`, "warning");
-      toggleButton(goBtn, false);
+      if (needPerm.some((e) => e === name)) {
+        showToast(`${name} may not work without permissions`, "warning");
+        toggleButton(goBtn, false);
+      } else {
+        // we don't need content scripts because needPerm says it doesn't need it
+        window.location.href = url;
+      }
       return;
     } else {
       // We don't need content scripts

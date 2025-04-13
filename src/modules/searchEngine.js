@@ -62,9 +62,6 @@ export async function addSearchEngines() {
     listItem.setAttribute("data-link", engine.url);
     if (engine.experimental !== undefined) {
       listItem.setAttribute("data-exp", engine.experimental);
-      listItem.addEventListener("click", async () => {
-        await getPermissions(engine);
-      });
     }
     // Create container for icon and text
     const container = document.createElement("div");
@@ -121,6 +118,7 @@ export function getSearchEngineUrlHostName() {
     }
     let url = hostnameToURL(new URL(selectedEngine.url).hostname);
     if (url.includes("huggingface")) url += "chat";
+    if (url.includes("gemini")) url += "app";
     return url;
   } else return null;
 }
@@ -180,17 +178,88 @@ let hasPermissions = false;
 let hasScripts = false;
 const gemSection = document.getElementById("remove-script");
 setupTooltip(gemSection, () => true, "Toggle Permissions");
+const scriptConfigs = {
+  Gemini: {
+    matches: ["*://gemini.google.com/*"],
+    js: ["/scripts/gemini.js"],
+  },
+  DeepSeek: {
+    matches: ["*://chat.deepseek.com/*"],
+    js: ["/scripts/deepseek.js"],
+  },
+  ChatGPT: {
+    matches: ["*://*.chatgpt.com/*"],
+    js: ["/scripts/chatgpt.js"],
+  },
+  Grok: {
+    matches: ["*://*.grok.com/*"],
+    js: ["/scripts/grok.js"],
+  },
+  Copilot: {
+    matches: ["*://copilot.microsoft.com/*"],
+    js: ["/scripts/copilot.js"],
+  },
+  Claude: {
+    matches: ["*://*.claude.ai/*"],
+    js: ["/scripts/claude.js"],
+  },
+  Perplexity: {
+    matches: ["*://*.perplexity.ai/*"],
+    js: ["/scripts/perplexity.js"],
+  },
+  Mistral: {
+    matches: ["*://chat.mistral.ai/*"],
+    js: ["/scripts/mistral.js"],
+  },
+  Meta: { matches: ["*://*.meta.ai/*"], js: ["/scripts/meta.js"] },
+  HuggingFace: {
+    matches: ["*://huggingface.co/chat/*"],
+    js: ["/scripts/hug.js"],
+  },
+};
+const permissionsConfig = {
+  Gemini: {
+    permissions: ["scripting"],
+    origins: ["*://gemini.google.com/*"],
+  },
+  DeepSeek: {
+    permissions: ["scripting"],
+    origins: ["*://chat.deepseek.com/*"],
+  },
+  ChatGPT: {
+    permissions: ["scripting"],
+    origins: ["*://*.chatgpt.com/*"],
+  },
+  Grok: {
+    permissions: ["scripting"],
+    origins: ["*://*.grok.com/*"],
+  },
+  Copilot: {
+    permissions: ["scripting"],
+    origins: ["*://copilot.microsoft.com/*"],
+  },
+  Claude: {
+    permissions: ["scripting"],
+    origins: ["*://*.claude.ai/*"],
+  },
+  Perplexity: {
+    permissions: ["scripting"],
+    origins: ["*://*.perplexity.ai/*"],
+  },
+  Mistral: {
+    permissions: ["scripting"],
+    origins: ["*://chat.mistral.ai/*"],
+  },
+  Meta: {
+    permissions: ["scripting"],
+    origins: ["*://*.meta.ai/*"],
+  },
+  HuggingFace: {
+    permissions: ["scripting"],
+    origins: ["*://*.huggingface.co/chat/*"],
+  },
+};
 async function registerScriptForEngine(name) {
-  const scriptConfigs = {
-    Gemini: {
-      matches: ["*://gemini.google.com/*"],
-      js: ["/scripts/gemini.js"],
-    },
-    DeepSeek: {
-      matches: ["*://chat.deepseek.com/*"],
-      js: ["/scripts/deepseek.js"],
-    },
-  };
   if (!scriptConfigs[name]) return;
   await chrome.scripting.registerContentScripts([
     {
@@ -203,18 +272,9 @@ async function registerScriptForEngine(name) {
 }
 export async function getPermissions(engine) {
   const name = engine.name;
-  const permissions = {
-    Gemini: {
-      permissions: ["scripting"],
-      origins: ["*://gemini.google.com/*"],
-    },
-    DeepSeek: {
-      permissions: ["scripting"],
-      origins: ["*://chat.deepseek.com/*"],
-    },
-  }[name];
-  if (!permissions) return;
-  const granted = await chrome.permissions.request(permissions);
+  const perm = permissionsConfig[name];
+  if (!perm) return;
+  const granted = await chrome.permissions.request(perm);
   if (granted) {
     try {
       await registerScriptForEngine(name);
@@ -385,7 +445,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 async function goToLink() {
-  let x = getSearchEngineUrl();
   let { query: q } = await chrome.storage.local.get("query");
   if (q && q.trim().length > 0) {
     // We enabled content scripts
@@ -393,7 +452,7 @@ async function goToLink() {
     if (enabled) {
       // Content scripts supports this experimental feature
       if (isSearchEngineExp()) {
-        window.location.href = x;
+        window.location.href = getSearchEngineUrlHostName();
       } else {
         // Go regularly
         getQueryLink();
@@ -411,7 +470,7 @@ async function goToLink() {
 
   async function getQueryLink() {
     await chrome.storage.local.remove("query");
-    let url = `${x}${encodeURIComponent(q.trim())}`;
+    let url = `${getSearchEngineUrl()}${encodeURIComponent(q.trim())}`;
     console.log(`Query found. Going to ${url}`);
     window.location.href = url;
   }
