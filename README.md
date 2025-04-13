@@ -2,7 +2,8 @@
 
 A new tab page with an AI-like user interface.
 ![Promo](./samples/Promo.png)
-![Sample 1](./samples/Sample_1.png)
+## Youtube Video
+[![Sample 1](./samples/Sample_1.png)](https://www.youtube.com/watch?v=PDgovF1dNBg)
 
 ## How to run from source
 
