@@ -219,7 +219,7 @@ export async function getPermissions(engine) {
     try {
       await registerScriptForEngine(name);
     } catch (error) {
-      console.error("Script registration failed:", error);
+      console.log("Script registration failed:", error);
     }
   } else {
     showToast(`Enable Permissions to search with ${name}`, "warning");
@@ -251,6 +251,14 @@ async function getPermissionStatus() {
     },
     gemSection
   );
+  // Add animation class based on state
+  if (hasScripts) {
+    gemSection.classList.add("unlocked");
+    gemSection.classList.remove("locked");
+  } else {
+    gemSection.classList.add("locked");
+    gemSection.classList.remove("unlocked");
+  }
   chrome.storage.local.set({ Experimental: hasPermissions && hasScripts });
   return hasPermissions;
 }

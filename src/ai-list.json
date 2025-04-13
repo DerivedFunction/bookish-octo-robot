@@ -1,19 +1,14 @@
 {
   "ai-list": [
     {
-      "name": "Grok",
-      "url": "https://grok.com/?q=",
-      "image": "/assets/images/ai/grok.svg"
+      "name": "ChatGPT",
+      "url": "https://chatgpt.com/?q=",
+      "image": "/assets/images/ai/chatgpt.svg"
     },
     {
       "name": "Copilot",
       "url": "https://copilot.microsoft.com/?q=",
       "image": "/assets/images/ai/copilot.svg"
-    },
-    {
-      "name": "ChatGPT",
-      "url": "https://chatgpt.com/?q=",
-      "image": "/assets/images/ai/chatgpt.svg"
     },
     {
       "name": "Gemini",
@@ -22,9 +17,15 @@
       "experimental": true
     },
     {
-      "name": "Perplexity",
-      "url": "https://www.perplexity.ai/search/new?q=",
-      "image": "/assets/images/ai/perplexity.svg"
+      "name": "Grok",
+      "url": "https://grok.com/?q=",
+      "image": "/assets/images/ai/grok.svg"
+    },
+    {
+      "name": "DeepSeek",
+      "url": "https://chat.deepseek.com/",
+      "image": "/assets/images/ai/deepseek.svg",
+      "experimental": true
     },
     {
       "name": "Claude",
@@ -32,9 +33,19 @@
       "image": "/assets/images/ai/claude.svg"
     },
     {
+      "name": "Perplexity",
+      "url": "https://www.perplexity.ai/search/new?q=",
+      "image": "/assets/images/ai/perplexity.svg"
+    },
+    {
       "name": "Mistral",
       "url": "https://chat.mistral.ai/chat?q=",
       "image": "/assets/images/ai/mistral.svg"
+    },
+    {
+      "name": "Meta",
+      "url": "https://www.meta.ai/?q=",
+      "image": "/assets/images/ai/meta.svg"
     },
     {
       "name": "HuggingFace",
@@ -45,17 +56,6 @@
       "name": "Google (AI mode)",
       "url": "https://www.google.com/search?udm=50&q=",
       "image": "/assets/images/ai/google.svg"
-    },
-    {
-      "name": "Meta",
-      "url": "https://www.meta.ai/?q=",
-      "image": "/assets/images/ai/meta.svg"
-    },
-    {
-      "name": "DeepSeek",
-      "url": "https://chat.deepseek.com/",
-      "image": "/assets/images/ai/deepseek.svg",
-      "experimental": true
     }
   ],
   "prompts": [
