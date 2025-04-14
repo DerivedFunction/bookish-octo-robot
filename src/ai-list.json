@@ -40,7 +40,7 @@
       "url": "https://claude.ai/new?q=",
       "image": "/assets/images/ai/claude.svg",
       "experimental": true,
-      "limit": 100000
+      "limit": 50000
     },
     {
       "name": "Perplexity",
