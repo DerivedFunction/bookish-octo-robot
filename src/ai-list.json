@@ -126,7 +126,6 @@
         "Analyze Pros and Cons",
         "Fact Check",
         "Find Patterns or Trends",
-        "Give Critical Insights",
         "Spot Strengths and Weaknesses",
         "Fix Errors"
       ],
@@ -171,7 +170,9 @@
         "Brainstorm Ideas",
         "Make a Plan",
         "Write a Draft",
-        "Create an Outline"
+        "Create an Outline",
+        "Write an Email",
+        "Write and improve my Resume"
       ],
       "replace": true,
       "context": ["editable", "selection", "page"]
