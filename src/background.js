@@ -171,7 +171,6 @@ chrome.action.onClicked.addListener(async () => {
   let x = await getSearchEngine();
   if (x) {
     let url = hostnameToURL(new URL(x.url).hostname);
-
     chrome.tabs.create({ url: url });
   }
 });
