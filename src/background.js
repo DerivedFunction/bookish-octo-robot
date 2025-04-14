@@ -1,12 +1,8 @@
 const needPerm = ["Gemini", "DeepSeek"];
-chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-  let query;
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  // AI searches
   let prompt = info.menuItemId;
-  if (prompt == "switch" || info.parentMenuItemId == "switch") {
-    await switchEngine(prompt);
-    return;
-  }
-  query = prompt == "paste" ? "" : prompt;
+  let query = prompt == "paste" ? "" : prompt;
   if (info.selectionText) {
     query = `${query} ${info.selectionText}`;
   } else if (info.linkUrl) {
@@ -16,21 +12,32 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   } else {
     query = "";
   }
-  query = query.trim();
-
+  query =
+    info.parentMenuItemId === "switch" || info.menuItemId == "switch"
+      ? null
+      : query.trim();
+  if (!query) return;
   console.log(`Sending ${query} to sidebar...`);
   chrome.storage.local.set({ query });
   chrome.runtime.sendMessage({
-    // Send a message to the sidebar
     message: "sendQuery",
   });
   try {
-    await browser.sidebarAction.setPanel({
-      panel: `sidebar.html`,
+    // Synchronously set panel and open sidebar in Firefox
+    browser.sidebarAction.setPanel({ panel: "sidebar.html" });
+    browser.sidebarAction.open().catch((error) => {
+      console.error("Failed to open sidebar:", error);
+      createTab(query); // Fallback to creating a tab
     });
-    await browser.sidebarAction.open();
   } catch (error) {
-    await createTab(query);
+    console.error(error);
+    createTab(query);
+  }
+});
+chrome.contextMenus.onClicked.addListener(async (info) => {
+  if (info.menuItemId == "switch" || info.parentMenuItemId == "switch") {
+    await switchEngine(info.menuItemId);
+    return;
   }
 });
 async function createTab(query) {
