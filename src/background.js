@@ -1,18 +1,22 @@
 const needPerm = ["Gemini", "DeepSeek"];
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-  // AI searches
+  let query;
   let prompt = info.menuItemId;
-  let query = prompt == "paste" ? "" : prompt;
-  if (info.selectionText) {
-    query = `${query} ${info.selectionText}`;
-  } else if (info.linkUrl) {
-    query = `${query} ${info.linkUrl}`;
-  } else if (tab.url) {
-    query = `${query} ${tab.url}`;
-  } else {
-    query = "";
+  if (info.menuItemId === "clipboard") query = await getClipboardText();
+  else {
+    query = prompt == "paste" ? "" : prompt;
+    if (info.selectionText) {
+      query = `${query} ${info.selectionText}`;
+    } else if (info.linkUrl) {
+      query = `${query} ${info.linkUrl}`;
+    } else if (tab.url) {
+      query = `${query} ${tab.url}`;
+    } else {
+      query = "";
+    }
+    query = query.trim();
   }
-  query = query.trim();
+
   console.log(`Sending ${query} to sidebar...`);
   chrome.storage.local.set({ query });
   chrome.runtime.sendMessage({
@@ -20,31 +24,50 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     message: "sendQuery",
   });
   try {
-    browser.sidebarAction.setPanel({
+    await browser.sidebarAction.setPanel({
       panel: `sidebar.html`,
     });
-    browser.sidebarAction.open();
+    await browser.sidebarAction.open();
   } catch (error) {
-    let x = await getSearchEngine();
-    if (x) {
-      let url;
-      let { Experimental } = await chrome.storage.local.get("Experimental"); // If we have permissions
-      if (x.experimental) {
-        // If set to true, use the original url
-        if (Experimental) url = hostnameToURL(new URL(x.url).hostname);
-        // Else use the query form
-        else {
-          chrome.storage.local.remove("query");
-          url = `${x.url}${encodeURIComponent(query)}`;
-        }
-      } else {
+    await createTab(query);
+  }
+});
+async function createTab(query) {
+  let x = await getSearchEngine();
+  if (x) {
+    let url;
+    let { Experimental } = await chrome.storage.local.get("Experimental"); // If we have permissions
+    if (x.experimental) {
+      // If set to true, use the original url
+      if (Experimental) url = hostnameToURL(new URL(x.url).hostname);
+      // Else use the query form
+      else {
         chrome.storage.local.remove("query");
         url = `${x.url}${encodeURIComponent(query)}`;
       }
-      chrome.tabs.create({ url: url });
+    } else {
+      chrome.storage.local.remove("query");
+      url = `${x.url}${encodeURIComponent(query)}`;
     }
+    chrome.tabs.create({ url: url });
   }
-});
+}
+
+async function getClipboardText() {
+  try {
+    const permissionStatus = await chrome.permissions.request({
+      permissions: ["clipboardRead"],
+    });
+    if (!permissionStatus) {
+      alert(`Clipboard operation denied`);
+      return;
+    }
+    const text = await navigator.clipboard.readText();
+    return text;
+  } catch {
+    alert(`Clipboard operation denied`);
+  }
+}
 
 async function getSearchEngine() {
   let { engine: x } = await chrome.storage.local.get("engine");
@@ -52,6 +75,7 @@ async function getSearchEngine() {
 }
 
 async function deleteMenu() {
+  console.log("Deleting context menus");
   await chrome.contextMenus.remove("search").catch(() => {});
   menusCreated = false;
 }
@@ -76,7 +100,17 @@ function hostnameToURL(hostname) {
 async function loadMenu() {
   // Remove existing quick-access menu
   deleteMenu();
+  console.log("Creating context menus");
   const search = await getSearchEngine();
+  let { Experimental } = await chrome.storage.local.get("Experimental"); // If we have permissions
+  // Without permissions, we don't create the context menus
+  if (!Experimental && needPerm.some((e) => e === search.name)) {
+    menusCreated = false;
+    console.log(
+      `No permissions for ${search.name}. Will not create context menus`
+    );
+    return;
+  }
   if (search) {
     chrome.contextMenus.create(
       {
@@ -92,6 +126,15 @@ async function loadMenu() {
         title: "Paste Selection Into Prompt",
         parentId: "search",
         contexts: ["selection", "link"],
+      },
+      () => void chrome.runtime.lastError
+    );
+    chrome.contextMenus.create(
+      {
+        id: "clipboard",
+        title: "Paste Clipboard Text Into Prompt",
+        parentId: "search",
+        contexts: ["all"],
       },
       () => void chrome.runtime.lastError
     );
@@ -134,6 +177,15 @@ chrome.runtime.onMessage.addListener(async (e) => {
   } else if (e.message === "reset") {
     console.log("Removing context menus");
     deleteMenu();
+  } else if (e.message === "Experimental") {
+    console.log("Scripting Permissions changed for ", e.engine.name);
+    // We have  permissions and our engine needsPermissions
+    if (needPerm.some((eg) => eg === e.engine.name))
+      if (e.status)
+        // status says we have permissions
+        loadMenu();
+      // status says we don't have permissions
+      else deleteMenu();
   }
 });
 

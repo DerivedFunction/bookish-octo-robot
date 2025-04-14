@@ -245,6 +245,11 @@ async function getPermissionStatus() {
     gemSection.classList.add("locked");
     gemSection.classList.remove("unlocked");
   }
+  chrome.runtime.sendMessage({
+    message: "Experimental",
+    engine: selectedEngine,
+    status: hasPermissions && hasScripts,
+  });
   chrome.storage.local.set({ Experimental: hasPermissions && hasScripts });
   await queryEvents();
   return hasPermissions;
