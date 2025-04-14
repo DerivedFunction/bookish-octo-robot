@@ -1,11 +1,15 @@
 import { clearBtn, goBtn } from "./actionButtons.js";
 import { toggleButton } from "../app.js";
 import { suggestionResult } from "./suggestions.js";
-import { getSearchEngineUrl, toggleDropdown } from "./searchEngine.js";
+import {
+  getSearchEngineUrl,
+  selectedEngine,
+  toggleDropdown,
+} from "./searchEngine.js";
 import { hasScripts } from "./searchEngine.js";
 export const query = document.getElementById("search");
 export function getLimit() {
-  return hasScripts ? 20000 : MAX_LIMIT;
+  return hasScripts ? selectedEngine.limit : MAX_LIMIT;
 }
 query.addEventListener("input", async () => {
   // Set the height to match the content (scrollHeight)

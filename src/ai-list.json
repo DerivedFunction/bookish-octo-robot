@@ -4,65 +4,76 @@
       "name": "ChatGPT",
       "url": "https://chatgpt.com/?q=",
       "image": "/assets/images/ai/chatgpt.svg",
-      "experimental": true
+      "experimental": true,
+      "limit": 39720
     },
     {
       "name": "Copilot",
       "url": "https://copilot.microsoft.com/?q=",
       "image": "/assets/images/ai/copilot.svg",
-      "experimental": true
+      "experimental": true,
+      "limit": 10240
     },
     {
       "name": "Gemini",
       "url": "https://gemini.google.com/app",
       "image": "/assets/images/ai/gemini.svg",
-      "experimental": true
+      "experimental": true,
+      "limit": 31022
     },
     {
       "name": "Grok",
       "url": "https://grok.com/?q=",
       "image": "/assets/images/ai/grok.svg",
-      "experimental": true
+      "experimental": true,
+      "limit": 100000
     },
     {
       "name": "DeepSeek",
       "url": "https://chat.deepseek.com/",
       "image": "/assets/images/ai/deepseek.svg",
-      "experimental": true
+      "experimental": true,
+      "limit": 100000
     },
     {
       "name": "Claude",
       "url": "https://claude.ai/new?q=",
       "image": "/assets/images/ai/claude.svg",
-      "experimental": true
+      "experimental": true,
+      "limit": 100000
     },
     {
       "name": "Perplexity",
       "url": "https://www.perplexity.ai/search/new?q=",
       "image": "/assets/images/ai/perplexity.svg",
-      "experimental": true
+      "experimental": true,
+      "limit": 15000
     },
     {
       "name": "Mistral",
       "url": "https://chat.mistral.ai/chat?q=",
       "image": "/assets/images/ai/mistral.svg",
-      "experimental": true
+      "experimental": true,
+      "limit": 100000
     },
     {
       "name": "Meta",
       "url": "https://www.meta.ai/?q=",
-      "image": "/assets/images/ai/meta.svg"
+      "image": "/assets/images/ai/meta.svg",
+      "limit": 15000
     },
     {
       "name": "HuggingFace",
       "url": "https://huggingface.co/chat/?q=",
       "image": "/assets/images/ai/hug.svg",
-      "experimental": true
+      "experimental": true,
+      "limit": 15000
     },
     {
       "name": "Google (AI mode)",
       "url": "https://www.google.com/search?udm=50&q=",
-      "image": "/assets/images/ai/google.svg"
+      "image": "/assets/images/ai/google.svg",
+      "limit": 15000
     }
   ],
   "prompts": [
