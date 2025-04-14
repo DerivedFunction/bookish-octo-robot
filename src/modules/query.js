@@ -2,7 +2,11 @@ import { clearBtn, goBtn } from "./actionButtons.js";
 import { toggleButton } from "../app.js";
 import { suggestionResult } from "./suggestions.js";
 import { getSearchEngineUrl, toggleDropdown } from "./searchEngine.js";
+import { hasScripts } from "./searchEngine.js";
 export const query = document.getElementById("search");
+export function getLimit() {
+  return hasScripts ? 20000 : MAX_LIMIT;
+}
 query.addEventListener("input", async () => {
   // Set the height to match the content (scrollHeight)
   chatbox.style.opacity = "1.0";
@@ -17,7 +21,8 @@ query.addEventListener("focus", async () => {
 query.addEventListener("keydown", async (e) => {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
-    if (!goBtn.disabled && query.value.length < MAX_LIMIT) {
+
+    if (!goBtn.disabled && query.value.length < getLimit()) {
       goBtn.click();
     } else if (goBtn.disabled) {
       let y = await getSearchEngineUrl();
@@ -40,16 +45,17 @@ export async function queryEvents() {
 export const MAX_LIMIT = 5000; // max char count
 export function getCharCount() {
   const charLength = query.value.length;
-  charCount.textContent = `${charLength}/${MAX_LIMIT}`;
-  if (charLength >= MAX_LIMIT * 0.9) {
+  charCount.textContent = `${charLength}/${getLimit()}`;
+  if (charLength >= LIMIT * 0.9) {
     charCount.style.color = "var(--danger-color)";
-  } else if (charLength >= MAX_LIMIT * 0.7) {
+  } else if (charLength >= LIMIT * 0.7) {
     charCount.style.color = "var(--warning-color)";
   } else {
     charCount.style.color = ""; // Reset to default color
   }
 }
 export const charCount = document.getElementById("char-count");
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   query.value = "";
+  await queryEvents();
 });

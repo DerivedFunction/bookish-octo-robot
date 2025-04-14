@@ -38,7 +38,7 @@ export async function getSuggestionButtons() {
       appendSvg({ image: prompt.image }, btn, "4px", false);
     }
 
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", async () => {
       if (goBtn.disabled) {
         query.value = prompt.prompt;
         getCharCount();

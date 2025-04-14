@@ -178,7 +178,7 @@ const PERMISSIONS = {
 };
 
 let hasPermissions = false;
-let hasScripts = false;
+export let hasScripts = false;
 const gemSection = document.getElementById("remove-script");
 setupTooltip(gemSection, () => true, "Toggle Permissions");
 let permissionsConfig = null;
@@ -245,6 +245,7 @@ async function getPermissionStatus() {
     gemSection.classList.remove("unlocked");
   }
   chrome.storage.local.set({ Experimental: hasPermissions && hasScripts });
+  await queryEvents();
   return hasPermissions;
 }
 

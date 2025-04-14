@@ -1,5 +1,5 @@
 import { readText, toggleButton } from "../app.js";
-import { query, queryEvents, MAX_LIMIT } from "./query.js";
+import { query, queryEvents, MAX_LIMIT, getLimit } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
 import {
   checkEnabled,
@@ -57,7 +57,7 @@ goBtn.addEventListener("click", async () => {
     toggleButton(goBtn, false);
     return;
   }
-  if (query.value.length > MAX_LIMIT) {
+  if (query.value.length > getLimit()) {
     showToast(
       "Query exceeds character count. Please go to actual URL",
       "warning"
