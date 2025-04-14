@@ -223,17 +223,45 @@ async function switchEngine(name) {
     if (ai.name === name) selected = ai;
   });
   await chrome.storage.local.set({ engine: selected });
-  chrome.runtime.sendMessage({
-    message: "selectedSearchEngine",
-    engine: selected,
-  });
-  const iconUrl = selected.image;
-  await chrome.action.setIcon({ path: iconUrl });
+  await loadMenu();
   try {
+    await chrome.runtime.sendMessage({
+      message: "selectedSearchEngine",
+      engine: selected,
+    });
+  } catch {}
+  const iconUrl = chrome.runtime.getURL(selected.image);
+  try {
+    // Firefox works
+    await chrome.action.setIcon({ path: iconUrl });
     browser.sidebarAction.setIcon({ path: iconUrl });
-  } catch (error) {}
-}
+  } catch (error) {
+    console.log(
+      "Chrome cannot change icons. Unless a New Tab page was open",
+      error
+    );
 
+    try {
+      const imgblob = await fetch(iconUrl.replace(".svg", ".png")).then((r) =>
+        r.blob()
+      );
+      const img = await createImageBitmap(imgblob);
+      const canvas = new OffscreenCanvas(19, 19); // Recommended base size for extension icons
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // Get the ImageData from the canvas
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+      // Set the icon using imageData
+      await chrome.action.setIcon({ imageData: imageData });
+
+      console.log("Extension icon set successfully.");
+    } catch (error) {
+      console.error("Error setting extension icon:", error);
+    }
+  }
+}
 // Message listener for dynamic updates
 chrome.runtime.onMessage.addListener(async (e) => {
   if (e.message === "selectedSearchEngine") {
