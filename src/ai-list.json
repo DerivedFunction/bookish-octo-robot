@@ -95,7 +95,7 @@
       "image": "/assets/images/prompts/research.svg",
       "suggestions": ["Compare Options", "Find Latest Info"],
       "replace": true,
-      "context": ["editable", "selection", "page"]
+      "context": ["editable", "selection"]
     },
     {
       "id": "Summarize",
@@ -108,7 +108,7 @@
         "Summarize in Simple Words"
       ],
       "replace": true,
-      "context": ["editable", "selection", "page", "link"]
+      "context": ["editable", "selection", "link"]
     },
     {
       "id": "Explain",
@@ -116,7 +116,7 @@
       "image": "/assets/images/prompts/explain.svg",
       "suggestions": ["Explain briefly", "ELI5", "Explain in Detail"],
       "replace": true,
-      "context": ["editable", "selection", "page", "link"]
+      "context": ["editable", "selection", "link"]
     },
     {
       "id": "Analyze",
@@ -130,7 +130,7 @@
         "Fix Errors"
       ],
       "replace": true,
-      "context": ["editable", "selection", "page", "link"]
+      "context": ["editable", "selection", "link"]
     },
     {
       "id": "Create Image",
@@ -160,7 +160,7 @@
         "Review and Comment"
       ],
       "replace": true,
-      "context": ["editable", "selection", "page"]
+      "context": ["editable", "selection"]
     },
     {
       "id": "Generate",
@@ -175,7 +175,7 @@
         "Write and improve my Resume"
       ],
       "replace": true,
-      "context": ["editable", "selection", "page"]
+      "context": ["editable", "selection"]
     }
   ]
 }
