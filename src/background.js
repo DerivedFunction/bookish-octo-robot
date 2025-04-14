@@ -236,11 +236,7 @@ async function switchEngine(name) {
     await chrome.action.setIcon({ path: iconUrl });
     browser.sidebarAction.setIcon({ path: iconUrl });
   } catch (error) {
-    console.log(
-      "Chrome cannot change icons. Unless a New Tab page was open",
-      error
-    );
-
+    console.log("Using Chrome. Drawing an icon *.png via canvas", error);
     try {
       const imgblob = await fetch(iconUrl.replace(".svg", ".png")).then((r) =>
         r.blob()
@@ -252,11 +248,8 @@ async function switchEngine(name) {
 
       // Get the ImageData from the canvas
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
       // Set the icon using imageData
       await chrome.action.setIcon({ imageData: imageData });
-
-      console.log("Extension icon set successfully.");
     } catch (error) {
       console.error("Error setting extension icon:", error);
     }
