@@ -207,9 +207,10 @@ export async function getPermissions(engine) {
       console.log("Script registration failed:", error);
     }
   } else {
-    showToast(`Enable Permissions to search with ${name}`, "warning");
+    if (needPerm.some((e) => e === name))
+      showToast(`${name} may not work without permissions`, "warning");
+    await getPermissionStatus();
   }
-  await getPermissionStatus();
 }
 async function getPermissionStatus() {
   hasPermissions = await chrome.permissions.contains(PERMISSIONS);
