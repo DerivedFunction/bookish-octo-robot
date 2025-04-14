@@ -2,6 +2,8 @@ import { loadJsonData } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
 import { setupTooltip } from "./tooltip.js";
 import { showToast } from "./toaster.js";
+import { needPerm } from "../app.js";
+import { query, queryEvents } from "./query.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
 
@@ -372,6 +374,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function goToLink() {
   let { query: q } = await chrome.storage.local.get("query");
+  let name = getSearchEngineName();
   if (q && q.trim().length > 0) {
     // We enabled content scripts
     let enabled = await checkEnabled();
@@ -389,7 +392,13 @@ async function goToLink() {
         // Not an experimental one
         getQueryLink();
       } else {
-        showToast("Enable Experimental Features", "danger");
+        if (needPerm.some((e) => e === name)) {
+          showToast(`${name} may not work without permissions`, "warning");
+          query.value = q;
+          await queryEvents();
+        } else {
+          getQueryLink();
+        }
       }
     }
   }

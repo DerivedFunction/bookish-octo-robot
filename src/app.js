@@ -5,6 +5,7 @@ export function toggleButton(button, enabled) {
   if (enabled) button.classList.add("enabled");
   else button.classList.remove("enabled");
 }
+export const needPerm = ["Gemini", "DeepSeek"];
 export async function readText(blob) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

@@ -48,7 +48,6 @@
     "*://gemini.google.com/",
     "*://chat.deepseek.com/",
     "*://chat.mistral.ai/*",
-    "*://*.meta.ai/*",
     "*://*.huggingface.co/chat/*"
   ]
 }

@@ -51,8 +51,7 @@
     {
       "name": "Meta",
       "url": "https://www.meta.ai/?q=",
-      "image": "/assets/images/ai/meta.svg",
-      "experimental": true
+      "image": "/assets/images/ai/meta.svg"
     },
     {
       "name": "HuggingFace",

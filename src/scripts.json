@@ -32,7 +32,6 @@
       "matches": ["*://chat.mistral.ai/*"],
       "js": ["/scripts/mistral.js"]
     },
-    "Meta": { "matches": ["*://*.meta.ai/*"], "js": ["/scripts/meta.js"] },
     "HuggingFace": {
       "matches": ["*://huggingface.co/chat/*"],
       "js": ["/scripts/hug.js"]
@@ -70,10 +69,6 @@
     "Mistral": {
       "permissions": ["scripting"],
       "origins": ["*://chat.mistral.ai/*"]
-    },
-    "Meta": {
-      "permissions": ["scripting"],
-      "origins": ["*://*.meta.ai/*"]
     },
     "HuggingFace": {
       "permissions": ["scripting"],

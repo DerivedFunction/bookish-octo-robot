@@ -11,7 +11,7 @@ import {
 } from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js";
 import { showToast } from "./toaster.js";
-export const needPerm = ["Gemini", "DeepSeek"];
+import { needPerm } from "../app.js";
 export const clearBtn = document.getElementById("clear");
 clearBtn.addEventListener("click", async () => {
   if (query.value.length > 0) {
