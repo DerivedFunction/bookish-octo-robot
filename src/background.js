@@ -1,6 +1,4 @@
-const manifest = chrome.runtime.getManifest();
-const optionalPermissions = manifest.optional_permissions || [];
-const optionalHostPermissions = manifest.optional_host_permissions || [];
+const needPerm = ["Gemini", "DeepSeek"];
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   // AI searches
   let prompt = info.menuItemId;
@@ -30,9 +28,17 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     let x = await getSearchEngine();
     if (x) {
       let url;
+      let { Experimental } = await chrome.storage.local.get("Experimental"); // If we have permissions
       if (x.experimental) {
-        url = x.url;
+        // If set to true, use the original url
+        if (Experimental) url = hostnameToURL(new URL(x.url).hostname);
+        // Else use the query form
+        else {
+          chrome.storage.local.remove("query");
+          url = `${x.url}${encodeURIComponent(query)}`;
+        }
       } else {
+        chrome.storage.local.remove("query");
         url = `${x.url}${encodeURIComponent(query)}`;
       }
       chrome.tabs.create({ url: url });
@@ -49,6 +55,23 @@ async function deleteMenu() {
   await chrome.contextMenus.remove("search").catch(() => {});
   menusCreated = false;
 }
+function hostnameToURL(hostname) {
+  // Create a URL object with a base URL
+  const urlObject = new URL("https://example.com");
+  // Update the hostname
+  urlObject.hostname = hostname;
+  // Get the full URL string
+  let url = urlObject.href;
+  // Append specific paths based on hostname content
+  if (hostname.includes("huggingface")) {
+    url += "chat";
+  }
+  if (hostname.includes("gemini")) {
+    url += "app";
+  }
+  return url;
+}
+
 // Load the context menus dynamically
 async function loadMenu() {
   // Remove existing quick-access menu
@@ -122,15 +145,8 @@ getPrompts();
 chrome.action.onClicked.addListener(async () => {
   let x = await getSearchEngine();
   if (x) {
-    function hostnameToURL(hostname) {
-      // the inital value of the URL object can be anything
-      const url = new URL("https://example.com");
-      url.hostname = hostname;
-      return url.href;
-    }
     let url = hostnameToURL(new URL(x.url).hostname);
-    if (url.includes("huggingface")) url += "chat";
-    if (url.includes("gemini")) url += "app";
+
     chrome.tabs.create({ url: url });
   }
 });
