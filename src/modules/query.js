@@ -45,7 +45,8 @@ export async function queryEvents() {
 export const MAX_LIMIT = 5000; // max char count
 export function getCharCount() {
   const charLength = query.value.length;
-  charCount.textContent = `${charLength}/${getLimit()}`;
+  const LIMIT = getLimit();
+  charCount.textContent = `${charLength}/${LIMIT}`;
   if (charLength >= LIMIT * 0.9) {
     charCount.style.color = "var(--danger-color)";
   } else if (charLength >= LIMIT * 0.7) {
