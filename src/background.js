@@ -2,20 +2,18 @@ const needPerm = ["Gemini", "DeepSeek"];
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   let query;
   let prompt = info.menuItemId;
-  if (info.menuItemId === "clipboard") query = await getClipboardText();
-  else {
-    query = prompt == "paste" ? "" : prompt;
-    if (info.selectionText) {
-      query = `${query} ${info.selectionText}`;
-    } else if (info.linkUrl) {
-      query = `${query} ${info.linkUrl}`;
-    } else if (tab.url) {
-      query = `${query} ${tab.url}`;
-    } else {
-      query = "";
-    }
-    query = query.trim();
+
+  query = prompt == "paste" ? "" : prompt;
+  if (info.selectionText) {
+    query = `${query} ${info.selectionText}`;
+  } else if (info.linkUrl) {
+    query = `${query} ${info.linkUrl}`;
+  } else if (tab.url) {
+    query = `${query} ${tab.url}`;
+  } else {
+    query = "";
   }
+  query = query.trim();
 
   console.log(`Sending ${query} to sidebar...`);
   chrome.storage.local.set({ query });
@@ -50,22 +48,6 @@ async function createTab(query) {
       url = `${x.url}${encodeURIComponent(query)}`;
     }
     chrome.tabs.create({ url: url });
-  }
-}
-
-async function getClipboardText() {
-  try {
-    const permissionStatus = await chrome.permissions.request({
-      permissions: ["clipboardRead"],
-    });
-    if (!permissionStatus) {
-      alert(`Clipboard operation denied`);
-      return;
-    }
-    const text = await navigator.clipboard.readText();
-    return text;
-  } catch {
-    alert(`Clipboard operation denied`);
   }
 }
 
@@ -126,15 +108,6 @@ async function loadMenu() {
         title: "Paste Selection Into Prompt",
         parentId: "search",
         contexts: ["selection", "link"],
-      },
-      () => void chrome.runtime.lastError
-    );
-    chrome.contextMenus.create(
-      {
-        id: "clipboard",
-        title: "Paste Clipboard Text Into Prompt",
-        parentId: "search",
-        contexts: ["all"],
       },
       () => void chrome.runtime.lastError
     );
