@@ -8,9 +8,11 @@ let stop = false;
 // Listen for messages from other scripts
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.stopLoop) {
-    stop = true;
-    console.log("Loop stop signal received.");
-    sendResponse({ received: true });
+    if (request.engine === "Mistral") {
+      stop = true;
+      console.log("Loop stop signal received.");
+      sendResponse({ received: true });
+    }
   }
 });
 
@@ -20,21 +22,27 @@ async function runAfterFullLoad() {
 }
 
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  let { query } = await chrome.storage.local.get("query");
-  if (!query || query.trim().length === 0 || query === undefined) return;
+  let { query, queryEngines, Mistral } = await chrome.storage.local.get([
+    "query",
+    "queryEngines",
+    "Mistral",
+  ]);
+  const searchQuery = (queryEngines && Mistral ? queryEngines : query)?.trim();
+  if (!searchQuery) return;
   let attempts = 0;
-  let x = query.trim();
   const attribute = "textarea";
   while (attempts < maxRetries && !stop) {
     const element = document.querySelector(attribute);
     console.log(
-      `Attempt ${attempts + 1}: Injecting into ${attribute} with query: ${x}`
+      `Attempt ${
+        attempts + 1
+      }: Injecting into ${attribute} with query: ${searchQuery}`
     );
 
     if (element) {
       // Simulate input for React compatibility
       let lastValue = element.value || "";
-      element.value = x;
+      element.value = searchQuery;
 
       let event = new Event("input", { bubbles: true });
       event.simulated = true; // Hack for React 15
@@ -74,11 +82,12 @@ async function clickButton(attribute) {
       const button = document.querySelector(attribute);
       if (button) {
         chrome.storage.local.remove("query");
+        chrome.storage.local.remove("Mistral");
         button.click();
         console.log(`Clicked button: ${attribute}`);
         // Send a message after the button click
         chrome.runtime.sendMessage(
-          { buttonClicked: true },
+          { buttonClicked: true, engine: "Mistral" },
           function (response) {
             if (chrome.runtime.lastError) {
               console.error(chrome.runtime.lastError);

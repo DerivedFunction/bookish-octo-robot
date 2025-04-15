@@ -6,6 +6,7 @@ import "./greetings.js";
 import "./nameInput.js";
 import "./query.js";
 import "./searchEngine.js";
+import "./searchEverywhere.js";
 import "./sidebar.js";
 import "./suggestions.js";
 import "./theme.js";

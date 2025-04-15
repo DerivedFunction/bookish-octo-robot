@@ -1,4 +1,4 @@
-import { clearBtn, goBtn } from "./actionButtons.js";
+import { clearBtn, goBtn, multiBtn } from "./actionButtons.js";
 import { toggleButton } from "../app.js";
 import { suggestionResult } from "./suggestions.js";
 import {
@@ -44,6 +44,9 @@ export async function queryEvents() {
   toggleButton(clearBtn, x);
   let y = await getSearchEngineUrl();
   toggleButton(goBtn, x && y);
+  toggleButton(multiBtn, x);
+  if (x) multiBtn.style.display = "";
+  else multiBtn.style.display = "none";
   getCharCount();
 }
 export const MAX_LIMIT = 5000; // max char count

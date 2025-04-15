@@ -3,6 +3,7 @@ import { query, queryEvents, MAX_LIMIT, getLimit } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
 import {
   checkEnabled,
+  getSearchEngineList,
   getSearchEngineName,
   getSearchEngineUrl,
   getSearchEngineUrlHostName,
@@ -11,7 +12,8 @@ import {
 } from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js";
 import { showToast } from "./toaster.js";
-import { needPerm } from "../app.js";
+import { needPerm, hostnameToURL } from "../app.js";
+import { getSearchEverywhere } from "./searchEverywhere.js";
 export const clearBtn = document.getElementById("clear");
 clearBtn.addEventListener("click", async () => {
   if (query.value.length > 0) {
@@ -95,6 +97,89 @@ goBtn.addEventListener("click", async () => {
     }
   }
 });
+export const multiBtn = document.getElementById("multi-go");
+multiBtn.addEventListener("click", async () => {
+  const queryText = query.value;
+
+  if (queryText.length < 1) {
+    showToast("No input", "warning");
+    toggleButton(goBtn, false);
+    return;
+  }
+
+  const searchEngines = await getSearchEngineList();
+  const searchEverywhere = getSearchEverywhere();
+  if (
+    !searchEverywhere ||
+    Object.keys(searchEverywhere).length === 0 ||
+    Object.values(searchEverywhere).every((value) => !value)
+  ) {
+    showToast("Nothing selected. See options");
+    return;
+  }
+  const permissions = [];
+
+  try {
+    const scripts = await chrome.scripting.getRegisteredContentScripts();
+    scripts.forEach((script) => permissions.push(script.id));
+  } catch {
+    console.log("Scripting is not enabled.");
+  }
+
+  const queryEngines = queryText;
+
+  for (const engine of searchEngines) {
+    if (!searchEverywhere[engine.name]) continue;
+    if (queryText.length > engine.limit) {
+      showToast(`Query exceeds character count for ${engine.name}`, "warning");
+      continue;
+    }
+
+    // Only collect for experimental engines with scripts enabled
+    if (engine.experimental && permissions.includes(engine.name)) {
+      // set a unique key with a value
+      await chrome.storage.local.set({ [engine.name]: true });
+    }
+  }
+
+  // Only store if there’s something to store
+  if (permissions.length > 0) {
+    await chrome.storage.local.set({ queryEngines });
+  }
+
+  for (const engine of searchEngines) {
+    if (queryText.length > engine.limit) continue;
+    if (!searchEverywhere[engine.name]) continue;
+    const url = `${engine.url}${encodeURIComponent(queryText)}`;
+    const hasPermission = permissions.includes(engine.name);
+    const needsPermission = needPerm.includes(engine.name);
+
+    if (hasPermission) {
+      if (!engine.experimental) {
+        await chrome.tabs.create({ url });
+      } else {
+        // hostnameToURL should resolve to engine homepage (for content script injection)
+        await chrome.tabs.create({
+          url: hostnameToURL(new URL(engine.url).hostname),
+        });
+      }
+    } else {
+      if (engine.experimental) {
+        if (needsPermission) {
+          showToast(
+            `${engine.name} may not work without permissions`,
+            "warning"
+          );
+        } else {
+          await chrome.tabs.create({ url });
+        }
+      } else {
+        await chrome.tabs.create({ url });
+      }
+    }
+  }
+});
+
 export const fakeFileBtn = document.getElementById("fake-file-upload");
 export const fileUploadInput = document.getElementById("fake-file");
 fileUploadInput.addEventListener("change", () => {
@@ -112,9 +197,12 @@ document.addEventListener("DOMContentLoaded", () => {
   appendSvg({ image: "assets/images/buttons/clear.svg" }, clearBtn);
   appendSvg({ image: "assets/images/buttons/paste.svg" }, pasteBtn);
   appendSvg({ image: "assets/images/buttons/file.svg" }, fakeFileBtn);
+  appendSvg({ image: "assets/images/buttons/multi.svg" }, multiBtn);
   [clearBtn, pasteBtn, goBtn, fakeFileBtn].forEach((btn) => {
     setupTooltip(btn, () => query.value.length === 0);
   });
+  setupTooltip(multiBtn, () => query.value.length > 0);
+  multiBtn.style.display = "none";
   document.getElementById("reset").addEventListener("click", async () => {
     await chrome.permissions.remove({ permissions: ["clipboardRead"] });
   });

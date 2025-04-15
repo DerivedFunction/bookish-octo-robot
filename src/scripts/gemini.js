@@ -8,9 +8,11 @@ let stop = false;
 // Listen for messages from other scripts
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.stopLoop) {
-    stop = true;
-    console.log("Loop stop signal received.");
-    sendResponse({ received: true }); // Optional: Send a response back
+    if (request.engine === "Gemini") {
+      stop = true;
+      console.log("Loop stop signal received.");
+      sendResponse({ received: true }); // Optional: Send a response back
+    }
   }
 });
 
@@ -25,25 +27,33 @@ async function getTextInput(
   maxRetries = 10,
   retryDelay = 3000
 ) {
-  let { query } = await chrome.storage.local.get("query");
-  if (!query || query.trim().length === 0 || query === undefined) return;
+  let { query, queryEngines, Gemini } = await chrome.storage.local.get([
+    "query",
+    "queryEngines",
+    "Gemini",
+  ]);
+  const searchQuery = (queryEngines && Gemini ? queryEngines : query)?.trim();
+
+  if (!searchQuery) return;
+
   let attempts = 0;
-  let x = query.trim();
 
   while (attempts < maxRetries && !stop) {
     // Check 'stop' condition here
     const element = document.querySelector(attribute);
     console.log(
-      `Attempt ${attempts + 1}: Injecting ${element} via ${type} of query: ${x}`
+      `Attempt ${
+        attempts + 1
+      }: Injecting ${element} via ${type} of query: ${searchQuery}`
     );
 
     if (element) {
       switch (type) {
         case "value":
-          element.value = x;
+          element.value = searchQuery;
           break;
         case "textContent":
-          element.textContent = x;
+          element.textContent = searchQuery;
           break;
       }
       clickButton(".send-button");
@@ -74,16 +84,20 @@ async function clickButton(attribute) {
     const button = document.querySelector(attribute);
     if (button) {
       chrome.storage.local.remove("query");
+      chrome.storage.local.remove("Gemini");
       button.click();
       console.log(`Clicked button: ${attribute}`);
       // Send a message after the button click
-      chrome.runtime.sendMessage({ buttonClicked: true }, function (response) {
-        if (chrome.runtime.lastError) {
-          console.error(chrome.runtime.lastError);
-        } else {
-          console.log("Button clicked message sent, response:", response);
+      chrome.runtime.sendMessage(
+        { buttonClicked: true, engine: "Gemini" },
+        function (response) {
+          if (chrome.runtime.lastError) {
+            console.error(chrome.runtime.lastError);
+          } else {
+            console.log("Button clicked message sent, response:", response);
+          }
         }
-      });
+      );
     } else {
       console.log(`Button not found: ${attribute}`);
     }
