@@ -42,7 +42,8 @@ A new tab page with an AI-like user interface.
 ### Basic
 
 - Clean UI adapted from ChatGPT and Grok
-- Ability to switch between different AI chatbots/websites
+- Ability to switch between different AI chatbots/websites.
+- Powerful **Search Everywhere** allows the same query to simultaneously run on multiple AI chatbots
 - Paste text into the prompt
 - Eight default suggestion ideas to save time on commands.
   ![Sample 3](./samples/Sample_3.png)
