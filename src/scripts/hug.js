@@ -28,7 +28,7 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
     "HuggingFace",
   ]);
   const searchQuery = (
-    queryEngines && HuggingFace ? queryEnginess : query
+    queryEngines && HuggingFace ? queryEngines : query
   )?.trim();
 
   if (!searchQuery) return;
