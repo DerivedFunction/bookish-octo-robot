@@ -1,5 +1,4 @@
 import { appendSvg } from "./appendSvg.js";
-import { getSearchEngineList } from "./searchEngine.js";
 import { showToast } from "./toaster.js";
 import { setupTooltip } from "./tooltip.js";
 
