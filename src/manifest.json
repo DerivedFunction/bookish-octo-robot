@@ -28,7 +28,7 @@
       "32": "assets/images/icon.svg"
     },
     "default_title": "Tabbed",
-    "default_panel": "sidebar.html",
+    "default_panel": "index.html#sidebar",
     "open_at_install": true
   },
   "chrome_url_overrides": {
