@@ -47,7 +47,7 @@ async function storeFile(filename, file) {
   const totalSize = await getTotalStoredSize();
   if (totalSize + file.size > MAX_TOTAL_SIZE) {
     showToast("Cannot store file: Total size limit of 4MB exceeded.");
-    return false;
+    return null; // Return null to indicate failure
   }
 
   const reader = new FileReader();
@@ -61,11 +61,41 @@ async function storeFile(filename, file) {
           size: file.size,
         },
       });
-      resolve(true);
+      resolve(uniqueFilename); // Return the unique filename
     };
     reader.readAsDataURL(file);
   });
 }
+
+// Handle file input changes
+fileUploadInput.addEventListener("change", async () => {
+  const files = fileUploadInput.files;
+
+  for (const file of files) {
+    const uniqueFilename = await storeFile(file.name, file);
+    if (uniqueFilename) {
+      addFileToList(uniqueFilename, file); // Use unique filename
+    }
+  }
+});
+
+// Handle pasted images
+document.addEventListener("paste", async (event) => {
+  const items = event.clipboardData?.items;
+  if (!items) return;
+
+  for (const item of items) {
+    if (item.type.startsWith("image/")) {
+      const file = item.getAsFile();
+      const filename = file.name || `pasted-${Date.now()}.png`;
+
+      const uniqueFilename = await storeFile(filename, file);
+      if (uniqueFilename) {
+        addFileToList(uniqueFilename, file); // Use unique filename
+      }
+    }
+  }
+});
 
 // Delete file from storage and DOM
 async function deleteFile(filename, liElement) {
@@ -101,36 +131,6 @@ function addFileToList(filename, blob) {
   filesList.appendChild(li);
 }
 
-// Handle file input changes
-fileUploadInput.addEventListener("change", async () => {
-  const files = fileUploadInput.files;
-
-  for (const file of files) {
-    const success = await storeFile(file.name, file);
-    if (success) {
-      addFileToList(file.name, file);
-    }
-  }
-});
-
-// Handle pasted images
-document.addEventListener("paste", async (event) => {
-  const items = event.clipboardData?.items;
-  if (!items) return;
-
-  for (const item of items) {
-    if (item.type.startsWith("image/")) {
-      const file = item.getAsFile();
-      const filename = file.name || `pasted-${Date.now()}.png`;
-
-      const success = await storeFile(filename, file);
-      if (success) {
-        addFileToList(filename, file);
-      }
-    }
-  }
-});
-
 // On page load, clear all stored data
 document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "/assets/images/buttons/paperclip.svg" }, fileUploadBtn);
@@ -139,5 +139,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (key.startsWith(STORAGE_KEY_PREFIX)) {
       chrome.storage.local.remove(key);
     }
+  }
+});
+
+chrome.runtime.onMessage.addListener((e) => {
+  if (e.message === "clearImage") {
+    filesList.innerHTML = "";
   }
 });

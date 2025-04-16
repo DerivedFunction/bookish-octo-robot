@@ -335,6 +335,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       );
       if (files.length > 0) {
         await chrome.storage.local.remove(files);
+        chrome.runtime.sendMessage({ message: "clearImage" });
       }
       await chrome.storage.local.remove("query");
     }

@@ -177,6 +177,8 @@ multiBtn.addEventListener("click", async () => {
       }
     }
   }
+  query.value = "";
+  await queryEvents();
 });
 
 export const fakeFileBtn = document.getElementById("fake-file-upload");
