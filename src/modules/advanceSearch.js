@@ -45,12 +45,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   appendSvg(
     {
       image: "/assets/images/prompts/generate.svg",
-      description: "Deep Research",
+      description: "Deep Reasoning",
     },
     deepBtn
   );
   appendSvg(
-    { image: "/assets/images/buttons/canvas.svg", description: "Code Canvas" },
+    { image: "/assets/images/buttons/canvas.svg", description: "Canvas" },
     codeBtn
   );
 });
