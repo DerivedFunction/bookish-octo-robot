@@ -13,13 +13,42 @@
   </head>
   <body>
     <div id="header">
-      <button id="options-button" class="bg-text"></button>
+      <button id="options-button" class="bg-text transparent-item"></button>
+      <button id="scripts-button" class="bg-text transparent-item"></button>
       <div class="extra-info">
         <h2 class="bg-text"><span id="time"></span></h2>
         <h2 class="bg-text"><span id="weather"></span></h2>
       </div>
     </div>
-    <div id="sidebar">
+    <div id="scripts-sidebar" class="sidebar">
+      <h1>Experimental Features</h1>
+      <p>
+        Permissions are required to use experimental content scripts to enhance
+        functionality. This feature is experimental and is not required for
+        basic functionality.
+      </p>
+      <div class="section">
+        <span>Requires Permissions to Use</span>
+        <div id="required-scripts-ai" class="horizontal-container"></div>
+      </div>
+      <div class="section">
+        <span>Image Support</span>
+        <div id="ai-image-support" class="horizontal-container"></div>
+      </div>
+      <div class="section">
+        <span>External Query Support</span>
+        <div id="ai-experimental-support" class="horizontal-container"></div>
+      </div>
+      <div class="section">
+        <span>Currently Enabled</span>
+        <div id="ai-experimental-enabled" class="horizontal-container"></div>
+      </div>
+      <div class="section horizontal-container">
+        <button id="enable-all-scripts">Enable All</button>
+        <button id="revoke-all-scripts">Revoke All</button>
+      </div>
+    </div>
+    <div id="sidebar" class="sidebar">
       <h1>Options</h1>
       <div class="section">
         <div class="horizontal-container">
@@ -166,7 +195,7 @@
       </div>
       <div class="section">
         <span>Search Everywhere:</span>
-        <div id="search-everywhere-list"></div>
+        <div id="search-everywhere-list" class="horizontal-container"></div>
       </div>
       <div class="horizontal-container section">
         <button id="reset" class="clear">Reset to Defaults</button>
@@ -195,22 +224,6 @@
               <div class="right-buttons">
                 <div class="search-engine-container">
                   <div class="horizontal-container">
-                    <label
-                      data-tooltip="Upload File (Permissions Enabled Only)"
-                      class="button-format"
-                      for="file-upload"
-                      id="file-upload-btn"
-                      multiple
-                    >
-                    </label>
-                    <input
-                      id="file-upload"
-                      type="file"
-                      accept=""
-                      hidden="true"
-                      accept="image/*"
-                      multiple="multiple"
-                    />
                     <button
                       id="currentEngine"
                       data-tooltip="Your current AI"
@@ -219,16 +232,40 @@
                       id="search-engine-picker"
                       data-tooltip="Pick other AI Chatbots"
                     ></button>
-                    <button id="remove-script"></button>
-                    <label
-                      data-tooltip="Add file's text to
+                    <button id="ellipse"></button>
+                    <div class="right-buttons" id="extra-stuff">
+                      <label
+                        data-tooltip="Add file's text to
                       query"
-                      class="button-format"
-                      for="fake-file"
-                      id="fake-file-upload"
-                    >
-                    </label>
-                    <input id="fake-file" type="file" accept="" hidden="true" />
+                        class="button-format"
+                        for="fake-file"
+                        id="fake-file-upload"
+                      >
+                      </label>
+                      <input
+                        id="fake-file"
+                        type="file"
+                        accept=""
+                        hidden="true"
+                      />
+                      <label
+                        data-tooltip="Upload File (Permissions Enabled Only)"
+                        class="button-format"
+                        for="file-upload"
+                        id="file-upload-btn"
+                        multiple
+                      >
+                      </label>
+                      <input
+                        id="file-upload"
+                        type="file"
+                        accept=""
+                        hidden="true"
+                        accept="image/*"
+                        multiple="multiple"
+                      />
+                      <button id="remove-script"></button>
+                    </div>
                   </div>
                   <ul id="search-engine-dropdown" class="dropdown-content"></ul>
                 </div>
