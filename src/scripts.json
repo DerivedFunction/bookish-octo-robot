@@ -35,6 +35,10 @@
     "HuggingFace": {
       "matches": ["*://huggingface.co/chat/*"],
       "js": ["/scripts/hug.js"]
+    },
+    "Meta": {
+      "matches": ["*://*.meta.ai/*"],
+      "js": ["/scripts/meta.js"]
     }
   },
   "permissionsConfig": {
@@ -73,6 +77,10 @@
     "HuggingFace": {
       "permissions": ["scripting"],
       "origins": ["*://*.huggingface.co/chat/*"]
+    },
+    "Meta": {
+      "permissions": ["scripting"],
+      "origins": ["*://*.meta.ai/*"]
     }
   },
   "full": {
@@ -87,7 +95,8 @@
         "*://*.claude.ai/*",
         "*://*.perplexity.ai/*",
         "*://chat.mistral.ai/*",
-        "*://*.huggingface.co/chat/*"
+        "*://*.huggingface.co/chat/*",
+        "*://*.meta.ai/*"
       ]
     }
   }

@@ -64,7 +64,9 @@
       "name": "Meta",
       "url": "https://www.meta.ai/?q=",
       "image": "/assets/images/ai/meta.svg",
-      "limit": 15000
+      "limit": 15000,
+      "experimental": true,
+      "fileImage": true
     },
     {
       "name": "HuggingFace",
