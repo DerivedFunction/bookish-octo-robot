@@ -87,7 +87,7 @@ async function clickButton(attribute) {
     } else {
       console.log(`Button not found: ${attribute}`);
     }
-  }, 1000);
+  }, 3000);
   return;
 }
 function update() {
