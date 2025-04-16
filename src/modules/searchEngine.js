@@ -73,7 +73,7 @@ export async function addSearchEngines() {
     container.style.gap = "8px";
 
     // Add inline SVG
-    appendSvg(engine, container, "4px", false);
+    appendSvg(engine, container, "4px", false, true);
 
     // Add text
     const text = document.createElement("span");
@@ -156,7 +156,10 @@ export async function getSearchEngine() {
           ? `Search with ${selectedEngine.name}`
           : "Set an AI Chatbot",
       },
-      curSearchBtn
+      curSearchBtn,
+      null,
+      true,
+      true
     );
     gemSection.style.display = "none";
     if (selectedEngine) {
@@ -213,69 +216,76 @@ export async function getPermissions(engine) {
   }
   await getPermissionStatus();
 }
-async function getPermissionStatus() {
+export async function getPermissionStatus(name = null) {
   hasPermissions = await chrome.permissions.contains(PERMISSIONS);
   await getSearchEngine();
-  let name = getSearchEngineName();
+  let engineName = name ? name : getSearchEngineName();
+  let currentHasScripts = false;
   try {
+    console.log(engineName);
     const scripts = await chrome.scripting.getRegisteredContentScripts();
-    hasScripts = name
-      ? scripts.some((script) => script.id === name)
+    currentHasScripts = engineName
+      ? scripts.some((script) => script.id === engineName)
       : scripts.length > 0;
+    if (selectedEngine?.name === engineName) hasScripts = currentHasScripts;
   } catch {
+    currentHasScripts = false;
     // Since we don't have scripting permissions
-    hasScripts = false;
+    if (selectedEngine?.name === engineName) hasScripts = false;
   }
   console.log(
-    `${name} permission status: ${hasPermissions}, script: ${hasScripts}`
+    `${engineName} permission status: ${hasPermissions}, script: ${currentHasScripts}`
   );
-  let img = `assets/images/buttons/${
-    hasScripts ? "unlocked.svg" : "locked.svg"
-  }`;
-  appendSvg(
-    {
-      image: img,
-    },
-    gemSection
-  );
-  let img2 = `assets/images/buttons/${
-    selectedEngine?.fileImage && hasScripts
-      ? "paperclip.svg"
-      : "nopaperclip.svg"
-  }`;
-  appendSvg(
-    {
-      image: img2,
-    },
-    fileUploadBtn
-  );
-  // Add animation class based on state
-  if (hasScripts) {
-    gemSection.classList.add("unlocked");
-    gemSection.classList.remove("locked");
-  } else {
-    gemSection.classList.add("locked");
-    gemSection.classList.remove("unlocked");
+  if (!name) {
+    let img = `assets/images/buttons/${
+      hasScripts ? "unlocked.svg" : "locked.svg"
+    }`;
+    appendSvg(
+      {
+        image: img,
+      },
+      gemSection
+    );
+    let img2 = `assets/images/buttons/${
+      selectedEngine?.fileImage && hasScripts
+        ? "paperclip.svg"
+        : "nopaperclip.svg"
+    }`;
+    appendSvg(
+      {
+        image: img2,
+      },
+      fileUploadBtn
+    );
+    // Add animation class based on state
+    if (hasScripts) {
+      gemSection.classList.add("unlocked");
+      gemSection.classList.remove("locked");
+    } else {
+      gemSection.classList.add("locked");
+      gemSection.classList.remove("unlocked");
+    }
+    if (hasScripts && selectedEngine?.fileImage) {
+      fileUploadBtn.classList.add("unlocked");
+      fileUploadBtn.classList.remove("locked");
+    } else {
+      fileUploadBtn.classList.add("locked");
+      fileUploadBtn.classList.remove("unlocked");
+    }
+    chrome.runtime.sendMessage({
+      message: "Experimental",
+      engine: selectedEngine,
+      status: hasPermissions && hasScripts,
+    });
+    chrome.storage.local.set({ Experimental: hasPermissions && hasScripts });
+    await queryEvents();
+    return hasPermissions;
   }
-  if (hasScripts && selectedEngine?.fileImage) {
-    fileUploadBtn.classList.add("unlocked");
-    fileUploadBtn.classList.remove("locked");
-  } else {
-    fileUploadBtn.classList.add("locked");
-    fileUploadBtn.classList.remove("unlocked");
-  }
-  chrome.runtime.sendMessage({
-    message: "Experimental",
-    engine: selectedEngine,
-    status: hasPermissions && hasScripts,
-  });
-  chrome.storage.local.set({ Experimental: hasPermissions && hasScripts });
-  await queryEvents();
-  return hasPermissions;
+  return currentHasScripts;
 }
 
-async function removePermissions(all = false) {
-  const name = getSearchEngineName();
+export async function removePermissions(all = false, engine = null) {
+  const name = engine ? engine : getSearchEngineName();
   // Remove the scripts
   try {
     const scripts = await chrome.scripting.getRegisteredContentScripts();
@@ -310,7 +320,7 @@ async function removePermissions(all = false) {
   } catch (error) {
     console.error("Error in removePermissions:", error);
   }
-  await getPermissionStatus();
+  await getPermissionStatus(engine);
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -333,8 +343,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error("Error adding search engines:", error);
     }
     await getPermissionStatus();
-    const path = window.location.href.split("/").pop();
-    if (path === "sidebar.html") {
+    const path = window.location.href;
+    console.log(path);
+    if (path.includes("sidebar")) {
       console.log("Sidebar opened, listening for queries");
       try {
         await goToLink();

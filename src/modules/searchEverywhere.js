@@ -1,58 +1,60 @@
 import { getSearchEngineList } from "./searchEngine.js";
+import { appendSvg } from "./appendSvg.js"; // <- Import from appendSvg.js
 
 const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
 const searchEverywhereList = document.getElementById("search-everywhere-list");
 
-// Function to get selected search engines from local storage
 export function getSearchEverywhere() {
   const storedEngines = localStorage.getItem(SEARCH_ENGINE_STORAGE_KEY);
   return storedEngines ? JSON.parse(storedEngines) : {};
 }
 
-// Function to save selected search engines to local storage
 function saveSearchEverywhere(engines) {
   localStorage.setItem(SEARCH_ENGINE_STORAGE_KEY, JSON.stringify(engines));
 }
 
+function createToggleButton(engine, isActive, onClick) {
+  const button = document.createElement("button");
+  button.className = isActive ? "active-engine-btn" : "inactive-engine-btn";
+
+  appendSvg(
+    {
+      image: engine.image || `/assets/images/ai/${engine.name}.svg`,
+      description: engine.name,
+    },
+    button,
+    null,
+    true,
+    true
+  );
+
+  button.addEventListener("click", () => onClick(button));
+  return button;
+}
+
 async function appendList() {
   const searchEngines = await getSearchEngineList();
-  const storedSelectedEngines = getSearchEverywhere(); // Get initial state from storage
+  const selectedEngines = getSearchEverywhere();
 
   const fragment = document.createDocumentFragment();
 
   searchEngines.forEach((engine) => {
-    // Create a new checkbox element
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.id = engine.name; // Use the engine name as the ID
-    checkbox.value = engine.name; // Store the engine name as the value
-    checkbox.checked = storedSelectedEngines.hasOwnProperty(engine.name)
-      ? storedSelectedEngines[engine.name]
-      : false;
+    const isActive = selectedEngines[engine.name] ?? false;
 
-    // Create a label for the checkbox
-    const label = document.createElement("label");
-    label.htmlFor = checkbox.id;
-    label.textContent = engine.name;
+    const button = createToggleButton(engine, isActive, (btn) => {
+      const currentState = btn.classList.contains("active-engine-btn");
+      const updatedState = !currentState;
 
-    const br = document.createElement("br");
+      btn.classList.toggle("active-engine-btn", updatedState);
+      btn.classList.toggle("inactive-engine-btn", !updatedState);
 
-    fragment.appendChild(checkbox);
-    fragment.appendChild(label);
-    fragment.appendChild(br);
-
-    // Add event listener to handle checkbox changes
-    checkbox.addEventListener("change", (event) => {
-      const engineName = event.target.value;
-      const isChecked = event.target.checked;
-      const selectedEngines = getSearchEverywhere();
-
-      selectedEngines[engineName] = isChecked;
+      selectedEngines[engine.name] = updatedState;
       saveSearchEverywhere(selectedEngines);
     });
+
+    fragment.appendChild(button);
   });
 
-  // Append the new fragment to the list
   searchEverywhereList.replaceChildren(fragment);
 }
 

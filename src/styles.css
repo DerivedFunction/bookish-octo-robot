@@ -110,16 +110,13 @@ button:hover,
   background: var(--hover-bg);
   border-color: var(--border-hover);
 }
-#options-button {
+.transparent-item {
   background: transparent;
   border: none;
-  transition: transform 1.5s ease-in-out;
 }
-#options-button:hover {
+.transparent-item:hover {
   background: var(--hover-bg);
-  transform: rotate(360deg);
 }
-
 .clear:hover {
   background: var(--danger-color);
   border-color: transparent;
@@ -258,6 +255,7 @@ h2 {
   width: 100%;
   display: flex;
   justify-content: flex-start; /* Align buttons to the right */
+  gap: 5px;
 }
 
 .search-engine-container {
@@ -308,7 +306,7 @@ li:hover {
   flex-direction: row;
 }
 
-#sidebar {
+.sidebar {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
   background-color: var(--background);
   border: 1px solid var(--border-color);
@@ -508,4 +506,12 @@ fieldset {
   padding: 0;
   margin: 0;
   gap: 5px;
+}
+
+button.active-engine-btn {
+  border-color: var(--accent-color); /* Active state border color */
+}
+
+button.inactive-engine-btn {
+  border-color: var(--border-color); /* Inactive state border color */
 }
