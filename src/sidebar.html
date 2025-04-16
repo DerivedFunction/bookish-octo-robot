@@ -183,6 +183,7 @@
         </h1>
         <div id="chatbox">
           <div class="search-container">
+            <ul id="files-list"></ul>
             <textarea
               type="text"
               id="search"
@@ -194,6 +195,22 @@
               <div class="right-buttons">
                 <div class="search-engine-container">
                   <div class="horizontal-container">
+                    <label
+                      data-tooltip="Upload File (Permissions Enabled Only)"
+                      class="button-format"
+                      for="file-upload"
+                      id="file-upload-btn"
+                      multiple
+                    >
+                    </label>
+                    <input
+                      id="file-upload"
+                      type="file"
+                      accept=""
+                      hidden="true"
+                      accept="image/*"
+                      multiple="multiple"
+                    />
                     <button
                       id="currentEngine"
                       data-tooltip="Your current AI"
