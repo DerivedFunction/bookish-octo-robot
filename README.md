@@ -1,6 +1,6 @@
 # Tabbed: AI chatbot in New Tab and Sidebar
 
-A new tab page with an AI-like user interface.
+A new tab page with an AI-like user interface. Note: You may have to sign in to the respective AI chatbot for it to work. **Gemini** and **DeepSeek** require special permissions to work. Click on the "beaker" icon to enable Gemini and DeepSeek. All other AI chatbots have the "beaker" icon to enhance functionality but is not requried for it to work.
 ![Promo](./samples/Promo.png)
 ## Youtube Video
 [![Sample 1](./samples/Sample_1.png)](https://www.youtube.com/watch?v=PDgovF1dNBg)
@@ -42,7 +42,8 @@ A new tab page with an AI-like user interface.
 ### Basic
 
 - Clean UI adapted from ChatGPT and Grok
-- Ability to switch between different AI chatbots/websites
+- Ability to switch between different AI chatbots/websites.
+- Powerful **Search Everywhere** allows the same query to simultaneously run on multiple AI chatbots
 - Paste text into the prompt
 - Eight default suggestion ideas to save time on commands.
   ![Sample 3](./samples/Sample_3.png)
