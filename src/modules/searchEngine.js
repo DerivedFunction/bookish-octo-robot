@@ -298,7 +298,8 @@ async function removePermissions(all = false) {
       console.log("Removed permissions:", PERMISSIONS);
     }
   } catch (error) {
-    console.error("Error in removePermissions:", error);
+    // most likely scripting is undefined
+    console.log("Error in removePermissions:", error);
   }
   // We clicked reset button
   try {
