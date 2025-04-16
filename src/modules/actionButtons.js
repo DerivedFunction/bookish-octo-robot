@@ -193,18 +193,34 @@ fileUploadInput.addEventListener("change", () => {
   }
 });
 
+export const ellipse = document.getElementById("ellipse");
+export const extras = document.getElementById("extra-stuff");
+ellipse.addEventListener("click", () => {
+  if (
+    extras.style.display === "none" ||
+    getComputedStyle(extras).display === "none"
+  ) {
+    extras.style.display = ""; // or whatever display value you want
+  } else {
+    extras.style.display = "none";
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   appendSvg({ image: "assets/images/buttons/go.svg" }, goBtn);
   appendSvg({ image: "assets/images/buttons/clear.svg" }, clearBtn);
   appendSvg({ image: "assets/images/buttons/paste.svg" }, pasteBtn);
   appendSvg({ image: "assets/images/buttons/file.svg" }, fakeFileBtn);
   appendSvg({ image: "assets/images/buttons/multi.svg" }, multiBtn);
-  [clearBtn, pasteBtn, goBtn, fakeFileBtn].forEach((btn) => {
+  appendSvg({ image: "assets/images/buttons/ellipse.svg" }, ellipse);
+  extras.style.display = "none";
+  [(clearBtn, pasteBtn, goBtn, fakeFileBtn)].forEach((btn) => {
     setupTooltip(btn, () => query.value.length === 0);
   });
   setupTooltip(multiBtn, () => query.value.length > 0);
   multiBtn.style.display = "none";
   document.getElementById("reset").addEventListener("click", async () => {
     await chrome.permissions.remove({ permissions: ["clipboardRead"] });
+    extras.style.display = "none";
   });
 });
