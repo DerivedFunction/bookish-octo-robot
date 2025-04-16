@@ -63,4 +63,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     await appendList();
   });
 });
-chrome.runtime.onMessage.addListener();

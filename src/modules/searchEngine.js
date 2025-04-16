@@ -239,7 +239,9 @@ async function getPermissionStatus() {
     gemSection
   );
   let img2 = `assets/images/buttons/${
-    selectedEngine.fileImage && hasScripts ? "paperclip.svg" : "nopaperclip.svg"
+    selectedEngine?.fileImage && hasScripts
+      ? "paperclip.svg"
+      : "nopaperclip.svg"
   }`;
   appendSvg(
     {
@@ -255,7 +257,7 @@ async function getPermissionStatus() {
     gemSection.classList.add("locked");
     gemSection.classList.remove("unlocked");
   }
-  if (hasScripts && selectedEngine.fileImage) {
+  if (hasScripts && selectedEngine?.fileImage) {
     fileUploadBtn.classList.add("unlocked");
     fileUploadBtn.classList.remove("locked");
   } else {

@@ -265,9 +265,9 @@ async function switchEngine(name) {
 // Message listener for dynamic updates
 chrome.runtime.onMessage.addListener(async (e) => {
   if (e.message === "selectedSearchEngine") {
-    console.log("AI chatbot changed", e.engine.name);
+    console.log("AI chatbot changed", e.engine?.name);
     const { Experimental } = await chrome.storage.local.get("Experimental");
-    if (!Experimental && needPerm.some((eg) => eg === e.engine.name)) {
+    if (!Experimental && needPerm.some((eg) => eg === e.engine?.name)) {
       await loadMenu(); // Rebuild menu if permissions are lacking
     } else {
       updateMenu(e.engine);
@@ -276,7 +276,7 @@ chrome.runtime.onMessage.addListener(async (e) => {
     console.log("Removing context menus");
     await deleteMenu();
   } else if (e.message === "Experimental") {
-    console.log("Scripting Permissions changed for ", e.engine.name);
+    console.log("Scripting Permissions changed for ", e.engine?.name);
     await loadMenu(); // Rebuild menu on permission change
   }
 });
@@ -298,19 +298,6 @@ chrome.action.onClicked.addListener(async () => {
 // background.js
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.buttonClicked) {
-    const engines = [
-      "ChatGPT",
-      "Copilot",
-      "Gemini",
-      "Grok",
-      "DeepSeek",
-      "Claude",
-      "Perplexity",
-      "Mistral",
-      "Meta",
-      "HuggingFace",
-      "Google (AI mode)",
-    ];
     // Retrieve stored engine states
     const keys = await chrome.storage.local.get();
 
@@ -318,9 +305,10 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     let noneEnabled = true;
 
     // Iterate through the list of engines
-    for (const engine of engines) {
+    for (const ai of aiList) {
+      const aiName = ai.name;
       // Check if the key exists in the stored keys and if its value is true
-      if (keys.hasOwnProperty(engine) && keys[engine] === true) {
+      if (keys.hasOwnProperty(aiName) && keys[aiName] === true) {
         // If at least one engine is enabled, set noneEnabled to false and break the loop
         noneEnabled = false;
         break;
