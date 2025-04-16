@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const button = document.createElement("button");
     appendSvg(
       {
-        image: `/assets/images/ai/${aiName}.svg`,
+        image: `/assets/images/ai/${aiName.toLowerCase()}.svg`,
         description: `Enable Permissions for ${aiName}`,
       },
       button,
