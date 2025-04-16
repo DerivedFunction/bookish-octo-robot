@@ -22,6 +22,26 @@ async function getTotalStoredSize() {
   }
   return totalSize;
 }
+async function getUniqueFilename(baseName) {
+  const sanitizedBase = baseName.replace(/\s+/g, "");
+
+  // Separate filename and extension
+  const dotIndex = sanitizedBase.lastIndexOf(".");
+  const namePart =
+    dotIndex !== -1 ? sanitizedBase.slice(0, dotIndex) : sanitizedBase;
+  const extPart = dotIndex !== -1 ? sanitizedBase.slice(dotIndex) : "";
+
+  const allItems = await chrome.storage.local.get(null);
+  let uniqueName = `${namePart}${extPart}`;
+  let counter = 1;
+
+  while (`${STORAGE_KEY_PREFIX}${uniqueName}` in allItems) {
+    uniqueName = `${namePart}(${counter})${extPart}`;
+    counter++;
+  }
+
+  return uniqueName;
+}
 
 async function storeFile(filename, file) {
   const totalSize = await getTotalStoredSize();
@@ -33,8 +53,9 @@ async function storeFile(filename, file) {
   const reader = new FileReader();
   return new Promise((resolve) => {
     reader.onload = async () => {
+      const uniqueFilename = await getUniqueFilename(filename);
       await chrome.storage.local.set({
-        [`${STORAGE_KEY_PREFIX}${filename.replace(" ", "")}`]: {
+        [`${STORAGE_KEY_PREFIX}${uniqueFilename}`]: {
           data: reader.result,
           type: file.type,
           size: file.size,
