@@ -9,7 +9,7 @@ import {
 import { hasScripts } from "./searchEngine.js";
 export const query = document.getElementById("search");
 export function getLimit() {
-  return hasScripts ? selectedEngine.limit : MAX_LIMIT;
+  return hasScripts ? selectedEngine?.limit || 0 : MAX_LIMIT;
 }
 query.addEventListener("input", async () => {
   // Set the height to match the content (scrollHeight)
