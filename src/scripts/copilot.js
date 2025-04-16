@@ -78,29 +78,17 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
 }
 
 async function clickButton(attribute) {
-  let attempts = 0;
-  const maxRetries = 10;
-  const intervalMs = 3000; // 3 seconds
-
-  while (attempts < maxRetries && !stop) {
+  setTimeout(() => {
     const button = document.querySelector(attribute);
-    if (button && !button.disabled) {
+    if (button) {
       button.click();
       console.log(`Clicked button: ${attribute}`);
       update();
-      return; // Exit after successful click
+    } else {
+      console.log(`Button not found: ${attribute}`);
     }
-
-    // Wait 3 seconds before the next attempt
-    await new Promise((resolve) => setTimeout(resolve, intervalMs));
-    attempts++;
-    console.log(`Attempt ${attempts} of ${maxRetries} failed, retrying...`);
-  }
-
-  console.log(
-    `Max retries (${maxRetries}) reached or stopped for button: ${attribute}`
-  );
-  update();
+  }, 1000);
+  return;
 }
 function update() {
   // Send a message after the button click
@@ -125,7 +113,6 @@ async function getImage() {
   const data = await chrome.storage.local.get();
 
   for (const key in data) {
-    console.log(key);
     if (key.startsWith(STORAGE_KEY_PREFIX)) {
       try {
         const filename = key.replace(STORAGE_KEY_PREFIX, "");
