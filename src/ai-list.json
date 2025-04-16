@@ -5,14 +5,16 @@
       "url": "https://chatgpt.com/?q=",
       "image": "/assets/images/ai/chatgpt.svg",
       "experimental": true,
-      "limit": 39720
+      "limit": 39720,
+      "fileImage": true
     },
     {
       "name": "Copilot",
       "url": "https://copilot.microsoft.com/?q=",
       "image": "/assets/images/ai/copilot.svg",
       "experimental": true,
-      "limit": 10240
+      "limit": 10240,
+      "fileImage": true
     },
     {
       "name": "Gemini",
@@ -26,7 +28,8 @@
       "url": "https://grok.com/?q=",
       "image": "/assets/images/ai/grok.svg",
       "experimental": true,
-      "limit": 100000
+      "limit": 100000,
+      "fileImage": true
     },
     {
       "name": "DeepSeek",
@@ -40,7 +43,8 @@
       "url": "https://claude.ai/new?q=",
       "image": "/assets/images/ai/claude.svg",
       "experimental": true,
-      "limit": 50000
+      "limit": 50000,
+      "fileImage": true
     },
     {
       "name": "Perplexity",

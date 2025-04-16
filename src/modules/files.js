@@ -34,7 +34,7 @@ async function storeFile(filename, file) {
   return new Promise((resolve) => {
     reader.onload = async () => {
       await chrome.storage.local.set({
-        [`${STORAGE_KEY_PREFIX}${filename}`]: {
+        [`${STORAGE_KEY_PREFIX}${filename.replace(" ", "")}`]: {
           data: reader.result,
           type: file.type,
           size: file.size,

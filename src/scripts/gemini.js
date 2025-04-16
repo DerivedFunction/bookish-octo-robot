@@ -33,7 +33,7 @@ async function getTextInput(
     "Gemini",
   ]);
   const searchQuery = (queryEngines && Gemini ? queryEngines : query)?.trim();
-
+  await chrome.storage.local.remove("Gemini");
   if (!searchQuery) return;
 
   let attempts = 0;
@@ -76,31 +76,36 @@ async function getTextInput(
     console.error(
       `Failed to find element ${attribute} after ${maxRetries} attempts.`
     );
+    update();
   }
 }
 
 async function clickButton(attribute) {
-  setTimeout(() => {
+  let attempts = 0;
+  const maxRetries = 10;
+  const intervalMs = 3000; // 3 seconds
+
+  while (attempts < maxRetries && !stop) {
     const button = document.querySelector(attribute);
-    if (button) {
-      chrome.storage.local.remove("query");
-      chrome.storage.local.remove("Gemini");
+    if (button && !button.disabled) {
       button.click();
       console.log(`Clicked button: ${attribute}`);
-      // Send a message after the button click
-      chrome.runtime.sendMessage(
-        { buttonClicked: true, engine: "Gemini" },
-        function (response) {
-          if (chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError);
-          } else {
-            console.log("Button clicked message sent, response:", response);
-          }
-        }
-      );
-    } else {
-      console.log(`Button not found: ${attribute}`);
+      update();
+      return; // Exit after successful click
     }
-  }, 1000);
-  return;
+
+    // Wait 3 seconds before the next attempt
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    attempts++;
+    console.log(`Attempt ${attempts} of ${maxRetries} failed, retrying...`);
+  }
+
+  console.log(
+    `Max retries (${maxRetries}) reached or stopped for button: ${attribute}`
+  );
+  update();
+}
+async function update() {
+  // Send a message after the button click
+  chrome.runtime.sendMessage({ buttonClicked: true, engine: "Gemini" });
 }

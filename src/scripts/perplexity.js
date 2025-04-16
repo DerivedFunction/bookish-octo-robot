@@ -22,14 +22,12 @@ async function runAfterFullLoad() {
 }
 
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  let { query, queryEngines, Perplexity } = await chrome.storage.local.get([
+  let { query, Perplexity } = await chrome.storage.local.get([
     "query",
-    "queryEngines",
     "Perplexity",
   ]);
-  const searchQuery = (
-    queryEngines && Perplexity ? queryEngines : query
-  )?.trim();
+  await chrome.storage.local.remove("Perplexity");
+  const searchQuery = (Perplexity ? query : "")?.trim();
 
   if (!searchQuery) return;
 
@@ -77,33 +75,39 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
     console.error(
       `Failed to find element ${attribute} after ${maxRetries} attempts.`
     );
+    update();
   }
 }
 
 async function clickButton(attribute) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const button = document.querySelector(attribute);
-      if (button) {
-        chrome.storage.local.remove("query");
-        chrome.storage.local.remove("Perplexity");
-        button.click();
-        console.log(`Clicked button: ${attribute}`);
-        // Send a message after the button click
-        chrome.runtime.sendMessage(
-          { buttonClicked: true, engine: "Perplexity" },
-          function (response) {
-            if (chrome.runtime.lastError) {
-              console.error(chrome.runtime.lastError);
-            } else {
-              console.log("Button clicked message sent, response:", response);
-            }
-          }
-        );
-      } else {
-        console.log(`Button not found: ${attribute}`);
-      }
-      resolve();
-    }, 1000);
+  let attempts = 0;
+  const maxRetries = 10;
+  const intervalMs = 3000; // 3 seconds
+
+  while (attempts < maxRetries && !stop) {
+    const button = document.querySelector(attribute);
+    if (button && !button.disabled) {
+      button.click();
+      console.log(`Clicked button: ${attribute}`);
+      update();
+      return; // Exit after successful click
+    }
+
+    // Wait 3 seconds before the next attempt
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    attempts++;
+    console.log(`Attempt ${attempts} of ${maxRetries} failed, retrying...`);
+  }
+
+  console.log(
+    `Max retries (${maxRetries}) reached or stopped for button: ${attribute}`
+  );
+  update();
+}
+function update() {
+  // Send a message after the button click
+  chrome.runtime.sendMessage({
+    buttonClicked: true,
+    engine: "Perplexity",
   });
 }

@@ -22,12 +22,9 @@ async function runAfterFullLoad() {
 }
 
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  let { query, queryEngines, Mistral } = await chrome.storage.local.get([
-    "query",
-    "queryEngines",
-    "Mistral",
-  ]);
-  const searchQuery = (queryEngines && Mistral ? queryEngines : query)?.trim();
+  let { query, Mistral } = await chrome.storage.local.get(["query", "Mistral"]);
+  await chrome.storage.local.remove("Mistral");
+  const searchQuery = (Mistral ? query : "")?.trim();
   if (!searchQuery) return;
   let attempts = 0;
   const attribute = "textarea";
@@ -73,33 +70,36 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
     console.error(
       `Failed to find element ${attribute} after ${maxRetries} attempts.`
     );
+    update();
   }
 }
 
 async function clickButton(attribute) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const button = document.querySelector(attribute);
-      if (button) {
-        chrome.storage.local.remove("query");
-        chrome.storage.local.remove("Mistral");
-        button.click();
-        console.log(`Clicked button: ${attribute}`);
-        // Send a message after the button click
-        chrome.runtime.sendMessage(
-          { buttonClicked: true, engine: "Mistral" },
-          function (response) {
-            if (chrome.runtime.lastError) {
-              console.error(chrome.runtime.lastError);
-            } else {
-              console.log("Button clicked message sent, response:", response);
-            }
-          }
-        );
-      } else {
-        console.log(`Button not found: ${attribute}`);
-      }
-      resolve();
-    }, 1000);
-  });
+  let attempts = 0;
+  const maxRetries = 10;
+  const intervalMs = 3000; // 3 seconds
+
+  while (attempts < maxRetries && !stop) {
+    const button = document.querySelector(attribute);
+    if (button && !button.disabled) {
+      button.click();
+      console.log(`Clicked button: ${attribute}`);
+      update();
+      return; // Exit after successful click
+    }
+
+    // Wait 3 seconds before the next attempt
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    attempts++;
+    console.log(`Attempt ${attempts} of ${maxRetries} failed, retrying...`);
+  }
+
+  console.log(
+    `Max retries (${maxRetries}) reached or stopped for button: ${attribute}`
+  );
+  update();
+}
+
+async function update() {
+  chrome.runtime.sendMessage({ buttonClicked: true, engine: "Mistral" });
 }

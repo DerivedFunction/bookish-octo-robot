@@ -296,30 +296,47 @@ chrome.action.onClicked.addListener(async () => {
 });
 
 // background.js
-
-const CACHE_NAME = "pasted-files";
-
-// Retrieve all files from the cache
-function getAllFilesFromCache() {
-  return caches.open(CACHE_NAME).then((cache) => {
-    return cache.keys().then((keys) => {
-      // Create an array of promises to fetch each file's content
-      const filePromises = keys.map(async (key) => {
-        const response = await cache.match(key);
-        const filename = decodeURIComponent(key.url.split("/").pop()); // Extract the filename
-        const blob = await response.blob();
-        return { filename, blob };
-      });
-      return Promise.all(filePromises); // Wait for all file fetches to complete
-    });
-  });
-}
-
-// Listen for messages to retrieve files
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-  if (request.getFiles) {
-    let theFiles = await getAllFilesFromCache();
+  if (request.buttonClicked) {
+    const engines = [
+      "ChatGPT",
+      "Copilot",
+      "Gemini",
+      "Grok",
+      "DeepSeek",
+      "Claude",
+      "Perplexity",
+      "Mistral",
+      "Meta",
+      "HuggingFace",
+      "Google (AI mode)",
+    ];
+    // Retrieve stored engine states
+    const keys = await chrome.storage.local.get();
 
-    await chrome.runtime.sendMessage({ message: "files", files: theFiles });
+    // Check if none of the engines are enabled (aka ChatGPT: false), or if no such key exist (aka not in storage)
+    let noneEnabled = true;
+
+    // Iterate through the list of engines
+    for (const engine of engines) {
+      // Check if the key exists in the stored keys and if its value is true
+      if (keys.hasOwnProperty(engine) && keys[engine] === true) {
+        // If at least one engine is enabled, set noneEnabled to false and break the loop
+        noneEnabled = false;
+        break;
+      }
+    }
+
+    if (noneEnabled) {
+      // Get all keys from storage
+      const allKeys = await chrome.storage.local.get(null); // null retrieves all key-value pairs
+      const files = Object.keys(allKeys).filter((key) =>
+        key.startsWith("pasted-file-")
+      );
+      if (files.length > 0) {
+        await chrome.storage.local.remove(files);
+      }
+      await chrome.storage.local.remove("query");
+    }
   }
 });

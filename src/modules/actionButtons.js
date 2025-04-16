@@ -75,6 +75,7 @@ goBtn.addEventListener("click", async () => {
       window.location.href = url;
       return;
     } else {
+      await chrome.storage.local.set({ [name]: true });
       // Run experimental content scripts
       await chrome.storage.local.set({ query: query.value });
       window.location.href = hostname;
@@ -126,8 +127,6 @@ multiBtn.addEventListener("click", async () => {
     console.log("Scripting is not enabled.");
   }
 
-  const queryEngines = queryText;
-
   for (const engine of searchEngines) {
     if (!searchEverywhere[engine.name]) continue;
     if (queryText.length > engine.limit) {
@@ -144,7 +143,7 @@ multiBtn.addEventListener("click", async () => {
 
   // Only store if there’s something to store
   if (permissions.length > 0) {
-    await chrome.storage.local.set({ queryEngines });
+    await chrome.storage.local.set({ query: queryText });
   }
 
   for (const engine of searchEngines) {
