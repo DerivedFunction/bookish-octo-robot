@@ -100,7 +100,7 @@ async function refreshCurrentEnabled(aiList) {
     }
   }
 }
-
+const advancedList = document.getElementById("ai-advanced-support");
 document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "assets/images/buttons/options.svg" }, optionBtn);
   appendSvg({ image: "assets/images/buttons/unlocked.svg" }, scriptsBtn);
@@ -140,6 +140,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (hasScripts) {
         addToCurrentEnabled(ai);
       }
+    }
+    if (ai.advanced) {
+      advancedList.appendChild(createPermissionButton(ai));
     }
   });
   const { scripts: permScripts } = await loadJsonData("scripts");

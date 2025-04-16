@@ -6,7 +6,8 @@
       "image": "/assets/images/ai/chatgpt.svg",
       "experimental": true,
       "limit": 39720,
-      "fileImage": true
+      "fileImage": true,
+      "advanced": true
     },
     {
       "name": "Copilot",
@@ -14,14 +15,16 @@
       "image": "/assets/images/ai/copilot.svg",
       "experimental": true,
       "limit": 10240,
-      "fileImage": true
+      "fileImage": true,
+      "advanced": true
     },
     {
       "name": "Gemini",
       "url": "https://gemini.google.com/app",
       "image": "/assets/images/ai/gemini.svg",
       "experimental": true,
-      "limit": 31022
+      "limit": 31022,
+      "advanced": true
     },
     {
       "name": "Grok",
@@ -29,14 +32,16 @@
       "image": "/assets/images/ai/grok.svg",
       "experimental": true,
       "limit": 100000,
-      "fileImage": true
+      "fileImage": true,
+      "advanced": true
     },
     {
       "name": "DeepSeek",
       "url": "https://chat.deepseek.com/",
       "image": "/assets/images/ai/deepseek.svg",
       "experimental": true,
-      "limit": 100000
+      "limit": 100000,
+      "advanced": true
     },
     {
       "name": "Claude",
@@ -66,14 +71,16 @@
       "image": "/assets/images/ai/meta.svg",
       "limit": 15000,
       "experimental": true,
-      "fileImage": true
+      "fileImage": true,
+      "advanced": true
     },
     {
       "name": "HuggingFace",
       "url": "https://huggingface.co/chat/?q=",
       "image": "/assets/images/ai/hug.svg",
       "experimental": true,
-      "limit": 15000
+      "limit": 15000,
+      "advanced": true
     },
     {
       "name": "Google (AI mode)",
