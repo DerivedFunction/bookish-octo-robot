@@ -74,5 +74,21 @@
       "permissions": ["scripting"],
       "origins": ["*://*.huggingface.co/chat/*"]
     }
+  },
+  "full": {
+    "permissionsConfig": {
+      "permissions": ["scripting"],
+      "origins": [
+        "*://gemini.google.com/*",
+        "*://chat.deepseek.com/*",
+        "*://*.chatgpt.com/*",
+        "*://*.grok.com/*",
+        "*://copilot.microsoft.com/*",
+        "*://*.claude.ai/*",
+        "*://*.perplexity.ai/*",
+        "*://chat.mistral.ai/*",
+        "*://*.huggingface.co/chat/*"
+      ]
+    }
   }
 }
