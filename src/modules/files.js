@@ -1,4 +1,6 @@
 import { appendSvg } from "./appendSvg.js";
+import { getSearchEngineList } from "./searchEngine.js";
+import { showToast } from "./toaster.js";
 import { setupTooltip } from "./tooltip.js";
 
 const fileUploadBtn = document.getElementById("file-upload-btn");
@@ -12,7 +14,7 @@ const MAX_TOTAL_SIZE = 4 * 1024 * 1024; // 4MB in bytes
 
 // Get total size of all stored files
 async function getTotalStoredSize() {
-  const data = await browser.storage.local.get();
+  const data = await chrome.storage.local.get();
   let totalSize = 0;
   for (const key in data) {
     if (key.startsWith(STORAGE_KEY_PREFIX)) {
@@ -22,11 +24,10 @@ async function getTotalStoredSize() {
   return totalSize;
 }
 
-// Store file in browser.storage.local
 async function storeFile(filename, file) {
   const totalSize = await getTotalStoredSize();
   if (totalSize + file.size > MAX_TOTAL_SIZE) {
-    alert("Cannot store file: Total size limit of 4MB exceeded.");
+    showToast("Cannot store file: Total size limit of 4MB exceeded.");
     return false;
   }
 
@@ -48,7 +49,7 @@ async function storeFile(filename, file) {
 
 // Delete file from storage and DOM
 async function deleteFile(filename, liElement) {
-  await browser.storage.local.remove(`${STORAGE_KEY_PREFIX}${filename}`);
+  await chrome.storage.local.remove(`${STORAGE_KEY_PREFIX}${filename}`);
   liElement.remove();
 }
 
@@ -57,7 +58,6 @@ function addFileToList(filename, blob) {
 
   // Create a container for the tooltip and visual element
   const container = document.createElement("div");
-  container.style.display = "inline-block";
   container.style.cursor = "pointer";
 
   if (blob.type.startsWith("image/")) {
@@ -67,11 +67,6 @@ function addFileToList(filename, blob) {
     img.style.objectFit = "contain";
     img.style.display = "block";
     container.appendChild(img);
-  } else {
-    // For non-image files, create a 20x20 square box
-    const placeholder = document.createElement("div");
-    appendSvg({ image: "/assets/images/buttons/file.svg" }, placeholder);
-    container.appendChild(placeholder);
   }
 
   // Tooltip shows the filename
@@ -120,7 +115,6 @@ document.addEventListener("paste", async (event) => {
 document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "/assets/images/buttons/paperclip.svg" }, fileUploadBtn);
   const data = await chrome.storage.local.get();
-
   for (const key in data) {
     if (key.startsWith(STORAGE_KEY_PREFIX)) {
       chrome.storage.local.remove(key);
