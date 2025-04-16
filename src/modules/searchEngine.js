@@ -238,7 +238,7 @@ export async function getPermissionStatus(name = null) {
   console.log(
     `${engineName} permission status: ${hasPermissions}, script: ${currentHasScripts}`
   );
-  if (!name || name === selectedEngine.name) {
+  if (!name || (selectedEngine && name === selectedEngine.name)) {
     let img = `assets/images/buttons/${
       hasScripts ? "unlocked.svg" : "locked.svg"
     }`;
