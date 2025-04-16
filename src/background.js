@@ -237,7 +237,9 @@ async function switchEngine(name) {
       engine: selected,
     });
   } catch {}
+  if (!selected) return;
   const iconUrl = chrome.runtime.getURL(selected.image);
+  if (!iconUrl) return;
   try {
     // Firefox works
     await chrome.action.setIcon({ path: iconUrl });
@@ -249,7 +251,7 @@ async function switchEngine(name) {
         r.blob()
       );
       const img = await createImageBitmap(imgblob);
-      const canvas = new OffscreenCanvas(19, 19); // Recommended base size for extension icons
+      const canvas = new OffscreenCanvas(32, 32); // Recommended base size for extension icons
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
