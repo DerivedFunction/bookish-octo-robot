@@ -24,7 +24,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   });
   try {
     // Synchronously set panel and open sidebar in Firefox
-    browser.sidebarAction.setPanel({ panel: "sidebar.html" });
+    browser.sidebarAction.setPanel({ panel: "index.html#sidebar" });
     browser.sidebarAction.open().catch((error) => {
       console.error("Failed to open sidebar:", error);
       createTab(query); // Fallback to creating a tab
