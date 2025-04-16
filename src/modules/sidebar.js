@@ -150,15 +150,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       const granted = await chrome.permissions.request(full.permissionsConfig);
       if (granted) {
         Object.entries(scripts).forEach(([name, config]) => {
-          chrome.scripting.registerContentScripts([
-            {
-              id: name,
-              matches: config.matches,
-              js: config.js,
-              runAt: "document_end",
-              allFrames: true,
-            },
-          ]);
+          try {
+            chrome.scripting.registerContentScripts([
+              {
+                id: name,
+                matches: config.matches,
+                js: config.js,
+                runAt: "document_end",
+                allFrames: true,
+              },
+            ]);
+          } catch (err) {
+            console.log("Script already exists", err);
+          }
         });
         refreshCurrentEnabled(aiList);
       }

@@ -187,17 +187,20 @@ const gemSection = document.getElementById("remove-script");
 setupTooltip(gemSection, () => true, "Toggle Permissions");
 let permissionsConfig = null;
 let scriptConfigs = null;
-console.log(permissionsConfig, scriptConfigs);
 async function registerScriptForEngine(name) {
   if (!scriptConfigs[name]) return;
-  await chrome.scripting.registerContentScripts([
-    {
-      id: name,
-      ...scriptConfigs[name],
-      runAt: "document_end",
-      allFrames: true,
-    },
-  ]);
+  try {
+    await chrome.scripting.registerContentScripts([
+      {
+        id: name,
+        ...scriptConfigs[name],
+        runAt: "document_end",
+        allFrames: true,
+      },
+    ]);
+  } catch (err) {
+    console.log("Scripts already enabled", err);
+  }
 }
 export async function getPermissions(engine) {
   const name = engine.name;
@@ -222,7 +225,6 @@ export async function getPermissionStatus(name = null) {
   let engineName = name ? name : getSearchEngineName();
   let currentHasScripts = false;
   try {
-    console.log(engineName);
     const scripts = await chrome.scripting.getRegisteredContentScripts();
     currentHasScripts = engineName
       ? scripts.some((script) => script.id === engineName)
@@ -344,7 +346,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     await getPermissionStatus();
     const path = window.location.href;
-    console.log(path);
     if (path.includes("sidebar")) {
       console.log("Sidebar opened, listening for queries");
       try {
