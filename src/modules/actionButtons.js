@@ -1,5 +1,5 @@
-import { readText, toggleButton } from "../app.js";
-import { query, queryEvents, MAX_LIMIT, getLimit } from "./query.js";
+import { toggleButton } from "../app.js";
+import { query, queryEvents, getLimit } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
 import {
   checkEnabled,
@@ -181,18 +181,6 @@ multiBtn.addEventListener("click", async () => {
   await queryEvents();
 });
 
-export const fakeFileBtn = document.getElementById("fake-file-upload");
-export const fileUploadInput = document.getElementById("fake-file");
-fileUploadInput.addEventListener("change", () => {
-  const file = fileUploadInput.files[0];
-  if (file) {
-    readText(file).then((text) => {
-      query.value += `${file.name}:\n${text}`;
-      query.focus();
-    });
-  }
-});
-
 export const ellipse = document.getElementById("ellipse");
 export const extras = document.getElementById("extra-stuff");
 ellipse.addEventListener("click", () => {
@@ -210,11 +198,10 @@ document.addEventListener("DOMContentLoaded", () => {
   appendSvg({ image: "assets/images/buttons/go.svg" }, goBtn);
   appendSvg({ image: "assets/images/buttons/clear.svg" }, clearBtn);
   appendSvg({ image: "assets/images/buttons/paste.svg" }, pasteBtn);
-  appendSvg({ image: "assets/images/buttons/file.svg" }, fakeFileBtn);
   appendSvg({ image: "assets/images/buttons/multi.svg" }, multiBtn);
   appendSvg({ image: "assets/images/buttons/ellipse.svg" }, ellipse);
   extras.style.display = "none";
-  [(clearBtn, pasteBtn, goBtn, fakeFileBtn)].forEach((btn) => {
+  [(clearBtn, pasteBtn, goBtn)].forEach((btn) => {
     setupTooltip(btn, () => query.value.length === 0);
   });
   setupTooltip(multiBtn, () => query.value.length > 0);

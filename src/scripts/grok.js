@@ -18,6 +18,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 async function runAfterFullLoad() {
   console.log("Running query injection.");
+  await getButtons();
   await getImage();
   await getTextInput();
 }
@@ -112,7 +113,6 @@ async function getImage() {
   const data = await chrome.storage.local.get();
 
   for (const key in data) {
-    console.log(key);
     if (key.startsWith(STORAGE_KEY_PREFIX)) {
       try {
         const filename = key.replace(STORAGE_KEY_PREFIX, "");
@@ -178,5 +178,14 @@ async function getImage() {
     fileUploadInput.dispatchEvent(event);
   } else {
     console.warn("No valid files to assign to input");
+  }
+}
+async function getButtons() {
+  let { deep, web } = await chrome.storage.local.get(["deep", "web"]);
+  if (web) {
+    document.querySelector("button[aria-label='DeepSearch']").click();
+  }
+  if (deep) {
+    document.querySelector("button[aria-label='Think']").click();
   }
 }

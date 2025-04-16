@@ -113,7 +113,6 @@ async function getImage() {
   const data = await chrome.storage.local.get();
 
   for (const key in data) {
-    console.log(key);
     if (key.startsWith(STORAGE_KEY_PREFIX)) {
       try {
         const filename = key.replace(STORAGE_KEY_PREFIX, "");

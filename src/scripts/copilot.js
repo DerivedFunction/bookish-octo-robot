@@ -18,6 +18,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 async function runAfterFullLoad() {
   console.log("Running query injection.");
+  await getButtons();
   await getImage();
   await getTextInput();
 }
@@ -178,5 +179,17 @@ async function getImage() {
     fileUploadInput.dispatchEvent(event);
   } else {
     console.warn("No valid files to assign to input");
+  }
+}
+
+async function getButtons() {
+  let { deep } = await chrome.storage.local.get("deep");
+  if (deep) {
+    document.querySelector("button[title='Open chat mode menu']").click();
+    setTimeout(() => {
+      document
+        .querySelector("button[title='composer.chatModes.reasoning.title']")
+        .click();
+    }, 1000);
   }
 }

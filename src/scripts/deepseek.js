@@ -18,6 +18,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 async function runAfterFullLoad() {
   console.log("Running query injection.");
+  await getButtons();
   await getTextInput();
 }
 
@@ -97,4 +98,13 @@ async function update() {
   await chrome.storage.local.remove("DeepSeek");
   // Send a message after the button click
   chrome.runtime.sendMessage({ buttonClicked: true, engine: "DeepSeek" });
+}
+async function getButtons() {
+  let { deep, web } = await chrome.storage.local.get(["deep", "web"]);
+  if (web) {
+    document.querySelectorAll("div.ds-button")[1].click();
+  }
+  if (deep) {
+    document.querySelectorAll("div.ds-button")[0].click();
+  }
 }

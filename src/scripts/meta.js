@@ -18,6 +18,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 async function runAfterFullLoad() {
   console.log("Running query injection.");
+  await getButtons();
   await getImage();
   await getTextInput("div[contenteditable='true']");
 }
@@ -194,5 +195,12 @@ async function getImage() {
     fileUploadInput.dispatchEvent(event);
   } else {
     console.warn("No valid files to assign to input");
+  }
+}
+
+async function getButtons() {
+  let { code } = await chrome.storage.local.get("code");
+  if (code) {
+    document.querySelector("div[aria-label='Canvas']").click();
   }
 }

@@ -13,6 +13,7 @@
   --shadow-hover: rgba(0, 0, 0, 0.1);
   --border-hover: #bbb;
   --accent-color: #000;
+  --active-color: #3b82f6;
   --warning-color: #ffa500;
   --danger-color: #ff4d4f;
 }
@@ -32,6 +33,7 @@
     --shadow-hover: rgba(0, 0, 0, 0.5);
     --border-hover: #666;
     --accent-color: #fff;
+    --active-color: #60a5fa;
     --warning-color: #ffa500;
     --danger-color: #ff4d4f;
   }
@@ -51,6 +53,7 @@
   --shadow-hover: rgba(0, 0, 0, 0.1);
   --border-hover: #bbb;
   --accent-color: #000;
+  --active-color: #3b82f6;
   --warning-color: #ffa500;
   --danger-color: #ff4d4f;
 }
@@ -69,6 +72,7 @@
   --shadow-hover: rgba(0, 0, 0, 0.5);
   --border-hover: #666;
   --accent-color: #fff;
+  --active-color: #60a5fa;
   --warning-color: #ffa500;
   --danger-color: #ff4d4f;
 }
@@ -509,9 +513,13 @@ fieldset {
 }
 
 button.active-engine-btn {
-  border-color: var(--accent-color); /* Active state border color */
+  border-color: var(--active-color); /* Active state border color */
 }
 
 button.inactive-engine-btn {
   border-color: var(--border-color); /* Inactive state border color */
+}
+.use {
+  border-color: var(--active-color);
+  color: var(--active-color);
 }

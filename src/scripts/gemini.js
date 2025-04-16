@@ -18,6 +18,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 async function runAfterFullLoad() {
   console.log("Running query injection.");
+  await getButtons();
   await getTextInput("textContent", ".ql-editor.textarea.new-input-ui");
 }
 
@@ -92,4 +93,14 @@ async function clickButton(attribute) {
 async function update() {
   // Send a message after the button click
   chrome.runtime.sendMessage({ buttonClicked: true, engine: "Gemini" });
+}
+
+async function getButtons() {
+  let { deep, code } = await chrome.storage.local.get(["deep", "code"]);
+  if (code) {
+    document.querySelectorAll("button.mat-ripple")[1].click();
+  }
+  if (deep) {
+    document.querySelectorAll("button.mat-ripple")[0].click();
+  }
 }

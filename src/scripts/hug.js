@@ -18,6 +18,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 async function runAfterFullLoad() {
   console.log("Running query injection.");
+  await getButtons();
   await getTextInput();
 }
 
@@ -93,4 +94,10 @@ async function clickButton(attribute) {
 async function update() {
   // Send a message after the button click
   chrome.runtime.sendMessage({ buttonClicked: true, engine: "Hug" });
+}
+async function getButtons() {
+  let { web } = await chrome.storage.local.get("web");
+  if (web) {
+    document.querySelector("button.base-tool").click();
+  }
 }

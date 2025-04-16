@@ -1,4 +1,5 @@
 import "./actionButtons.js";
+import "./advanceSearch.js";
 import "./appendSvg.js";
 import "./backgroundImage.js";
 import "./chatbox.js";
