@@ -294,3 +294,32 @@ chrome.action.onClicked.addListener(async () => {
     chrome.tabs.create({ url: url });
   }
 });
+
+// background.js
+
+const CACHE_NAME = "pasted-files";
+
+// Retrieve all files from the cache
+function getAllFilesFromCache() {
+  return caches.open(CACHE_NAME).then((cache) => {
+    return cache.keys().then((keys) => {
+      // Create an array of promises to fetch each file's content
+      const filePromises = keys.map(async (key) => {
+        const response = await cache.match(key);
+        const filename = decodeURIComponent(key.url.split("/").pop()); // Extract the filename
+        const blob = await response.blob();
+        return { filename, blob };
+      });
+      return Promise.all(filePromises); // Wait for all file fetches to complete
+    });
+  });
+}
+
+// Listen for messages to retrieve files
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+  if (request.getFiles) {
+    let theFiles = await getAllFilesFromCache();
+
+    await chrome.runtime.sendMessage({ message: "files", files: theFiles });
+  }
+});

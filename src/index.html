@@ -183,6 +183,7 @@
         </h1>
         <div id="chatbox">
           <div class="search-container">
+            <ul id="files-list"></ul>
             <textarea
               type="text"
               id="search"
@@ -212,6 +213,19 @@
                     >
                     </label>
                     <input id="fake-file" type="file" accept="" hidden="true" />
+                    <label
+                      data-tooltip="Upload File (Permissions Enabled Only)"
+                      class="button-format"
+                      for="file-upload"
+                      id="file-upload-btn"
+                    >
+                    </label>
+                    <input
+                      id="file-upload"
+                      type="file"
+                      accept=""
+                      hidden="true"
+                    />
                   </div>
                   <ul id="search-engine-dropdown" class="dropdown-content"></ul>
                 </div>

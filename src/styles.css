@@ -187,7 +187,6 @@ h2 {
   right: 0;
 }
 .search-container {
-  margin-top: 20px;
   position: relative;
   padding: 10px;
   box-sizing: border-box;
@@ -502,4 +501,11 @@ fieldset {
 
 #remove-script.locked {
   animation: lock 0.4s ease-out;
+}
+
+#files-list {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  gap: 5px;
 }
