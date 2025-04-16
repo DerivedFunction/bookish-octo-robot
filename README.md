@@ -5,6 +5,7 @@ A new tab page with an AI-like user interface. Note: You may have to sign in to 
 ## Youtube Video
 [![Sample 1](./samples/Sample_1.png)](https://www.youtube.com/watch?v=PDgovF1dNBg)
 
+Versions: 1.5.0 (Stable) 1.5.1+ (unstable)
 ## How to run from source
 
 ### Chrome
