@@ -2,7 +2,7 @@ import { appendSvg } from "./appendSvg.js";
 import { showToast } from "./toaster.js";
 import { setupTooltip } from "./tooltip.js";
 
-const fileUploadBtn = document.getElementById("file-upload-btn");
+export const fileUploadBtn = document.getElementById("file-upload-btn");
 setupTooltip(fileUploadBtn, () => true);
 
 const fileUploadInput = document.getElementById("file-upload");

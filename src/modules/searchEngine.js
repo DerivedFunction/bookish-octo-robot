@@ -4,6 +4,7 @@ import { setupTooltip } from "./tooltip.js";
 import { showToast } from "./toaster.js";
 import { needPerm } from "../app.js";
 import { query, queryEvents } from "./query.js";
+import { fileUploadBtn } from "./files.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
 
@@ -237,6 +238,15 @@ async function getPermissionStatus() {
     },
     gemSection
   );
+  let img2 = `assets/images/buttons/${
+    selectedEngine.fileImage && hasScripts ? "paperclip.svg" : "nopaperclip.svg"
+  }`;
+  appendSvg(
+    {
+      image: img2,
+    },
+    fileUploadBtn
+  );
   // Add animation class based on state
   if (hasScripts) {
     gemSection.classList.add("unlocked");
@@ -244,6 +254,13 @@ async function getPermissionStatus() {
   } else {
     gemSection.classList.add("locked");
     gemSection.classList.remove("unlocked");
+  }
+  if (hasScripts && selectedEngine.fileImage) {
+    fileUploadBtn.classList.add("unlocked");
+    fileUploadBtn.classList.remove("locked");
+  } else {
+    fileUploadBtn.classList.add("locked");
+    fileUploadBtn.classList.remove("unlocked");
   }
   chrome.runtime.sendMessage({
     message: "Experimental",
