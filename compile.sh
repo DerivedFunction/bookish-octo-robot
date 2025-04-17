@@ -14,6 +14,7 @@ mkdir -p "$DIST_DIR"
 cp -r "$SOURCE_DIR"/*.{json,css,html} "$SOURCE_DIR"/{assets,scripts} "$DIST_DIR"
 
 # Run the npm build script
+npm update
 npm run build
 
 cp -r dist/* firefox

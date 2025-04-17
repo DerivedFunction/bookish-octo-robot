@@ -1,6 +1,4 @@
 const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const glob = require("glob");
 module.exports = [
   {
     entry: "./src/app.js",
