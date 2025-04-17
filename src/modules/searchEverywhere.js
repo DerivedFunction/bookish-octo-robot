@@ -31,7 +31,7 @@ function createToggleButton(engine, isActive, onClick) {
   return button;
 }
 
-async function appendList() {
+export async function appendList() {
   const searchEngines = await getSearchEngineList();
   const selectedEngines = getSearchEverywhere();
 
