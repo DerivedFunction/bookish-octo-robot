@@ -1,4 +1,4 @@
-import { toggleButton } from "../app.js";
+import { toggleButton, resetBtn } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
 import { showToast } from "./toaster.js";
 const weather = document.getElementById("weather");
@@ -277,7 +277,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   await displayWeather();
 
-  document.getElementById("reset").addEventListener("click", async () => {
+  resetBtn.addEventListener("click", async () => {
     clearFields(true);
     appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn); // Default 20px
     await displayWeather();

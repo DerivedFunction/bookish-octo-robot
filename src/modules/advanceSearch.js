@@ -1,4 +1,4 @@
-import { toggleClass } from "../app.js";
+import { toggleClass, resetBtn } from "../app.js";
 import { ellipse } from "./actionButtons.js";
 import { appendSvg } from "./appendSvg.js";
 
@@ -69,4 +69,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     { image: "/assets/images/buttons/canvas.svg", description: "Canvas" },
     codeBtn
   );
+  resetBtn.addEventListener("click", async () => {
+    await chrome.storage.local.remove(["web", "code", "deep"]);
+    [ellipse, webBtn, codeBtn, deepBtn].forEach((btn) => {
+      toggleClass(btn, false, "use");
+    });
+  });
 });

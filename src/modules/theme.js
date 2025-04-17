@@ -1,3 +1,4 @@
+import { resetBtn } from "../app.js";
 export const userThemeForm = document.getElementById("user-theme");
 userThemeForm.addEventListener("change", async (e) => {
   localStorage.setItem("user-theme", e.target.value);
@@ -23,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
       storedTheme === "true" ? "light" : "dark"
     );
   }
-  document.getElementById("reset").addEventListener("click", async () => {
+  resetBtn.addEventListener("click", async () => {
     document.body.removeAttribute("data-theme");
     userThemeForm.querySelectorAll("input").forEach((option) => {
       option.checked = false;

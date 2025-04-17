@@ -12,7 +12,7 @@ import {
 } from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js";
 import { showToast } from "./toaster.js";
-import { needPerm, hostnameToURL } from "../app.js";
+import { needPerm, hostnameToURL, resetBtn } from "../app.js";
 import { getSearchEverywhere } from "./searchEverywhere.js";
 export const clearBtn = document.getElementById("clear");
 clearBtn.addEventListener("click", async () => {
@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   setupTooltip(multiBtn, () => query.value.length > 0);
   multiBtn.style.display = "none";
-  document.getElementById("reset").addEventListener("click", async () => {
+  resetBtn.addEventListener("click", async () => {
     await chrome.permissions.remove({ permissions: ["clipboardRead"] });
     extras.style.display = "none";
   });

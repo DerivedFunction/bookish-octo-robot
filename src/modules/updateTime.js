@@ -1,3 +1,4 @@
+import { resetBtn } from "../app.js";
 export const timeFormat = document.getElementById("time-format");
 timeFormat.addEventListener("change", (e) => {
   const format = e.target.value;
@@ -40,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     timeFormat.querySelector("input").checked = true;
   }
-  document.getElementById("reset").addEventListener("click", async () => {
+  resetBtn.addEventListener("click", async () => {
     timeFormat.querySelectorAll("input").forEach((option) => {
       option.checked = false;
     });

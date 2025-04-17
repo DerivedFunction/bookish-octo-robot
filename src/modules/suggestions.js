@@ -1,4 +1,4 @@
-import { loadJsonData, toggleButton } from "../app.js";
+import { loadJsonData, toggleButton, resetBtn } from "../app.js";
 import { goBtn, clearBtn } from "./actionButtons.js";
 import { appendSvg } from "./appendSvg.js";
 import { query, getCharCount } from "./query.js";
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
   await getSuggestionButtons();
-  document.getElementById("reset").addEventListener("click", async () => {
+  resetBtn.addEventListener("click", async () => {
     localStorage.removeItem("show-suggestions");
     suggestDisplay.querySelectorAll("input").forEach((option) => {
       option.checked = false;

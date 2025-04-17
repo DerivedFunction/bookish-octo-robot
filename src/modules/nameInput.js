@@ -1,4 +1,4 @@
-import { toggleButton } from "../app.js";
+import { toggleButton, resetBtn } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
 import { getGreeting } from "./greetings.js";
 
@@ -27,7 +27,7 @@ nameInput.addEventListener("input", () => {
 });
 document.addEventListener("DOMContentLoaded", () => {
   appendSvg({ image: "assets/images/buttons/save.svg" }, nameBtn);
-  document.getElementById("reset").addEventListener("click", async () => {
+  resetBtn.addEventListener("click", async () => {
     nameInput.value = "";
     appendSvg({ image: "/assets/images/buttons/save.svg" }, nameBtn);
     toggleButton(nameBtn, false);

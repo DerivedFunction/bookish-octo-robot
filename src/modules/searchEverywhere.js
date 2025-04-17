@@ -1,6 +1,6 @@
 import { getSearchEngineList } from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js"; // <- Import from appendSvg.js
-
+import { resetBtn } from "../app.js";
 const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
 const searchEverywhereList = document.getElementById("search-everywhere-list");
 
@@ -60,7 +60,7 @@ async function appendList() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   await appendList();
-  document.getElementById("reset").addEventListener("click", async () => {
+  resetBtn.addEventListener("click", async () => {
     localStorage.removeItem(SEARCH_ENGINE_STORAGE_KEY);
     await appendList();
   });

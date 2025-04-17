@@ -1,5 +1,6 @@
 import "./modules/index.js";
 import { showToast } from "./modules/toaster.js";
+export const resetBtn = document.getElementById("reset");
 export function toggleButton(button, enabled, style = "enabled") {
   button.disabled = !enabled;
   if (enabled) button.classList.add(style);
@@ -91,7 +92,7 @@ export function hostnameToURL(hostname) {
 }
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    document.getElementById("reset").addEventListener("click", async () => {
+    resetBtn.addEventListener("click", async () => {
       localStorage.clear();
       await chrome.storage.local.clear();
       await caches.keys().then((keyList) =>

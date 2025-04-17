@@ -1,3 +1,4 @@
+import { resetBtn } from "../app.js";
 export const greeting = document.getElementById("greeting-form");
 const greetingContainer = document.getElementById("greeting-container");
 greeting.addEventListener("change", async (e) => {
@@ -64,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     options[0].checked = true;
   }
 
-  document.getElementById("reset").addEventListener("click", async () => {
+  resetBtn.addEventListener("click", async () => {
     localStorage.removeItem("greeting");
     localStorage.removeItem("name");
     greeting.querySelectorAll("input").forEach((option) => {

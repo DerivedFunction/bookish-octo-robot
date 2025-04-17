@@ -1,5 +1,5 @@
 import { query } from "./query.js";
-
+import { resetBtn } from "../app.js";
 export const chatbox = document.getElementById("chatbox");
 export const trOption = document.getElementById("content-transparent"); // Function to update inactivity behavior
 export let inactivityTimeout = null;
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
       break;
     }
   }
-  document.getElementById("reset").addEventListener("click", () => {
+  resetBtn.addEventListener("click", () => {
     localStorage.removeItem("inactivity");
     for (let i = 0; i < trOption.options.length; i++) {
       trOption.options[i].selected = false;

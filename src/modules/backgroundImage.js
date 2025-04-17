@@ -1,4 +1,4 @@
-import { toggleButton, loadJsonData } from "../app.js";
+import { toggleButton, loadJsonData, resetBtn } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
 
 let expirationTimeout = null;
@@ -522,7 +522,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     backgroundSelect.options[0].selected = true;
   }
   await loadData();
-  document.getElementById("reset").addEventListener("click", async () => {
+  resetBtn.addEventListener("click", async () => {
     clearBgOption();
     resetBackground();
     setTextColor();

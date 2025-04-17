@@ -2,7 +2,7 @@ import { loadJsonData } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
 import { setupTooltip } from "./tooltip.js";
 import { showToast } from "./toaster.js";
-import { needPerm } from "../app.js";
+import { needPerm, resetBtn } from "../app.js";
 import { query, queryEvents } from "./query.js";
 import { fileUploadBtn } from "./files.js";
 export const curSearchBtn = document.getElementById("currentEngine");
@@ -377,7 +377,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!hasScripts || !hasPermissions) await getPermissions(selectedEngine);
       else await removePermissions();
     });
-    document.getElementById("reset").addEventListener("click", async () => {
+    resetBtn.addEventListener("click", async () => {
       try {
         await chrome.storage.local.remove("engine");
         selectedEngine = null;
