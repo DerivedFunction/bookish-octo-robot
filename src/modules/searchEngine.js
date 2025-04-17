@@ -1,7 +1,7 @@
 import { appendSvg } from "./appendSvg.js";
 import { setupTooltip } from "./tooltip.js";
 import { showToast } from "./toaster.js";
-import { needPerm, resetBtn, loadJsonData, toggleClass } from "../app.js";
+import { resetBtn, loadJsonData, toggleClass } from "../app.js";
 import { query, queryEvents } from "./query.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
@@ -207,7 +207,7 @@ export async function getPermissions(engine) {
       console.log("Script registration failed:", error);
     }
   } else {
-    if (needPerm.some((e) => e === name))
+    if (engine.needsPerm)
       showToast(`${name} may not work without permissions`, "warning");
   }
   await getScriptStatus(engine.name);
@@ -389,7 +389,7 @@ async function goToLink() {
         // Not an experimental one
         getQueryLink();
       } else {
-        if (needPerm.some((e) => e === name)) {
+        if (selectedEngine.needsPerm) {
           showToast(`${name} may not work without permissions`, "warning");
           query.value = q;
           await queryEvents();

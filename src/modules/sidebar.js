@@ -1,7 +1,7 @@
 import { weatherField } from "./weather.js";
 import { nameInput } from "./nameInput.js";
 import { appendSvg } from "./appendSvg.js";
-import { loadJsonData, needPerm } from "../app.js";
+import { loadJsonData } from "../app.js";
 import {
   getPermissions,
   getScriptStatus,
@@ -111,34 +111,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "assets/images/buttons/options.svg" }, optionBtn);
   appendSvg({ image: "assets/images/buttons/unlocked.svg" }, scriptsBtn);
   const aiList = await getSearchEngineList();
-  needPerm.forEach((aiName) => {
-    const button = document.createElement("button");
-    appendSvg(
-      {
-        image: `/assets/images/ai/${aiName.toLowerCase()}.svg`,
-        description: `Enable Permissions for ${aiName}`,
-      },
-      button,
-      null,
-      false,
-      true
-    );
-    button.addEventListener("click", async () => {
-      await getPermissions({
-        name: aiName,
-      });
-      const hasScripts = await getScriptStatus(aiName);
-      if (hasScripts) {
-        const ai = aiList.find((a) => a.name === aiName);
-        if (ai) addToCurrentEnabled(ai);
-      }
-    });
-    requiredList.appendChild(button);
-  });
-
   aiList.forEach(async (ai) => {
     if (ai.fileImage) {
       imageList.appendChild(createPermissionButton(ai));
+    }
+    if (ai.needsPerm) {
+      requiredList.appendChild(createPermissionButton(ai));
     }
     if (ai.experimental) {
       scriptsList.appendChild(createPermissionButton(ai));

@@ -24,7 +24,8 @@
       "image": "/assets/images/ai/gemini.svg",
       "experimental": true,
       "limit": 31022,
-      "advanced": true
+      "advanced": true,
+      "needsPerm": true
     },
     {
       "name": "Grok",
@@ -41,7 +42,8 @@
       "image": "/assets/images/ai/deepseek.svg",
       "experimental": true,
       "limit": 100000,
-      "advanced": true
+      "advanced": true,
+      "needsPerm": true
     },
     {
       "name": "Claude",

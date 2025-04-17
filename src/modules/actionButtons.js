@@ -4,15 +4,13 @@ import { setupTooltip } from "./tooltip.js";
 import {
   checkEnabled,
   getSearchEngineList,
-  getSearchEngineName,
-  getSearchEngineUrl,
   getSearchEngineUrlHostName,
-  isSearchEngineExp,
   toggleDropdown,
+  selectedEngine,
 } from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js";
 import { showToast } from "./toaster.js";
-import { needPerm, hostnameToURL, resetBtn } from "../app.js";
+import { hostnameToURL, resetBtn } from "../app.js";
 import { getSearchEverywhere } from "./searchEverywhere.js";
 export const clearBtn = document.getElementById("clear");
 clearBtn.addEventListener("click", async () => {
@@ -45,12 +43,9 @@ pasteBtn.addEventListener("click", async () => {
 });
 export const goBtn = document.getElementById("go");
 goBtn.addEventListener("click", async () => {
-  let sUrl = getSearchEngineUrl();
   let hasPerm = await checkEnabled();
-  let isExp = isSearchEngineExp();
-  let name = getSearchEngineName();
   let hostname = getSearchEngineUrlHostName();
-  if (!sUrl) {
+  if (!selectedEngine) {
     toggleDropdown();
     return;
   }
@@ -68,24 +63,27 @@ goBtn.addEventListener("click", async () => {
     return;
   }
 
-  let url = `${sUrl}${encodeURIComponent(query.value)}`;
+  let url = `${selectedEngine.url}${encodeURIComponent(query.value)}`;
   if (hasPerm) {
     // Not an experimental one
-    if (!isExp) {
+    if (!selectedEngine.experimental) {
       window.location.href = url;
       return;
     } else {
-      await chrome.storage.local.set({ [name]: true });
+      await chrome.storage.local.set({ [selectedEngine.name]: true });
       // Run experimental content scripts
       await chrome.storage.local.set({ query: query.value });
       window.location.href = hostname;
       return;
     }
   } else {
-    if (isExp) {
+    if (selectedEngine.experimental) {
       // the current engine requires content scripts, but we have not enabled it
-      if (needPerm.some((e) => e === name)) {
-        showToast(`${name} may not work without permissions`, "warning");
+      if (selectedEngine.needsPerm) {
+        showToast(
+          `${selectedEngine.name} may not work without permissions`,
+          "warning"
+        );
         toggleButton(goBtn, false);
       } else {
         // we don't need content scripts because needPerm says it doesn't need it
@@ -151,7 +149,7 @@ multiBtn.addEventListener("click", async () => {
     if (!searchEverywhere[engine.name]) continue;
     const url = `${engine.url}${encodeURIComponent(queryText)}`;
     const hasPermission = permissions.includes(engine.name);
-    const needsPermission = needPerm.includes(engine.name);
+    const needsPermission = engine.needsPerm;
 
     if (hasPermission) {
       if (!engine.experimental) {

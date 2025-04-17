@@ -1,4 +1,3 @@
-const needPerm = ["Gemini", "DeepSeek"];
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   // AI searches
   let prompt = info.menuItemId;
@@ -124,7 +123,7 @@ async function loadMenu() {
   }
 
   // Check if the selected engine requires permissions and Experimental is false
-  if (!Experimental && needPerm.some((e) => e === search.name)) {
+  if (!Experimental && search.needsPerm) {
     chrome.contextMenus.create(
       {
         id: "switch",
@@ -269,7 +268,7 @@ chrome.runtime.onMessage.addListener(async (e) => {
   if (e.message === "selectedSearchEngine") {
     console.log("AI chatbot changed", e.engine?.name);
     const { Experimental } = await chrome.storage.local.get("Experimental");
-    if (!Experimental && needPerm.some((eg) => eg === e.engine?.name)) {
+    if (!Experimental && e.engine?.needsPerm) {
       await loadMenu(); // Rebuild menu if permissions are lacking
     } else {
       updateMenu(e.engine);
