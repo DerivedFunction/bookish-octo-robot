@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "Tabbed: AI chatbot in New Tab/Sidebar",
+  "short_name": "Tabbed",
+  "version": "1.0.6.4",
+  "description": "A new tab page and sidebar with an AI-like user interface",
+  "icons": {
+    "48": "assets/images/icon.svg"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "bookish-octo-robot@DerivedFunction"
+    }
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "action": {
+    "default_icon": {
+      "16": "assets/images/icon.svg",
+      "32": "assets/images/icon.svg"
+    }
+  },
+  "options_page": "index.html",
+  "sidebar_action": {
+    "default_icon": {
+      "16": "assets/images/icon.svg",
+      "32": "assets/images/icon.svg"
+    },
+    "default_title": "Tabbed",
+    "default_panel": "index.html#sidebar",
+    "open_at_install": true
+  },
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "chrome_settings_overrides": {
+    "homepage": "index.html"
+  },
+  "optional_permissions": ["clipboardRead", "scripting"],
+  "permissions": ["storage", "contextMenus"],
+  "optional_host_permissions": [
+    "*://*.chatgpt.com/",
+    "*://copilot.microsoft.com/",
+    "*://*.claude.ai/",
+    "*://*.grok.com/",
+    "*://*.perplexity.ai/",
+    "*://gemini.google.com/",
+    "*://chat.deepseek.com/",
+    "*://chat.mistral.ai/*",
+    "*://*.huggingface.co/chat/*",
+    "*://*.meta.ai/*"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "Tabbed: AI chatbot in New Tab",
+  "short_name": "Tabbed",
+  "version": "1.0.6.4",
+  "description": "A new tab page with an AI-like user interface",
+  "icons": {
+    "16": "assets/images/icon.png",
+    "32": "assets/images/icon.png",
+    "48": "assets/images/icon.png"
+  },
+  "background": { "service_worker": "background.js" },
+  "action": {
+    "default_icon": {
+      "16": "assets/images/icon.png",
+      "32": "assets/images/icon.png",
+      "48": "assets/images/icon.png"
+    }
+  },
+  "options_page": "index.html",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "optional_permissions": ["clipboardRead", "scripting"],
+  "permissions": ["storage", "contextMenus"],
+  "optional_host_permissions": [
+    "*://*.chatgpt.com/",
+    "*://copilot.microsoft.com/",
+    "*://*.claude.ai/",
+    "*://*.grok.com/",
+    "*://*.perplexity.ai/",
+    "*://gemini.google.com/",
+    "*://chat.deepseek.com/",
+    "*://chat.mistral.ai/*",
+    "*://*.huggingface.co/chat/*",
+    "*://*.meta.ai/*"
+  ]
+}
