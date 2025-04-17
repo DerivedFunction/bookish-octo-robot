@@ -155,6 +155,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (err) {
       console.log(err);
     }
-    await refreshCurrentEnabled(aiList, true);
+    setTimeout(async () => {
+      await refreshCurrentEnabled(aiList, true);
+    }, 1000);
   });
 });
