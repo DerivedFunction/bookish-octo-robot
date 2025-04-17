@@ -13,10 +13,10 @@ import { showToast } from "./toaster.js";
 import { hostnameToURL, resetBtn } from "../app.js";
 import { getSearchEverywhere } from "./searchEverywhere.js";
 export const clearBtn = document.getElementById("clear");
-clearBtn.addEventListener("click", async () => {
+clearBtn.addEventListener("click", () => {
   if (query.value.length > 0) {
     query.value = "";
-    await queryEvents();
+    queryEvents();
   }
   query.focus();
 });
@@ -32,7 +32,7 @@ pasteBtn.addEventListener("click", async () => {
     query.focus();
     const text = await navigator.clipboard.readText();
     query.value += text;
-    await queryEvents();
+    queryEvents();
   } catch (err) {
     showToast("Unable to access clipboard.");
   }
@@ -158,7 +158,7 @@ multiBtn.addEventListener("click", async () => {
     }
   }
   query.value = "";
-  await queryEvents();
+  queryEvents();
 });
 
 export const ellipse = document.getElementById("ellipse");

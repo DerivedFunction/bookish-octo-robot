@@ -11,16 +11,16 @@ export const query = document.getElementById("search");
 export function getLimit() {
   return hasScripts ? selectedEngine?.limit || 0 : MAX_LIMIT;
 }
-query.addEventListener("input", async () => {
+query.addEventListener("input", () => {
   // Set the height to match the content (scrollHeight)
   chatbox.style.opacity = "1.0";
-  await queryEvents();
+  queryEvents();
 });
-query.addEventListener("focus", async () => {
+query.addEventListener("focus", () => {
   suggestionResult.innerHTML = "";
   chatbox.style.opacity = "1.0";
   // Set the height to match the content (scrollHeight)
-  await queryEvents();
+  queryEvents();
 });
 query.addEventListener("keydown", async (e) => {
   if (e.key === "Enter" && !e.shiftKey) {
@@ -37,12 +37,12 @@ query.addEventListener("keydown", async (e) => {
     query.value += "\n";
   }
 });
-export async function queryEvents() {
+export function queryEvents() {
   query.style.height = "auto"; // Reset height to auto
   query.style.height = `${query.scrollHeight}px`; // Recalculate height
   let x = query.value.length > 0;
   toggleButton(clearBtn, x);
-  let y = await getSearchEngineUrl();
+  let y = getSearchEngineUrl();
   toggleButton(goBtn, x && y);
   toggleButton(multiBtn, x);
   if (x) multiBtn.style.display = "";
@@ -63,7 +63,7 @@ export function getCharCount() {
   }
 }
 export const charCount = document.getElementById("char-count");
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
   query.value = "";
-  await queryEvents();
+  queryEvents();
 });

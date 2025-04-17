@@ -238,7 +238,7 @@ export async function getScriptStatus(name = null) {
       status: hasScripts,
     });
     chrome.storage.local.set({ Experimental: hasScripts });
-    await queryEvents();
+    queryEvents();
     return hasScripts;
   }
   return currentHasScripts;
@@ -331,6 +331,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
       if (e?.message === "Experimental") {
+        console.log("recevied");
         toggleClass(curSearchBtn, e.status);
       }
     });
@@ -391,7 +392,7 @@ async function goToLink() {
         if (selectedEngine.needsPerm) {
           showToast(`${name} may not work without permissions`);
           query.value = q;
-          await queryEvents();
+          queryEvents();
         } else {
           getQueryLink();
         }
