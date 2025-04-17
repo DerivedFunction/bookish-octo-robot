@@ -29,6 +29,10 @@ const closeBtn = document.getElementById("close-options");
 closeBtn.addEventListener("click", () => {
   sidebar.style.display = "none";
 });
+const closeScriptBtn = document.getElementById("close-scripts");
+closeScriptBtn.addEventListener("click", () => {
+  exp_sidebar.style.display = "none";
+});
 const scriptsBtn = document.getElementById("scripts-button");
 scriptsBtn.addEventListener("click", async () => {
   exp_sidebar.style.display = "block";
