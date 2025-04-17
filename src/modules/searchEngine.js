@@ -207,8 +207,7 @@ export async function getPermissions(engine) {
       console.log("Script registration failed:", error);
     }
   } else {
-    if (engine.needsPerm)
-      showToast(`${name} may not work without permissions`, "warning");
+    if (engine.needsPerm) showToast(`${name} may not work without permissions`);
   }
   await getScriptStatus(engine.name);
 }
@@ -390,7 +389,7 @@ async function goToLink() {
         getQueryLink();
       } else {
         if (selectedEngine.needsPerm) {
-          showToast(`${name} may not work without permissions`, "warning");
+          showToast(`${name} may not work without permissions`);
           query.value = q;
           await queryEvents();
         } else {

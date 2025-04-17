@@ -27,10 +27,6 @@ pasteBtn.addEventListener("click", async () => {
       permissions: ["clipboardRead"],
     });
     if (!permissionStatus) {
-      showToast(
-        "Permission to access clipboard is denied. Please enable it in your browser settings.",
-        "danger"
-      );
       return;
     }
     query.focus();
@@ -38,7 +34,7 @@ pasteBtn.addEventListener("click", async () => {
     query.value += text;
     await queryEvents();
   } catch (err) {
-    showToast("Unable to access clipboard.", "warning");
+    showToast("Unable to access clipboard.");
   }
 });
 export const goBtn = document.getElementById("go");
@@ -50,15 +46,11 @@ goBtn.addEventListener("click", async () => {
     return;
   }
   if (query.value.length < 1) {
-    showToast("No input", "warning");
+    showToast("No input");
     toggleButton(goBtn, false);
     return;
   }
   if (query.value.length > getLimit()) {
-    showToast(
-      "Query exceeds character count. Please go to actual URL",
-      "warning"
-    );
     toggleButton(goBtn, false);
     return;
   }
@@ -80,10 +72,7 @@ goBtn.addEventListener("click", async () => {
     if (selectedEngine.experimental) {
       // the current engine requires content scripts, but we have not enabled it
       if (selectedEngine.needsPerm) {
-        showToast(
-          `${selectedEngine.name} may not work without permissions`,
-          "warning"
-        );
+        showToast(`${selectedEngine.name} may not work without permissions`);
         toggleButton(goBtn, false);
       } else {
         // we don't need content scripts because needPerm says it doesn't need it
@@ -101,7 +90,7 @@ multiBtn.addEventListener("click", async () => {
   const queryText = query.value;
 
   if (queryText.length < 1) {
-    showToast("No input", "warning");
+    showToast("No input");
     toggleButton(goBtn, false);
     return;
   }
@@ -128,7 +117,7 @@ multiBtn.addEventListener("click", async () => {
   for (const engine of searchEngines) {
     if (!searchEverywhere[engine.name]) continue;
     if (queryText.length > engine.limit) {
-      showToast(`Query exceeds character count for ${engine.name}`, "warning");
+      showToast(`Query exceeds character count for ${engine.name}`);
       continue;
     }
 
@@ -149,8 +138,6 @@ multiBtn.addEventListener("click", async () => {
     if (!searchEverywhere[engine.name]) continue;
     const url = `${engine.url}${encodeURIComponent(queryText)}`;
     const hasPermission = permissions.includes(engine.name);
-    const needsPermission = engine.needsPerm;
-
     if (hasPermission) {
       if (!engine.experimental) {
         await chrome.tabs.create({ url });
@@ -162,11 +149,8 @@ multiBtn.addEventListener("click", async () => {
       }
     } else {
       if (engine.experimental) {
-        if (needsPermission) {
-          showToast(
-            `${engine.name} may not work without permissions`,
-            "warning"
-          );
+        if (engine.needsPerm) {
+          showToast(`${engine.name} may not work without permissions`);
         } else {
           await chrome.tabs.create({ url });
         }
