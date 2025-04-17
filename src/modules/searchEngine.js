@@ -83,6 +83,7 @@ export async function addSearchEngines() {
     listItem.addEventListener("click", async () => {
       await chrome.storage.local.set({ engine: engine });
       await getSearchEngine(); // Update the button icon immediately
+      await getScriptStatus();
       dropdown.classList.remove("open");
       appendSvg(
         { image: "assets/images/buttons/down.svg" },
@@ -93,7 +94,6 @@ export async function addSearchEngines() {
         message: "selectedSearchEngine",
         engine: engine,
       });
-      await getScriptStatus();
     });
 
     fragment.appendChild(listItem);
@@ -210,15 +210,13 @@ export async function getPermissions(engine) {
     if (needPerm.some((e) => e === name))
       showToast(`${name} may not work without permissions`, "warning");
   }
-  await getScriptStatus();
+  await getScriptStatus(engine.name);
 }
 export async function getPermissionStatus() {
   hasPermissions = await chrome.permissions.contains(PERMISSIONS);
   return hasPermissions;
 }
 export async function getScriptStatus(name = null) {
-  const perm = await getPermissionStatus();
-  if (!perm) return false; // we don't have permissions
   let currentHasScripts = false;
   try {
     // check if we have a matching name. If there is no name, we are using our selected one
@@ -230,16 +228,17 @@ export async function getScriptStatus(name = null) {
     if (selectedEngine?.name === name || !name) hasScripts = currentHasScripts;
   } catch {
     currentHasScripts = false;
+    if (selectedEngine?.name === name || !name) hasScripts = currentHasScripts;
   }
   // If there is no name (default to selected), or the name matches our current selected one, then change the look
   if (!name || (selectedEngine && name === selectedEngine.name)) {
-    toggleClass(curSearchBtn, hasScripts && selectedEngine.experimental);
+    toggleClass(curSearchBtn, hasScripts);
     chrome.runtime.sendMessage({
       message: "Experimental",
       engine: selectedEngine,
-      status: hasPermissions && hasScripts,
+      status: hasScripts,
     });
-    chrome.storage.local.set({ Experimental: hasPermissions && hasScripts });
+    chrome.storage.local.set({ Experimental: hasScripts });
     await queryEvents();
     return hasScripts;
   }
