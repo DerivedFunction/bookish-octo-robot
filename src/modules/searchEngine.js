@@ -1,10 +1,8 @@
-import { loadJsonData } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
 import { setupTooltip } from "./tooltip.js";
 import { showToast } from "./toaster.js";
-import { needPerm, resetBtn } from "../app.js";
+import { needPerm, resetBtn, loadJsonData, toggleClass } from "../app.js";
 import { query, queryEvents } from "./query.js";
-import { fileUploadBtn } from "./files.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
 
@@ -34,15 +32,15 @@ document.addEventListener("click", (e) => {
 export function toggleDropdown(remove = "none") {
   switch (remove) {
     case "remove":
-      dropdown.classList.remove("active");
+      dropdown.classList.remove("open");
       break;
     case "open":
-      dropdown.classList.add("active");
+      dropdown.classList.add("open");
       break;
     default:
-      dropdown.classList.toggle("active");
+      dropdown.classList.toggle("open");
   }
-  if (dropdown.classList.contains("active")) {
+  if (dropdown.classList.contains("open")) {
     appendSvg(
       { image: "/assets/images/buttons/up.svg" },
       searchEnginePickerBtn
@@ -85,7 +83,7 @@ export async function addSearchEngines() {
     listItem.addEventListener("click", async () => {
       await chrome.storage.local.set({ engine: engine });
       await getSearchEngine(); // Update the button icon immediately
-      dropdown.classList.remove("active");
+      dropdown.classList.remove("open");
       appendSvg(
         { image: "assets/images/buttons/down.svg" },
         searchEnginePickerBtn
@@ -103,10 +101,7 @@ export async function addSearchEngines() {
   list.replaceChildren(fragment);
   await getSearchEngine();
 }
-setupTooltip(
-  searchEnginePickerBtn,
-  () => !dropdown.classList.contains("active")
-);
+setupTooltip(searchEnginePickerBtn, () => !dropdown.classList.contains("open"));
 
 export function getSearchEngineUrl() {
   if (selectedEngine) return selectedEngine.url;
@@ -161,14 +156,13 @@ export async function getSearchEngine() {
       true,
       true
     );
-    gemSection.style.display = "none";
+
     if (selectedEngine) {
       const iconUrl = selectedEngine.image;
       await chrome.action.setIcon({ path: iconUrl });
       try {
         browser.sidebarAction.setIcon({ path: iconUrl });
       } catch (error) {}
-      if (selectedEngine.experimental) gemSection.style.display = "";
     }
   } catch (error) {
     console.error("Error setting up search engine:", error);
@@ -183,8 +177,7 @@ const PERMISSIONS = {
 
 let hasPermissions = false;
 export let hasScripts = false;
-const gemSection = document.getElementById("remove-script");
-setupTooltip(gemSection, () => true, "Toggle Permissions");
+
 let permissionsConfig = null;
 let scriptConfigs = null;
 async function registerScriptForEngine(name) {
@@ -239,41 +232,7 @@ export async function getPermissionStatus(name = null) {
     `${engineName} permission status: ${hasPermissions}, script: ${currentHasScripts}`
   );
   if (!name || (selectedEngine && name === selectedEngine.name)) {
-    let img = `assets/images/buttons/${
-      hasScripts ? "unlocked.svg" : "locked.svg"
-    }`;
-    appendSvg(
-      {
-        image: img,
-      },
-      gemSection
-    );
-    let img2 = `assets/images/buttons/${
-      selectedEngine?.fileImage && hasScripts
-        ? "paperclip.svg"
-        : "nopaperclip.svg"
-    }`;
-    appendSvg(
-      {
-        image: img2,
-      },
-      fileUploadBtn
-    );
-    // Add animation class based on state
-    if (hasScripts) {
-      gemSection.classList.add("unlocked");
-      gemSection.classList.remove("locked");
-    } else {
-      gemSection.classList.add("locked");
-      gemSection.classList.remove("unlocked");
-    }
-    if (hasScripts && selectedEngine?.fileImage) {
-      fileUploadBtn.classList.add("unlocked");
-      fileUploadBtn.classList.remove("locked");
-    } else {
-      fileUploadBtn.classList.add("locked");
-      fileUploadBtn.classList.remove("unlocked");
-    }
+    toggleClass(curSearchBtn, hasScripts && selectedEngine.experimental);
     chrome.runtime.sendMessage({
       message: "Experimental",
       engine: selectedEngine,
@@ -373,10 +332,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
     });
-    gemSection.addEventListener("click", async () => {
-      if (!hasScripts || !hasPermissions) await getPermissions(selectedEngine);
-      else await removePermissions();
-    });
+
     resetBtn.addEventListener("click", async () => {
       try {
         await chrome.storage.local.remove("engine");

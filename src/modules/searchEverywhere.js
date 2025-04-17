@@ -1,6 +1,6 @@
 import { getSearchEngineList } from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js"; // <- Import from appendSvg.js
-import { resetBtn } from "../app.js";
+import { resetBtn, toggleClass } from "../app.js";
 const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
 const searchEverywhereList = document.getElementById("search-everywhere-list");
 
@@ -15,8 +15,7 @@ function saveSearchEverywhere(engines) {
 
 function createToggleButton(engine, isActive, onClick) {
   const button = document.createElement("button");
-  button.className = isActive ? "active-engine-btn" : "inactive-engine-btn";
-
+  toggleClass(button, isActive);
   appendSvg(
     {
       image: engine.image || `/assets/images/ai/${engine.name}.svg`,
@@ -42,12 +41,9 @@ async function appendList() {
     const isActive = selectedEngines[engine.name] ?? false;
 
     const button = createToggleButton(engine, isActive, (btn) => {
-      const currentState = btn.classList.contains("active-engine-btn");
+      const currentState = btn.classList.contains("active");
       const updatedState = !currentState;
-
-      btn.classList.toggle("active-engine-btn", updatedState);
-      btn.classList.toggle("inactive-engine-btn", !updatedState);
-
+      toggleClass(btn, updatedState);
       selectedEngines[engine.name] = updatedState;
       saveSearchEverywhere(selectedEngines);
     });

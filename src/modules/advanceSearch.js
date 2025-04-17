@@ -34,25 +34,19 @@ export async function checkStatus() {
   const result = await new Promise((resolve) =>
     chrome.storage.local.get(keys, resolve)
   );
-  toggleClass(webBtn, result.web, "use");
-  toggleClass(deepBtn, result.deep, "use");
-  toggleClass(codeBtn, result.code, "use");
-  toggleClass(
-    ellipse,
-    !Object.values(result).every((item) => item === false),
-    "use"
-  );
+  toggleClass(webBtn, result.web);
+  toggleClass(deepBtn, result.deep);
+  toggleClass(codeBtn, result.code);
+  toggleClass(ellipse, !Object.values(result).every((item) => item === false));
 }
 
 async function initialize() {
-  const keys = ["web", "deep", "code"];
-  const result = await new Promise((resolve) =>
-    chrome.storage.local.get(keys, resolve)
-  );
-  toggleClass(webBtn, result.web, "use");
-  toggleClass(deepBtn, result.deep, "use");
-  toggleClass(codeBtn, result.code, "use");
+  await chrome.storage.local.remove(["web", "code", "deep"]);
+  [(ellipse, webBtn, codeBtn, deepBtn)].forEach((btn) => {
+    toggleClass(btn, false);
+  });
   checkStatus();
+  chrome.runtime.sendMessage({ message: "updateAdvanced" });
 }
 document.addEventListener("DOMContentLoaded", async () => {
   await initialize();
@@ -79,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   resetBtn.addEventListener("click", async () => {
     await chrome.storage.local.remove(["web", "code", "deep"]);
     [ellipse, webBtn, codeBtn, deepBtn].forEach((btn) => {
-      toggleClass(btn, false, "use");
+      toggleClass(btn, false);
     });
   });
 });

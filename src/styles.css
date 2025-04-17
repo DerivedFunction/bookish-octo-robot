@@ -285,8 +285,8 @@ h2 {
   top: 100%; /* Below the button */
   left: 0;
 }
-.dropdown-content.active {
-  display: block; /* Show when active */
+.dropdown-content.open {
+  display: block; /* Show when open */
 }
 
 li {
@@ -462,48 +462,6 @@ fieldset {
     transform: translateY(-20px);
   }
 }
-/* Animation for unlocking (when changing to unlocked.svg) */
-@keyframes unlock {
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-15deg);
-  }
-  50% {
-    transform: rotate(0deg);
-  }
-  75% {
-    transform: rotate(15deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-/* Animation for locking (when changing to locked.svg) */
-@keyframes lock {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Apply animations based on state */
-.unlocked {
-  animation: unlock 0.5s ease-in-out;
-}
-
-.locked {
-  animation: lock 0.4s ease-out;
-}
 
 #files-list {
   display: flex;
@@ -512,14 +470,10 @@ fieldset {
   gap: 5px;
 }
 
-button.active-engine-btn {
-  border-color: var(--active-color); /* Active state border color */
-}
-
-button.inactive-engine-btn {
-  border-color: var(--border-color); /* Inactive state border color */
-}
-.use {
+.active {
   border-color: var(--active-color);
   color: var(--active-color);
+}
+.inactive {
+  border-color: var(--border-color);
 }

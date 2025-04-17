@@ -7,7 +7,7 @@ export function toggleButton(button, enabled, style = "enabled") {
   else button.classList.remove(style);
 }
 
-export function toggleClass(container, condition, style = "enabled") {
+export function toggleClass(container, condition, style = "active") {
   if (condition) container.classList.add(style);
   else container.classList.remove(style);
 }
