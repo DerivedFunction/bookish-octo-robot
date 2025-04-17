@@ -5,37 +5,41 @@ import { appendSvg } from "./appendSvg.js";
 const webBtn = document.getElementById("web-search");
 const deepBtn = document.getElementById("deep-search");
 const codeBtn = document.getElementById("code-canvas");
-let set = { web: false, deep: false, code: false };
-function toggleSetting(key, btn) {
-  chrome.storage.local.get([key], (result) => {
+async function toggleSetting(key) {
+  await chrome.storage.local.get([key], async (result) => {
     const oldValue = result[key] === true;
     if (oldValue) {
       chrome.storage.local.remove(key);
-      set[key] = false;
-      btn.classList.remove("use");
     } else {
       chrome.storage.local.set({ [key]: true });
-      set[key] = true;
-      btn.classList.add("use");
     }
-    toggleClass(btn, !oldValue, "use");
-    checkStatus();
+    await checkStatus();
   });
 }
 
 webBtn.addEventListener("click", async () => {
-  toggleSetting("web", webBtn);
+  await toggleSetting("web", webBtn);
+  chrome.runtime.sendMessage({ message: "updateAdvanced" });
 });
 deepBtn.addEventListener("click", async () => {
-  toggleSetting("deep", deepBtn);
+  await toggleSetting("deep", deepBtn);
+  chrome.runtime.sendMessage({ message: "updateAdvanced" });
 });
 codeBtn.addEventListener("click", async () => {
-  toggleSetting("code", codeBtn);
+  await toggleSetting("code", codeBtn);
+  chrome.runtime.sendMessage({ message: "updateAdvanced" });
 });
-function checkStatus() {
+export async function checkStatus() {
+  const keys = ["web", "deep", "code"];
+  const result = await new Promise((resolve) =>
+    chrome.storage.local.get(keys, resolve)
+  );
+  toggleClass(webBtn, result.web, "use");
+  toggleClass(deepBtn, result.deep, "use");
+  toggleClass(codeBtn, result.code, "use");
   toggleClass(
     ellipse,
-    !Object.values(set).every((item) => item === false),
+    !Object.values(result).every((item) => item === false),
     "use"
   );
 }
@@ -48,9 +52,7 @@ async function initialize() {
   toggleClass(webBtn, result.web, "use");
   toggleClass(deepBtn, result.deep, "use");
   toggleClass(codeBtn, result.code, "use");
-  set.web = result.web;
-  set.deep = result.deep;
-  set.code = result.code;
+  checkStatus();
 }
 document.addEventListener("DOMContentLoaded", async () => {
   await initialize();
@@ -69,6 +71,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     { image: "/assets/images/buttons/canvas.svg", description: "Canvas" },
     codeBtn
   );
+  chrome.runtime.onMessage.addListener((e) => {
+    if (e?.message === "updateAdvanced") {
+      checkStatus();
+    }
+  });
   resetBtn.addEventListener("click", async () => {
     await chrome.storage.local.remove(["web", "code", "deep"]);
     [ellipse, webBtn, codeBtn, deepBtn].forEach((btn) => {
