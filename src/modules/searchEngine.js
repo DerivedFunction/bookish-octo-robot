@@ -331,8 +331,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.error("Error getting search engine:", error);
         }
       }
+      if (e?.message === "Experimental") {
+        toggleClass(curSearchBtn, e.status);
+      }
     });
-
     resetBtn.addEventListener("click", async () => {
       try {
         await chrome.storage.local.remove("engine");
