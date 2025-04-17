@@ -18,8 +18,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 async function runAfterFullLoad() {
   console.log("Running query injection.");
-  await getButtons();
   await getImage();
+  await getButtons();
   await getTextInput();
 }
 

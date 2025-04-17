@@ -18,9 +18,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 async function runAfterFullLoad() {
   console.log("Running query injection.");
-  await getButtons();
   await getImage();
-  await getTextInput();
+  await getButtons();
+  setTimeout(() => {
+    getTextInput();
+  }, 2000);
 }
 
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
@@ -190,6 +192,7 @@ async function getButtons() {
       document
         .querySelector("button[title='composer.chatModes.reasoning.title']")
         .click();
+      return true;
     }, 1000);
   }
 }
