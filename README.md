@@ -7,9 +7,7 @@ A new tab page with an AI-like user interface. Note: You may have to sign in to 
 
 [![Sample 1](./samples/Sample_1.png)](https://www.youtube.com/watch?v=PDgovF1dNBg)
 
-## How to run from source
-
-Step 1: Compile the files from `src`
+## Compile and Package from Source
 
 ```sh
 npm install # install relevant dependencies from package.json
@@ -22,6 +20,13 @@ chmod +x compile.sh
 # 7z a ../tabbed-chrome.zip .
 # cd ../firefox
 # 7z a ../tabbed-firefox.zip .
+```
+
+## Run and Test from source
+
+```sh
+chmod +x dev.sh
+./dev.sh # Move files from src/ to test/firefox and test/chrome
 ```
 
 ### Chrome
