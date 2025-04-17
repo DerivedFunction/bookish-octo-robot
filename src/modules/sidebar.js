@@ -95,12 +95,12 @@ function createPermissionButton(ai, enable = true) {
   });
   return button;
 }
-async function refreshCurrentEnabled(aiList) {
+async function refreshCurrentEnabled(aiList, all = false) {
   currentEnabled.innerHTML = ""; // clear old buttons
   for (const ai of aiList) {
     if (ai.experimental) {
       const hasScripts = await getScriptStatus(ai.name);
-      if (hasScripts) {
+      if (hasScripts || all) {
         currentEnabled.appendChild(createPermissionButton(ai, false));
       }
     }
@@ -151,10 +151,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.log("Script already exists", err);
           }
         });
-        refreshCurrentEnabled(aiList);
       }
     } catch (err) {
       console.log(err);
     }
+    await refreshCurrentEnabled(aiList, true);
   });
 });
