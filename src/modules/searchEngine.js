@@ -93,7 +93,7 @@ export async function addSearchEngines() {
         message: "selectedSearchEngine",
         engine: engine,
       });
-      await getPermissionStatus();
+      await getScriptStatus();
     });
 
     fragment.appendChild(listItem);
@@ -210,27 +210,28 @@ export async function getPermissions(engine) {
     if (needPerm.some((e) => e === name))
       showToast(`${name} may not work without permissions`, "warning");
   }
-  await getPermissionStatus();
+  await getScriptStatus();
 }
-export async function getPermissionStatus(name = null) {
+export async function getPermissionStatus() {
   hasPermissions = await chrome.permissions.contains(PERMISSIONS);
-  await getSearchEngine();
-  let engineName = name ? name : getSearchEngineName();
+  return hasPermissions;
+}
+export async function getScriptStatus(name = null) {
+  const perm = await getPermissionStatus();
+  if (!perm) return false; // we don't have permissions
   let currentHasScripts = false;
   try {
+    // check if we have a matching name. If there is no name, we are using our selected one
     const scripts = await chrome.scripting.getRegisteredContentScripts();
-    currentHasScripts = engineName
-      ? scripts.some((script) => script.id === engineName)
-      : scripts.length > 0;
-    if (selectedEngine?.name === engineName) hasScripts = currentHasScripts;
+    currentHasScripts = name
+      ? scripts.some((script) => script.id === name)
+      : scripts.some((script) => script.id === selectedEngine?.name);
+    // If the selected one is the name, then update the global variable
+    if (selectedEngine?.name === name || !name) hasScripts = currentHasScripts;
   } catch {
     currentHasScripts = false;
-    // Since we don't have scripting permissions
-    if (selectedEngine?.name === engineName) hasScripts = false;
   }
-  console.log(
-    `${engineName} permission status: ${hasPermissions}, script: ${currentHasScripts}`
-  );
+  // If there is no name (default to selected), or the name matches our current selected one, then change the look
   if (!name || (selectedEngine && name === selectedEngine.name)) {
     toggleClass(curSearchBtn, hasScripts && selectedEngine.experimental);
     chrome.runtime.sendMessage({
@@ -240,7 +241,7 @@ export async function getPermissionStatus(name = null) {
     });
     chrome.storage.local.set({ Experimental: hasPermissions && hasScripts });
     await queryEvents();
-    return hasPermissions;
+    return hasScripts;
   }
   return currentHasScripts;
 }
@@ -281,7 +282,7 @@ export async function removePermissions(all = false, engine = null) {
   } catch (error) {
     console.error("Error in removePermissions:", error);
   }
-  await getPermissionStatus(engine);
+  await getScriptStatus();
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -303,7 +304,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       console.error("Error adding search engines:", error);
     }
-    await getPermissionStatus();
+    await getScriptStatus();
     const path = window.location.href;
     if (path.includes("sidebar")) {
       console.log("Sidebar opened, listening for queries");

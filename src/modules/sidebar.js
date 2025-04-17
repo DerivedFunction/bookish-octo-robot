@@ -4,16 +4,18 @@ import { appendSvg } from "./appendSvg.js";
 import { loadJsonData, needPerm } from "../app.js";
 import {
   getPermissions,
-  getPermissionStatus,
+  getScriptStatus,
   getSearchEngineList,
   removePermissions,
 } from "./searchEngine.js";
+import { appendList } from "./searchEverywhere.js";
 export const optionBtn = document.getElementById("options-button");
-optionBtn.addEventListener("click", () => {
+optionBtn.addEventListener("click", async () => {
   sidebar.style.display = "block";
   nameInput.value = localStorage.getItem("name") || "";
   let x = JSON.parse(localStorage.getItem("location"));
   weatherField.value = x ? x.inputValue : "";
+  await appendList();
 });
 const sidebar = document.getElementById("sidebar");
 const exp_sidebar = document.getElementById("scripts-sidebar");
@@ -54,7 +56,7 @@ async function addToCurrentEnabled(ai) {
     (btn) => btn.value === ai.name
   );
   if (!exists) {
-    const hasScripts = await getPermissionStatus(ai.name);
+    const hasScripts = await getScriptStatus(ai.name);
     if (hasScripts)
       currentEnabled.appendChild(createPermissionButton(ai, false));
   }
@@ -97,7 +99,7 @@ async function refreshCurrentEnabled(aiList) {
   currentEnabled.innerHTML = ""; // clear old buttons
   for (const ai of aiList) {
     if (ai.experimental) {
-      const hasScripts = await getPermissionStatus(ai.name);
+      const hasScripts = await getScriptStatus(ai.name);
       if (hasScripts) {
         currentEnabled.appendChild(createPermissionButton(ai, false));
       }
@@ -125,7 +127,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       await getPermissions({
         name: aiName,
       });
-      const hasScripts = await getPermissionStatus(aiName);
+      const hasScripts = await getScriptStatus(aiName);
       if (hasScripts) {
         const ai = aiList.find((a) => a.name === aiName);
         if (ai) addToCurrentEnabled(ai);
@@ -140,7 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     if (ai.experimental) {
       scriptsList.appendChild(createPermissionButton(ai));
-      const hasScripts = await getPermissionStatus(ai.name);
+      const hasScripts = await getScriptStatus(ai.name);
       if (hasScripts) {
         addToCurrentEnabled(ai);
       }
