@@ -5,6 +5,11 @@ export function toggleButton(button, enabled, style = "enabled") {
   if (enabled) button.classList.add(style);
   else button.classList.remove(style);
 }
+
+export function toggleClass(container, condition, style = "enabled") {
+  if (condition) container.classList.add(style);
+  else container.classList.remove(style);
+}
 export const needPerm = ["Gemini", "DeepSeek"];
 export async function readText(blob) {
   return new Promise((resolve, reject) => {
