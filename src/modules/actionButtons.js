@@ -46,7 +46,6 @@ goBtn.addEventListener("click", async () => {
     return;
   }
   if (query.value.length < 1) {
-    showToast("No input");
     toggleButton(goBtn, false);
     return;
   }
@@ -90,7 +89,6 @@ multiBtn.addEventListener("click", async () => {
   const queryText = query.value;
 
   if (queryText.length < 1) {
-    showToast("No input");
     toggleButton(goBtn, false);
     return;
   }
@@ -102,7 +100,7 @@ multiBtn.addEventListener("click", async () => {
     Object.keys(searchEverywhere).length === 0 ||
     Object.values(searchEverywhere).every((value) => !value)
   ) {
-    showToast("Nothing selected. See options");
+    showToast("Search Everywhere has none selected. See Options");
     return;
   }
   const permissions = [];

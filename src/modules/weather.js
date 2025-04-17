@@ -54,7 +54,7 @@ async function fetchWeather() {
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=sunrise,sunset&temperature_unit=celsius&timezone=auto`
     );
     if (!response.ok) {
-      showToast("Failed to fetch weather data", "danger");
+      showToast("Failed to fetch weather data");
     }
     const data = await response.json();
     const currentWeather = data.current_weather;
@@ -81,7 +81,7 @@ async function fetchWeather() {
     localStorage.setItem("weatherData", JSON.stringify(weatherData));
     displayWeather();
   } catch (error) {
-    showToast("Error fetching weather data", "danger");
+    showToast("Error fetching weather data");
     clearFields();
   }
 }
@@ -153,7 +153,7 @@ async function getCoords() {
         await fetchWeather();
         return;
       } catch (error) {
-        showToast("Error fetching coordinates", "danger");
+        showToast("Error fetching coordinates");
         clearFields();
         return;
       }
