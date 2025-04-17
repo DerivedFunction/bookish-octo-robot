@@ -1,3 +1,6 @@
 *.zip
 .hintrc
 chrome
+firefox
+node_modules
+dist
