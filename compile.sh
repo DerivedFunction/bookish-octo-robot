@@ -18,3 +18,9 @@ npm run build
 
 cp -r dist/* firefox
 cp -r dist/* chrome
+
+echo "Zipping with 7z"
+cd chrome 
+7z a ../tabbed-chrome.zip . 
+cd ../firefox
+7z a ../tabbed-firefox.zip . 
