@@ -1,27 +1,40 @@
 # Tabbed: AI chatbot in New Tab and Sidebar
 
-A new tab page with an AI-like user interface. Note: You may have to sign in to the respective AI chatbot for it to work. **Gemini** and **DeepSeek** require special permissions to work. Click on the "beaker" icon to enable Gemini and DeepSeek. All other AI chatbots have the "beaker" icon to enhance functionality but is not requried for it to work.
+A new tab page with an AI-like user interface. Note: You may have to sign in to the respective AI chatbot for it to work. Stop paying and sending your data to third-parties when you can directly use the AI chatbot with this extension.
 ![Promo](./samples/Promo.png)
+
 ## Youtube Video
+
 [![Sample 1](./samples/Sample_1.png)](https://www.youtube.com/watch?v=PDgovF1dNBg)
 
 ## How to run from source
 
+Step 1: Compile the files from `src`
+
+```sh
+npm install # install relevant dependencies from package.json
+chmod +x compile.sh
+./compile.sh # run webpack to build our dist/ and move files to chrome/ and firefox/
+# Make sure to zip the files
+# Inside compile.sh, I chose 7z
+# echo "Zipping with 7z"
+# cd chrome
+# 7z a ../tabbed-chrome.zip .
+# cd ../firefox
+# 7z a ../tabbed-firefox.zip .
+```
+
 ### Chrome
 
-- Run `compile.sh` to move the files from `src` to the `chrome/src` folder.
-- Go to [`chrome://extensions`] and enable Developer mode
-- Load the unpacked extension by selecting the `chrome/src` folder where the `manifest.json` resides.
+1. Enable developer mode in [`chrome://extensions`](chrome://extensions)
+2. Click on load unpacked extension
+3. Select the `chrome/` folder. This is where `manifest.json` resides.
 
 ### Firefox
 
-- Set `xpinstall.signatures.required` to `false` from [`about:config`](about:config)
-- Zip inside `src` directory as
-  ```sh
-  cd src
-  7z a ../tabbed.zip . # or any other zip archivers, such as zipping from File Explorer
-  ```
-- Install the custom addon at [`about:addons`](about:addons) by selecting the zipped file
+1. Install Firefox Developer/Nightly
+2. Go to [`about:config`](about:config) and set `xpinstall.signatures.required` to `false`
+3. Install the custom addon at [`about:addons`](about:addons) by selecting the `tabbed-firefox.zip` file
 
 ## Features
 
@@ -66,5 +79,13 @@ A new tab page with an AI-like user interface. Note: You may have to sign in to 
 - Set light/dark mode
 - Set the background Image using Unsplash/Pexels, or your own image.
 - Fade the chatbox after inactivity
-- Gemini and DeepSeek is currently supported using Experimental content scripts (Permissions: scripting). You can revoke them at any time by pressing "reset" or the "beaker" button.
-  ![Sample 1](./samples/Sample_2.png)
+
+  ![Sample 2](./samples/Sample_2.png)
+
+## Experimental Features (in Experimental)
+
+- **Gemini** and **DeepSeek** is currently supported using Experimental content scripts (Permissions: scripting). You can revoke them at any time by pressing "reset" or the "beaker" button.
+- Send longer queries
+- Paste Images into the prompt.
+- Automatically click **_Web Search_**, **_Deep Research_**, or **_Canvas_** if possible.
+  ![Sample 6](./samples/Sample_6.png)
