@@ -201,10 +201,10 @@ document.addEventListener("DOMContentLoaded", () => {
   appendSvg({ image: "assets/images/buttons/multi.svg" }, multiBtn);
   appendSvg({ image: "assets/images/buttons/ellipse.svg" }, ellipse);
   extras.style.display = "none";
-  [(clearBtn, pasteBtn, goBtn)].forEach((btn) => {
-    setupTooltip(btn, () => query.value.length === 0);
+  [clearBtn, pasteBtn, multiBtn, ellipse].forEach((btn) => {
+    setupTooltip(btn);
   });
-  setupTooltip(multiBtn, () => query.value.length > 0);
+  setupTooltip(goBtn, () => query.value.length === 0);
   multiBtn.style.display = "none";
   resetBtn.addEventListener("click", async () => {
     await chrome.permissions.remove({ permissions: ["clipboardRead"] });
