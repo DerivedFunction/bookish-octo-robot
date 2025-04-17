@@ -18,7 +18,7 @@ function createToggleButton(engine, isActive, onClick) {
   toggleClass(button, isActive);
   appendSvg(
     {
-      image: engine.image || `/assets/images/ai/${engine.name}.svg`,
+      image: engine.image,
       description: engine.name,
     },
     button,
