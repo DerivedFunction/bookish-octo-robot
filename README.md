@@ -22,7 +22,7 @@ chmod +x compile.sh
 # 7z a ../tabbed-firefox.zip .
 ```
 
-## Run and Test from source
+## Develop and Test from source
 
 ```sh
 chmod +x dev.sh
