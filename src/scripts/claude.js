@@ -23,7 +23,6 @@ async function runAfterFullLoad() {
   async function runWithDelay() {
     while (counter++ < MAX_COUNTER) {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
-      await getImage();
       await getTextInput("textContent", "div[enterkeyhint='enter'] p");
       await getLastResponse();
     }
