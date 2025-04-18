@@ -11,6 +11,22 @@ let counter = 0;
 let element;
 // if it was opened
 let orphan;
+
+async function getLastResponse() {
+  let { DeepSeekLast } = await chrome.storage.local.get(["DeepSeekLast"]);
+  await chrome.storage.local.remove("DeepSeekLast");
+  if (!DeepSeekLast) return;
+  let lastResponse = document.querySelectorAll(
+    "div.ds-markdown.ds-markdown--block"
+  );
+  if (lastResponse.length === 0) return;
+  let content = lastResponse[lastResponse.length - 1].innerHTML;
+  console.log(content);
+  chrome.runtime.sendMessage({
+    lastResponse: content,
+    engine: "DeepSeek",
+  });
+}
 async function runAfterFullLoad() {
   if (!orphan) {
     console.log("Orphan process. Exiting...");
@@ -25,6 +41,7 @@ async function runAfterFullLoad() {
     while (counter++ < MAX_COUNTER) {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
       await getTextInput();
+      await getLastResponse();
     }
     console.log("No activity. Stopped listening for queries");
   }

@@ -472,12 +472,16 @@ fieldset {
   border-color: var(--border-color);
 }
 
+/* Response container (your original styling) */
 #response-container {
-  display: none;
+  display: none; /* Assumed to be toggled visible elsewhere */
   height: 65vh;
   overflow-y: scroll;
+  padding: 10px;
+  box-sizing: border-box;
 }
-/* Chatbot Response */
+
+/* Chatbot and user response base styling (your original styling) */
 .chat-response {
   background-color: var(--item-bg);
   border: 1px solid var(--border-color);
@@ -497,8 +501,55 @@ fieldset {
   background: var(--hover-bg);
 }
 
-/* User Input */
+/* User input styling (your original styling) */
 .chat-response.input {
   align-self: flex-end;
   margin-left: auto;
+}
+
+/* Chatbot messages container (new styling for horizontal flexbox) */
+.chatbot-messages {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap; /* Keep responses in a single row */
+  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-y: hidden; /* Disable vertical scrolling */
+  padding: 8px 12px; /* Match .chat-response margin */
+  margin: 8px 12px; /* Match .chat-response margin */
+  max-width: 100%; /* Fit within responseContainer */
+  scroll-behavior: smooth; /* Smooth scrolling */
+  gap: 12px; /* Space between chatbot responses */
+}
+
+/* Chatbot response specific styling */
+.chat-response.chatbot {
+  flex: 0 0 auto; /* Prevent shrinking, fixed width */
+  max-width: 500px; /* Constrain width for readability */
+  max-height: 400px;
+  overflow: scroll;
+  /* Inherits .chat-response styles (background, border, etc.) */
+}
+
+/* Optional: Style scrollbar to match theme */
+.chatbot-messages::-webkit-scrollbar {
+  height: 8px;
+}
+
+.chatbot-messages::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 4px;
+}
+
+.chatbot-messages::-webkit-scrollbar-track {
+  background: var(--item-bg);
+}
+
+/* Optional: Hide scrollbar for cleaner look (works in WebKit browsers) */
+.chatbot-messages::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ensure KEEP class doesn't affect styling */
+.KEEP {
+  /* No styling needed unless for debugging */
 }

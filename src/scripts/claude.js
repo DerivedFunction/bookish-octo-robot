@@ -24,11 +24,25 @@ async function runAfterFullLoad() {
     while (counter++ < MAX_COUNTER) {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
       await getTextInput("textContent", "div[enterkeyhint='enter'] p");
+      await getLastResponse();
     }
     console.log("No activity. Stopped listening for queries");
   }
 }
 
+async function getLastResponse() {
+  let { ClaudeLast } = await chrome.storage.local.get(["ClaudeLast"]);
+  await chrome.storage.local.remove("ClaudeLast");
+  if (!ClaudeLast) return;
+  let lastResponse = document.querySelectorAll("[data-test-render-count]");
+  if (lastResponse.length === 0) return;
+  let content = lastResponse[lastResponse.length - 1].innerHTML;
+  console.log(content);
+  chrome.runtime.sendMessage({
+    lastResponse: content,
+    engine: "Claude",
+  });
+}
 async function getTextInput(
   type,
   attribute,
