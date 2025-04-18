@@ -26,16 +26,16 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     message: "sendQuery",
   });
   try {
-    console.log("sidebar status", sidebarStatus);
+    console.log("sidebar status", sidebarStatus, "unstable status", unstable);
+    if (!unstable)
+      browser.sidebarAction.setPanel({ panel: "./index.html#sidebar" });
     if (!sidebarStatus) {
-      await browser.sidebarAction.open().catch((error) => {
+      browser.sidebarAction.open().catch((error) => {
         console.error("Failed to open sidebar:", error);
         createTab(query); // Fallback to creating a tab
       });
     } else {
-      console.log("Sidebar is open with permissions", selectedEngine);
-      // sidebar is open
-      chrome.storage.local.set({ [selectedEngine.name]: true });
+      if (unstable) chrome.storage.local.set({ [selectedEngine.name]: true });
     }
   } catch (error) {
     console.log("In chrome. Creating tab", error);
@@ -387,6 +387,13 @@ chrome.runtime.onMessage.addListener((e) => {
     tabReceived++;
     // Reset the tab listener after 1 sec
     setTimeout(() => tabReceived--, 1000);
+  }
+});
+let { unstable } = chrome.storage.local.get("unstable");
+chrome.runtime.onMessage.addListener((e) => {
+  if (e.unstable) {
+    unstable = e.value;
+    console.log("unstable status", unstable);
   }
 });
 chrome.runtime.onMessage.addListener((e) => {

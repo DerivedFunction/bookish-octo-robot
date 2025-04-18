@@ -18,6 +18,9 @@ async function runAfterFullLoad() {
   }
   console.log("Running query injection.");
   await getTextInput();
+  let { unstable } = await chrome.storage.local.get("unstable");
+  if (!unstable) return;
+  console.log("Unstable Feature activated. listening...");
   await runWithDelay();
   async function runWithDelay() {
     while (counter++ < MAX_COUNTER) {

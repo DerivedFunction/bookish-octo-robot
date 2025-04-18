@@ -141,6 +141,8 @@ multiBtn.addEventListener("click", async () => {
 
   query.value = keep ? queryText : "";
   queryEvents();
+  let { unstable } = await chrome.storage.local.get("unstable");
+  if (!unstable) return;
   if (newClick) {
     alert(
       "Active Search Everywhere session started. Click the same button again will not open new tabs. Opening a new Tab will invalidate this session"
@@ -214,55 +216,58 @@ document.addEventListener("DOMContentLoaded", async () => {
     await appendList();
   });
   const engines = await getSearchEngineList();
-  chrome.runtime.onMessage.addListener((e) => {
-    if (e.content) {
-      const messageWrapper = document.createElement("div");
-      messageWrapper.classList.add("chat-response", "chatbot");
-      const icon = document.createElement("div");
-      const engine = engines.find((ai) => ai.name === e.engine);
-      appendSvg(
-        {
-          image: engine.image,
-          description: e.engine,
-        },
-        icon,
-        "5px",
-        false,
-        true
-      );
-      messageWrapper.appendChild(icon);
-      // Create a DOMParser to parse the content string
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(e.content, "text/html");
+  let { unstable } = await chrome.storage.local.get("unstable");
+  // only use this feature if needed
+  if (unstable)
+    chrome.runtime.onMessage.addListener((e) => {
+      if (e.content) {
+        const messageWrapper = document.createElement("div");
+        messageWrapper.classList.add("chat-response", "chatbot");
+        const icon = document.createElement("div");
+        const engine = engines.find((ai) => ai.name === e.engine);
+        appendSvg(
+          {
+            image: engine.image,
+            description: e.engine,
+          },
+          icon,
+          "5px",
+          false,
+          true
+        );
+        messageWrapper.appendChild(icon);
+        // Create a DOMParser to parse the content string
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(e.content, "text/html");
 
-      // Extract the parsed HTML (e.g., <p>...</p>)
-      const parsedElement = doc.body.firstChild;
+        // Extract the parsed HTML (e.g., <p>...</p>)
+        const parsedElement = doc.body.firstChild;
 
-      // Check if the parsed element has text content
-      if (parsedElement && parsedElement.textContent.trim()) {
-        // If it has text, append it
-        messageWrapper.appendChild(parsedElement);
-      }
-
-      // Only append to the chatbot-messages container if there is a valid element
-      if (messageWrapper.hasChildNodes()) {
-        // Check if the last child is an unprotected chatbot-messages container
-        let chatbotMessages = responseContainer.lastElementChild;
-        if (
-          !chatbotMessages ||
-          !chatbotMessages.classList.contains("chatbot-messages") ||
-          chatbotMessages.classList.contains("KEEP")
-        ) {
-          // Create a new chatbot-messages container (no KEEP class)
-          chatbotMessages = document.createElement("div");
-          chatbotMessages.classList.add("chatbot-messages");
-          responseContainer.appendChild(chatbotMessages);
+        // Check if the parsed element has text content
+        if (parsedElement && parsedElement.textContent.trim()) {
+          // If it has text, append it
+          messageWrapper.appendChild(parsedElement);
         }
-        chatbotMessages.appendChild(messageWrapper);
-        responseContainer.scrollTo(0, responseContainer.scrollHeight); // Scroll to bottom
+
+        // Only append to the chatbot-messages container if there is a valid element
+        if (messageWrapper.hasChildNodes()) {
+          // Check if the last child is an unprotected chatbot-messages container
+          let chatbotMessages = responseContainer.lastElementChild;
+          if (
+            !chatbotMessages ||
+            !chatbotMessages.classList.contains("chatbot-messages") ||
+            chatbotMessages.classList.contains("KEEP")
+          ) {
+            // Create a new chatbot-messages container (no KEEP class)
+            chatbotMessages = document.createElement("div");
+            chatbotMessages.classList.add("chatbot-messages");
+            responseContainer.appendChild(chatbotMessages);
+          }
+          chatbotMessages.appendChild(messageWrapper);
+          responseContainer.scrollTo(0, responseContainer.scrollHeight); // Scroll to bottom
+        }
       }
-    }
-  });
+    });
 });
 function getResponse() {
   const activeEngines = getSearchEverywhere();

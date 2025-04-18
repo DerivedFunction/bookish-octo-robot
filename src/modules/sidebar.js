@@ -38,6 +38,10 @@ closeScriptBtn.addEventListener("click", () => {
 const scriptsBtn = document.getElementById("scripts-button");
 scriptsBtn.addEventListener("click", async () => {
   exp_sidebar.style.display = "block";
+  await chrome.storage.local.get("unstable").then((e) => {
+    console.log("unstable feature status", e?.unstable);
+    unstable.checked = e?.unstable || false;
+  });
   const aiList = await getSearchEngineList(); // or cache it if you want
   await refreshCurrentEnabled(aiList);
 });
@@ -107,6 +111,14 @@ async function refreshCurrentEnabled(aiList, all = false) {
   }
 }
 const advancedList = document.getElementById("ai-advanced-support");
+const unstable = document.getElementById("unstable");
+unstable.addEventListener("change", async () => {
+  await chrome.storage.local.set({ unstable: unstable.checked });
+  chrome.runtime.sendMessage({
+    unstable: true,
+    value: unstable.checked,
+  });
+});
 document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "assets/images/buttons/options.svg" }, optionBtn);
   appendSvg({ image: "assets/images/buttons/unlocked.svg" }, scriptsBtn);

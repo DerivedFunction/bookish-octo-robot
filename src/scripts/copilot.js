@@ -23,7 +23,9 @@ async function runAfterFullLoad() {
   setTimeout(() => {
     getTextInput();
   }, 2000);
-
+  let { unstable } = await chrome.storage.local.get("unstable");
+  if (!unstable) return;
+  console.log("Unstable Feature activated. listening...");
   await runWithDelay();
   async function runWithDelay() {
     while (counter++ < MAX_COUNTER) {
