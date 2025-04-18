@@ -26,9 +26,23 @@ async function runAfterFullLoad() {
     while (counter++ < MAX_COUNTER) {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
       await getTextInput();
+      await getLastResponse();
     }
     console.log("No activity. Stopped listening for queries");
   }
+}
+async function getLastResponse() {
+  let { ChatGPTLast } = await chrome.storage.local.get(["ChatGPTLast"]);
+  await chrome.storage.local.remove("ChatGPTLast");
+  if (!ChatGPTLast) return;
+  let lastResponse = document.querySelectorAll("article");
+  if (lastResponse.length === 0) return;
+  let content = lastResponse[lastResponse.length - 1].innerHTML;
+  console.log(content);
+  chrome.runtime.sendMessage({
+    lastResponse: content,
+    engine: "ChatGPT",
+  });
 }
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   let { query, ChatGPT } = await chrome.storage.local.get(["query", "ChatGPT"]);
@@ -74,9 +88,12 @@ async function clickButton(attribute) {
   }, 3000);
   return;
 }
-function update() {
+function update(content = "") {
   // Send a message after the button click
-  chrome.runtime.sendMessage({ buttonClicked: true, engine: "ChatGPT" });
+  chrome.runtime.sendMessage({
+    buttonClicked: true,
+    engine: "ChatGPT",
+  });
 }
 
 async function getImage() {

@@ -3,6 +3,7 @@ import { appendSvg } from "./appendSvg.js"; // <- Import from appendSvg.js
 import { resetBtn, toggleClass, hostnameToURL } from "../app.js";
 import { query, queryEvents } from "./query.js";
 import { showToast } from "./toaster.js";
+import { greetingContainer } from "./greetings.js";
 const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
 const searchEverywhereList = document.getElementById("search-everywhere-list");
 
@@ -57,6 +58,7 @@ export async function appendList() {
 }
 
 export const multiBtn = document.getElementById("multi-go");
+let newClick = true;
 multiBtn.addEventListener("click", async () => {
   const queryText = query.value;
 
@@ -116,9 +118,12 @@ multiBtn.addEventListener("click", async () => {
         await chrome.tabs.create({ url });
       } else {
         // hostnameToURL should resolve to engine homepage (for content script injection)
-        await chrome.tabs.create({
-          url: hostnameToURL(new URL(engine.url).hostname),
-        });
+        if (newClick) {
+          // First time clicking the button
+          await chrome.tabs.create({
+            url: hostnameToURL(new URL(engine.url).hostname),
+          });
+        }
       }
     } else {
       if (engine.experimental) {
@@ -133,18 +138,55 @@ multiBtn.addEventListener("click", async () => {
       }
     }
   }
+
   query.value = keep ? queryText : "";
   queryEvents();
+  if (newClick) {
+    alert(
+      "Active Search Everywhere session started. Click the same button again will not open new tabs. Opening a new Tab will invalidate this session"
+    );
+    document.getElementById("response-container").style.display = "block";
+    greetingContainer.style.display = "none";
+    newClick = false;
+    responseBtn.style.display = "";
+  }
 });
-
+const responseBtn = document.getElementById("response");
+responseBtn.addEventListener("click", async () => {
+  const activeEngines = getSearchEverywhere();
+  Object.keys(activeEngines).forEach(async (engine) => {
+    const engineLast = engine + "Last";
+    await chrome.storage.local.set({ [engineLast]: true });
+  });
+});
 const curMultID = Date.now().toString();
 document.addEventListener("DOMContentLoaded", async () => {
   multiBtn.style.display = "none";
+  responseBtn.style.display = "";
   localStorage.setItem("multi-mode", curMultID);
-  appendSvg({ image: "assets/images/buttons/multi.svg" }, multiBtn);
+  appendSvg(
+    {
+      image: "assets/images/buttons/response.svg",
+      description: "Get response data",
+    },
+    responseBtn
+  );
+  appendSvg(
+    {
+      image: "assets/images/buttons/multi.svg",
+      description: "Search Everywhere",
+    },
+    multiBtn
+  );
   await appendList();
   resetBtn.addEventListener("click", async () => {
     localStorage.removeItem(SEARCH_ENGINE_STORAGE_KEY);
     await appendList();
+  });
+  chrome.runtime.onMessage.addListener((e) => {
+    if (e.content) {
+      console.log(e.content);
+      console.log(e.engine);
+    }
   });
 });

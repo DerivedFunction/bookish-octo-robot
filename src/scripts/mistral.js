@@ -90,5 +90,9 @@ async function clickButton(attribute) {
 }
 
 async function update() {
-  chrome.runtime.sendMessage({ buttonClicked: true, engine: "Mistral" });
+  chrome.runtime.sendMessage({
+    buttonClicked: true,
+    content: "",
+    engine: "Mistral",
+  });
 }

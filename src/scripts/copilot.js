@@ -95,7 +95,11 @@ async function clickButton(attribute) {
 }
 function update() {
   // Send a message after the button click
-  chrome.runtime.sendMessage({ buttonClicked: true, engine: "Copilot" });
+  chrome.runtime.sendMessage({
+    buttonClicked: true,
+    content: "",
+    engine: "Copilot",
+  });
 }
 
 async function getImage() {

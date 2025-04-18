@@ -471,3 +471,8 @@ fieldset {
 .inactive {
   border-color: var(--border-color);
 }
+
+#response-container {
+  display: none;
+  height: 65vh;
+}

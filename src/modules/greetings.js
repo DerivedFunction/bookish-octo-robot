@@ -1,6 +1,6 @@
 import { resetBtn } from "../app.js";
 export const greeting = document.getElementById("greeting-form");
-const greetingContainer = document.getElementById("greeting-container");
+export const greetingContainer = document.getElementById("greeting-container");
 greeting.addEventListener("change", async (e) => {
   localStorage.setItem("greeting", e.target.value);
   if (e.target.value === "custom") {

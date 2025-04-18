@@ -116,7 +116,11 @@ async function clickButton(attribute) {
 }
 async function update() {
   // Send a message after the button click
-  chrome.runtime.sendMessage({ buttonClicked: true, engine: "Meta" });
+  chrome.runtime.sendMessage({
+    buttonClicked: true,
+    content: "",
+    engine: "Meta",
+  });
 }
 async function getImage() {
   const STORAGE_KEY_PREFIX = "pasted-file-";

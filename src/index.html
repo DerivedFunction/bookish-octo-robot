@@ -39,6 +39,11 @@
         work as expected, and is <strong>not required</strong> for basic
         functionality.
       </p>
+      <p>
+        Enabling Permission allows tabs opened by this extension to listen to
+        any queries, as long prompts are inputed within 5 minutes. You must
+        close the tabs in order to create a new chat.
+      </p>
       <div class="section">
         <span>Currently Enabled</span>
         <div id="ai-experimental-enabled" class="horizontal-container"></div>
@@ -228,6 +233,7 @@
           <span id="name" class="bg-text"></span>
           <span id="secondary" class="bg-text"></span>
         </h1>
+        <div id="response-container"></div>
         <div id="chatbox">
           <div class="search-container">
             <ul id="files-list"></ul>
@@ -270,6 +276,12 @@
                         accept="image/*"
                         multiple="multiple"
                       />
+                    </div>
+                    <div id="multi-tools">
+                      <button
+                        id="response"
+                        data-tooltip="Get Response"
+                      ></button>
                     </div>
                   </div>
                 </div>

@@ -78,7 +78,11 @@ async function clickButton(attribute) {
 }
 async function update() {
   // Send a message after the button click
-  chrome.runtime.sendMessage({ buttonClicked: true, engine: "Gemini" });
+  chrome.runtime.sendMessage({
+    buttonClicked: true,
+    content: "",
+    engine: "Gemini",
+  });
 }
 
 async function getButtons() {

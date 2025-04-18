@@ -96,7 +96,11 @@ async function clickButton(attribute) {
 async function update() {
   await chrome.storage.local.remove("DeepSeek");
   // Send a message after the button click
-  chrome.runtime.sendMessage({ buttonClicked: true, engine: "DeepSeek" });
+  chrome.runtime.sendMessage({
+    buttonClicked: true,
+    content: "",
+    engine: "DeepSeek",
+  });
 }
 async function getButtons() {
   let { deep, web } = await chrome.storage.local.get(["deep", "web"]);

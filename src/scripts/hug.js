@@ -99,7 +99,11 @@ async function clickButton(attribute) {
 }
 async function update() {
   // Send a message after the button click
-  chrome.runtime.sendMessage({ buttonClicked: true, engine: "Hug" });
+  chrome.runtime.sendMessage({
+    buttonClicked: true,
+    content: "",
+    engine: "Hug",
+  });
 }
 async function getButtons() {
   let { web } = await chrome.storage.local.get("web");

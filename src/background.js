@@ -389,3 +389,17 @@ chrome.runtime.onMessage.addListener((e) => {
     setTimeout(() => tabReceived--, 1000);
   }
 });
+chrome.runtime.onMessage.addListener((e) => {
+  if (e.lastResponse) {
+    function stripAttributes(html) {
+      // This regex matches any attributes inside HTML tags and removes them
+      return html.replace(/<([a-z]+)([^>]*?)>/gi, (match, tagName) => {
+        return `<${tagName}>`; // Return the tag name without attributes
+      });
+    }
+    chrome.runtime.sendMessage({
+      content: stripAttributes(e.lastResponse),
+      engine: e.engine,
+    });
+  }
+});
