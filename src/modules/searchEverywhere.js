@@ -1,9 +1,11 @@
-import { getSearchEngineList } from "./searchEngine.js";
+import { curSearchBtn, getSearchEngineList } from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js"; // <- Import from appendSvg.js
 import { resetBtn, toggleClass, hostnameToURL } from "../app.js";
 import { query, queryEvents } from "./query.js";
 import { showToast } from "./toaster.js";
 import { greetingContainer } from "./greetings.js";
+import { ellipse } from "./actionButtons.js";
+import { suggestionContainer } from "./suggestions.js";
 const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
 const searchEverywhereList = document.getElementById("search-everywhere-list");
 
@@ -147,10 +149,34 @@ multiBtn.addEventListener("click", async () => {
     alert(
       "Active Search Everywhere session started. Click the same button again will not open new tabs. Opening a new Tab will invalidate this session"
     );
-    responseContainer.style.display = "block";
-    greetingContainer.style.display = "none";
+    [greetingContainer, curSearchBtn, ellipse, suggestionContainer].forEach(
+      (e) => {
+        e.style.display = "none";
+      }
+    );
     newClick = false;
+    responseContainer.style.display = "block";
     responseBtn.style.display = "";
+
+    const searchEngines = await getSearchEngineList();
+    const selectedEngines = getSearchEverywhere();
+
+    const fragment = document.createDocumentFragment();
+
+    searchEngines.forEach((engine) => {
+      const isActive = selectedEngines[engine.name] ?? false;
+      if (!isActive) return;
+      const button = createToggleButton(engine, isActive, (btn) => {
+        const currentState = btn.classList.contains("active");
+        const updatedState = !currentState;
+        toggleClass(btn, updatedState);
+        selectedEngines[engine.name] = updatedState;
+        saveSearchEverywhere(selectedEngines);
+      });
+      fragment.appendChild(button);
+    });
+
+    multiTools.appendChild(fragment);
   }
   query.style.maxHeight = "50px";
   const children = Array.from(responseContainer.children);
@@ -167,6 +193,7 @@ multiBtn.addEventListener("click", async () => {
 });
 const responseContainer = document.getElementById("response-container");
 const responseBtn = document.getElementById("response");
+const multiTools = document.getElementById("multi-tools");
 responseBtn.addEventListener("click", async () => {
   deleteLastMessage();
   getResponse();

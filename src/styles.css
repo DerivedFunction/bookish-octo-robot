@@ -475,7 +475,7 @@ fieldset {
 /* Response container (your original styling) */
 #response-container {
   display: none; /* Assumed to be toggled visible elsewhere */
-  height: 65vh;
+  height: 68vh;
   overflow-y: scroll;
   padding: 10px;
   box-sizing: border-box;
