@@ -38,7 +38,6 @@ async function getLastResponse() {
   let lastResponse = document.querySelectorAll("article");
   if (lastResponse.length === 0) return;
   let content = lastResponse[lastResponse.length - 1].innerHTML;
-  console.log(content);
   chrome.runtime.sendMessage({
     lastResponse: content,
     engine: "ChatGPT",

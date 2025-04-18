@@ -150,7 +150,7 @@ multiBtn.addEventListener("click", async () => {
     newClick = false;
     responseBtn.style.display = "";
   }
-  query.style.maxHeight = 50;
+  query.style.maxHeight = "50px";
   const children = Array.from(responseContainer.children);
   children.forEach((child) => {
     if (!child.classList.contains("KEEP")) {
@@ -192,7 +192,7 @@ function deleteLastMessage() {
 const curMultID = Date.now().toString();
 document.addEventListener("DOMContentLoaded", async () => {
   multiBtn.style.display = "none";
-  responseBtn.style.display = "";
+  responseBtn.style.display = "none";
   localStorage.setItem("multi-mode", curMultID);
   appendSvg(
     {

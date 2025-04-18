@@ -36,7 +36,6 @@ async function getLastResponse() {
   let lastResponse = document.querySelectorAll("div.prose");
   if (lastResponse.length === 0) return;
   let content = lastResponse[lastResponse.length - 1].textContent;
-  console.log(content);
   chrome.runtime.sendMessage({
     lastResponse: content,
     engine: "Perplexity",
