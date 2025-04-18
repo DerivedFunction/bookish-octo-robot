@@ -275,7 +275,7 @@ h2 {
   display: none; /* Hidden by default */
   z-index: 10;
   transition: all 0.2s ease;
-  overflow-x: scroll; /* Enable vertical scrolling when content overflows */
+  overflow-x: hidden;
 }
 .dropdown-content.open {
   display: flex; /* Show when open */
