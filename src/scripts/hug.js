@@ -3,10 +3,23 @@
   setTimeout(runAfterFullLoad, 3000);
 })();
 
+const MAX_COUNTER = 20;
+let counter = 0;
+let element;
 async function runAfterFullLoad() {
   console.log("Running query injection.");
   await getButtons();
+  element = document.querySelector("textarea[placeholder='Ask anything']");
   await getTextInput();
+
+  await runWithDelay();
+  async function runWithDelay() {
+    while (counter++ < MAX_COUNTER) {
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
+      await getTextInput();
+    }
+    console.log("No activity. Stopped listening for queries");
+  }
 }
 
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
@@ -20,13 +33,13 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   if (!searchQuery) return;
 
   let attempts = 0;
-  const attribute = "textarea[placeholder='Ask anything']";
+  counter = 0; //reset the counter
   while (attempts < maxRetries) {
-    const element = document.querySelector(attribute);
+    element = document.querySelector("textarea[placeholder='Ask anything']");
     console.log(
       `Attempt ${
         attempts + 1
-      }: Injecting into ${attribute} with query: ${searchQuery}`
+      }: Injecting into ${element} with query: ${searchQuery}`
     );
 
     if (element) {
@@ -46,6 +59,9 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
       await clickButton("button[name='submit']");
       return;
     } else {
+      element =
+        element ||
+        document.querySelector("textarea[placeholder='Ask anything']");
       console.log(
         `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
       );
@@ -56,9 +72,7 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
     }
   }
 
-  console.error(
-    `Failed to find element ${attribute} after ${maxRetries} attempts.`
-  );
+  console.error(`Failed to find element after ${maxRetries} attempts.`);
   update();
 }
 async function clickButton(attribute) {
