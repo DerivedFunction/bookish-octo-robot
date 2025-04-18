@@ -25,6 +25,7 @@ async function runAfterFullLoad() {
   async function runWithDelay() {
     while (counter++ < MAX_COUNTER) {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
+      await getImage();
       await getTextInput();
       await getLastResponse();
     }
@@ -176,7 +177,7 @@ async function getImage() {
     const event = new Event("change", { bubbles: true });
     fileUploadInput.dispatchEvent(event);
   } else {
-    console.warn("No valid files to assign to input");
+    console.log("No valid files to assign to input");
   }
 }
 async function getButtons() {
