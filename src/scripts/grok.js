@@ -11,6 +11,19 @@ let counter = 0;
 let element;
 // if it was opened
 let orphan;
+async function getLastResponse() {
+  let { GrokLast } = await chrome.storage.local.get(["GrokLast"]);
+  await chrome.storage.local.remove("GrokLast");
+  if (!GrokLast) return;
+  let lastResponse = document.querySelectorAll(".message-bubble");
+  if (lastResponse.length === 0) return;
+  let content = lastResponse[lastResponse.length - 1].innerHTML;
+  console.log(content);
+  chrome.runtime.sendMessage({
+    lastResponse: content,
+    engine: "Grok",
+  });
+}
 async function runAfterFullLoad() {
   if (!orphan) {
     console.log("Orphan process. Exiting...");
@@ -21,12 +34,12 @@ async function runAfterFullLoad() {
   await getButtons();
   element = document.querySelector("textarea");
   await getTextInput();
-
   await runWithDelay();
   async function runWithDelay() {
     while (counter++ < MAX_COUNTER) {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
       await getTextInput();
+      await getLastResponse();
     }
     console.log("No activity. Stopped listening for queries");
   }

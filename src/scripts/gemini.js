@@ -25,11 +25,24 @@ async function runAfterFullLoad() {
     while (counter++ < MAX_COUNTER) {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
       await getTextInput();
+      await getLastResponse();
     }
     console.log("No activity. Stopped listening for queries");
   }
 }
-
+async function getLastResponse() {
+  let { GeminiLast } = await chrome.storage.local.get(["GeminiLast"]);
+  await chrome.storage.local.remove("GeminiLast");
+  if (!GeminiLast) return;
+  let lastResponse = document.querySelectorAll(".response-content");
+  if (lastResponse.length === 0) return;
+  let content = lastResponse[lastResponse.length - 1].innerHTML;
+  console.log(content);
+  chrome.runtime.sendMessage({
+    lastResponse: content,
+    engine: "Gemini",
+  });
+}
 async function getTextInput(maxRetries = 5, retryDelay = 3000) {
   let { query, Gemini } = await chrome.storage.local.get(["query", "Gemini"]);
   const searchQuery = (Gemini ? query : "")?.trim();
