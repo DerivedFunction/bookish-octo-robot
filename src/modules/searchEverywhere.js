@@ -145,12 +145,18 @@ multiBtn.addEventListener("click", async () => {
     alert(
       "Active Search Everywhere session started. Click the same button again will not open new tabs. Opening a new Tab will invalidate this session"
     );
-    document.getElementById("response-container").style.display = "block";
+    responseContainer.style.display = "block";
     greetingContainer.style.display = "none";
     newClick = false;
     responseBtn.style.display = "";
   }
+  const messageWrapper = document.createElement("div");
+  messageWrapper.classList.add("chat-response");
+  messageWrapper.classList.add("input");
+  messageWrapper.textContent = queryText;
+  responseContainer.appendChild(messageWrapper);
 });
+const responseContainer = document.getElementById("response-container");
 const responseBtn = document.getElementById("response");
 responseBtn.addEventListener("click", async () => {
   const activeEngines = getSearchEverywhere();
@@ -185,8 +191,26 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
   chrome.runtime.onMessage.addListener((e) => {
     if (e.content) {
-      console.log(e.content);
-      console.log(e.engine);
+      const messageWrapper = document.createElement("div");
+      messageWrapper.classList.add("chat-response");
+
+      // Create a DOMParser to parse the content string
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(e.content, "text/html");
+
+      // Extract the parsed HTML (e.g., <p>...</p>)
+      const parsedElement = doc.body.firstChild;
+
+      // Check if the parsed element has text content
+      if (parsedElement && parsedElement.textContent.trim()) {
+        // If it has text, append it
+        messageWrapper.appendChild(parsedElement);
+      }
+
+      // Only append to the response container if there is a valid element
+      if (messageWrapper.hasChildNodes()) {
+        responseContainer.appendChild(messageWrapper);
+      }
     }
   });
 });

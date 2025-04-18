@@ -392,6 +392,8 @@ chrome.runtime.onMessage.addListener((e) => {
 chrome.runtime.onMessage.addListener((e) => {
   if (e.lastResponse) {
     function stripAttributes(html) {
+      html = html.replace(/<button[^>]*?>.*?<\/button>/gi, ""); // Remove <button> elements
+      html = html.replace(/<svg[^>]*?>.*?<\/svg>/gi, ""); // Remove <svg> elements
       // This regex matches any attributes inside HTML tags and removes them
       return html.replace(/<([a-z]+)([^>]*?)>/gi, (match, tagName) => {
         return `<${tagName}>`; // Return the tag name without attributes
