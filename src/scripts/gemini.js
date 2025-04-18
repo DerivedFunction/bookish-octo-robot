@@ -2,44 +2,42 @@
 (async () => {
   setTimeout(runAfterFullLoad, 3000);
 })();
-
+let element;
+const MAX_COUNTER = 20;
+let counter = 0;
 async function runAfterFullLoad() {
   console.log("Running query injection.");
+  element = document.querySelector(".textarea");
   await getButtons();
-  await getTextInput("textContent", ".ql-editor.textarea.new-input-ui");
+  await getTextInput();
+
+  await runWithDelay();
+  async function runWithDelay() {
+    while (counter++ < MAX_COUNTER) {
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
+      await getTextInput();
+    }
+    console.log("No activity. Stopped listening for queries");
+  }
 }
 
-async function getTextInput(
-  type,
-  attribute,
-  maxRetries = 5,
-  retryDelay = 3000
-) {
+async function getTextInput(maxRetries = 5, retryDelay = 3000) {
   let { query, Gemini } = await chrome.storage.local.get(["query", "Gemini"]);
   const searchQuery = (Gemini ? query : "")?.trim();
   await chrome.storage.local.remove("Gemini");
   if (!searchQuery) return;
 
   let attempts = 0;
+  counter = 0; //reset the counter
 
   while (attempts < maxRetries) {
     // Check 'stop' condition here
-    const element = document.querySelector(attribute);
     console.log(
-      `Attempt ${
-        attempts + 1
-      }: Injecting ${element} via ${type} of query: ${searchQuery}`
+      `Attempt ${attempts + 1}: Injecting ${element} via query: ${searchQuery}`
     );
 
     if (element) {
-      switch (type) {
-        case "value":
-          element.value = searchQuery;
-          break;
-        case "textContent":
-          element.textContent = searchQuery;
-          break;
-      }
+      element.textContent = searchQuery;
       clickButton(".send-button");
       return;
     } else {
