@@ -62,7 +62,7 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
         attempts + 1
       }: Injecting into ${element} with query: ${searchQuery}`
     );
-
+    element = document.querySelector("textarea");
     if (element) {
       // Simulate input for React compatibility
       let lastValue = element.value || "";
