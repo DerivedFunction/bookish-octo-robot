@@ -273,12 +273,23 @@ h2 {
 
 .dropdown-content {
   display: none; /* Hidden by default */
+  width: 200px; /* Fixed width for consistency */
+  background: var(--item-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 15px;
+  box-shadow: 0 2px 4px var(--shadow-color);
   z-index: 10;
   transition: all 0.2s ease;
-  overflow-x: hidden;
+  padding: 0;
+  max-height: 200px; /* Limit the height */
+  overflow-y: auto; /* Enable vertical scrolling when content overflows */
+}
+#search-engine-dropdown {
+  position: absolute;
+  left: 0;
 }
 .dropdown-content.open {
-  display: flex; /* Show when open */
+  display: block; /* Show when active */
 }
 
 li {

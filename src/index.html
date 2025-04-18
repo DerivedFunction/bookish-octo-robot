@@ -16,15 +16,6 @@
       <div class="left horizontal-container">
         <button id="options-button" class="bg-text transparent-item"></button>
         <button id="scripts-button" class="bg-text transparent-item"></button>
-        <button
-          id="search-engine-picker"
-          data-tooltip="Pick other AI Chatbots"
-          class="bg-text transparent-item"
-        ></button>
-        <div
-          id="search-engine-dropdown"
-          class="dropdown-content horizontal-container"
-        ></div>
       </div>
       <div class="right horizontal-container">
         <h2 class="bg-text"><span id="time"></span></h2>
@@ -257,6 +248,10 @@
                       data-tooltip="Your current AI"
                     ></button>
                     <button
+                      id="search-engine-picker"
+                      data-tooltip="Pick other AI Chatbots"
+                    ></button>
+                    <button
                       id="ellipse"
                       data-tooltip="Experimental Features"
                     ></button>
@@ -311,6 +306,7 @@
               ></button>
             </div>
           </div>
+          <div id="search-engine-dropdown" class="dropdown-content"></div>
 
           <div id="suggestions" class="suggestions-container"></div>
           <div id="suggestions-result" class="suggestions-container"></div>

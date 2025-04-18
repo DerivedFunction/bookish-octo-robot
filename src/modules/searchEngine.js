@@ -58,28 +58,34 @@ export async function addSearchEngines() {
   const list = document.getElementById("search-engine-dropdown");
   const fragment = document.createDocumentFragment();
   searchEngines.forEach((engine) => {
-    const button = document.createElement("button");
-    button.className = "bg-text transparent-item";
-    button.setAttribute("data-link", engine.url);
+    const listItem = document.createElement("li");
+    listItem.className = "search-engine-option";
+    listItem.setAttribute("data-link", engine.url);
     if (engine.experimental !== undefined) {
-      button.setAttribute("data-exp", engine.experimental);
+      listItem.setAttribute("data-exp", engine.experimental);
     }
-    // Add inline SVG
-    appendSvg(
-      { image: engine.image, description: engine.name },
-      button,
-      null,
-      false,
-      true
-    );
+    // Create container for icon and text
+    const container = document.createElement("div");
+    container.style.display = "flex";
+    container.style.alignItems = "center";
+    container.style.gap = "8px";
 
-    button.addEventListener("click", async () => {
+    // Add inline SVG
+    appendSvg(engine, container, "4px", false, true);
+
+    // Add text
+    const text = document.createElement("span");
+    text.textContent = engine.name;
+
+    container.appendChild(text);
+    listItem.appendChild(container);
+
+    listItem.addEventListener("click", async () => {
       await chrome.storage.local.set({ engine: engine });
       await getSearchEngine(); // Update the button icon immediately
-      await getScriptStatus();
       dropdown.classList.remove("open");
       appendSvg(
-        { image: "assets/images/buttons/right.svg" },
+        { image: "assets/images/buttons/left.svg" },
         searchEnginePickerBtn
       );
       await chrome.runtime.sendMessage({
@@ -87,9 +93,10 @@ export async function addSearchEngines() {
         message: "selectedSearchEngine",
         engine: engine,
       });
+      await getPermissionStatus();
     });
 
-    fragment.appendChild(button);
+    fragment.appendChild(listItem);
   });
   list.replaceChildren(fragment);
   await getSearchEngine();
