@@ -378,6 +378,7 @@ async function goToLink() {
     if (enabled) {
       // Content scripts supports this experimental feature
       if (isSearchEngineExp()) {
+        await chrome.storage.local.set({ [selectedEngine.name]: true });
         window.location.href = getSearchEngineUrlHostName();
       } else {
         // Go regularly
