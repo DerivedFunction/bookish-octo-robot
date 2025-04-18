@@ -22,21 +22,24 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (!query) return;
   console.log(`Sending ${query} to sidebar...`);
   chrome.storage.local.set({ query });
-  chrome.runtime.sendMessage({
-    message: "sendQuery",
-  });
+  chrome.runtime
+    .sendMessage({
+      message: "sendQuery",
+    })
+    .catch(() => {});
   try {
     console.log("sidebar status", sidebarStatus, "unstable status", unstable);
-    if (!unstable)
+    if (!unstable) {
       browser.sidebarAction.setPanel({ panel: "./index.html#sidebar" });
-    if (!sidebarStatus) {
+      browser.sidebarAction.open();
+      return;
+    }
+    if (!sidebarStatus)
       browser.sidebarAction.open().catch((error) => {
         console.error("Failed to open sidebar:", error);
         createTab(query); // Fallback to creating a tab
       });
-    } else {
-      if (unstable) chrome.storage.local.set({ [selectedEngine.name]: true });
-    }
+    chrome.storage.local.set({ [selectedEngine.name]: true });
   } catch (error) {
     console.log("In chrome. Creating tab", error);
     createTab(query);
@@ -144,7 +147,6 @@ async function loadMenu() {
   await chrome.storage.local.get("Experimental").then((e) => {
     Experimental = e?.Experimental;
   });
-  console.log("Creating context menus", selectedEngine, Experimental);
   // If no search engine is selected, create only the switch menu
   if (!selectedEngine) {
     chrome.contextMenus.create(
@@ -263,6 +265,10 @@ function updateMenu(engine) {
   }
 }
 async function getPrompts() {
+  await chrome.storage.local.get("unstable").then((e) => {
+    unstable = e.unstable;
+  });
+  console.log("unstable feature status", unstable);
   let response = await fetch("ai-list.json");
   if (!response.ok) {
     throw new Error("Failed to load AI list data");
@@ -337,6 +343,7 @@ chrome.runtime.onMessage.addListener(async (e) => {
 // Initial menu setup
 let prompts = [];
 let aiList = [];
+let unstable = false;
 let menusCreated = false;
 getPrompts();
 
@@ -389,7 +396,6 @@ chrome.runtime.onMessage.addListener((e) => {
     setTimeout(() => tabReceived--, 1000);
   }
 });
-let { unstable } = chrome.storage.local.get("unstable");
 chrome.runtime.onMessage.addListener((e) => {
   if (e.unstable) {
     unstable = e.value;
