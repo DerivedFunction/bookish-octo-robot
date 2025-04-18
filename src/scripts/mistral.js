@@ -23,11 +23,24 @@ async function runAfterFullLoad() {
     while (counter++ < MAX_COUNTER) {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
       await getTextInput();
+      await getLastResponse();
     }
     console.log("No activity. Stopped listening for queries");
   }
 }
-
+async function getLastResponse() {
+  let { MistralLast } = await chrome.storage.local.get(["MistralLast"]);
+  await chrome.storage.local.remove("MistralLast");
+  if (!MistralLast) return;
+  let lastResponse = document.querySelectorAll("div[dir='auto']");
+  if (lastResponse.length === 0) return;
+  let content = lastResponse[lastResponse.length - 1].innerHTML;
+  console.log(content);
+  chrome.runtime.sendMessage({
+    lastResponse: content,
+    engine: "Mistral",
+  });
+}
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   let { query, Mistral } = await chrome.storage.local.get(["query", "Mistral"]);
   await chrome.storage.local.remove("Mistral");
