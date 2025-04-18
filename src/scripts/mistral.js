@@ -3,9 +3,20 @@
   setTimeout(runAfterFullLoad, 3000);
 })();
 
+const MAX_COUNTER = 20;
+let counter = 0;
+let element;
 async function runAfterFullLoad() {
   console.log("Running query injection.");
   await getTextInput();
+  await runWithDelay();
+  async function runWithDelay() {
+    while (counter++ < MAX_COUNTER) {
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
+      await getTextInput();
+    }
+    console.log("No activity. Stopped listening for queries");
+  }
 }
 
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
@@ -14,13 +25,13 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   const searchQuery = (Mistral ? query : "")?.trim();
   if (!searchQuery) return;
   let attempts = 0;
-  const attribute = "textarea";
+  counter = 0; //reset the counter
   while (attempts < maxRetries) {
-    const element = document.querySelector(attribute);
+    element = document.querySelector("textarea");
     console.log(
       `Attempt ${
         attempts + 1
-      }: Injecting into ${attribute} with query: ${searchQuery}`
+      }: Injecting into ${element} with query: ${searchQuery}`
     );
 
     if (element) {
@@ -42,7 +53,7 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
       return;
     } else {
       console.log(
-        `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
+        `Element not found: ${element}. Retrying after ${retryDelay}ms.`
       );
       attempts++;
       if (attempts < maxRetries) {
@@ -51,9 +62,7 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
     }
   }
 
-  console.error(
-    `Failed to find element ${attribute} after ${maxRetries} attempts.`
-  );
+  console.error(`Failed to find element after ${maxRetries} attempts.`);
   update();
 }
 
