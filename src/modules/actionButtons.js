@@ -85,6 +85,7 @@ goBtn.addEventListener("click", async () => {
   }
 });
 export const multiBtn = document.getElementById("multi-go");
+let clickedMulti = false;
 multiBtn.addEventListener("click", async () => {
   const queryText = query.value;
 
@@ -104,7 +105,6 @@ multiBtn.addEventListener("click", async () => {
     return;
   }
   const permissions = [];
-
   try {
     const scripts = await chrome.scripting.getRegisteredContentScripts();
     scripts.forEach((script) => permissions.push(script.id));
@@ -141,9 +141,11 @@ multiBtn.addEventListener("click", async () => {
         await chrome.tabs.create({ url });
       } else {
         // hostnameToURL should resolve to engine homepage (for content script injection)
-        await chrome.tabs.create({
-          url: hostnameToURL(new URL(engine.url).hostname),
-        });
+        if (!clickedMulti) {
+          await chrome.tabs.create({
+            url: hostnameToURL(new URL(engine.url).hostname),
+          });
+        }
       }
     } else {
       if (engine.experimental) {
@@ -159,6 +161,7 @@ multiBtn.addEventListener("click", async () => {
   }
   query.value = "";
   queryEvents();
+  clickedMulti = true;
 });
 
 export const ellipse = document.getElementById("ellipse");

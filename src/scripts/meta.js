@@ -3,48 +3,38 @@
   setTimeout(runAfterFullLoad, 3000);
 })();
 
+const MAX_COUNTER = 20;
+let counter = 0;
+let element;
 async function runAfterFullLoad() {
   console.log("Running query injection.");
 
   await getImage();
   await getButtons();
-  await getTextInput("div[contenteditable='true']");
+  element = document.querySelector("div[contenteditable='true']");
+  await getTextInput();
+
+  await runWithDelay();
+  async function runWithDelay() {
+    while (counter++ < MAX_COUNTER) {
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
+      await getTextInput();
+    }
+    console.log("No activity. Stopped listening for queries");
+  }
 }
 
-async function getTextInput(attribute, maxRetries = 5, retryDelay = 3000) {
+async function getTextInput(maxRetries = 5, retryDelay = 3000) {
   let { query, Meta } = await chrome.storage.local.get(["query", "Meta"]);
   const searchQuery = (Meta ? query : "")?.trim();
   await chrome.storage.local.remove("Meta");
   if (!searchQuery) return;
 
   let attempts = 0;
-
+  counter = 0; //reset the counter
+  getListener();
   while (attempts < maxRetries) {
-    // Check 'stop' condition here
-    const element = document.querySelector(attribute);
-    console.log(element);
-    element?.addEventListener("beforeinput", (event) => {
-      if (event.inputType === "insertText") {
-        event.preventDefault(); //Prevent the default behaviour
-        const newText = event.data;
-        const selection = window.getSelection();
-
-        if (selection && selection.rangeCount) {
-          const range = selection.getRangeAt(0);
-          // Remove selected text (if any)
-          range.deleteContents();
-
-          // Insert the new text
-          range.insertNode(document.createTextNode(newText));
-
-          // Update selection (if desired)
-          selection.removeAllRanges();
-          selection.addRange(range);
-        } else {
-          element.appendChild(document.createTextNode(newText));
-        }
-      }
-    });
+    element = document.querySelector("div[contenteditable='true']");
     console.log(
       `Attempt ${attempts + 1}: Injecting ${element} of query: ${searchQuery}`
     );
@@ -62,9 +52,8 @@ async function getTextInput(attribute, maxRetries = 5, retryDelay = 3000) {
       clickButton("div[aria-label='Send Message']");
       return;
     } else {
-      console.log(
-        `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
-      );
+      getListener();
+      console.log(`Element not found:. Retrying after ${retryDelay}ms.`);
       attempts++;
       if (attempts < maxRetries) {
         // Check 'stop' condition here
@@ -73,11 +62,34 @@ async function getTextInput(attribute, maxRetries = 5, retryDelay = 3000) {
     }
   }
 
-  console.error(
-    `Failed to find element ${attribute} after ${maxRetries} attempts.`
-  );
+  console.error(`Failed to find element after ${maxRetries} attempts.`);
   update();
   return;
+}
+
+function getListener() {
+  element?.addEventListener("beforeinput", (event) => {
+    if (event.inputType === "insertText") {
+      event.preventDefault(); //Prevent the default behaviour
+      const newText = event.data;
+      const selection = window.getSelection();
+
+      if (selection && selection.rangeCount) {
+        const range = selection.getRangeAt(0);
+        // Remove selected text (if any)
+        range.deleteContents();
+
+        // Insert the new text
+        range.insertNode(document.createTextNode(newText));
+
+        // Update selection (if desired)
+        selection.removeAllRanges();
+        selection.addRange(range);
+      } else {
+        element.appendChild(document.createTextNode(newText));
+      }
+    }
+  });
 }
 
 async function clickButton(attribute) {

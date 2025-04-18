@@ -3,9 +3,21 @@
   setTimeout(runAfterFullLoad, 3000);
 })();
 
+const MAX_COUNTER = 20;
+let counter = 0;
+let element;
 async function runAfterFullLoad() {
   console.log("Running query injection.");
+  element = document.querySelector("textarea");
   await getTextInput();
+  await runWithDelay();
+  async function runWithDelay() {
+    while (counter++ < MAX_COUNTER) {
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
+      await getTextInput();
+    }
+    console.log("No activity. Stopped listening for queries");
+  }
 }
 
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
@@ -19,13 +31,13 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   if (!searchQuery) return;
 
   let attempts = 0;
-  const attribute = "textarea";
+  counter = 0; //reset the counter
   while (attempts < maxRetries) {
-    const element = document.querySelector(attribute);
+    element = document.querySelector("textarea");
     console.log(
       `Attempt ${
         attempts + 1
-      }: Injecting into ${attribute} with query: ${searchQuery}`
+      }: Injecting into ${element} with query: ${searchQuery}`
     );
 
     if (element) {
@@ -46,9 +58,8 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
       await clickButton("button[aria-label='Submit']");
       return;
     } else {
-      console.log(
-        `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
-      );
+      element = element || document.querySelector("textarea");
+      console.log(`Element not found: Retrying after ${retryDelay}ms.`);
       attempts++;
       if (attempts < maxRetries) {
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -56,9 +67,7 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
     }
   }
 
-  console.error(
-    `Failed to find element ${attribute} after ${maxRetries} attempts.`
-  );
+  console.error(`Failed to find element after ${maxRetries} attempts.`);
   update();
 }
 

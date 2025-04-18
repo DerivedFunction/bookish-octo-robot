@@ -41,6 +41,7 @@ async function getTextInput(maxRetries = 5, retryDelay = 3000) {
       clickButton(".send-button");
       return;
     } else {
+      element = element || document.querySelector(".textarea");
       console.log(
         `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
       );
@@ -51,9 +52,7 @@ async function getTextInput(maxRetries = 5, retryDelay = 3000) {
       }
     }
   }
-  console.error(
-    `Failed to find element ${attribute} after ${maxRetries} attempts.`
-  );
+  console.error(`Failed to find element after ${maxRetries} attempts.`);
   update();
   return;
 }

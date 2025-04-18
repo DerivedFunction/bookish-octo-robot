@@ -2,49 +2,45 @@
 (async () => {
   setTimeout(runAfterFullLoad, 3000);
 })();
-
+const MAX_COUNTER = 20;
+let counter = 0;
+let element;
 async function runAfterFullLoad() {
   console.log("Running query injection.");
   await getImage();
   await getButtons();
-  await getTextInput("textContent", "#prompt-textarea p");
+  element = document.querySelector("#prompt-textarea p");
+  await getTextInput();
+  await runWithDelay();
+  async function runWithDelay() {
+    while (counter++ < MAX_COUNTER) {
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
+      await getTextInput();
+    }
+    console.log("No activity. Stopped listening for queries");
+  }
 }
 
-async function getTextInput(
-  type,
-  attribute,
-  maxRetries = 10,
-  retryDelay = 3000
-) {
+async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   let { query, ChatGPT } = await chrome.storage.local.get(["query", "ChatGPT"]);
   await chrome.storage.local.remove("ChatGPT"); //remove immediately off the queue
   const searchQuery = (ChatGPT ? query : "")?.trim();
   if (!searchQuery) return;
 
   let attempts = 0;
+  counter = 0; //reset the counter
   while (attempts < maxRetries) {
-    const element = document.querySelector(attribute);
     console.log(
-      `Attempt ${
-        attempts + 1
-      }: Injecting ${element} via ${type} of query: ${searchQuery}`
+      `Attempt ${attempts + 1}: Injecting ${element} of query: ${searchQuery}`
     );
 
     if (element) {
-      switch (type) {
-        case "value":
-          element.value = searchQuery;
-          break;
-        case "textContent":
-          element.textContent = searchQuery;
-          break;
-      }
+      element.textContent = searchQuery;
       clickButton("#composer-submit-button");
       return;
     } else {
-      console.log(
-        `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
-      );
+      element = document.querySelector("#prompt-textarea p"); // try finding it again
+      console.log(`Element not found. Retrying after ${retryDelay}ms.`);
       attempts++;
       if (attempts < maxRetries) {
         await new Promise((resolve) => setTimeout(resolve, retryDelay)); // Wait before retry
@@ -52,9 +48,7 @@ async function getTextInput(
     }
   }
 
-  console.error(
-    `Failed to find element ${attribute} after ${maxRetries} attempts.`
-  );
+  console.error(`Failed to find element after ${maxRetries} attempts.`);
   update();
 }
 

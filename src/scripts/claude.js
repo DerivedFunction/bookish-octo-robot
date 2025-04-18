@@ -3,10 +3,21 @@
   setTimeout(runAfterFullLoad, 3000);
 })();
 
+const MAX_COUNTER = 20;
+let counter = 0;
 async function runAfterFullLoad() {
   console.log("Running query injection.");
   await getImage();
   await getTextInput("textContent", "div[enterkeyhint='enter'] p");
+
+  await runWithDelay();
+  async function runWithDelay() {
+    while (counter++ < MAX_COUNTER) {
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
+      await getTextInput("textContent", "div[enterkeyhint='enter'] p");
+    }
+    console.log("No activity. Stopped listening for queries");
+  }
 }
 
 async function getTextInput(
@@ -21,6 +32,7 @@ async function getTextInput(
   if (!searchQuery) return;
 
   let attempts = 0;
+  counter = 0; //reset the counter
 
   while (attempts < maxRetries) {
     const element = document.querySelector(attribute);
@@ -52,9 +64,7 @@ async function getTextInput(
     }
   }
 
-  console.error(
-    `Failed to find element ${attribute} after ${maxRetries} attempts.`
-  );
+  console.error(`Failed to find element after ${maxRetries} attempts.`);
   update();
 }
 
