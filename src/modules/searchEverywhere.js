@@ -1,4 +1,8 @@
-import { curSearchBtn, getSearchEngineList } from "./searchEngine.js";
+import {
+  curSearchBtn,
+  getSearchEngineList,
+  searchEnginePickerBtn,
+} from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js"; // <- Import from appendSvg.js
 import { resetBtn, toggleClass, hostnameToURL } from "../app.js";
 import { query, queryEvents } from "./query.js";
@@ -149,11 +153,15 @@ multiBtn.addEventListener("click", async () => {
     alert(
       "Active Search Everywhere session started. Click the same button again will not open new tabs. Opening a new Tab will invalidate this session"
     );
-    [greetingContainer, curSearchBtn, ellipse, suggestionContainer].forEach(
-      (e) => {
-        e.style.display = "none";
-      }
-    );
+    [
+      greetingContainer,
+      curSearchBtn,
+      ellipse,
+      suggestionContainer,
+      searchEnginePickerBtn,
+    ].forEach((e) => {
+      e.style.display = "none";
+    });
     newClick = false;
     responseContainer.style.display = "block";
     responseBtn.style.display = "";
