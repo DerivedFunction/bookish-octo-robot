@@ -213,55 +213,56 @@ document.addEventListener("DOMContentLoaded", async () => {
     localStorage.removeItem(SEARCH_ENGINE_STORAGE_KEY);
     await appendList();
   });
-});
+  const engines = await getSearchEngineList();
+  chrome.runtime.onMessage.addListener((e) => {
+    if (e.content) {
+      const messageWrapper = document.createElement("div");
+      messageWrapper.classList.add("chat-response", "chatbot");
+      const icon = document.createElement("div");
+      const engine = engines.find((ai) => ai.name === e.engine);
+      appendSvg(
+        {
+          image: engine.image,
+          description: e.engine,
+        },
+        icon,
+        "5px",
+        false,
+        true
+      );
+      messageWrapper.appendChild(icon);
+      // Create a DOMParser to parse the content string
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(e.content, "text/html");
 
-chrome.runtime.onMessage.addListener((e) => {
-  if (e.content) {
-    const messageWrapper = document.createElement("div");
-    messageWrapper.classList.add("chat-response", "chatbot");
-    const icon = document.createElement("div");
-    appendSvg(
-      {
-        image: `assets/images/ai/${e.engine.toLowerCase()}.svg`,
-        description: e.engine,
-      },
-      icon,
-      "5px",
-      false,
-      true
-    );
-    messageWrapper.appendChild(icon);
-    // Create a DOMParser to parse the content string
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(e.content, "text/html");
+      // Extract the parsed HTML (e.g., <p>...</p>)
+      const parsedElement = doc.body.firstChild;
 
-    // Extract the parsed HTML (e.g., <p>...</p>)
-    const parsedElement = doc.body.firstChild;
-
-    // Check if the parsed element has text content
-    if (parsedElement && parsedElement.textContent.trim()) {
-      // If it has text, append it
-      messageWrapper.appendChild(parsedElement);
-    }
-
-    // Only append to the chatbot-messages container if there is a valid element
-    if (messageWrapper.hasChildNodes()) {
-      // Check if the last child is an unprotected chatbot-messages container
-      let chatbotMessages = responseContainer.lastElementChild;
-      if (
-        !chatbotMessages ||
-        !chatbotMessages.classList.contains("chatbot-messages") ||
-        chatbotMessages.classList.contains("KEEP")
-      ) {
-        // Create a new chatbot-messages container (no KEEP class)
-        chatbotMessages = document.createElement("div");
-        chatbotMessages.classList.add("chatbot-messages");
-        responseContainer.appendChild(chatbotMessages);
+      // Check if the parsed element has text content
+      if (parsedElement && parsedElement.textContent.trim()) {
+        // If it has text, append it
+        messageWrapper.appendChild(parsedElement);
       }
-      chatbotMessages.appendChild(messageWrapper);
-      responseContainer.scrollTo(0, responseContainer.scrollHeight); // Scroll to bottom
+
+      // Only append to the chatbot-messages container if there is a valid element
+      if (messageWrapper.hasChildNodes()) {
+        // Check if the last child is an unprotected chatbot-messages container
+        let chatbotMessages = responseContainer.lastElementChild;
+        if (
+          !chatbotMessages ||
+          !chatbotMessages.classList.contains("chatbot-messages") ||
+          chatbotMessages.classList.contains("KEEP")
+        ) {
+          // Create a new chatbot-messages container (no KEEP class)
+          chatbotMessages = document.createElement("div");
+          chatbotMessages.classList.add("chatbot-messages");
+          responseContainer.appendChild(chatbotMessages);
+        }
+        chatbotMessages.appendChild(messageWrapper);
+        responseContainer.scrollTo(0, responseContainer.scrollHeight); // Scroll to bottom
+      }
     }
-  }
+  });
 });
 function getResponse() {
   const activeEngines = getSearchEverywhere();

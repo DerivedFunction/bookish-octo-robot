@@ -28,11 +28,26 @@ async function runAfterFullLoad() {
     while (counter++ < MAX_COUNTER) {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
       await getTextInput();
+      await getLastResponse();
     }
     console.log("No activity. Stopped listening for queries");
   }
 }
-
+async function getLastResponse() {
+  let { MetaLast } = await chrome.storage.local.get(["MetaLast"]);
+  await chrome.storage.local.remove("MetaLast");
+  if (!MetaLast) return;
+  let lastResponse = document.querySelectorAll(
+    ".x78zum5.xdt5ytf div[dir='auto']"
+  );
+  if (lastResponse.length === 0) return;
+  let content = lastResponse[lastResponse.length - 1].innerHTML;
+  console.log(content);
+  chrome.runtime.sendMessage({
+    lastResponse: content,
+    engine: "Meta",
+  });
+}
 async function getTextInput(maxRetries = 5, retryDelay = 3000) {
   let { query, Meta } = await chrome.storage.local.get(["query", "Meta"]);
   const searchQuery = (Meta ? query : "")?.trim();
