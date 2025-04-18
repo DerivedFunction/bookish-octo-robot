@@ -46,7 +46,11 @@ async function createTab(query) {
     let { Experimental } = await chrome.storage.local.get("Experimental"); // If we have permissions
     if (x.experimental) {
       // If set to true, use the original url
-      if (Experimental) url = hostnameToURL(new URL(x.url).hostname);
+      if (Experimental) {
+        const selectedEngine = await getSearchEngine();
+        await chrome.storage.local.set({ [selectedEngine.name]: true });
+        url = hostnameToURL(new URL(x.url).hostname);
+      }
       // Else use the query form
       else {
         chrome.storage.local.remove("query");
