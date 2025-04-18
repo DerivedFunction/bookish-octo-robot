@@ -1,18 +1,27 @@
 // script.js Thanks to https://github.com/facebook/react/issues/11488#issuecomment-347775628
 (async () => {
+  chrome.storage.local.get("Mistral").then((e) => {
+    orphan = e.Mistral;
+  });
   setTimeout(runAfterFullLoad, 3000);
 })();
 
-const MAX_COUNTER = 20;
+const MAX_COUNTER = 300;
 let counter = 0;
 let element;
+// if it was opened
+let orphan;
 async function runAfterFullLoad() {
+  if (!orphan) {
+    console.log("Orphan process. Exiting...");
+    return;
+  }
   console.log("Running query injection.");
   await getTextInput();
   await runWithDelay();
   async function runWithDelay() {
     while (counter++ < MAX_COUNTER) {
-      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
       await getTextInput();
     }
     console.log("No activity. Stopped listening for queries");

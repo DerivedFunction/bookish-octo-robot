@@ -1,11 +1,20 @@
 // script.js
 (async () => {
+  chrome.storage.local.get("Claude").then((e) => {
+    orphan = e.Claude;
+  });
   setTimeout(runAfterFullLoad, 3000);
 })();
 
-const MAX_COUNTER = 20;
+const MAX_COUNTER = 300;
 let counter = 0;
+// if it was opened
+let orphan;
 async function runAfterFullLoad() {
+  if (!orphan) {
+    console.log("Orphan process. Exiting...");
+    return;
+  }
   console.log("Running query injection.");
   await getImage();
   await getTextInput("textContent", "div[enterkeyhint='enter'] p");
@@ -13,7 +22,7 @@ async function runAfterFullLoad() {
   await runWithDelay();
   async function runWithDelay() {
     while (counter++ < MAX_COUNTER) {
-      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
       await getTextInput("textContent", "div[enterkeyhint='enter'] p");
     }
     console.log("No activity. Stopped listening for queries");
@@ -30,7 +39,7 @@ async function getTextInput(
   const searchQuery = (Claude ? query : "")?.trim();
   await chrome.storage.local.remove("Claude"); //remove immediately off the queue
   if (!searchQuery) return;
-
+  chrome.runtime.sendMessage({ ping: true });
   let attempts = 0;
   counter = 0; //reset the counter
 

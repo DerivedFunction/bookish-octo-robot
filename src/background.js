@@ -1,4 +1,8 @@
-chrome.contextMenus.onClicked.addListener((info, tab) => {
+let sidebarStatus = false;
+let selectedEngine = getSearchEngine();
+let Experimental = false;
+let tabReceived = 0;
+chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   // AI searches
   let prompt = info.menuItemId;
   let query = prompt == "paste" ? "" : prompt;
@@ -22,45 +26,83 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     message: "sendQuery",
   });
   try {
-    // Synchronously set panel and open sidebar in Firefox
-    browser.sidebarAction.setPanel({ panel: "index.html#sidebar" });
-    browser.sidebarAction.open().catch((error) => {
-      console.error("Failed to open sidebar:", error);
-      createTab(query); // Fallback to creating a tab
-    });
+    console.log("sidebar status", sidebarStatus);
+    if (!sidebarStatus) {
+      await browser.sidebarAction.open().catch((error) => {
+        console.error("Failed to open sidebar:", error);
+        createTab(query); // Fallback to creating a tab
+      });
+    } else {
+      console.log("Sidebar is open with permissions", selectedEngine);
+      // sidebar is open
+      chrome.storage.local.set({ [selectedEngine.name]: true });
+    }
   } catch (error) {
-    console.error(error);
+    console.log("In chrome. Creating tab", error);
     createTab(query);
   }
 });
 chrome.contextMenus.onClicked.addListener(async (info) => {
+  let firefox = false;
+  try {
+    await browser.sidebarAction.isOpen({}).then((e) => (firefox = e));
+  } catch {
+    firefox = false;
+  }
+  sidebarStatus = Experimental && firefox;
+
   if (info.menuItemId == "switch" || info.parentMenuItemId == "switch") {
     await switchEngine(info.menuItemId);
     return;
   }
 });
 async function createTab(query) {
-  let x = await getSearchEngine();
-  if (x) {
+  selectedEngine = await getSearchEngine();
+  if (selectedEngine) {
     let url;
-    let { Experimental } = await chrome.storage.local.get("Experimental"); // If we have permissions
-    if (x.experimental) {
+    await chrome.storage.local.get("Experimental").then((e) => {
+      Experimental = e?.Experimental;
+    }); // If we have permissions
+    if (selectedEngine.experimental) {
       // If set to true, use the original url
       if (Experimental) {
-        const selectedEngine = await getSearchEngine();
         await chrome.storage.local.set({ [selectedEngine.name]: true });
-        url = hostnameToURL(new URL(x.url).hostname);
+
+        const waitForNoPing = () =>
+          new Promise((resolve) => {
+            let checkInterval = setInterval(() => {
+              console.log(tabReceived);
+              if (tabReceived > 0) {
+                clearInterval(checkInterval);
+                resolve(false); // A tab picked it up
+              }
+            }, 100);
+
+            setTimeout(() => {
+              clearInterval(checkInterval);
+              resolve(true); // No tab responded within 2 sec
+            }, 2000);
+          });
+
+        const shouldCreateTab = await waitForNoPing();
+        console.log("create tab?", shouldCreateTab);
+        if (shouldCreateTab) {
+          url = hostnameToURL(new URL(selectedEngine.url).hostname);
+          chrome.tabs.create({ url });
+          return;
+        }
       }
       // Else use the query form
       else {
         chrome.storage.local.remove("query");
-        url = `${x.url}${encodeURIComponent(query)}`;
+        url = `${selectedEngine.url}${encodeURIComponent(query)}`;
+        chrome.tabs.create({ url: url });
       }
     } else {
       chrome.storage.local.remove("query");
-      url = `${x.url}${encodeURIComponent(query)}`;
+      url = `${selectedEngine.url}${encodeURIComponent(query)}`;
+      chrome.tabs.create({ url: url });
     }
-    chrome.tabs.create({ url: url });
   }
 }
 
@@ -73,6 +115,7 @@ async function deleteMenu() {
   console.log("Deleting context menus");
   await chrome.contextMenus.remove("search").catch(() => {});
   await chrome.contextMenus.remove("switch").catch(() => {});
+  selectedEngine = null;
   menusCreated = false;
 }
 function hostnameToURL(hostname) {
@@ -96,12 +139,14 @@ function hostnameToURL(hostname) {
 async function loadMenu() {
   // Remove existing menus
   await deleteMenu();
-  console.log("Creating context menus");
-  const search = await getSearchEngine();
-  let { Experimental } = await chrome.storage.local.get("Experimental");
 
+  selectedEngine = await getSearchEngine();
+  await chrome.storage.local.get("Experimental").then((e) => {
+    Experimental = e?.Experimental;
+  });
+  console.log("Creating context menus", selectedEngine, Experimental);
   // If no search engine is selected, create only the switch menu
-  if (!search) {
+  if (!selectedEngine) {
     chrome.contextMenus.create(
       {
         id: "switch",
@@ -127,7 +172,7 @@ async function loadMenu() {
   }
 
   // Check if the selected engine requires permissions and Experimental is false
-  if (!Experimental && search.needsPerm) {
+  if (!Experimental && selectedEngine.needsPerm) {
     chrome.contextMenus.create(
       {
         id: "switch",
@@ -147,7 +192,7 @@ async function loadMenu() {
         () => void chrome.runtime.lastError
       );
     });
-    console.log(`No permissions for ${search.name}.`);
+    console.log(`No permissions for ${selectedEngine.name}.`);
     menusCreated = true;
     return;
   }
@@ -156,7 +201,7 @@ async function loadMenu() {
   chrome.contextMenus.create(
     {
       id: "search",
-      title: `Ask ${search.name}`,
+      title: `Ask ${selectedEngine.name}`,
       contexts: ["selection", "link", "page"],
     },
     () => void chrome.runtime.lastError
@@ -228,20 +273,20 @@ async function getPrompts() {
   await loadMenu();
 }
 async function switchEngine(name) {
-  let selected = null;
+  selectedEngine = null;
   aiList.forEach((ai) => {
-    if (ai.name === name) selected = ai;
+    if (ai.name === name) selectedEngine = ai;
   });
-  await chrome.storage.local.set({ engine: selected });
+  await chrome.storage.local.set({ engine: selectedEngine });
   await loadMenu();
   try {
     await chrome.runtime.sendMessage({
       message: "selectedSearchEngine",
-      engine: selected,
+      engine: selectedEngine,
     });
   } catch {}
-  if (!selected) return;
-  const iconUrl = chrome.runtime.getURL(selected.image);
+  if (!selectedEngine) return;
+  const iconUrl = chrome.runtime.getURL(selectedEngine.image);
   if (!iconUrl) return;
   try {
     // Firefox works
@@ -271,8 +316,11 @@ async function switchEngine(name) {
 chrome.runtime.onMessage.addListener(async (e) => {
   if (e.message === "selectedSearchEngine") {
     console.log("AI chatbot changed", e.engine?.name);
-    const { Experimental } = await chrome.storage.local.get("Experimental");
-    if (!Experimental && e.engine?.needsPerm) {
+    selectedEngine = e.engine;
+    await chrome.storage.local.get("Experimental").then((e) => {
+      Experimental = e?.Experimental;
+    });
+    if (!Experimental && selectedEngine?.needsPerm) {
       await loadMenu(); // Rebuild menu if permissions are lacking
     } else {
       updateMenu(e.engine);
@@ -281,7 +329,7 @@ chrome.runtime.onMessage.addListener(async (e) => {
     console.log("Removing context menus");
     await deleteMenu();
   } else if (e.message === "Experimental") {
-    console.log("Scripting Permissions changed for ", e.engine?.name);
+    console.log("Scripting Permissions changed for ", selectedEngine?.name);
     await loadMenu(); // Rebuild menu on permission change
   }
 });
@@ -332,5 +380,12 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       }
       await chrome.storage.local.remove("query");
     }
+  }
+});
+chrome.runtime.onMessage.addListener((e) => {
+  if (e.ping) {
+    tabReceived++;
+    // Reset the tab listener after 1 sec
+    setTimeout(() => tabReceived--, 1000);
   }
 });

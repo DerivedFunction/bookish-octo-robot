@@ -1,11 +1,20 @@
 // script.js
 (async () => {
+  chrome.storage.local.get("Gemini").then((e) => {
+    orphan = e.Gemini;
+  });
   setTimeout(runAfterFullLoad, 3000);
 })();
 let element;
-const MAX_COUNTER = 20;
+const MAX_COUNTER = 300;
 let counter = 0;
+// if it was opened
+let orphan;
 async function runAfterFullLoad() {
+  if (!orphan) {
+    console.log("Orphan process. Exiting...");
+    return;
+  }
   console.log("Running query injection.");
   element = document.querySelector(".textarea");
   await getButtons();
@@ -14,7 +23,7 @@ async function runAfterFullLoad() {
   await runWithDelay();
   async function runWithDelay() {
     while (counter++ < MAX_COUNTER) {
-      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
       await getTextInput();
     }
     console.log("No activity. Stopped listening for queries");
@@ -26,7 +35,7 @@ async function getTextInput(maxRetries = 5, retryDelay = 3000) {
   const searchQuery = (Gemini ? query : "")?.trim();
   await chrome.storage.local.remove("Gemini");
   if (!searchQuery) return;
-
+  chrome.runtime.sendMessage({ ping: true });
   let attempts = 0;
   counter = 0; //reset the counter
 
