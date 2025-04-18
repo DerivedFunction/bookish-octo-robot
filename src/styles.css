@@ -131,14 +131,21 @@ button:active {
 }
 
 #header {
-  position: fixed;
+  margin: 10px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 20px;
   background: none;
   border: none;
 }
+.right {
+  max-width: 50%;
+  margin-right: 10px;
+}
+.left {
+  max-width: 50%;
+  margin-left: 10px;
+}
+
 .extra-info {
   position: fixed;
   top: 0px;
@@ -196,9 +203,6 @@ h2 {
   background: var(--item-bg);
   box-shadow: 0 2px 4px var(--shadow-color);
   transition: all 0.2s ease;
-  gap: 5px;
-  flex-wrap: wrap;
-  flex-direction: row;
 }
 
 #search {
@@ -269,24 +273,12 @@ h2 {
 
 .dropdown-content {
   display: none; /* Hidden by default */
-  width: 200px; /* Fixed width for consistency */
-  background: var(--item-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  box-shadow: 0 2px 4px var(--shadow-color);
   z-index: 10;
   transition: all 0.2s ease;
-  padding: 0;
-  max-height: 200px; /* Limit the height */
-  overflow-y: auto; /* Enable vertical scrolling when content overflows */
-}
-#search-engine-dropdown {
-  position: absolute;
-  top: 100%; /* Below the button */
-  left: 0;
+  overflow-x: scroll; /* Enable vertical scrolling when content overflows */
 }
 .dropdown-content.open {
-  display: block; /* Show when open */
+  display: flex; /* Show when open */
 }
 
 li {
@@ -309,7 +301,6 @@ li:hover {
   flex-wrap: wrap;
   flex-direction: row;
 }
-
 .sidebar {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25);
   background-color: var(--background);
@@ -318,10 +309,13 @@ li:hover {
   height: 100%;
   overflow-y: auto;
   padding: 0 1rem;
-  position: absolute;
+  position: fixed;
   width: 500px;
   z-index: 50;
   display: none;
+
+  top: 0; /* <-- Add this */
+  left: 0; /* or right: 0; depending on your layout */
 }
 
 .input-field {

@@ -42,12 +42,12 @@ export function toggleDropdown(remove = "none") {
   }
   if (dropdown.classList.contains("open")) {
     appendSvg(
-      { image: "/assets/images/buttons/up.svg" },
+      { image: "/assets/images/buttons/left.svg" },
       searchEnginePickerBtn
     );
   } else {
     appendSvg(
-      { image: "/assets/images/buttons/down.svg" },
+      { image: "/assets/images/buttons/right.svg" },
       searchEnginePickerBtn
     );
   }
@@ -58,35 +58,28 @@ export async function addSearchEngines() {
   const list = document.getElementById("search-engine-dropdown");
   const fragment = document.createDocumentFragment();
   searchEngines.forEach((engine) => {
-    const listItem = document.createElement("li");
-    listItem.className = "search-engine-option";
-    listItem.setAttribute("data-link", engine.url);
+    const button = document.createElement("button");
+    button.className = "bg-text transparent-item";
+    button.setAttribute("data-link", engine.url);
     if (engine.experimental !== undefined) {
-      listItem.setAttribute("data-exp", engine.experimental);
+      button.setAttribute("data-exp", engine.experimental);
     }
-    // Create container for icon and text
-    const container = document.createElement("div");
-    container.style.display = "flex";
-    container.style.alignItems = "center";
-    container.style.gap = "8px";
-
     // Add inline SVG
-    appendSvg(engine, container, "4px", false, true);
+    appendSvg(
+      { image: engine.image, description: engine.name },
+      button,
+      null,
+      false,
+      true
+    );
 
-    // Add text
-    const text = document.createElement("span");
-    text.textContent = engine.name;
-
-    container.appendChild(text);
-    listItem.appendChild(container);
-
-    listItem.addEventListener("click", async () => {
+    button.addEventListener("click", async () => {
       await chrome.storage.local.set({ engine: engine });
       await getSearchEngine(); // Update the button icon immediately
       await getScriptStatus();
       dropdown.classList.remove("open");
       appendSvg(
-        { image: "assets/images/buttons/down.svg" },
+        { image: "assets/images/buttons/right.svg" },
         searchEnginePickerBtn
       );
       await chrome.runtime.sendMessage({
@@ -96,7 +89,7 @@ export async function addSearchEngines() {
       });
     });
 
-    fragment.appendChild(listItem);
+    fragment.appendChild(button);
   });
   list.replaceChildren(fragment);
   await getSearchEngine();
@@ -290,7 +283,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     try {
       appendSvg(
-        { image: "assets/images/buttons/down.svg" },
+        { image: "assets/images/buttons/right.svg" },
         searchEnginePickerBtn
       );
     } catch (error) {
