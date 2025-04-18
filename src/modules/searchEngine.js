@@ -42,12 +42,12 @@ export function toggleDropdown(remove = "none") {
   }
   if (dropdown.classList.contains("open")) {
     appendSvg(
-      { image: "/assets/images/buttons/left.svg" },
+      { image: "/assets/images/buttons/up.svg" },
       searchEnginePickerBtn
     );
   } else {
     appendSvg(
-      { image: "/assets/images/buttons/right.svg" },
+      { image: "/assets/images/buttons/down.svg" },
       searchEnginePickerBtn
     );
   }
@@ -85,7 +85,7 @@ export async function addSearchEngines() {
       await getSearchEngine(); // Update the button icon immediately
       dropdown.classList.remove("open");
       appendSvg(
-        { image: "assets/images/buttons/left.svg" },
+        { image: "assets/images/buttons/down.svg" },
         searchEnginePickerBtn
       );
       await chrome.runtime.sendMessage({
@@ -290,7 +290,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     try {
       appendSvg(
-        { image: "assets/images/buttons/right.svg" },
+        { image: "assets/images/buttons/down.svg" },
         searchEnginePickerBtn
       );
     } catch (error) {
