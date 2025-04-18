@@ -1,6 +1,7 @@
-import { clearBtn, goBtn, multiBtn } from "./actionButtons.js";
+import { clearBtn, goBtn } from "./actionButtons.js";
 import { toggleButton } from "../app.js";
 import { suggestionResult } from "./suggestions.js";
+import { multiBtn } from "./searchEverywhere.js";
 import {
   getSearchEngineUrl,
   selectedEngine,

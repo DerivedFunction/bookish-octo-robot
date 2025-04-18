@@ -3,15 +3,13 @@ import { query, queryEvents, getLimit } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
 import {
   checkEnabled,
-  getSearchEngineList,
   getSearchEngineUrlHostName,
   toggleDropdown,
   selectedEngine,
 } from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js";
 import { showToast } from "./toaster.js";
-import { hostnameToURL, resetBtn } from "../app.js";
-import { getSearchEverywhere } from "./searchEverywhere.js";
+import { resetBtn } from "../app.js";
 export const clearBtn = document.getElementById("clear");
 clearBtn.addEventListener("click", () => {
   if (query.value.length > 0) {
@@ -84,86 +82,6 @@ goBtn.addEventListener("click", async () => {
     }
   }
 });
-export const multiBtn = document.getElementById("multi-go");
-let clickedMulti = false;
-multiBtn.addEventListener("click", async () => {
-  const queryText = query.value;
-
-  if (queryText.length < 1) {
-    toggleButton(goBtn, false);
-    return;
-  }
-
-  const searchEngines = await getSearchEngineList();
-  const searchEverywhere = getSearchEverywhere();
-  if (
-    !searchEverywhere ||
-    Object.keys(searchEverywhere).length === 0 ||
-    Object.values(searchEverywhere).every((value) => !value)
-  ) {
-    showToast("Search Everywhere has none selected. See Options");
-    return;
-  }
-  const permissions = [];
-  try {
-    const scripts = await chrome.scripting.getRegisteredContentScripts();
-    scripts.forEach((script) => permissions.push(script.id));
-  } catch {
-    console.log("Scripting is not enabled.");
-  }
-
-  for (const engine of searchEngines) {
-    if (!searchEverywhere[engine.name]) continue;
-    if (queryText.length > engine.limit) {
-      showToast(`Query exceeds character count for ${engine.name}`);
-      continue;
-    }
-
-    // Only collect for experimental engines with scripts enabled
-    if (engine.experimental && permissions.includes(engine.name)) {
-      // set a unique key with a value
-      await chrome.storage.local.set({ [engine.name]: true });
-    }
-  }
-
-  // Only store if there’s something to store
-  if (permissions.length > 0) {
-    await chrome.storage.local.set({ query: queryText });
-  }
-
-  for (const engine of searchEngines) {
-    if (queryText.length > engine.limit) continue;
-    if (!searchEverywhere[engine.name]) continue;
-    const url = `${engine.url}${encodeURIComponent(queryText)}`;
-    const hasPermission = permissions.includes(engine.name);
-    if (hasPermission) {
-      if (!engine.experimental) {
-        await chrome.tabs.create({ url });
-      } else {
-        // hostnameToURL should resolve to engine homepage (for content script injection)
-        if (!clickedMulti) {
-          await chrome.tabs.create({
-            url: hostnameToURL(new URL(engine.url).hostname),
-          });
-        }
-      }
-    } else {
-      if (engine.experimental) {
-        if (engine.needsPerm) {
-          showToast(`${engine.name} may not work without permissions`);
-        } else {
-          await chrome.tabs.create({ url });
-        }
-      } else {
-        await chrome.tabs.create({ url });
-      }
-    }
-  }
-  query.value = "";
-  queryEvents();
-  clickedMulti = true;
-});
-
 export const ellipse = document.getElementById("ellipse");
 export const extras = document.getElementById("extra-stuff");
 ellipse.addEventListener("click", () => {
@@ -176,19 +94,16 @@ ellipse.addEventListener("click", () => {
     extras.style.display = "none";
   }
 });
-
 document.addEventListener("DOMContentLoaded", () => {
   appendSvg({ image: "assets/images/buttons/go.svg" }, goBtn);
   appendSvg({ image: "assets/images/buttons/clear.svg" }, clearBtn);
   appendSvg({ image: "assets/images/buttons/paste.svg" }, pasteBtn);
-  appendSvg({ image: "assets/images/buttons/multi.svg" }, multiBtn);
   appendSvg({ image: "assets/images/buttons/ellipse.svg" }, ellipse);
   extras.style.display = "none";
-  [clearBtn, pasteBtn, multiBtn, ellipse].forEach((btn) => {
+  [clearBtn, pasteBtn, ellipse].forEach((btn) => {
     setupTooltip(btn);
   });
   setupTooltip(goBtn, () => query.value.length === 0);
-  multiBtn.style.display = "none";
   resetBtn.addEventListener("click", async () => {
     await chrome.permissions.remove({ permissions: ["clipboardRead"] });
     extras.style.display = "none";
