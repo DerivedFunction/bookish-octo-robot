@@ -31,7 +31,7 @@ async function getTextInput(maxRetries = 5, retryDelay = 3000) {
   counter = 0; //reset the counter
 
   while (attempts < maxRetries) {
-    // Check 'stop' condition here
+    element = document.querySelector(".textarea");
     console.log(
       `Attempt ${attempts + 1}: Injecting ${element} via query: ${searchQuery}`
     );
@@ -41,10 +41,7 @@ async function getTextInput(maxRetries = 5, retryDelay = 3000) {
       clickButton(".send-button");
       return;
     } else {
-      element = element || document.querySelector(".textarea");
-      console.log(
-        `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
-      );
+      console.log(`Element not found. Retrying after ${retryDelay}ms.`);
       attempts++;
       if (attempts < maxRetries) {
         // Check 'stop' condition here
