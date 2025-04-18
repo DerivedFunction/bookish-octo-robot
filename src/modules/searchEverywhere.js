@@ -8,7 +8,7 @@ import { resetBtn, toggleClass, hostnameToURL } from "../app.js";
 import { query, queryEvents } from "./query.js";
 import { showToast } from "./toaster.js";
 import { greetingContainer } from "./greetings.js";
-import { ellipse } from "./actionButtons.js";
+import { ellipse, goBtn } from "./actionButtons.js";
 import { suggestionContainer } from "./suggestions.js";
 const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
 const searchEverywhereList = document.getElementById("search-everywhere-list");
@@ -159,6 +159,7 @@ multiBtn.addEventListener("click", async () => {
       ellipse,
       suggestionContainer,
       searchEnginePickerBtn,
+      goBtn,
     ].forEach((e) => {
       e.style.display = "none";
     });
