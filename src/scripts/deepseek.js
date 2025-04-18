@@ -2,20 +2,6 @@
 (async () => {
   setTimeout(runAfterFullLoad, 3000);
 })();
-
-let stop = false;
-
-// Listen for messages from other scripts
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.stopLoop) {
-    if (request.engine === "DeepSeek") {
-      stop = true;
-      console.log("Loop stop signal received.");
-      sendResponse({ received: true });
-    }
-  }
-});
-
 async function runAfterFullLoad() {
   console.log("Running query injection.");
   await getTextInput();
@@ -33,7 +19,7 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
 
   let attempts = 0;
   const attribute = "#chat-input";
-  while (attempts < maxRetries && !stop) {
+  while (attempts < maxRetries) {
     const element = document.querySelector(attribute);
     console.log(
       `Attempt ${
@@ -63,19 +49,15 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
         `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
       );
       attempts++;
-      if (attempts < maxRetries && !stop) {
+      if (attempts < maxRetries) {
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
       }
     }
   }
 
-  if (stop) {
-    console.log("Loop stopped by external signal.");
-  } else {
-    console.error(
-      `Failed to find element ${attribute} after ${maxRetries} attempts.`
-    );
-  }
+  console.error(
+    `Failed to find element ${attribute} after ${maxRetries} attempts.`
+  );
 }
 
 async function clickButton(attribute) {

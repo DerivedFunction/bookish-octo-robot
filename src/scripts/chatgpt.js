@@ -3,19 +3,6 @@
   setTimeout(runAfterFullLoad, 3000);
 })();
 
-let stop = false;
-
-// Listen for messages from other scripts
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.stopLoop) {
-    if (request.engine === "ChatGPT") {
-      stop = true;
-      console.log("Loop stop signal received.");
-      sendResponse({ received: true }); // Optional: Send a response back
-    }
-  }
-});
-
 async function runAfterFullLoad() {
   console.log("Running query injection.");
   await getTextInput("textContent", "#prompt-textarea p");
@@ -37,8 +24,7 @@ async function getTextInput(
   if (!searchQuery) return;
 
   let attempts = 0;
-  while (attempts < maxRetries && !stop) {
-    // Check 'stop' condition here
+  while (attempts < maxRetries) {
     const element = document.querySelector(attribute);
     console.log(
       `Attempt ${
@@ -62,20 +48,15 @@ async function getTextInput(
         `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
       );
       attempts++;
-      if (attempts < maxRetries && !stop) {
-        // Check 'stop' condition here
+      if (attempts < maxRetries) {
         await new Promise((resolve) => setTimeout(resolve, retryDelay)); // Wait before retry
       }
     }
   }
 
-  if (stop) {
-    console.log("Loop stopped by external signal.");
-  } else {
-    console.error(
-      `Failed to find element ${attribute} after ${maxRetries} attempts.`
-    );
-  }
+  console.error(
+    `Failed to find element ${attribute} after ${maxRetries} attempts.`
+  );
 }
 
 async function clickButton(attribute) {
