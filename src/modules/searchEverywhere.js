@@ -282,7 +282,8 @@ function getResponse() {
   const activeEngines = getSearchEverywhere();
   Object.keys(activeEngines).forEach(async (engine) => {
     const engineLast = engine + "Last";
-    await chrome.storage.local.set({ [engineLast]: true });
+    if (activeEngines[engine])
+      await chrome.storage.local.set({ [engineLast]: true });
   });
 }
 
