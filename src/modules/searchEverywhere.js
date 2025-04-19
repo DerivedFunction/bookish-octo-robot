@@ -97,7 +97,10 @@ async function handleChatMessage(e, engines) {
       parsedElement.style.whiteSpace = "pre-wrap";
       messageWrapper.appendChild(parsedElement);
     }
-
+    messageWrapper.classList.add("shrink");
+    messageWrapper.addEventListener("click", () => {
+      messageWrapper.classList.toggle("shrink");
+    });
     if (messageWrapper.hasChildNodes()) {
       let chatbotMessages = responseContainer.lastElementChild;
       if (
@@ -268,6 +271,10 @@ async function handleMultiSearch() {
   messageWrapper.classList.add("chat-response");
   messageWrapper.classList.add("input");
   messageWrapper.textContent = queryText;
+  messageWrapper.classList.add("shrink");
+  messageWrapper.addEventListener("click", () => {
+    messageWrapper.classList.toggle("shrink");
+  });
   responseContainer.appendChild(messageWrapper);
   responseContainer.scrollTo(0, responseContainer.scrollHeight);
 }
