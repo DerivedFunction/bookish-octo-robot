@@ -86,17 +86,14 @@ async function handleChatMessage(e, engines) {
       true
     );
     messageWrapper.appendChild(icon);
-
     const parser = new DOMParser();
     const doc = parser.parseFromString(e.content, "text/html");
-    console.log(doc.body);
     const parsedElement = doc.body;
+    if (!parsedElement) return;
     parsedElement.style.backgroundColor = "var(--item-bg)";
-    if (parsedElement) {
-      console.log(parsedElement.textContent);
-      parsedElement.style.whiteSpace = "pre-wrap";
-      messageWrapper.appendChild(parsedElement);
-    }
+    parsedElement.style.whiteSpace = "pre-wrap";
+    parsedElement.style.backgroundColor = "var(--item-bg)";
+    messageWrapper.appendChild(parsedElement);
     messageWrapper.classList.add("shrink");
     messageWrapper.addEventListener("click", () => {
       messageWrapper.classList.toggle("shrink");
