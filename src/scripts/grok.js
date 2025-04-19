@@ -19,7 +19,9 @@ async function getLastResponse() {
   if (!lastResponse) return;
   let button = lastResponse.querySelector("button[aria-label='Show inline']");
   if (button) button.click();
+  // lastReponse's innerHTML should reflect the new changes
   let content = lastResponse.innerHTML;
+  console.log(content);
   chrome.runtime.sendMessage({
     lastResponse: content,
     engine: "Grok",
