@@ -68,6 +68,15 @@
       "limit": 100000
     },
     {
+      "name": "Qwen",
+      "url": "https:/chat.qwen.ai/",
+      "image": "/assets/images/ai/qwen.svg",
+      "limit": 100000,
+      "needsPerm": true,
+      "experimental": true,
+      "advanced": true
+    },
+    {
       "name": "Meta",
       "url": "https://www.meta.ai/?q=",
       "image": "/assets/images/ai/meta.svg",
