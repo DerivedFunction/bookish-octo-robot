@@ -89,8 +89,9 @@ async function handleChatMessage(e, engines) {
 
     const parser = new DOMParser();
     const doc = parser.parseFromString(e.content, "text/html");
-    const parsedElement = doc.body.firstChild;
-
+    console.log(doc.body);
+    const parsedElement = doc.body;
+    parsedElement.style.backgroundColor = "var(--item-bg)";
     if (parsedElement) {
       console.log(parsedElement.textContent);
       parsedElement.style.whiteSpace = "pre-wrap";

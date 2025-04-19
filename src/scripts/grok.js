@@ -17,11 +17,14 @@ async function getLastResponse() {
   if (!GrokLast) return;
   let lastResponse = document.querySelector(".last-response")?.parentElement;
   if (!lastResponse) return;
-  let button = lastResponse.querySelector("button[aria-label='Show inline']");
-  if (button) button.click();
+  let buttons = lastResponse.querySelectorAll(
+    "button[aria-label='Show inline']"
+  );
+  buttons.forEach((btn) => {
+    btn.click();
+  });
   // lastReponse's innerHTML should reflect the new changes
   let content = lastResponse.innerHTML;
-  console.log(content);
   chrome.runtime.sendMessage({
     lastResponse: content,
     engine: "Grok",
