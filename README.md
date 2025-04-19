@@ -3,6 +3,8 @@
 A new tab page with an AI-like user interface. Note: You may have to sign in to the respective AI chatbot for it to work. Stop paying and sending your data to third-parties when you can directly use the AI chatbot with this extension.
 ![Promo](./samples/Promo.png)
 
+Version 1.0.6.7
+
 ## Youtube Video
 
 [![Sample 1](./samples/Sample_1.png)](https://www.youtube.com/watch?v=PDgovF1dNBg)
