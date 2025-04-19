@@ -1,6 +1,6 @@
 # Tabbed: AI chatbot in New Tab and Sidebar
 
-A new tab page with an AI-like user interface. Note: 1.0.5.0 does not have the latest features such as Search Everywhere.
+A new tab page with an AI-like user interface. Note: 1.0.5.0 does not have the latest features such as Advanced Search Everywhere, copying and pasting images.
 ![Promo](./samples/Promo.png)
 
 ## Youtube Video
