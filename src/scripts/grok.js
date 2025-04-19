@@ -17,6 +17,8 @@ async function getLastResponse() {
   if (!GrokLast) return;
   let lastResponse = document.querySelector(".last-response")?.parentElement;
   if (!lastResponse) return;
+  let button = lastResponse.querySelector("button[aria-label='Show inline']");
+  if (button) button.click();
   let content = lastResponse.innerHTML;
   chrome.runtime.sendMessage({
     lastResponse: content,

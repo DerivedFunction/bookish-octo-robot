@@ -405,12 +405,32 @@ chrome.runtime.onMessage.addListener((e) => {
 chrome.runtime.onMessage.addListener((e) => {
   if (e.lastResponse) {
     function stripAttributes(html) {
-      html = html.replace(/<button[^>]*?>.*?<\/button>/gi, ""); // Remove <button> elements
-      html = html.replace(/<svg[^>]*?>.*?<\/svg>/gi, ""); // Remove <svg> elements
-      // This regex matches any attributes inside HTML tags and removes them
-      return html.replace(/<([a-z]+)([^>]*?)>/gi, (match, tagName) => {
-        return `<${tagName}>`; // Return the tag name without attributes
+      console.log(html);
+      // Remove all <svg> elements entirely
+      html = html.replace(/<svg[^>]*?>.*?<\/svg>/gis, "");
+
+      // Preserve href for <a> and src for <img>, strip everything else
+      html = html.replace(/<([a-z]+)([^>]*)>/gi, (match, tagName, attrs) => {
+        tagName = tagName.toLowerCase();
+
+        if (tagName === "a") {
+          const hrefMatch = attrs.match(/\s*href\s*=\s*(['"])(.*?)\1/i);
+          return hrefMatch ? `<a href="${hrefMatch[2]}">` : `<a>`;
+        }
+
+        if (tagName === "img") {
+          const srcMatch = attrs.match(/\s*src\s*=\s*(['"])(.*?)\1/i);
+          return srcMatch ? `<img src="${srcMatch[2]}">` : `<img>`;
+        }
+
+        // For semantic tags like h1, strong, p, etc., just keep the tag name
+        return `<${tagName}>`;
       });
+
+      // Replace all empty non-void elements (except <a>) with <br/>
+      html = html.replace(/<(?!a\b)([a-z]+)>\s*<\/\1>/gi, "<br/>");
+      console.log(html);
+      return html;
     }
     chrome.runtime.sendMessage({
       content: stripAttributes(e.lastResponse),
