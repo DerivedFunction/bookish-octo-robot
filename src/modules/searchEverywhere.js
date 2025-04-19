@@ -91,7 +91,9 @@ async function handleChatMessage(e, engines) {
     const doc = parser.parseFromString(e.content, "text/html");
     const parsedElement = doc.body.firstChild;
 
-    if (parsedElement && parsedElement.textContent.trim()) {
+    if (parsedElement) {
+      console.log(parsedElement.textContent);
+      parsedElement.style.whiteSpace = "pre-wrap";
       messageWrapper.appendChild(parsedElement);
     }
 
