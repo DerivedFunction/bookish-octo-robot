@@ -184,6 +184,7 @@ async function handleMultiSearch() {
   }
 
   let keep = false;
+  const active = false;
   for (const engine of searchEngines) {
     if (queryText.length > engine.limit) continue;
     if (!searchEverywhere[engine.name]) continue;
@@ -191,11 +192,12 @@ async function handleMultiSearch() {
     const hasPermission = permissions.includes(engine.name);
     if (hasPermission) {
       if (!engine.experimental) {
-        await chrome.tabs.create({ url });
+        await chrome.tabs.create({ url, active });
       } else {
         if (newClick) {
           await chrome.tabs.create({
             url: hostnameToURL(new URL(engine.url).hostname),
+            active,
           });
         }
       }
@@ -205,10 +207,10 @@ async function handleMultiSearch() {
           showToast(`${engine.name} may not work without permissions`);
           keep = true;
         } else {
-          await chrome.tabs.create({ url });
+          await chrome.tabs.create({ url, active });
         }
       } else {
-        await chrome.tabs.create({ url });
+        await chrome.tabs.create({ url, active });
       }
     }
   }
@@ -219,8 +221,12 @@ async function handleMultiSearch() {
   if (!unstable) return;
 
   if (newClick) {
-    alert(
-      "Active Search Everywhere session started. Click the same button again will not open new tabs. Opening a new Tab will invalidate this session"
+    showToast(
+      "If permissions are enabled, clicking the same button again will not open new tabs." +
+        "Please close all other tabs that are already listening, as it may intercept queries. " +
+        "Opening a new tab will invalidate this session." +
+        "This is an unstable feature that may/may not work as expected",
+      "Active Search Everywhere session started"
     );
     [
       greetingContainer,
