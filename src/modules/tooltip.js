@@ -20,9 +20,6 @@ export function setupTooltip(element, condition = () => true, message = null) {
   element.addEventListener("mouseout", hideTooltip);
   document.addEventListener("keydown", () => {
     hideTooltip();
-    if (!document.activeElement || document.activeElement.tagName !== "INPUT") {
-      query.focus();
-    }
   });
   document.addEventListener("click", hideTooltip);
 }
