@@ -535,8 +535,6 @@ fieldset {
 /* Chatbot response specific styling */
 .chat-response.chatbot {
   flex: 0 0 auto; /* Prevent shrinking, fixed width */
-  max-width: 500px; /* Constrain width for readability */
-  max-height: 400px;
   overflow: scroll;
   /* Inherits .chat-response styles (background, border, etc.) */
 }
