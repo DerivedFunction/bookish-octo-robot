@@ -405,7 +405,6 @@ chrome.runtime.onMessage.addListener((e) => {
 chrome.runtime.onMessage.addListener((e) => {
   if (e.lastResponse) {
     function stripAttributes(html) {
-      console.log(html);
       // Remove all <svg> elements entirely
       html = html.replace(/<svg[^>]*?>.*?<\/svg>/gis, "");
 
@@ -420,18 +419,19 @@ chrome.runtime.onMessage.addListener((e) => {
 
         if (tagName === "img") {
           const srcMatch = attrs.match(/\s*src\s*=\s*(['"])(.*?)\1/i);
-          return srcMatch ? `<img src="${srcMatch[2]}">` : `<img>`;
+          if (srcMatch) {
+            return `<img src="${srcMatch[2]}" style="max-width:150px; max-height:150px; height:auto; width:auto;">`;
+          }
+          return `<img style="max-width:150px; max-height:150px; height:auto; width:auto;">`;
         }
 
         // For semantic tags like h1, strong, p, etc., just keep the tag name
         return `<${tagName}>`;
       });
-
-      // Replace all empty non-void elements (except <a>) with <br/>
-      html = html.replace(/<(?!a\b)([a-z]+)>\s*<\/\1>/gi, "<br/>");
       console.log(html);
       return html;
     }
+
     chrome.runtime.sendMessage({
       content: stripAttributes(e.lastResponse),
       engine: e.engine,
