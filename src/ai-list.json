@@ -43,7 +43,8 @@
       "experimental": true,
       "limit": 100000,
       "advanced": true,
-      "needsPerm": true
+      "needsPerm": true,
+      "fileImage": true
     },
     {
       "name": "Claude",
@@ -74,7 +75,8 @@
       "limit": 100000,
       "needsPerm": true,
       "experimental": true,
-      "advanced": true
+      "advanced": true,
+      "fileImage": true
     },
     {
       "name": "Meta",
