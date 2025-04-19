@@ -538,7 +538,6 @@ fieldset {
 /* Chatbot response specific styling */
 .chat-response.chatbot {
   flex: 0 0 auto; /* Prevent shrinking, fixed width */
-  overflow: scroll;
   /* Inherits .chat-response styles (background, border, etc.) */
 }
 
