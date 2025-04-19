@@ -1,7 +1,7 @@
 import { clearBtn, goBtn } from "./actionButtons.js";
 import { toggleButton } from "../app.js";
 import { suggestionResult } from "./suggestions.js";
-import { multiBtn } from "./searchEverywhere.js";
+import { multiBtn, newClick } from "./searchEverywhere.js";
 import {
   getSearchEngineUrl,
   selectedEngine,
@@ -28,7 +28,8 @@ query.addEventListener("keydown", async (e) => {
     e.preventDefault();
 
     if (!goBtn.disabled && query.value.length < getLimit()) {
-      goBtn.click();
+      if (newClick) goBtn.click();
+      else multiBtn.click();
     } else if (goBtn.disabled) {
       let y = await getSearchEngineUrl();
       if (!y) toggleDropdown("open");

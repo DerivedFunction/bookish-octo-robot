@@ -22,7 +22,7 @@ const responseBtn = document.getElementById("response");
 const multiTools = document.getElementById("multi-tools");
 
 // State Variables
-let newClick = true;
+export let newClick = true;
 const curMultID = Date.now().toString();
 
 // --- Helper Functions ---
