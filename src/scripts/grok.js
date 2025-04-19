@@ -15,9 +15,9 @@ async function getLastResponse() {
   let { GrokLast } = await chrome.storage.local.get(["GrokLast"]);
   await chrome.storage.local.remove("GrokLast");
   if (!GrokLast) return;
-  let lastResponse = document.querySelectorAll(".message-bubble");
-  if (lastResponse.length === 0) return;
-  let content = lastResponse[lastResponse.length - 1].innerHTML;
+  let lastResponse = document.querySelector(".last-response")?.parentElement;
+  if (!lastResponse) return;
+  let content = lastResponse.innerHTML;
   chrome.runtime.sendMessage({
     lastResponse: content,
     engine: "Grok",
