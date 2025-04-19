@@ -54,6 +54,7 @@ chmod +x dev.sh
 - [Perplexity](https://perplexity.ai)
 - [HuggingFace](https://huggingface.co/chat/)
 - [DeepSeek](https://chat.deepseek.com/) (Experimental)
+- [Qwen](https://chat.qwen.ai/) (Experimental)
 - [Gemini](https://gemini.google.com/app) (Experimental)
 - [Claude](https://claude.ai/new) (requires manual clicking)
 - [Meta](https://meta.ai) (requires manual clicking)
