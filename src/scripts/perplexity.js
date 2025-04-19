@@ -6,7 +6,7 @@
   setTimeout(runAfterFullLoad, 3000);
 })();
 
-const MAX_COUNTER = 300;
+const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
 // if it was opened
