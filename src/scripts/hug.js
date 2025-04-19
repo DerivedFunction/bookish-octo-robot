@@ -41,7 +41,7 @@ async function getLastResponse() {
     "[data-message-role='assistant']"
   );
   if (lastResponse.length === 0) return;
-  let content = lastResponse[lastResponse.length - 1].innerText;
+  let content = lastResponse[lastResponse.length - 1].innerHTML;
   chrome.runtime.sendMessage({
     lastResponse: content,
     engine: "HuggingFace",

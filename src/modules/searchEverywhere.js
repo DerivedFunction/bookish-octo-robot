@@ -86,18 +86,18 @@ async function handleChatMessage(e, engines) {
       true
     );
     messageWrapper.appendChild(icon);
-
     const parser = new DOMParser();
     const doc = parser.parseFromString(e.content, "text/html");
-    console.log(doc.body);
     const parsedElement = doc.body;
+    if (!parsedElement) return;
     parsedElement.style.backgroundColor = "var(--item-bg)";
-    if (parsedElement) {
-      console.log(parsedElement.textContent);
-      parsedElement.style.whiteSpace = "pre-wrap";
-      messageWrapper.appendChild(parsedElement);
-    }
-
+    parsedElement.style.whiteSpace = "pre-wrap";
+    parsedElement.style.backgroundColor = "var(--item-bg)";
+    messageWrapper.appendChild(parsedElement);
+    messageWrapper.classList.add("shrink");
+    messageWrapper.addEventListener("click", () => {
+      messageWrapper.classList.toggle("shrink");
+    });
     if (messageWrapper.hasChildNodes()) {
       let chatbotMessages = responseContainer.lastElementChild;
       if (
@@ -268,6 +268,10 @@ async function handleMultiSearch() {
   messageWrapper.classList.add("chat-response");
   messageWrapper.classList.add("input");
   messageWrapper.textContent = queryText;
+  messageWrapper.classList.add("shrink");
+  messageWrapper.addEventListener("click", () => {
+    messageWrapper.classList.toggle("shrink");
+  });
   responseContainer.appendChild(messageWrapper);
   responseContainer.scrollTo(0, responseContainer.scrollHeight);
 }
@@ -282,7 +286,8 @@ function getResponse() {
   const activeEngines = getSearchEverywhere();
   Object.keys(activeEngines).forEach(async (engine) => {
     const engineLast = engine + "Last";
-    await chrome.storage.local.set({ [engineLast]: true });
+    if (activeEngines[engine])
+      await chrome.storage.local.set({ [engineLast]: true });
   });
 }
 

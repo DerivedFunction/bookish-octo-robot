@@ -39,6 +39,10 @@
     "Meta": {
       "matches": ["*://*.meta.ai/*"],
       "js": ["/scripts/meta.js"]
+    },
+    "Qwen": {
+      "matches": ["*://chat.qwen.ai/*"],
+      "js": ["/scripts/qwen.js"]
     }
   },
   "permissionsConfig": {
@@ -81,19 +85,24 @@
     "Meta": {
       "permissions": ["scripting"],
       "origins": ["*://*.meta.ai/*"]
+    },
+    "Qwen": {
+      "permissions": ["scripting"],
+      "origins": ["*://chat.qwen.ai/*"]
     }
   },
   "full": {
     "permissionsConfig": {
       "permissions": ["scripting"],
       "origins": [
-        "*://gemini.google.com/*",
-        "*://chat.deepseek.com/*",
         "*://*.chatgpt.com/*",
-        "*://*.grok.com/*",
         "*://copilot.microsoft.com/*",
         "*://*.claude.ai/*",
+        "*://*.grok.com/*",
         "*://*.perplexity.ai/*",
+        "*://gemini.google.com/*",
+        "*://chat.deepseek.com/*",
+        "*://chat.qwen.ai/*",
         "*://chat.mistral.ai/*",
         "*://*.huggingface.co/chat/*",
         "*://*.meta.ai/*"

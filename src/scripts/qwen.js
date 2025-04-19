@@ -1,7 +1,7 @@
 // script.js Thanks to https://github.com/facebook/react/issues/11488#issuecomment-347775628
 (async () => {
-  chrome.storage.local.get("DeepSeek").then((e) => {
-    orphan = e.DeepSeek;
+  chrome.storage.local.get("Qwen").then((e) => {
+    orphan = e.Qwen;
   });
   setTimeout(runAfterFullLoad, 3000);
 })();
@@ -13,17 +13,15 @@ let element;
 let orphan;
 
 async function getLastResponse() {
-  let { DeepSeekLast } = await chrome.storage.local.get(["DeepSeekLast"]);
-  await chrome.storage.local.remove("DeepSeekLast");
-  if (!DeepSeekLast) return;
-  let lastResponse = document.querySelectorAll(
-    "div.ds-markdown.ds-markdown--block"
-  );
+  let { QwenLast } = await chrome.storage.local.get(["QwenLast"]);
+  await chrome.storage.local.remove("QwenLast");
+  if (!QwenLast) return;
+  let lastResponse = document.querySelectorAll("#response-content-container");
   if (lastResponse.length === 0) return;
   let content = lastResponse[lastResponse.length - 1].innerHTML;
   chrome.runtime.sendMessage({
     lastResponse: content,
-    engine: "DeepSeek",
+    engine: "Qwen",
   });
 }
 async function runAfterFullLoad() {
@@ -51,12 +49,9 @@ async function runAfterFullLoad() {
 }
 
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  let { query, DeepSeek } = await chrome.storage.local.get([
-    "query",
-    "DeepSeek",
-  ]);
-  await chrome.storage.local.remove("DeepSeek"); //remove immediately off the queue
-  const searchQuery = (DeepSeek ? query : "")?.trim();
+  let { query, Qwen } = await chrome.storage.local.get(["query", "Qwen"]);
+  await chrome.storage.local.remove("Qwen"); //remove immediately off the queue
+  const searchQuery = (Qwen ? query : "")?.trim();
 
   if (!searchQuery) return;
   chrome.runtime.sendMessage({ ping: true });
@@ -85,7 +80,7 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
       }
       element.dispatchEvent(event);
 
-      await clickButton("._7436101");
+      await clickButton("#send-message-button");
       return;
     } else {
       console.log(`Element not found. Retrying after ${retryDelay}ms.`);
@@ -114,23 +109,25 @@ async function clickButton(attribute) {
 }
 
 async function update() {
-  await chrome.storage.local.remove("DeepSeek");
+  await chrome.storage.local.remove("Qwen");
   // Send a message after the button click
   chrome.runtime.sendMessage({
     buttonClicked: true,
     content: "",
-    engine: "DeepSeek",
+    engine: "Qwen",
   });
 }
 async function getButtons() {
   let { deep, web } = await chrome.storage.local.get(["deep", "web"]);
+  let buttons = document.querySelectorAll(".operationBtn button");
   if (web) {
-    document.querySelectorAll("div.ds-button")[1].click();
+    buttons[1].click();
   }
   if (deep) {
-    document.querySelectorAll("div.ds-button")[0].click();
+    buttons[0].click();
   }
 }
+
 async function getImage() {
   const STORAGE_KEY_PREFIX = "pasted-file-";
   const fileUploadInput = document.querySelector("input[type='file']");

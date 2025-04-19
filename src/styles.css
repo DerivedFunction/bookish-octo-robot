@@ -495,7 +495,7 @@ fieldset {
 .chat-response {
   background-color: var(--item-bg);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 28px;
   padding: 12px 16px;
   margin: 8px 12px;
   max-width: 80%;
@@ -503,6 +503,10 @@ fieldset {
   transition: all 0.2s ease;
   line-height: 1.5;
   position: relative;
+  overflow: hidden;
+}
+.chat-response.shrink {
+  max-height: 30vh;
 }
 
 .chat-response:hover {
@@ -534,7 +538,6 @@ fieldset {
 /* Chatbot response specific styling */
 .chat-response.chatbot {
   flex: 0 0 auto; /* Prevent shrinking, fixed width */
-  overflow: scroll;
   /* Inherits .chat-response styles (background, border, etc.) */
 }
 
