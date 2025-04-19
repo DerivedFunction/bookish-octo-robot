@@ -16,9 +16,7 @@ async function getLastResponse() {
   let { QwenLast } = await chrome.storage.local.get(["QwenLast"]);
   await chrome.storage.local.remove("QwenLast");
   if (!QwenLast) return;
-  let lastResponse = document.querySelectorAll(
-    "div.ds-markdown.ds-markdown--block"
-  );
+  let lastResponse = document.querySelectorAll("#response-content-container");
   if (lastResponse.length === 0) return;
   let content = lastResponse[lastResponse.length - 1].innerHTML;
   chrome.runtime.sendMessage({
