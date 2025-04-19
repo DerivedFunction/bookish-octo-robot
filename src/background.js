@@ -428,7 +428,6 @@ chrome.runtime.onMessage.addListener((e) => {
         // For semantic tags like h1, strong, p, etc., just keep the tag name
         return `<${tagName}>`;
       });
-      console.log(html);
       return html;
     }
 
