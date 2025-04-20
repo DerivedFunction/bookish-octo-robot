@@ -21,6 +21,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (!query) return;
   console.log(`Sending ${query} to sidebar...`);
   chrome.storage.local.set({ query });
+  chrome.storage.local.set({ time: Date.now() });
   chrome.runtime
     .sendMessage({
       message: "sendQuery",
@@ -52,7 +53,6 @@ chrome.contextMenus.onClicked.addListener(async (info) => {
     firefox = false;
   }
   sidebarStatus = hasScripts && firefox;
-
   if (info.menuItemId == "switch" || info.parentMenuItemId == "switch") {
     await switchEngine(info.menuItemId);
     return;
@@ -271,6 +271,19 @@ async function getPrompts() {
   prompts = data["prompts"];
   aiList = data["ai-list"];
   await loadMenu();
+  await refresh();
+}
+async function refresh() {
+  console.log("Checking for old queries in background.");
+  const { time } = await chrome.storage.local.get("time");
+  const curTime = Date.now();
+  if (curTime > time + 1000 * 15) {
+    console.log("Clearing old queries");
+    aiList.forEach((ai) => {
+      chrome.storage.local.remove(ai.name);
+    });
+  }
+  chrome.storage.local.remove(["time", "query"]);
 }
 async function switchEngine(name) {
   selectedEngine = null;
@@ -340,6 +353,7 @@ async function getScriptStatus() {
   }
   return hasScripts;
 }
+
 // Initial menu setup
 let prompts = [];
 let aiList = [];

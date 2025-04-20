@@ -270,6 +270,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const { scripts } = await loadJsonData("scripts");
   permissionsConfig = scripts["permissionsConfig"];
   scriptConfigs = scripts["scriptConfigs"];
+  await refresh();
   try {
     try {
       appendSvg(
@@ -351,8 +352,25 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+async function refresh() {
+  console.log("Checking for old queries");
+  let { time } = await chrome.storage.local.get("time");
+  let curTime = Date.now();
+  if (curTime > time + 1000 * 15) {
+    console.log("Cleaning old query");
+    // If 15 seconds has passed, it is an old query
+    chrome.storage.local.remove(["query", "time"]);
+    // Iterate through the list of engines
+    const { aiList } = await loadJsonData("ai");
+    for (const ai of aiList) {
+      const aiName = ai.name;
+      chrome.storage.local.remove(aiName);
+    }
+  }
+}
 async function goToLink() {
   let { query: q } = await chrome.storage.local.get("query");
+
   if (selectedEngine && q && q.trim().length > 0) {
     if (selectedEngine.experimental) {
       if (hasScripts) {
