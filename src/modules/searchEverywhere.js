@@ -11,6 +11,8 @@ import { greetingContainer } from "./greetings.js";
 import { ellipse, goBtn } from "./actionButtons.js";
 import { suggestionContainer } from "./suggestions.js";
 import { chatBotResponse, responseBox } from "./response.js";
+import { hide } from "./advanceSearch.js";
+import { fileUploadBtn } from "./files.js";
 
 // Constants
 const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
@@ -215,6 +217,7 @@ async function handleMultiSearch() {
 
   query.value = keep ? queryText : "";
   queryEvents();
+  await chrome.storage.local.set({ time: Date.now() });
   let { unstable } = await chrome.storage.local.get("unstable");
   if (!unstable) return;
 
@@ -230,13 +233,14 @@ async function handleMultiSearch() {
       greetingContainer,
       curSearchBtn,
       ellipse,
-      multiTools,
       suggestionContainer,
       searchEnginePickerBtn,
       goBtn,
+      fileUploadBtn,
     ].forEach((e) => {
       e.style.display = "none";
     });
+    hide();
     newClick = false;
     responseContainer.style.display = "block";
     responseBtn.style.display = "";

@@ -62,6 +62,7 @@ goBtn.addEventListener("click", async () => {
       await chrome.storage.local.set({ [selectedEngine.name]: true });
       // Run experimental content scripts
       await chrome.storage.local.set({ query: query.value });
+      await chrome.storage.local.set({ time: Date.now() });
       window.location.href = hostname;
       return;
     }

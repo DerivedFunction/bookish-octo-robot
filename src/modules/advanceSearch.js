@@ -29,6 +29,11 @@ codeBtn.addEventListener("click", async () => {
   await toggleSetting("code", codeBtn);
   chrome.runtime.sendMessage({ message: "updateAdvanced" });
 });
+export function hide() {
+  [webBtn, deepBtn, codeBtn].forEach((btn) => {
+    btn.style.display = "none";
+  });
+}
 export async function checkStatus() {
   const keys = ["web", "deep", "code"];
   const result = await new Promise((resolve) =>
