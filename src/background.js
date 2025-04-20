@@ -335,8 +335,12 @@ chrome.runtime.onMessage.addListener(async (e) => {
   }
 });
 async function getScriptStatus() {
-  const scripts = await chrome.scripting.getRegisteredContentScripts();
-  hasScripts = scripts.some((script) => script.id === selectedEngine?.name);
+  try {
+    const scripts = await chrome.scripting.getRegisteredContentScripts();
+    hasScripts = scripts.some((script) => script.id === selectedEngine?.name);
+  } catch {
+    hasScripts = false;
+  }
   return hasScripts;
 }
 // Initial menu setup
