@@ -1,6 +1,5 @@
 let sidebarStatus = false;
 let selectedEngine = getSearchEngine();
-let Experimental = false;
 let tabReceived = 0;
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   // AI searches
@@ -52,7 +51,7 @@ chrome.contextMenus.onClicked.addListener(async (info) => {
   } catch {
     firefox = false;
   }
-  sidebarStatus = Experimental && firefox;
+  sidebarStatus = hasScripts && firefox;
 
   if (info.menuItemId == "switch" || info.parentMenuItemId == "switch") {
     await switchEngine(info.menuItemId);
@@ -63,12 +62,10 @@ async function createTab(query) {
   selectedEngine = await getSearchEngine();
   if (selectedEngine) {
     let url;
-    await chrome.storage.local.get("Experimental").then((e) => {
-      Experimental = e?.Experimental;
-    }); // If we have permissions
+    await getScriptStatus(); // If we have permissions
     if (selectedEngine.experimental) {
       // If set to true, use the original url
-      if (Experimental) {
+      if (hasScripts) {
         await chrome.storage.local.set({ [selectedEngine.name]: true });
 
         const waitForNoPing = () =>
@@ -144,9 +141,7 @@ async function loadMenu() {
   await deleteMenu();
 
   selectedEngine = await getSearchEngine();
-  await chrome.storage.local.get("Experimental").then((e) => {
-    Experimental = e?.Experimental;
-  });
+  await getScriptStatus();
   // If no search engine is selected, create only the switch menu
   if (!selectedEngine) {
     chrome.contextMenus.create(
@@ -174,29 +169,31 @@ async function loadMenu() {
   }
 
   // Check if the selected engine requires permissions and Experimental is false
-  if (!Experimental && selectedEngine.needsPerm) {
-    chrome.contextMenus.create(
-      {
-        id: "switch",
-        title: "Switch to different AI chatbot",
-        contexts: ["all"],
-      },
-      () => void chrome.runtime.lastError
-    );
-    aiList.forEach((type) => {
+  if (selectedEngine.needsPerm) {
+    if (!hasScripts) {
       chrome.contextMenus.create(
         {
-          id: type.name,
-          title: type.name,
-          parentId: "switch",
+          id: "switch",
+          title: "Switch to different AI chatbot",
           contexts: ["all"],
         },
         () => void chrome.runtime.lastError
       );
-    });
-    console.log(`No permissions for ${selectedEngine.name}.`);
-    menusCreated = true;
-    return;
+      aiList.forEach((type) => {
+        chrome.contextMenus.create(
+          {
+            id: type.name,
+            title: type.name,
+            parentId: "switch",
+            contexts: ["all"],
+          },
+          () => void chrome.runtime.lastError
+        );
+      });
+      console.log(`No permissions for ${selectedEngine.name}.`);
+      menusCreated = true;
+      return;
+    }
   }
 
   // Create full menu for valid engine with permissions
@@ -323,10 +320,8 @@ chrome.runtime.onMessage.addListener(async (e) => {
   if (e.message === "selectedSearchEngine") {
     console.log("AI chatbot changed", e.engine?.name);
     selectedEngine = e.engine;
-    await chrome.storage.local.get("Experimental").then((e) => {
-      Experimental = e?.Experimental;
-    });
-    if (!Experimental && selectedEngine?.needsPerm) {
+    await getScriptStatus();
+    if (!hasScripts && selectedEngine?.needsPerm) {
       await loadMenu(); // Rebuild menu if permissions are lacking
     } else {
       updateMenu(e.engine);
@@ -339,12 +334,17 @@ chrome.runtime.onMessage.addListener(async (e) => {
     await loadMenu(); // Rebuild menu on permission change
   }
 });
-
+async function getScriptStatus() {
+  const scripts = await chrome.scripting.getRegisteredContentScripts();
+  hasScripts = scripts.some((script) => script.id === selectedEngine?.name);
+  return hasScripts;
+}
 // Initial menu setup
 let prompts = [];
 let aiList = [];
 let unstable = false;
 let menusCreated = false;
+let hasScripts = false;
 getPrompts();
 
 chrome.action.onClicked.addListener(async () => {

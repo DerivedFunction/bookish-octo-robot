@@ -2,10 +2,10 @@ import { toggleButton } from "../app.js";
 import { query, queryEvents, getLimit } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
 import {
-  checkEnabled,
   getSearchEngineUrlHostName,
   toggleDropdown,
   selectedEngine,
+  getScriptStatus,
 } from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js";
 import { showToast } from "./toaster.js";
@@ -37,7 +37,7 @@ pasteBtn.addEventListener("click", async () => {
 });
 export const goBtn = document.getElementById("go");
 goBtn.addEventListener("click", async () => {
-  let hasPerm = await checkEnabled();
+  let hasPerm = await getScriptStatus();
   let hostname = getSearchEngineUrlHostName();
   if (!selectedEngine) {
     toggleDropdown();
