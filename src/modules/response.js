@@ -2,7 +2,6 @@ import { appendSvg } from "./appendSvg.js";
 
 export const chatBotResponse = document.getElementById("response-box-popup");
 export const responseBox = document.getElementById("response-box");
-chatBotResponse.style.display = "none";
 const button = chatBotResponse.querySelector("button");
 appendSvg({ image: "assets/images/buttons/close.svg" }, button);
 button.addEventListener("click", () => {
