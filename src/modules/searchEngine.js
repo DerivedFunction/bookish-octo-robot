@@ -93,7 +93,6 @@ export async function addSearchEngines() {
         message: "selectedSearchEngine",
         engine: engine,
       });
-      await getPermissionStatus();
     });
 
     fragment.appendChild(listItem);
@@ -121,19 +120,7 @@ export function getSearchEngineUrlHostName() {
     return url;
   } else return null;
 }
-export function getSearchEngineName() {
-  if (selectedEngine) return selectedEngine.name;
-  else return null;
-}
-// true (needs content scripts), false (doesn't need it), or null (no content scripts at all)
-export function isSearchEngineExp() {
-  if (selectedEngine) return selectedEngine.experimental;
-  else return null;
-}
-export async function checkEnabled() {
-  let { Experimental: x } = await chrome.storage.local.get("Experimental");
-  return x;
-}
+
 export async function getSearchEngineList() {
   const { aiList: loadedList } = await loadJsonData("ai");
   return loadedList;
@@ -148,7 +135,7 @@ export async function getSearchEngine() {
           ? selectedEngine.image
           : "/assets/images/ai/default.svg",
         description: selectedEngine
-          ? `Search with ${selectedEngine.name}`
+          ? `Search with ${selectedEngine?.name}`
           : "Set an AI Chatbot",
       },
       curSearchBtn,
@@ -168,6 +155,7 @@ export async function getSearchEngine() {
     console.error("Error setting up search engine:", error);
     selectedEngine = null;
   }
+  await getScriptStatus();
   return selectedEngine;
 }
 
@@ -175,7 +163,6 @@ const PERMISSIONS = {
   permissions: ["scripting"],
 };
 
-let hasPermissions = false;
 export let hasScripts = false;
 
 let permissionsConfig = null;
@@ -211,10 +198,7 @@ export async function getPermissions(engine) {
   }
   await getScriptStatus(engine.name);
 }
-export async function getPermissionStatus() {
-  hasPermissions = await chrome.permissions.contains(PERMISSIONS);
-  return hasPermissions;
-}
+
 export async function getScriptStatus(name = null) {
   let currentHasScripts = false;
   try {
@@ -230,14 +214,13 @@ export async function getScriptStatus(name = null) {
     if (selectedEngine?.name === name || !name) hasScripts = currentHasScripts;
   }
   // If there is no name (default to selected), or the name matches our current selected one, then change the look
-  if (!name || (selectedEngine && name === selectedEngine.name)) {
+  if (!name || (selectedEngine && name === selectedEngine?.name)) {
     toggleClass(curSearchBtn, hasScripts);
     chrome.runtime.sendMessage({
       message: "Experimental",
       engine: selectedEngine,
       status: hasScripts,
     });
-    chrome.storage.local.set({ Experimental: hasScripts });
     queryEvents();
     return hasScripts;
   }
@@ -245,7 +228,7 @@ export async function getScriptStatus(name = null) {
 }
 
 export async function removePermissions(all = false, engine = null) {
-  const name = engine ? engine : getSearchEngineName();
+  const name = engine ? engine : selectedEngine?.name;
   // Remove the scripts
   try {
     const scripts = await chrome.scripting.getRegisteredContentScripts();
@@ -365,7 +348,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   } catch (error) {
     console.error("Error during initialization:", error);
-    chrome.storage.local.set({ Experimental: false });
   }
 });
 
@@ -377,7 +359,7 @@ async function goToLink() {
     let enabled = await checkEnabled();
     if (enabled) {
       // Content scripts supports this experimental feature
-      if (isSearchEngineExp()) {
+      if (selectedEngine.experimental) {
         await chrome.storage.local.set({ [selectedEngine.name]: true });
         window.location.href = getSearchEngineUrlHostName();
       } else {
@@ -386,7 +368,7 @@ async function goToLink() {
       }
     } else {
       //check is not enabled
-      if (!isSearchEngineExp()) {
+      if (!selectedEngine.experimental) {
         // Not an experimental one
         getQueryLink();
       } else {
