@@ -353,8 +353,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function goToLink() {
   let { query: q } = await chrome.storage.local.get("query");
-  let name = getSearchEngineName();
-  if (q && q.trim().length > 0) {
+  let name = selectedEngine?.name;
+  if (name && q && q.trim().length > 0) {
     // We enabled content scripts
     let enabled = await checkEnabled();
     if (enabled) {
