@@ -1,11 +1,10 @@
 # Tabbed: AI chatbot in New Tab and Sidebar
 
 A new tab page with an AI-like user interface. Note: You may have to sign in to the respective AI chatbot for it to work. Stop paying and sending your data to third-parties when you can directly use the AI chatbot with this extension.
-![Promo](./samples/Promo.png)
 
 [![Microsoft Edge](https://img.shields.io/badge/Edge-1.0.5.0-green.svg)](https://microsoftedge.microsoft.com/addons/detail/tabbed-ai-chatbot-in-new/jbhemcgchnpebmchepbcjfmneagnpnpa)
-[![Google Chrome](https://img.shields.io/badge/Chrome-1.0.6.8-red.svg)](https://chromewebstore.google.com/detail/jbpmodbjedoloelbepnpfhjoohjjkand)
-[![Mozilla Firefox](https://img.shields.io/badge/Firefox-1.0.6.8-red.svg)](https://addons.mozilla.org/en-US/firefox/addon/tabbed/)
+[![Google Chrome](https://img.shields.io/badge/Chrome-1.0.6.10-red.svg)](https://chromewebstore.google.com/detail/jbpmodbjedoloelbepnpfhjoohjjkand)
+[![Mozilla Firefox](https://img.shields.io/badge/Firefox-1.0.6.10-red.svg)](https://addons.mozilla.org/en-US/firefox/addon/tabbed/)
 
 ## Youtube Video
 
@@ -69,18 +68,16 @@ chmod +x dev.sh
 - Powerful **Search Everywhere** allows the same query to simultaneously run on multiple AI chatbots
 - Paste text into the prompt
 - Eight default suggestion ideas to save time on commands.
-  ![Sample 3](./samples/Sample_3.png)
 - Click on the Extension Icon:
   - To launch your current AI chatbot in a new Tab.
 - Permissions are optional but extend the basic features. You can revoke them any time by pressing "reset" in the options menu.
 - Context menus provide suggestions as your browse and select text.
+  ![Sample 5](./samples/Sample_5.png)
 
 ### Sidebar features (Firefox Only)
 
 - Open the sidebar to access the chatbots as well.
-  ![Sample 4](./samples/Sample_4.png)
 - Context menus provide suggestions as your browse
-  ![Sample 5](./samples/Sample_5.png)
 
 ## Optional Features (in Options)
 
@@ -96,6 +93,8 @@ chmod +x dev.sh
 
 - **Gemini** and **DeepSeek** is currently supported using Experimental content scripts (Permissions: scripting). You can revoke them at any time by pressing "reset" or the "beaker" button.
 - Send longer queries
+  ![Sample 3](./samples/Sample_3.png)
 - Paste Images into the prompt.
 - Automatically click **_Web Search_**, **_Deep Research_**, or **_Canvas_** if possible.
-  ![Sample 6](./samples/Sample_6.png)
+- Advanced Search Everywhere function
+  ![Sample 4](./samples/Sample_4.png)
