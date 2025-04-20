@@ -50,11 +50,17 @@ async function getLastResponse() {
   });
 }
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  let { query, Copilot } = await chrome.storage.local.get(["query", "Copilot"]);
+  const { query, time, Copilot } = await chrome.storage.local.get([
+    "query",
+    "time",
+    "Copilot",
+  ]);
   await chrome.storage.local.remove("Copilot"); //remove immediately off the queue
   const searchQuery = (Copilot ? query : "")?.trim();
 
   if (!searchQuery) return;
+  const curTime = Date.now();
+  if (curTime > time + 1000 * 15) return;
   chrome.runtime.sendMessage({ ping: true });
   let attempts = 0;
   counter = 0; //reset the counter

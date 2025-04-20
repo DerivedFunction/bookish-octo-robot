@@ -48,11 +48,17 @@ async function runAfterFullLoad() {
 }
 
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  let { query, Qwen } = await chrome.storage.local.get(["query", "Qwen"]);
+  const { query, time, Qwen } = await chrome.storage.local.get([
+    "query",
+    "time",
+    "Qwen",
+  ]);
   await chrome.storage.local.remove("Qwen"); //remove immediately off the queue
   const searchQuery = (Qwen ? query : "")?.trim();
 
   if (!searchQuery) return;
+  const curTime = Date.now();
+  if (curTime > time + 1000 * 15) return;
   chrome.runtime.sendMessage({ ping: true });
   let attempts = 0;
   counter = 0; //reset the counter

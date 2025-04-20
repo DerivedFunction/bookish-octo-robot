@@ -45,10 +45,16 @@ async function getLastResponse() {
   });
 }
 async function getTextInput(maxRetries = 5, retryDelay = 3000) {
-  let { query, Gemini } = await chrome.storage.local.get(["query", "Gemini"]);
+  const { query, time, Gemini } = await chrome.storage.local.get([
+    "query",
+    "time",
+    "Gemini",
+  ]);
   const searchQuery = (Gemini ? query : "")?.trim();
   await chrome.storage.local.remove("Gemini");
   if (!searchQuery) return;
+  const curTime = Date.now();
+  if (curTime > time + 1000 * 15) return;
   chrome.runtime.sendMessage({ ping: true });
   let attempts = 0;
   counter = 0; //reset the counter

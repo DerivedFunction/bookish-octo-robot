@@ -44,10 +44,16 @@ async function getLastResponse() {
   });
 }
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  let { query, Mistral } = await chrome.storage.local.get(["query", "Mistral"]);
+  const { query, time, Mistral } = await chrome.storage.local.get([
+    "query",
+    "time",
+    "Mistral",
+  ]);
   await chrome.storage.local.remove("Mistral");
   const searchQuery = (Mistral ? query : "")?.trim();
   if (!searchQuery) return;
+  const curTime = Date.now();
+  if (curTime > time + 1000 * 15) return;
   let attempts = 0;
   counter = 0; //reset the counter
   while (attempts < maxRetries) {
