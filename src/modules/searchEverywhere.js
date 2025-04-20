@@ -10,6 +10,7 @@ import { showToast } from "./toaster.js";
 import { greetingContainer } from "./greetings.js";
 import { ellipse, goBtn } from "./actionButtons.js";
 import { suggestionContainer } from "./suggestions.js";
+import { chatBotResponse, responseBox } from "./response.js";
 
 // Constants
 const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
@@ -71,47 +72,44 @@ function deleteLastMessage() {
 
 async function handleChatMessage(e, engines) {
   if (e.content) {
-    const messageWrapper = document.createElement("div");
-    messageWrapper.classList.add("chat-response", "chatbot");
-    const icon = document.createElement("div");
+    const messageButton = document.createElement("button");
     const engine = engines.find((ai) => ai.name === e.engine);
     appendSvg(
       {
         image: engine.image,
         description: e.engine,
       },
-      icon,
+      messageButton,
       "5px",
       false,
       true
     );
-    messageWrapper.appendChild(icon);
     const parser = new DOMParser();
     const doc = parser.parseFromString(e.content, "text/html");
-    const parsedElement = doc.body;
-    if (!parsedElement) return;
-    parsedElement.style.backgroundColor = "var(--item-bg)";
-    parsedElement.style.whiteSpace = "pre-wrap";
-    parsedElement.style.backgroundColor = "var(--item-bg)";
-    messageWrapper.appendChild(parsedElement);
-    messageWrapper.classList.add("shrink");
-    messageWrapper.addEventListener("click", () => {
-      messageWrapper.classList.toggle("shrink");
+    const parsedElement = document.createElement("div");
+    const body = doc.body;
+    body.style.whiteSpace = "pre-wrap";
+    parsedElement.appendChild(body);
+    parsedElement.style.background = "var(--item-bg)";
+
+    messageButton.addEventListener("click", () => {
+      responseBox.replaceChildren(parsedElement);
+      chatBotResponse.style.display = "block";
     });
-    if (messageWrapper.hasChildNodes()) {
-      let chatbotMessages = responseContainer.lastElementChild;
-      if (
-        !chatbotMessages ||
-        !chatbotMessages.classList.contains("chatbot-messages") ||
-        chatbotMessages.classList.contains("KEEP")
-      ) {
-        chatbotMessages = document.createElement("div");
-        chatbotMessages.classList.add("chatbot-messages");
-        responseContainer.appendChild(chatbotMessages);
-      }
-      chatbotMessages.appendChild(messageWrapper);
-      responseContainer.scrollTo(0, responseContainer.scrollHeight);
+
+    let chatbotMessages = responseContainer.lastElementChild;
+    if (
+      !chatbotMessages ||
+      !chatbotMessages.classList.contains("chatbot-messages") ||
+      chatbotMessages.classList.contains("KEEP")
+    ) {
+      chatbotMessages = document.createElement("div");
+      chatbotMessages.classList.add("chatbot-messages");
+      chatbotMessages.classList.add("horizontal-container");
+      responseContainer.appendChild(chatbotMessages);
     }
+    chatbotMessages.appendChild(messageButton);
+    responseContainer.scrollTo(0, responseContainer.scrollHeight);
   }
 }
 
