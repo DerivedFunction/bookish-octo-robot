@@ -30,7 +30,6 @@ async function runAfterFullLoad() {
     return;
   }
   console.log("Running query injection.");
-  element = document.querySelector("textarea");
   await getImage();
   await getButtons();
   await getTextInput();
@@ -79,7 +78,6 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
         tracker.setValue(lastValue);
       }
       element.dispatchEvent(event);
-
       await clickButton("#send-message-button");
       return;
     } else {
