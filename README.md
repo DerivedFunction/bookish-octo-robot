@@ -93,8 +93,9 @@ chmod +x dev.sh
 
 - **Gemini** and **DeepSeek** is currently supported using Experimental content scripts (Permissions: scripting). You can revoke them at any time by pressing "reset" or the "beaker" button.
 - Send longer queries
-  ![Sample 3](./samples/Sample_3.png)
+
 - Paste Images into the prompt.
 - Automatically click **_Web Search_**, **_Deep Research_**, or **_Canvas_** if possible.
 - Advanced Search Everywhere function
+  ![Sample 3](./samples/Sample_3.png)
   ![Sample 4](./samples/Sample_4.png)
