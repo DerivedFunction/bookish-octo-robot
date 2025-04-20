@@ -353,40 +353,31 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function goToLink() {
   let { query: q } = await chrome.storage.local.get("query");
-  let name = selectedEngine?.name;
-  if (name && q && q.trim().length > 0) {
-    // We enabled content scripts
-    let enabled = await checkEnabled();
-    if (enabled) {
-      // Content scripts supports this experimental feature
-      if (selectedEngine.experimental) {
+  if (selectedEngine && q && q.trim().length > 0) {
+    if (selectedEngine.experimental) {
+      if (hasScripts) {
+        // Content scripts supports this experimental feature
         await chrome.storage.local.set({ [selectedEngine.name]: true });
         window.location.href = getSearchEngineUrlHostName();
+        return;
+      } else if (selectedEngine.needsPerm) {
+        // We don't have scripts and we need it
+        showToast(`${selectedEngine.name} may not work without permissions`);
+        query.value = q;
+        queryEvents();
       } else {
-        // Go regularly
+        // Generate regular link (scriptless)
         getQueryLink();
       }
     } else {
-      //check is not enabled
-      if (!selectedEngine.experimental) {
-        // Not an experimental one
-        getQueryLink();
-      } else {
-        if (selectedEngine.needsPerm) {
-          showToast(`${name} may not work without permissions`);
-          query.value = q;
-          queryEvents();
-        } else {
-          getQueryLink();
-        }
-      }
+      // Generate regular link (scriptless)
+      getQueryLink();
     }
   }
 
   async function getQueryLink() {
     await chrome.storage.local.remove("query");
     let url = `${getSearchEngineUrl()}${encodeURIComponent(q.trim())}`;
-    console.log(`Query found. Going to ${url}`);
     window.location.href = url;
   }
 }
