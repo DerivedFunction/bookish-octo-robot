@@ -364,7 +364,7 @@ async function refresh() {
     const { aiList } = await loadJsonData("ai");
     for (const ai of aiList) {
       const aiName = ai.name;
-      chrome.storage.local.remove(aiName);
+      chrome.storage.local.remove([aiName, aiName + "Last"]);
     }
   }
 }

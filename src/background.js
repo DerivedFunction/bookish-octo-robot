@@ -280,7 +280,8 @@ async function refresh() {
   if (curTime > time + 1000 * 15) {
     console.log("Clearing old queries");
     aiList.forEach((ai) => {
-      chrome.storage.local.remove(ai.name);
+      const aiName = ai.name;
+      chrome.storage.local.remove([aiName, aiName + "Last"]);
     });
   }
   chrome.storage.local.remove(["time", "query"]);
