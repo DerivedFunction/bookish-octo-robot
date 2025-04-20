@@ -12,14 +12,6 @@ export function toggleClass(container, condition, style = "active") {
   else container.classList.remove(style);
 }
 
-export async function readText(blob) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsText(blob);
-  });
-}
 export async function loadJsonData(type) {
   try {
     // Object to store only the requested data

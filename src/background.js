@@ -112,7 +112,6 @@ async function getSearchEngine() {
 }
 
 async function deleteMenu() {
-  console.log("Deleting context menus");
   await chrome.contextMenus.remove("search").catch(() => {});
   await chrome.contextMenus.remove("switch").catch(() => {});
   selectedEngine = null;
@@ -169,31 +168,29 @@ async function loadMenu() {
   }
 
   // Check if the selected engine requires permissions and Experimental is false
-  if (selectedEngine.needsPerm) {
-    if (!hasScripts) {
+  if (selectedEngine.needsPerm && !hasScripts) {
+    chrome.contextMenus.create(
+      {
+        id: "switch",
+        title: "Switch to different AI chatbot",
+        contexts: ["all"],
+      },
+      () => void chrome.runtime.lastError
+    );
+    aiList.forEach((type) => {
       chrome.contextMenus.create(
         {
-          id: "switch",
-          title: "Switch to different AI chatbot",
+          id: type.name,
+          title: type.name,
+          parentId: "switch",
           contexts: ["all"],
         },
         () => void chrome.runtime.lastError
       );
-      aiList.forEach((type) => {
-        chrome.contextMenus.create(
-          {
-            id: type.name,
-            title: type.name,
-            parentId: "switch",
-            contexts: ["all"],
-          },
-          () => void chrome.runtime.lastError
-        );
-      });
-      console.log(`No permissions for ${selectedEngine.name}.`);
-      menusCreated = true;
-      return;
-    }
+    });
+    console.log(`No permissions for ${selectedEngine.name}.`);
+    menusCreated = true;
+    return;
   }
 
   // Create full menu for valid engine with permissions
