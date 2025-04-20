@@ -230,6 +230,7 @@ async function handleMultiSearch() {
       greetingContainer,
       curSearchBtn,
       ellipse,
+      multiTools,
       suggestionContainer,
       searchEnginePickerBtn,
       goBtn,
