@@ -7,6 +7,7 @@ import "./files.js";
 import "./greetings.js";
 import "./nameInput.js";
 import "./query.js";
+import "./response.js";
 import "./searchEngine.js";
 import "./searchEverywhere.js";
 import "./sidebar.js";
