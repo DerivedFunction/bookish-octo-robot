@@ -94,7 +94,7 @@ async function handleChatMessage(e, engines) {
 
     messageButton.addEventListener("click", () => {
       responseBox.replaceChildren(parsedElement);
-      chatBotResponse.style.display = "";
+      chatBotResponse.style.display = "block";
     });
 
     let chatbotMessages = responseContainer.lastElementChild;
@@ -105,6 +105,7 @@ async function handleChatMessage(e, engines) {
     ) {
       chatbotMessages = document.createElement("div");
       chatbotMessages.classList.add("chatbot-messages");
+      chatbotMessages.classList.add("horizontal-container");
       responseContainer.appendChild(chatbotMessages);
     }
     chatbotMessages.appendChild(messageButton);
