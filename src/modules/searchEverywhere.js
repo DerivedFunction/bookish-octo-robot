@@ -181,6 +181,7 @@ async function handleMultiSearch() {
 
   if (permissions.length > 0) {
     await chrome.storage.local.set({ query: queryText });
+    await chrome.storage.local.set({ time: Date.now() });
   }
 
   let keep = false;
@@ -217,7 +218,6 @@ async function handleMultiSearch() {
 
   query.value = keep ? queryText : "";
   queryEvents();
-  await chrome.storage.local.set({ time: Date.now() });
   let { unstable } = await chrome.storage.local.get("unstable");
   if (!unstable) return;
 
