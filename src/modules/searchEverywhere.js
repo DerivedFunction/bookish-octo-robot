@@ -20,6 +20,7 @@ const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
 // DOM Elements
 const searchEverywhereList = document.getElementById("search-everywhere-list");
 export const multiBtn = document.getElementById("multi-go");
+const sendAgain = document.getElementById("send-again");
 const responseContainer = document.getElementById("response-container");
 const responseBtn = document.getElementById("response");
 const multiTools = document.getElementById("multi-tools");
@@ -136,11 +137,10 @@ export async function appendList() {
   searchEverywhereList.replaceChildren(fragment);
 }
 
-async function handleMultiSearch() {
-  const queryText = query.value;
-
+async function handleMultiSearch(textContent, resend = false) {
+  const queryText = textContent ?? query.value;
+  console.log("Sending query: ", queryText);
   if (queryText.length < 1) return;
-
   const storedID = localStorage.getItem("multi-mode");
   if (storedID !== curMultID) {
     showToast("New Tab opened. This session expired");
@@ -216,11 +216,14 @@ async function handleMultiSearch() {
     }
   }
 
-  query.value = keep ? queryText : "";
-  queryEvents();
+  if (!resend) {
+    query.value = keep ? queryText : "";
+    queryEvents();
+  }
+
   let { unstable } = await chrome.storage.local.get("unstable");
   if (!unstable) return;
-
+  if (resend) return;
   if (newClick) {
     showToast(
       "If permissions are enabled, clicking the same button again will not open new tabs." +
@@ -244,7 +247,7 @@ async function handleMultiSearch() {
     newClick = false;
     responseContainer.style.display = "block";
     responseBtn.style.display = "";
-
+    sendAgain.style.display = "";
     const selectedEngines = getSearchEverywhere();
     const fragment = document.createDocumentFragment();
 
@@ -284,6 +287,15 @@ async function handleGetResponse() {
   getResponse();
   responseContainer.scrollTo(0, responseContainer.scrollHeight);
 }
+async function handleSendAgain() {
+  // get the text content of the last chat input
+  const inputs = document.querySelectorAll(".chat-response.input");
+  if (inputs.length === 0) return;
+  const lastInput = inputs[inputs.length - 1];
+  const queryText = lastInput.textContent;
+  if (queryText.length === 0) return;
+  await handleMultiSearch(queryText, true);
+}
 
 function getResponse() {
   const activeEngines = getSearchEverywhere();
@@ -299,6 +311,7 @@ function getResponse() {
 document.addEventListener("DOMContentLoaded", async () => {
   multiBtn.style.display = "none";
   responseBtn.style.display = "none";
+  sendAgain.style.display = "none";
   localStorage.setItem("multi-mode", curMultID);
   appendSvg(
     {
@@ -310,11 +323,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   appendSvg(
     {
       image: "assets/images/buttons/multi.svg",
-      description: "Search Everywhere",
     },
     multiBtn
   );
+  appendSvg(
+    {
+      image: "assets/images/buttons/resend.svg",
+      description: "Send again",
+    },
+    sendAgain
+  );
+
   await appendList();
+  multiBtn.addEventListener("click", () => handleMultiSearch());
+  responseBtn.addEventListener("click", () => handleGetResponse());
+  sendAgain.addEventListener("click", () => handleSendAgain());
+
   resetBtn.addEventListener("click", async () => {
     localStorage.removeItem(SEARCH_ENGINE_STORAGE_KEY);
     await appendList();
@@ -326,6 +350,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     chrome.runtime.onMessage.addListener((e) => handleChatMessage(e, engines));
   }
 });
-
-multiBtn.addEventListener("click", handleMultiSearch);
-responseBtn.addEventListener("click", handleGetResponse);
