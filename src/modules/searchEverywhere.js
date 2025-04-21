@@ -139,7 +139,6 @@ export async function appendList() {
 
 async function handleMultiSearch(textContent, resend = false) {
   const queryText = textContent ?? query.value;
-  console.log("Sending query: ", queryText);
   if (queryText.length < 1) return;
   const storedID = localStorage.getItem("multi-mode");
   if (storedID !== curMultID) {
