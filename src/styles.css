@@ -477,6 +477,7 @@ fieldset {
   line-height: 1.5;
   position: relative;
   overflow: hidden;
+  white-space: pre-wrap;
 }
 .chat-response.shrink {
   max-height: 30vh;
