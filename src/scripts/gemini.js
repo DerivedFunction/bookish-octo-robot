@@ -41,9 +41,9 @@ async function runAfterFullLoad() {
   });
 }
 async function getLastResponse() {
-  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get([
-    SELECTORS.lastResponse,
-  ]);
+  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get(
+    SELECTORS.lastResponse
+  );
   await chrome.storage.local.remove(SELECTORS.lastResponse);
   if (!getLast) return;
   let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);

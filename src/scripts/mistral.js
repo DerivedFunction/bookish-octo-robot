@@ -1,68 +1,72 @@
 // script.js Thanks to https://github.com/facebook/react/issues/11488#issuecomment-347775628
-(async () => {
-  chrome.storage.local.get("Mistral").then((e) => {
-    orphan = e.Mistral;
-  });
-  setTimeout(runAfterFullLoad, 3000);
-})();
-
+(async () => setTimeout(runAfterFullLoad, 3000))();
+const SELECTORS = {
+  AI: "Mistral",
+  lastResponse: "MistralLast",
+  textbox: "textarea",
+  send: "button[type='submit']",
+  file: null,
+  deep: null,
+  web: null,
+  code: null,
+  lastHTML: "div[dir='auto']",
+};
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
-// if it was opened
-let orphan;
 async function runAfterFullLoad() {
-  if (!orphan) {
-    console.log("Orphan process. Exiting...");
-    return;
-  }
-  console.log("Running query injection.");
-  await getTextInput();
-  let { unstable } = await chrome.storage.local.get("unstable");
-  if (!unstable) return;
-  console.log("Unstable Feature activated. listening...");
-  await runWithDelay();
-  async function runWithDelay() {
-    while (counter++ < MAX_COUNTER) {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
-      await getTextInput();
-      await getLastResponse();
+  chrome.storage.local.get(SELECTORS.AI).then(async (e) => {
+    let orphan = e[SELECTORS.AI];
+    if (!orphan) {
+      console.log("Orphan process. Exiting...");
+      return;
     }
-    console.log("No activity. Stopped listening for queries");
-  }
+    console.log("Running query injection.");
+    await getTextInput();
+    let { unstable } = await chrome.storage.local.get("unstable");
+    if (!unstable) return;
+    console.log("Unstable Feature activated. listening...");
+    await runWithDelay();
+    async function runWithDelay() {
+      while (counter++ < MAX_COUNTER) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
+        await getTextInput();
+        await getLastResponse();
+      }
+      console.log("No activity. Stopped listening for queries");
+    }
+  });
 }
 async function getLastResponse() {
-  let { MistralLast } = await chrome.storage.local.get(["MistralLast"]);
-  await chrome.storage.local.remove("MistralLast");
-  if (!MistralLast) return;
-  let lastResponse = document.querySelectorAll("div[dir='auto']");
+  let { [SELECTORS.AI]: getLast } = await chrome.storage.local.get([
+    SELECTORS.AI,
+  ]);
+  await chrome.storage.local.remove(SELECTORS.AI);
+  if (!getLast) return;
+  let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
   if (lastResponse.length === 0) return;
   let content = lastResponse[lastResponse.length - 1].innerHTML;
   chrome.runtime.sendMessage({
     lastResponse: content,
-    engine: "Mistral",
+    engine: SELECTORS.AI,
   });
 }
-async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  const { query, time, Mistral } = await chrome.storage.local.get([
-    "query",
-    "time",
-    "Mistral",
-  ]);
-  await chrome.storage.local.remove("Mistral");
-  const searchQuery = (Mistral ? query : "")?.trim();
+async function getTextInput(maxRetries = 5, retryDelay = 3000) {
+  const {
+    query,
+    time,
+    [SELECTORS.AI]: curAI,
+  } = await chrome.storage.local.get(["query", "time", SELECTORS.AI]);
+  await chrome.storage.local.remove(SELECTORS.AI);
+  const searchQuery = (curAI ? query : "")?.trim();
   if (!searchQuery) return;
   const curTime = Date.now();
   if (curTime > time + 1000 * 15) return;
   let attempts = 0;
   counter = 0; //reset the counter
   while (attempts < maxRetries) {
-    element = document.querySelector("textarea");
-    console.log(
-      `Attempt ${
-        attempts + 1
-      }: Injecting into ${element} with query: ${searchQuery}`
-    );
+    element = document.querySelector(SELECTORS.textbox);
+    console.log(`Attempt ${attempts + 1}: Injecting Query`);
 
     if (element) {
       // Simulate input for React compatibility
@@ -79,7 +83,7 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
       }
       element.dispatchEvent(event);
 
-      await clickButton("button[type='submit']");
+      await clickButton();
       return;
     } else {
       console.log(
@@ -96,15 +100,15 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   update();
 }
 
-async function clickButton(attribute) {
+async function clickButton() {
   setTimeout(() => {
-    const button = document.querySelector(attribute);
+    const button = document.querySelector(SELECTORS.send);
     if (button) {
       button.click();
-      console.log(`Clicked button: ${attribute}`);
+      console.log(`Clicked button: ${button}`);
       update();
     } else {
-      console.log(`Button not found: ${attribute}`);
+      console.log(`Button not found.`);
     }
   }, 3000);
   return;
@@ -113,7 +117,6 @@ async function clickButton(attribute) {
 async function update() {
   chrome.runtime.sendMessage({
     buttonClicked: true,
-    content: "",
-    engine: "Mistral",
+    engine: SELECTORS.AI,
   });
 }

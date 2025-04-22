@@ -1,16 +1,20 @@
 // script.js Thanks to https://github.com/facebook/react/issues/11488#issuecomment-347775628
-(async () => {
-  chrome.storage.local.get("HuggingFace").then((e) => {
-    orphan = e.HuggingFace;
-  });
-  setTimeout(runAfterFullLoad, 3000);
-})();
-
+(async () => setTimeout(runAfterFullLoad, 3000))();
+const SELECTORS = {
+  AI: "HuggingFace",
+  lastResponse: "HuggingFaceLast",
+  textbox: "textarea[placeholder='Ask anything']",
+  send: "button[name='submit']",
+  file: null,
+  deep: null,
+  web: "button.base-tool",
+  code: null,
+  lastHTML: "[data-message-role='assistant']",
+};
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
-// if it was opened
-let orphan;
+
 async function runAfterFullLoad() {
   if (!orphan) {
     console.log("Orphan process. Exiting...");
@@ -18,7 +22,6 @@ async function runAfterFullLoad() {
   }
   console.log("Running query injection.");
   await getButtons();
-  element = document.querySelector("textarea[placeholder='Ask anything']");
   await getTextInput();
   let { unstable } = await chrome.storage.local.get("unstable");
   if (!unstable) return;
@@ -34,27 +37,27 @@ async function runAfterFullLoad() {
   }
 }
 async function getLastResponse() {
-  let { HuggingFaceLast } = await chrome.storage.local.get(["HuggingFaceLast"]);
-  await chrome.storage.local.remove("HuggingFaceLast");
-  if (!HuggingFaceLast) return;
-  let lastResponse = document.querySelectorAll(
-    "[data-message-role='assistant']"
+  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get(
+    SELECTORS.lastResponse
   );
+  await chrome.storage.local.remove(SELECTORS.lastResponse);
+  if (!getLast) return;
+  let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
   if (lastResponse.length === 0) return;
   let content = lastResponse[lastResponse.length - 1].innerHTML;
   chrome.runtime.sendMessage({
     lastResponse: content,
-    engine: "HuggingFace",
+    engine: SELECTORS.AI,
   });
 }
-async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  const { query, time, HuggingFace } = await chrome.storage.local.get([
-    "query",
-    "time",
-    "HuggingFace",
-  ]);
-  await chrome.storage.local.remove("HuggingFace");
-  const searchQuery = (HuggingFace ? query : "")?.trim();
+async function getTextInput(maxRetries = 5, retryDelay = 3000) {
+  const {
+    query,
+    time,
+    [SELECTORS.AI]: curAI,
+  } = await chrome.storage.local.get(["query", "time", SELECTORS.AI]);
+  await chrome.storage.local.remove(SELECTORS.AI);
+  const searchQuery = (curAI ? query : "")?.trim();
 
   if (!searchQuery) return;
   const curTime = Date.now();
@@ -63,12 +66,8 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   let attempts = 0;
   counter = 0; //reset the counter
   while (attempts < maxRetries) {
-    element = document.querySelector("textarea[placeholder='Ask anything']");
-    console.log(
-      `Attempt ${
-        attempts + 1
-      }: Injecting into ${element} with query: ${searchQuery}`
-    );
+    element = document.querySelector(SELECTORS.textbox);
+    console.log(`Attempt ${attempts + 1}: Injecting Query`);
 
     if (element) {
       // Simulate input for React compatibility
@@ -84,15 +83,10 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
         tracker.setValue(lastValue);
       }
       element.dispatchEvent(event);
-      await clickButton("button[name='submit']");
+      await clickButton();
       return;
     } else {
-      element =
-        element ||
-        document.querySelector("textarea[placeholder='Ask anything']");
-      console.log(
-        `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
-      );
+      console.log(`Element not found. Retrying after ${retryDelay}ms.`);
       attempts++;
       if (attempts < maxRetries) {
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -103,15 +97,15 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   console.error(`Failed to find element after ${maxRetries} attempts.`);
   update();
 }
-async function clickButton(attribute) {
+async function clickButton() {
   setTimeout(() => {
-    const button = document.querySelector(attribute);
+    const button = document.querySelector(SELECTORS.send);
     if (button) {
       button.click();
-      console.log(`Clicked button: ${attribute}`);
+      console.log(`Clicked button: ${button}`);
       update();
     } else {
-      console.log(`Button not found: ${attribute}`);
+      console.log(`Button not found.`);
     }
   }, 3000);
   return;
@@ -120,13 +114,12 @@ async function update() {
   // Send a message after the button click
   chrome.runtime.sendMessage({
     buttonClicked: true,
-    content: "",
-    engine: "Hug",
+    engine: SELECTORS.AI,
   });
 }
 async function getButtons() {
   let { web } = await chrome.storage.local.get("web");
   if (web) {
-    document.querySelector("button.base-tool").click();
+    document.querySelector(SELECTORS.web).click();
   }
 }

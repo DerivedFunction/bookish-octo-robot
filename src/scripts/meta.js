@@ -1,16 +1,20 @@
 // script.js
-(async () => {
-  chrome.storage.local.get("Meta").then((e) => {
-    orphan = e.Meta;
-  });
-  setTimeout(runAfterFullLoad, 3000);
-})();
-
+(async () => setTimeout(runAfterFullLoad, 3000))();
+const SELECTORS = {
+  AI: "Meta",
+  lastResponse: "MetaLast",
+  textbox: "div[contenteditable='true']",
+  send: "div[aria-label='Send Message']",
+  file: "input",
+  deep: null,
+  web: null,
+  code: "div[aria-label='Canvas']",
+  lastHTML: ".x78zum5.xdt5ytf div[dir='auto']",
+};
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
-// if it was opened
-let orphan;
+
 async function runAfterFullLoad() {
   if (!orphan) {
     console.log("Orphan process. Exiting...");
@@ -20,7 +24,6 @@ async function runAfterFullLoad() {
 
   await getImage();
   await getButtons();
-  element = document.querySelector("div[contenteditable='true']");
   await getTextInput();
   let { unstable } = await chrome.storage.local.get("unstable");
   if (!unstable) return;
@@ -37,39 +40,37 @@ async function runAfterFullLoad() {
   }
 }
 async function getLastResponse() {
-  let { MetaLast } = await chrome.storage.local.get(["MetaLast"]);
-  await chrome.storage.local.remove("MetaLast");
-  if (!MetaLast) return;
-  let lastResponse = document.querySelectorAll(
-    ".x78zum5.xdt5ytf div[dir='auto']"
+  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get(
+    SELECTORS.lastResponse
   );
+  await chrome.storage.local.remove(SELECTORS.lastResponse);
+  if (!getLast) return;
+  let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
   if (lastResponse.length === 0) return;
   let content = lastResponse[lastResponse.length - 1].innerHTML;
   chrome.runtime.sendMessage({
     lastResponse: content,
-    engine: "Meta",
+    engine: SELECTORS.AI,
   });
 }
 async function getTextInput(maxRetries = 5, retryDelay = 3000) {
-  const { query, time, Meta } = await chrome.storage.local.get([
-    "query",
-    "time",
-    "Meta",
-  ]);
-  const searchQuery = (Meta ? query : "")?.trim();
-  await chrome.storage.local.remove("Meta");
+  const {
+    query,
+    time,
+    [SELECTORS.AI]: curAI,
+  } = await chrome.storage.local.get(["query", "time", SELECTORS.AI]);
+  const searchQuery = (curAI ? query : "")?.trim();
+  await chrome.storage.local.remove(SELECTORS.AI);
   if (!searchQuery) return;
   const curTime = Date.now();
   if (curTime > time + 1000 * 15) return;
   chrome.runtime.sendMessage({ ping: true });
   let attempts = 0;
   counter = 0; //reset the counter
-  getListener();
   while (attempts < maxRetries) {
-    element = document.querySelector("div[contenteditable='true']");
-    console.log(
-      `Attempt ${attempts + 1}: Injecting ${element} of query: ${searchQuery}`
-    );
+    element = document.querySelector(SELECTORS.textbox);
+    getListener();
+    console.log(`Attempt ${attempts + 1}: Injecting Query`);
 
     if (element) {
       element.focus();
@@ -81,11 +82,10 @@ async function getTextInput(maxRetries = 5, retryDelay = 3000) {
       });
 
       element.dispatchEvent(beforeInputEvent);
-      clickButton("div[aria-label='Send Message']");
+      clickButton();
       return;
     } else {
-      getListener();
-      console.log(`Element not found:. Retrying after ${retryDelay}ms.`);
+      console.log(`Element not found. Retrying after ${retryDelay}ms.`);
       attempts++;
       if (attempts < maxRetries) {
         // Check 'stop' condition here
@@ -124,15 +124,15 @@ function getListener() {
   });
 }
 
-async function clickButton(attribute) {
+async function clickButton() {
   setTimeout(() => {
-    const button = document.querySelector(attribute);
+    const button = document.querySelector(SELECTORS.send);
     if (button) {
       button.click();
-      console.log(`Clicked button: ${attribute}`);
+      console.log(`Clicked button: ${button}`);
       update();
     } else {
-      console.log(`Button not found: ${attribute}`);
+      console.log(`Button not found.`);
     }
   }, 3000);
   return;
@@ -141,13 +141,16 @@ async function update() {
   // Send a message after the button click
   chrome.runtime.sendMessage({
     buttonClicked: true,
-    content: "",
-    engine: "Meta",
+    engine: SELECTORS.AI,
   });
 }
 async function getImage() {
+  const { [SELECTORS.AI]: curAI } = await chrome.storage.local.get(
+    SELECTORS.AI
+  );
   const STORAGE_KEY_PREFIX = "pasted-file-";
   const fileUploadInput = document.querySelector("input");
+  if (!curAI || !fileUploadInput) return;
   const dataTransfer = new DataTransfer();
 
   // Map MIME types to file extensions
@@ -234,6 +237,6 @@ async function getImage() {
 async function getButtons() {
   let { code } = await chrome.storage.local.get("code");
   if (code) {
-    document.querySelector("div[aria-label='Canvas']").click();
+    document.querySelector(SELECTORS.code).click();
   }
 }

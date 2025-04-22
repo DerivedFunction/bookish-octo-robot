@@ -1,11 +1,17 @@
 // script.js Thanks to https://github.com/facebook/react/issues/11488#issuecomment-347775628
-(async () => {
-  chrome.storage.local.get("Qwen").then((e) => {
-    orphan = e.Qwen;
-  });
-  setTimeout(runAfterFullLoad, 3000);
-})();
+(async () => setTimeout(runAfterFullLoad, 3000))();
 
+const SELECTORS = {
+  AI: "Qwen",
+  lastResponse: "QwenLast",
+  textbox: "textarea",
+  send: "#send-message-button",
+  file: "input[type='file']",
+  deep: ".operationBtn button:nth-child(1)",
+  web: ".operationBtn button:nth-child(2)",
+  code: null,
+  lastHTML: "#response-content-container",
+};
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
@@ -13,48 +19,53 @@ let element;
 let orphan;
 
 async function getLastResponse() {
-  let { QwenLast } = await chrome.storage.local.get(["QwenLast"]);
-  await chrome.storage.local.remove("QwenLast");
-  if (!QwenLast) return;
-  let lastResponse = document.querySelectorAll("#response-content-container");
+  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get(
+    SELECTORS.lastResponse
+  );
+  await chrome.storage.local.remove(SELECTORS.lastResponse);
+  if (!getLast) return;
+  let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
   if (lastResponse.length === 0) return;
   let content = lastResponse[lastResponse.length - 1].innerHTML;
   chrome.runtime.sendMessage({
     lastResponse: content,
-    engine: "Qwen",
+    engine: SELECTORS.AI,
   });
 }
 async function runAfterFullLoad() {
-  if (!orphan) {
-    console.log("Orphan process. Exiting...");
-    return;
-  }
-  console.log("Running query injection.");
-  await getImage();
-  await getButtons();
-  await getTextInput();
-  let { unstable } = await chrome.storage.local.get("unstable");
-  if (!unstable) return;
-  console.log("Unstable Feature activated. listening...");
-  await runWithDelay();
-  async function runWithDelay() {
-    while (counter++ < MAX_COUNTER) {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
-      await getTextInput();
-      await getLastResponse();
+  chrome.storage.local.get(SELECTORS.AI).then(async (e) => {
+    if (!orphan) {
+      console.log("Orphan process. Exiting...");
+      return;
     }
-    console.log("No activity. Stopped listening for queries");
-  }
+    console.log("Running query injection.");
+    await getImage();
+    await getButtons();
+    await getTextInput();
+    let { unstable } = await chrome.storage.local.get("unstable");
+    if (!unstable) return;
+    console.log("Unstable Feature activated. listening...");
+    await runWithDelay();
+    async function runWithDelay() {
+      while (counter++ < MAX_COUNTER) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
+        await getImage();
+        await getTextInput();
+        await getLastResponse();
+      }
+      console.log("No activity. Stopped listening for queries");
+    }
+  });
 }
 
-async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  const { query, time, Qwen } = await chrome.storage.local.get([
-    "query",
-    "time",
-    "Qwen",
-  ]);
-  await chrome.storage.local.remove("Qwen"); //remove immediately off the queue
-  const searchQuery = (Qwen ? query : "")?.trim();
+async function getTextInput(maxRetries = 5, retryDelay = 3000) {
+  const {
+    query,
+    time,
+    [SELECTORS.AI]: curAI,
+  } = await chrome.storage.local.get(["query", "time", SELECTORS.AI]);
+  await chrome.storage.local.remove(SELECTORS.AI); //remove immediately off the queue
+  const searchQuery = (curAI ? query : "")?.trim();
 
   if (!searchQuery) return;
   const curTime = Date.now();
@@ -63,13 +74,8 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   let attempts = 0;
   counter = 0; //reset the counter
   while (attempts < maxRetries) {
-    element = document.querySelector("textarea");
-    console.log(
-      `Attempt ${
-        attempts + 1
-      }: Injecting into ${element} with query: ${searchQuery}`
-    );
-
+    element = document.querySelector(SELECTORS.textbox);
+    console.log(`Attempt ${attempts + 1}: Injecting Query`);
     if (element) {
       // Simulate input for React compatibility
       let lastValue = element.value || "";
@@ -84,7 +90,7 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
         tracker.setValue(lastValue);
       }
       element.dispatchEvent(event);
-      await clickButton("#send-message-button");
+      await clickButton();
       return;
     } else {
       console.log(`Element not found. Retrying after ${retryDelay}ms.`);
@@ -98,27 +104,25 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   update();
 }
 
-async function clickButton(attribute) {
+async function clickButton() {
   setTimeout(() => {
-    const button = document.querySelector(attribute);
+    const button = document.querySelector(SELECTORS.send);
     if (button) {
       button.click();
-      console.log(`Clicked button: ${attribute}`);
+      console.log(`Clicked button: ${button}`);
       update();
     } else {
-      console.log(`Button not found: ${attribute}`);
+      console.log(`Button not found.`);
     }
   }, 3000);
   return;
 }
 
 async function update() {
-  await chrome.storage.local.remove("Qwen");
   // Send a message after the button click
   chrome.runtime.sendMessage({
     buttonClicked: true,
-    content: "",
-    engine: "Qwen",
+    engine: SELECTORS.AI,
   });
 }
 async function getButtons() {
@@ -133,8 +137,12 @@ async function getButtons() {
 }
 
 async function getImage() {
+  const { [SELECTORS.AI]: curAI } = await chrome.storage.local.get(
+    SELECTORS.AI
+  );
   const STORAGE_KEY_PREFIX = "pasted-file-";
-  const fileUploadInput = document.querySelector("input[type='file']");
+  const fileUploadInput = document.querySelector(SELECTORS.file);
+  if (!curAI || !fileUploadInput) return;
   const dataTransfer = new DataTransfer();
 
   // Map MIME types to file extensions

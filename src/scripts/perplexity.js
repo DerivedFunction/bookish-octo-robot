@@ -1,57 +1,64 @@
 // script.js Thanks to https://github.com/facebook/react/issues/11488#issuecomment-347775628
-(async () => {
-  chrome.storage.local.get("Perplexity").then((e) => {
-    orphan = e.Perplexity;
-  });
-  setTimeout(runAfterFullLoad, 3000);
-})();
-
+(async () => setTimeout(runAfterFullLoad, 3000))();
+const SELECTORS = {
+  AI: "Perplexity",
+  lastResponse: "PerplexityLast",
+  textbox: "textarea",
+  send: "button[aria-label='Submit']",
+  file: null,
+  deep: null,
+  web: null,
+  code: null,
+  lastHTML: "div.prose",
+};
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
-// if it was opened
-let orphan;
+
 async function runAfterFullLoad() {
-  if (!orphan) {
-    console.log("Orphan process. Exiting...");
-    return;
-  }
-  console.log("Running query injection.");
-  element = document.querySelector("textarea");
-  await getTextInput();
-  let { unstable } = await chrome.storage.local.get("unstable");
-  if (!unstable) return;
-  console.log("Unstable Feature activated. listening...");
-  await runWithDelay();
-  async function runWithDelay() {
-    while (counter++ < MAX_COUNTER) {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
-      await getTextInput();
-      await getLastResponse();
+  chrome.storage.local.get(SELECTORS.AI).then(async (e) => {
+    if (!orphan) {
+      console.log("Orphan process. Exiting...");
+      return;
     }
-    console.log("No activity. Stopped listening for queries");
-  }
+    console.log("Running query injection.");
+    await getTextInput();
+    let { unstable } = await chrome.storage.local.get("unstable");
+    if (!unstable) return;
+    console.log("Unstable Feature activated. listening...");
+    await runWithDelay();
+    async function runWithDelay() {
+      while (counter++ < MAX_COUNTER) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
+        await getTextInput();
+        await getLastResponse();
+      }
+      console.log("No activity. Stopped listening for queries");
+    }
+  });
 }
 async function getLastResponse() {
-  let { PerplexityLast } = await chrome.storage.local.get(["PerplexityLast"]);
-  await chrome.storage.local.remove("PerplexityLast");
-  if (!PerplexityLast) return;
-  let lastResponse = document.querySelectorAll("div.prose");
+  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get(
+    SELECTORS.lastResponse
+  );
+  await chrome.storage.local.remove(SELECTORS.lastResponse);
+  if (!getLast) return;
+  let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
   if (lastResponse.length === 0) return;
   let content = lastResponse[lastResponse.length - 1].textContent;
   chrome.runtime.sendMessage({
     lastResponse: content,
-    engine: "Perplexity",
+    engine: SELECTORS.AI,
   });
 }
-async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  const { query, time, Perplexity } = await chrome.storage.local.get([
-    "query",
-    "time",
-    "Perplexity",
-  ]);
-  await chrome.storage.local.remove("Perplexity");
-  const searchQuery = (Perplexity ? query : "")?.trim();
+async function getTextInput(maxRetries = 5, retryDelay = 3000) {
+  const {
+    query,
+    time,
+    [SELECTORS.AI]: curAI,
+  } = await chrome.storage.local.get(["query", "time", SELECTORS.AI]);
+  await chrome.storage.local.remove(SELECTORS.AI);
+  const searchQuery = (curAI ? query : "")?.trim();
 
   if (!searchQuery) return;
   const curTime = Date.now();
@@ -60,12 +67,8 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   let attempts = 0;
   counter = 0; //reset the counter
   while (attempts < maxRetries) {
-    element = document.querySelector("textarea");
-    console.log(
-      `Attempt ${
-        attempts + 1
-      }: Injecting into ${element} with query: ${searchQuery}`
-    );
+    element = document.querySelector(SELECTORS.textbox);
+    console.log(`Attempt ${attempts + 1}: Injecting Query`);
 
     if (element) {
       // Simulate input for React compatibility
@@ -82,10 +85,9 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
       }
       element.dispatchEvent(event);
 
-      await clickButton("button[aria-label='Submit']");
+      await clickButton();
       return;
     } else {
-      element = element || document.querySelector("textarea");
       console.log(`Element not found: Retrying after ${retryDelay}ms.`);
       attempts++;
       if (attempts < maxRetries) {
@@ -98,15 +100,15 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   update();
 }
 
-async function clickButton(attribute) {
+async function clickButton() {
   setTimeout(() => {
-    const button = document.querySelector(attribute);
+    const button = document.querySelector(SELECTORS.send);
     if (button) {
       button.click();
-      console.log(`Clicked button: ${attribute}`);
+      console.log(`Clicked button: ${button}`);
       update();
     } else {
-      console.log(`Button not found: ${attribute}`);
+      console.log(`Button not found.`);
     }
   }, 3000);
   return;
@@ -115,6 +117,6 @@ function update() {
   // Send a message after the button click
   chrome.runtime.sendMessage({
     buttonClicked: true,
-    engine: "Perplexity",
+    engine: SELECTORS.AI,
   });
 }

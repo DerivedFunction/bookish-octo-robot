@@ -7,21 +7,19 @@ const SELECTORS = {
   textbox: "textarea",
   send: "._7436101",
   file: "input[type='file']",
-  deep: "div.ds-button",
-  web: "div.ds-button",
+  deep: "div.ds-button:nth-child(1)",
+  web: "div.ds-button:nth-child(2)",
   code: null,
   lastHTML: "div.ds-markdown.ds-markdown--block",
 };
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
-// if it was opened
-let orphan;
 
 async function getLastResponse() {
-  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get([
-    SELECTORS.lastResponse,
-  ]);
+  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get(
+    SELECTORS.lastResponse
+  );
   await chrome.storage.local.remove(SELECTORS.lastResponse);
   if (!getLast) return;
   let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
@@ -60,7 +58,7 @@ async function runAfterFullLoad() {
   });
 }
 
-async function getTextInput(maxRetries = 10, retryDelay = 3000) {
+async function getTextInput(maxRetries = 5, retryDelay = 3000) {
   const {
     query,
     time,
@@ -132,10 +130,10 @@ async function update() {
 async function getButtons() {
   let { deep, web } = await chrome.storage.local.get(["deep", "web"]);
   if (web) {
-    document.querySelectorAll(SELECTORS.web)[1].click();
+    document.querySelector(SELECTORS.web).click();
   }
   if (deep) {
-    document.querySelectorAll(SELECTORS.web)[0].click();
+    document.querySelector(SELECTORS.web).click();
   }
 }
 async function getImage() {
