@@ -1,5 +1,3 @@
-import { query } from "./query.js";
-
 const tooltip = document.getElementById("tooltip");
 export function setupTooltip(element, condition = () => true, message = null) {
   const hideTooltip = () => {

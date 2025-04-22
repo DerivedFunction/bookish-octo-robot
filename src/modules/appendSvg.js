@@ -31,7 +31,6 @@ export function appendSvg(
     } else {
       container.insertBefore(img, container.firstChild);
     }
-
     if (object.description) {
       setupTooltip(img, () => img.matches(":hover"), object.description);
     }
