@@ -142,8 +142,7 @@ async function handleMultiSearch(textContent, resend = false) {
   if (queryText.length < 1) return;
   const storedID = localStorage.getItem("multi-mode");
   if (storedID !== curMultID) {
-    showToast("New Tab opened. This session expired");
-    return;
+    showToast("Warning: New Tab opened. This session may be outdated");
   }
 
   const searchEngines = await getSearchEngineList();
