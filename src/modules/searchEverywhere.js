@@ -310,9 +310,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   [responseBtn, sendAgain].forEach((btn) => {
     btn.style.display = "none";
   });
-  [responseBtn, sendAgain, multiBtn].forEach((btn) => {
-    setupTooltip(btn, () => true, btn.getAttribute("data-tooltip"));
+  [responseBtn, sendAgain].forEach((btn) => {
+    setupTooltip(btn, () => true);
   });
+  setupTooltip(multiBtn, () => query.value.length === 0);
   localStorage.setItem("multi-mode", curMultID);
   appendSvg(
     {
