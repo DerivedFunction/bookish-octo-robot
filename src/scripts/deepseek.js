@@ -45,19 +45,36 @@ async function runAfterFullLoad() {
     let { unstable } = await chrome.storage.local.get("unstable");
     if (!unstable) return;
     console.log("Unstable Feature activated. listening...");
-    await runWithDelay();
-    async function runWithDelay() {
-      while (counter++ < MAX_COUNTER) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
-        await getImage();
-        await getTextInput();
-        await getLastResponse();
-      }
-      console.log("No activity. Stopped listening for queries");
-    }
+    chrome.storage.onChanged.addListener(handleStorageChange);
   });
 }
+// Listener function to handle storage changes
+async function handleStorageChange(changes, areaName) {
+  // Only react to changes in the 'local' storage area
+  if (areaName !== "local") return;
 
+  // Check if the main AI trigger key was added or changed
+  // This indicates a potential new query or image task
+  if (changes[SELECTORS.AI] && changes[SELECTORS.AI].newValue) {
+    console.log(
+      `Change detected for ${SELECTORS.AI}. Running getImage and getTextInput.`
+    );
+    // Run the functions; they will check storage again to see if action is needed
+    await getImage();
+    await getTextInput(); // This function checks internally if query/time are valid and removes the key if processed.
+  }
+
+  // Check if the request to get the last response was added or changed
+  if (
+    changes[SELECTORS.lastResponse] &&
+    changes[SELECTORS.lastResponse].newValue
+  ) {
+    console.log(
+      `Change detected for ${SELECTORS.lastResponse}. Running getLastResponse.`
+    );
+    await getLastResponse(); // This function checks internally and removes the key if processed.
+  }
+}
 async function getTextInput(maxRetries = 5, retryDelay = 3000) {
   const {
     query,
