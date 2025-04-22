@@ -1,21 +1,27 @@
 // script.js Thanks to https://github.com/facebook/react/issues/11488#issuecomment-347775628
-(async () => {
-  chrome.storage.local.get("Grok").then((e) => {
-    orphan = e.Grok;
-  });
-  setTimeout(runAfterFullLoad, 3000);
-})();
-
+(async () => setTimeout(runAfterFullLoad, 3000))();
+const SELECTORS = {
+  AI: "Grok",
+  lastResponse: "GrokLast",
+  textbox: "textarea",
+  send: "button[type='submit']",
+  file: "input[type='file']",
+  deep: "button[aria-label='Think']",
+  web: "button[aria-label='DeepSearch']",
+  code: null,
+  lastHTML: ".last-response",
+};
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
-// if it was opened
-let orphan;
+
 async function getLastResponse() {
-  let { GrokLast } = await chrome.storage.local.get(["GrokLast"]);
-  await chrome.storage.local.remove("GrokLast");
-  if (!GrokLast) return;
-  let lastResponse = document.querySelector(".last-response")?.parentElement;
+  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get([
+    SELECTORS.lastResponse,
+  ]);
+  await chrome.storage.local.remove(SELECTORS.lastResponse);
+  if (!getLast) return;
+  let lastResponse = document.querySelector(SELECTORS.lastHTML)?.parentElement;
   if (!lastResponse) return;
   let buttons = lastResponse.querySelectorAll(
     "button[aria-label='Show inline']"
@@ -27,41 +33,45 @@ async function getLastResponse() {
   let content = lastResponse.innerHTML;
   chrome.runtime.sendMessage({
     lastResponse: content,
-    engine: "Grok",
+    engine: SELECTORS.AI,
   });
 }
 async function runAfterFullLoad() {
-  if (!orphan) {
-    console.log("Orphan process. Exiting...");
-    return;
-  }
-  console.log("Running query injection.");
-  await getImage();
-  await getButtons();
-  element = document.querySelector("textarea");
-  await getTextInput();
-  let { unstable } = await chrome.storage.local.get("unstable");
-  if (!unstable) return;
-  console.log("Unstable Feature activated. listening...");
-  await runWithDelay();
-  async function runWithDelay() {
-    while (counter++ < MAX_COUNTER) {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
-      await getTextInput();
-      await getLastResponse();
+  chrome.storage.local.get(SELECTORS.AI).then(async (e) => {
+    let orphan = e[SELECTORS.AI];
+    if (!orphan) {
+      console.log("Orphan process. Exiting...");
+      return;
     }
-    console.log("No activity. Stopped listening for queries");
-  }
+    console.log("Running query injection.");
+    await getImage();
+    await getButtons();
+    element = document.querySelector("textarea");
+    await getTextInput();
+    let { unstable } = await chrome.storage.local.get("unstable");
+    if (!unstable) return;
+    console.log("Unstable Feature activated. listening...");
+    await runWithDelay();
+    async function runWithDelay() {
+      while (counter++ < MAX_COUNTER) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
+        await getImage();
+        await getTextInput();
+        await getLastResponse();
+      }
+      console.log("No activity. Stopped listening for queries");
+    }
+  });
 }
 
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  const { query, time, Grok } = await chrome.storage.local.get([
-    "query",
-    "time",
-    "Grok",
-  ]);
-  await chrome.storage.local.remove("Grok");
-  const searchQuery = (Grok ? query : "")?.trim();
+  const {
+    query,
+    time,
+    [SELECTORS.AI]: curAI,
+  } = await chrome.storage.local.get(["query", "time", SELECTORS.AI]);
+  await chrome.storage.local.remove(SELECTORS.AI);
+  const searchQuery = (curAI ? query : "")?.trim();
 
   if (!searchQuery) return;
   const curTime = Date.now();
@@ -70,12 +80,8 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   let attempts = 0;
   counter = 0; //reset the counter
   while (attempts < maxRetries) {
-    console.log(
-      `Attempt ${
-        attempts + 1
-      }: Injecting into ${element} with query: ${searchQuery}`
-    );
-    element = document.querySelector("textarea");
+    element = document.querySelector(SELECTORS.textbox);
+    console.log(`Attempt ${attempts + 1}: Injecting Query`);
     if (element) {
       // Simulate input for React compatibility
       let lastValue = element.value || "";
@@ -91,13 +97,10 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
       }
       element.dispatchEvent(event);
 
-      await clickButton("button[type='submit']");
+      await clickButton();
       return;
     } else {
-      element = element || document.querySelector("textarea");
-      console.log(
-        `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
-      );
+      console.log(`Element not found. Retrying after ${retryDelay}ms.`);
       attempts++;
       if (attempts < maxRetries) {
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -108,15 +111,15 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   console.error(`Failed to find element after ${maxRetries} attempts.`);
   update();
 }
-async function clickButton(attribute) {
+async function clickButton() {
   setTimeout(() => {
-    const button = document.querySelector(attribute);
+    const button = document.querySelector(SELECTORS.send);
     if (button) {
       button.click();
-      console.log(`Clicked button: ${attribute}`);
+      console.log(`Clicked button: ${button}`);
       update();
     } else {
-      console.log(`Button not found: ${attribute}`);
+      console.log(`Button not found.`);
     }
   }, 3000);
   return;
@@ -125,14 +128,17 @@ async function update() {
   // Send a message after the button click
   chrome.runtime.sendMessage({
     buttonClicked: true,
-    content: "",
-    engine: "Grok",
+    engine: SELECTORS.AI,
   });
 }
 
 async function getImage() {
+  const { [SELECTORS.AI]: curAI } = await chrome.storage.local.get(
+    SELECTORS.AI
+  );
   const STORAGE_KEY_PREFIX = "pasted-file-";
-  const fileUploadInput = document.querySelector("input[type='file']");
+  const fileUploadInput = document.querySelector(SELECTORS.file);
+  if (!curAI || !fileUploadInput) return;
   const dataTransfer = new DataTransfer();
 
   // Map MIME types to file extensions
@@ -218,9 +224,9 @@ async function getImage() {
 async function getButtons() {
   let { deep, web } = await chrome.storage.local.get(["deep", "web"]);
   if (web) {
-    document.querySelector("button[aria-label='DeepSearch']").click();
+    document.querySelector(SELECTORS.web).click();
   }
   if (deep) {
-    document.querySelector("button[aria-label='Think']").click();
+    document.querySelector(SELECTORS.deep).click();
   }
 }

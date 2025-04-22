@@ -1,11 +1,17 @@
 // script.js Thanks to https://github.com/facebook/react/issues/11488#issuecomment-347775628
-(async () => {
-  chrome.storage.local.get("DeepSeek").then((e) => {
-    orphan = e.DeepSeek;
-  });
-  setTimeout(runAfterFullLoad, 3000);
-})();
+(async () => setTimeout(runAfterFullLoad, 3000))();
 
+const SELECTORS = {
+  AI: "DeepSeek",
+  lastResponse: "DeepSeekLast",
+  textbox: "textarea",
+  send: "._7436101",
+  file: "input[type='file']",
+  deep: "div.ds-button",
+  web: "div.ds-button",
+  code: null,
+  lastHTML: "div.ds-markdown.ds-markdown--block",
+};
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
@@ -13,51 +19,55 @@ let element;
 let orphan;
 
 async function getLastResponse() {
-  let { DeepSeekLast } = await chrome.storage.local.get(["DeepSeekLast"]);
-  await chrome.storage.local.remove("DeepSeekLast");
-  if (!DeepSeekLast) return;
-  let lastResponse = document.querySelectorAll(
-    "div.ds-markdown.ds-markdown--block"
-  );
+  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get([
+    SELECTORS.lastResponse,
+  ]);
+  await chrome.storage.local.remove(SELECTORS.lastResponse);
+  if (!getLast) return;
+  let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
   if (lastResponse.length === 0) return;
   let content = lastResponse[lastResponse.length - 1].innerHTML;
   chrome.runtime.sendMessage({
     lastResponse: content,
-    engine: "DeepSeek",
+    engine: SELECTORS.AI,
   });
 }
 async function runAfterFullLoad() {
-  if (!orphan) {
-    console.log("Orphan process. Exiting...");
-    return;
-  }
-  console.log("Running query injection.");
-  element = document.querySelector("textarea");
-  await getImage();
-  await getButtons();
-  await getTextInput();
-  let { unstable } = await chrome.storage.local.get("unstable");
-  if (!unstable) return;
-  console.log("Unstable Feature activated. listening...");
-  await runWithDelay();
-  async function runWithDelay() {
-    while (counter++ < MAX_COUNTER) {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
-      await getTextInput();
-      await getLastResponse();
+  chrome.storage.local.get(SELECTORS.AI).then(async (e) => {
+    let orphan = e[SELECTORS.AI];
+    if (!orphan) {
+      console.log("Orphan process. Exiting...");
+      return;
     }
-    console.log("No activity. Stopped listening for queries");
-  }
+    console.log("Running query injection.");
+    element = document.querySelector(SELECTORS.textbox);
+    await getImage();
+    await getButtons();
+    await getTextInput();
+    let { unstable } = await chrome.storage.local.get("unstable");
+    if (!unstable) return;
+    console.log("Unstable Feature activated. listening...");
+    await runWithDelay();
+    async function runWithDelay() {
+      while (counter++ < MAX_COUNTER) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
+        await getImage();
+        await getTextInput();
+        await getLastResponse();
+      }
+      console.log("No activity. Stopped listening for queries");
+    }
+  });
 }
 
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  const { query, time, DeepSeek } = await chrome.storage.local.get([
-    "query",
-    "time",
-    "DeepSeek",
-  ]);
-  await chrome.storage.local.remove("DeepSeek"); //remove immediately off the queue
-  const searchQuery = (DeepSeek ? query : "")?.trim();
+  const {
+    query,
+    time,
+    [SELECTORS.AI]: curAI,
+  } = await chrome.storage.local.get(["query", "time", SELECTORS.AI]);
+  await chrome.storage.local.remove(SELECTORS.AI); //remove immediately off the queue
+  const searchQuery = (curAI ? query : "")?.trim();
 
   if (!searchQuery) return;
   const curTime = Date.now();
@@ -66,12 +76,8 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   let attempts = 0;
   counter = 0; //reset the counter
   while (attempts < maxRetries) {
-    element = document.querySelector("textarea");
-    console.log(
-      `Attempt ${
-        attempts + 1
-      }: Injecting into ${element} with query: ${searchQuery}`
-    );
+    element = document.querySelector(SELECTORS.textbox);
+    console.log(`Attempt ${attempts + 1}: Injecting Query`);
 
     if (element) {
       // Simulate input for React compatibility
@@ -88,7 +94,7 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
       }
       element.dispatchEvent(event);
 
-      await clickButton("._7436101");
+      await clickButton();
       return;
     } else {
       console.log(`Element not found. Retrying after ${retryDelay}ms.`);
@@ -102,41 +108,43 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   update();
 }
 
-async function clickButton(attribute) {
+async function clickButton() {
   setTimeout(() => {
-    const button = document.querySelector(attribute);
+    const button = document.querySelector(SELECTORS.send);
     if (button) {
       button.click();
-      console.log(`Clicked button: ${attribute}`);
+      console.log(`Clicked button: ${button}`);
       update();
     } else {
-      console.log(`Button not found: ${attribute}`);
+      console.log(`Button not found.`);
     }
   }, 3000);
   return;
 }
 
 async function update() {
-  await chrome.storage.local.remove("DeepSeek");
   // Send a message after the button click
   chrome.runtime.sendMessage({
     buttonClicked: true,
-    content: "",
-    engine: "DeepSeek",
+    engine: SELECTORS.AI,
   });
 }
 async function getButtons() {
   let { deep, web } = await chrome.storage.local.get(["deep", "web"]);
   if (web) {
-    document.querySelectorAll("div.ds-button")[1].click();
+    document.querySelectorAll(SELECTORS.web)[1].click();
   }
   if (deep) {
-    document.querySelectorAll("div.ds-button")[0].click();
+    document.querySelectorAll(SELECTORS.web)[0].click();
   }
 }
 async function getImage() {
+  const { [SELECTORS.AI]: curAI } = await chrome.storage.local.get(
+    SELECTORS.AI
+  );
   const STORAGE_KEY_PREFIX = "pasted-file-";
-  const fileUploadInput = document.querySelector("input[type='file']");
+  const fileUploadInput = document.querySelector(SELECTORS.file);
+  if (!curAI || !fileUploadInput) return;
   const dataTransfer = new DataTransfer();
 
   // Map MIME types to file extensions
