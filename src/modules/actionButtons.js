@@ -18,23 +18,7 @@ clearBtn.addEventListener("click", () => {
   }
   query.focus();
 });
-export const pasteBtn = document.getElementById("paste");
-pasteBtn.addEventListener("click", async () => {
-  try {
-    const permissionStatus = await chrome.permissions.request({
-      permissions: ["clipboardRead"],
-    });
-    if (!permissionStatus) {
-      return;
-    }
-    query.focus();
-    const text = await navigator.clipboard.readText();
-    query.value += text;
-    queryEvents();
-  } catch (err) {
-    showToast("Unable to access clipboard.");
-  }
-});
+
 export const goBtn = document.getElementById("go");
 goBtn.addEventListener("click", async () => {
   let hasPerm = await getScriptStatus();
@@ -98,15 +82,13 @@ ellipse.addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", () => {
   appendSvg({ image: "assets/images/buttons/go.svg" }, goBtn);
   appendSvg({ image: "assets/images/buttons/clear.svg" }, clearBtn);
-  appendSvg({ image: "assets/images/buttons/paste.svg" }, pasteBtn);
   appendSvg({ image: "assets/images/buttons/ellipse.svg" }, ellipse);
   extras.style.display = "none";
-  [clearBtn, pasteBtn, ellipse].forEach((btn) => {
+  [clearBtn, ellipse].forEach((btn) => {
     setupTooltip(btn);
   });
   setupTooltip(goBtn, () => query.value.length === 0);
   resetBtn.addEventListener("click", async () => {
-    await chrome.permissions.remove({ permissions: ["clipboardRead"] });
     extras.style.display = "none";
   });
 });

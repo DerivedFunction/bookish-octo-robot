@@ -21,7 +21,7 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-  "optional_permissions": ["clipboardRead", "scripting"],
+  "optional_permissions": ["scripting"],
   "permissions": ["storage", "contextMenus"],
   "optional_host_permissions": [
     "*://*.chatgpt.com/*",
