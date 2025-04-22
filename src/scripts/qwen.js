@@ -34,6 +34,7 @@ async function getLastResponse() {
 }
 async function runAfterFullLoad() {
   chrome.storage.local.get(SELECTORS.AI).then(async (e) => {
+    let orphan = e[SELECTORS.AI];
     if (!orphan) {
       console.log("Orphan process. Exiting...");
       return;
