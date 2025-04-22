@@ -178,7 +178,6 @@ async function handleMultiSearch(textContent, resend = false) {
     }
 
     if (engine.experimental && permissions.includes(engine.name)) {
-      console.log(engine.name);
       await chrome.storage.local.set({ [engine.name]: true });
     }
   }
