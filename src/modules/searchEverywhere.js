@@ -166,6 +166,10 @@ async function handleMultiSearch(textContent, resend = false) {
     console.log("Scripting is not enabled.");
   }
 
+  if (permissions.length > 0) {
+    await chrome.storage.local.set({ query: queryText });
+    await chrome.storage.local.set({ time: Date.now() });
+  }
   for (const engine of searchEngines) {
     if (!searchEverywhere[engine.name]) continue;
     if (queryText.length > engine.limit) {
@@ -174,13 +178,9 @@ async function handleMultiSearch(textContent, resend = false) {
     }
 
     if (engine.experimental && permissions.includes(engine.name)) {
+      console.log(engine.name);
       await chrome.storage.local.set({ [engine.name]: true });
     }
-  }
-
-  if (permissions.length > 0) {
-    await chrome.storage.local.set({ query: queryText });
-    await chrome.storage.local.set({ time: Date.now() });
   }
 
   let keep = false;
