@@ -13,6 +13,7 @@ import { suggestionContainer } from "./suggestions.js";
 import { chatBotResponse, responseBox } from "./response.js";
 import { hide } from "./advanceSearch.js";
 import { fileUploadBtn } from "./files.js";
+import { setupTooltip } from "./tooltip.js";
 
 // Constants
 const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
@@ -307,14 +308,16 @@ function getResponse() {
 // --- Event Listeners and Initialization ---
 
 document.addEventListener("DOMContentLoaded", async () => {
-  multiBtn.style.display = "none";
-  responseBtn.style.display = "none";
-  sendAgain.style.display = "none";
+  [responseBtn, sendAgain].forEach((btn) => {
+    btn.style.display = "none";
+  });
+  [responseBtn, sendAgain, multiBtn].forEach((btn) => {
+    setupTooltip(btn, () => true, btn.getAttribute("data-tooltip"));
+  });
   localStorage.setItem("multi-mode", curMultID);
   appendSvg(
     {
       image: "assets/images/buttons/response.svg",
-      description: "Get response data",
     },
     responseBtn
   );
@@ -327,7 +330,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   appendSvg(
     {
       image: "assets/images/buttons/resend.svg",
-      description: "Send again",
     },
     sendAgain
   );

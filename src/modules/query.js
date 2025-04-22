@@ -42,8 +42,6 @@ export function queryEvents() {
   let y = selectedEngine?.url;
   toggleButton(goBtn, x && y);
   toggleButton(multiBtn, x);
-  if (x) multiBtn.style.display = "";
-  else multiBtn.style.display = "none";
   getCharCount();
 }
 export const MAX_LIMIT = 5000; // max char count
