@@ -1,5 +1,5 @@
 import { loadJsonData, toggleButton, resetBtn } from "../app.js";
-import { goBtn, clearBtn } from "./actionButtons.js";
+import { goBtn } from "./actionButtons.js";
 import { appendSvg } from "./appendSvg.js";
 import { query, getCharCount } from "./query.js";
 
@@ -42,7 +42,6 @@ export async function getSuggestionButtons() {
       if (goBtn.disabled) {
         query.value = prompt.prompt;
         getCharCount();
-        toggleButton(clearBtn, true);
       } else {
         query.value = prompt.prompt + query.value;
       }

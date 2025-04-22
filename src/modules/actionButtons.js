@@ -10,14 +10,6 @@ import {
 import { appendSvg } from "./appendSvg.js";
 import { showToast } from "./toaster.js";
 import { resetBtn } from "../app.js";
-export const clearBtn = document.getElementById("clear");
-clearBtn.addEventListener("click", () => {
-  if (query.value.length > 0) {
-    query.value = "";
-    queryEvents();
-  }
-  query.focus();
-});
 
 export const goBtn = document.getElementById("go");
 goBtn.addEventListener("click", async () => {
@@ -81,10 +73,9 @@ ellipse.addEventListener("click", () => {
 });
 document.addEventListener("DOMContentLoaded", () => {
   appendSvg({ image: "assets/images/buttons/go.svg" }, goBtn);
-  appendSvg({ image: "assets/images/buttons/clear.svg" }, clearBtn);
   appendSvg({ image: "assets/images/buttons/ellipse.svg" }, ellipse);
   extras.style.display = "none";
-  [clearBtn, ellipse].forEach((btn) => {
+  [ellipse].forEach((btn) => {
     setupTooltip(btn);
   });
   setupTooltip(goBtn, () => query.value.length === 0);

@@ -1,4 +1,4 @@
-import { clearBtn, goBtn } from "./actionButtons.js";
+import { goBtn } from "./actionButtons.js";
 import { toggleButton } from "../app.js";
 import { suggestionResult } from "./suggestions.js";
 import { multiBtn, newClick } from "./searchEverywhere.js";
@@ -43,7 +43,6 @@ export function queryEvents() {
   query.style.height = "auto"; // Reset height to auto
   query.style.height = `${query.scrollHeight}px`; // Recalculate height
   let x = query.value.length > 0;
-  toggleButton(clearBtn, x);
   let y = getSearchEngineUrl();
   toggleButton(goBtn, x && y);
   toggleButton(multiBtn, x);
