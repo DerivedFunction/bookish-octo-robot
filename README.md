@@ -3,8 +3,8 @@
 A new tab page with an AI-like user interface. Note: You may have to sign in to the respective AI chatbot for it to work. Stop paying and sending your data to third-parties when you can directly use the AI chatbot with this extension.
 
 [![Microsoft Edge](https://img.shields.io/badge/Edge-1.0.5.0-green.svg)](https://microsoftedge.microsoft.com/addons/detail/tabbed-ai-chatbot-in-new/jbhemcgchnpebmchepbcjfmneagnpnpa)
-[![Google Chrome](https://img.shields.io/badge/Chrome-1.0.6.12-red.svg)](https://chromewebstore.google.com/detail/jbpmodbjedoloelbepnpfhjoohjjkand)
-[![Mozilla Firefox](https://img.shields.io/badge/Firefox-1.0.6.12-red.svg)](https://addons.mozilla.org/en-US/firefox/addon/tabbed/)
+[![Google Chrome](https://img.shields.io/badge/Chrome-1.0.6.13-red.svg)](https://chromewebstore.google.com/detail/jbpmodbjedoloelbepnpfhjoohjjkand)
+[![Mozilla Firefox](https://img.shields.io/badge/Firefox-1.0.6.13-red.svg)](https://addons.mozilla.org/en-US/firefox/addon/tabbed/)
 
 ## Youtube Video
 
