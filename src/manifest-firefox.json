@@ -9,7 +9,7 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "tabbed@firefox"
+      "id": "tabbed@DerivedFunction"
     }
   },
   "background": {
