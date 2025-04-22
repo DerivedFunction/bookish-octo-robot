@@ -1,62 +1,69 @@
 // script.js Thanks to https://github.com/facebook/react/issues/11488#issuecomment-347775628
-(async () => {
-  chrome.storage.local.get("Copilot").then((e) => {
-    orphan = e.Copilot;
-  });
-  setTimeout(runAfterFullLoad, 3000);
-})();
-
+(async () => setTimeout(runAfterFullLoad, 3000))();
+const SELECTORS = {
+  AI: "Copilot",
+  lastResponse: "CopilotLast",
+  textbox: "#userInput",
+  send: "button[title='Submit message']",
+  file: "input",
+  deep: "button[title='composer.chatModes.reasoning.title']",
+  web: null,
+  code: null,
+  lastHTML: "div[role='article']",
+};
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
-// if it was opened
-let orphan;
+
 async function runAfterFullLoad() {
-  if (!orphan) {
-    console.log("Orphan process. Exiting...");
-    return;
-  }
-  console.log("Running query injection.");
-  await getImage();
-  await getButtons();
-  element = document.querySelector("#userInput");
-  setTimeout(() => {
-    getTextInput();
-  }, 2000);
-  let { unstable } = await chrome.storage.local.get("unstable");
-  if (!unstable) return;
-  console.log("Unstable Feature activated. listening...");
-  await runWithDelay();
-  async function runWithDelay() {
-    while (counter++ < MAX_COUNTER) {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
-      await getTextInput();
-      await getLastResponse();
+  chrome.storage.local.get(SELECTORS.AI).then(async (e) => {
+    let orphan = e[SELECTORS.AI];
+    if (!orphan) {
+      console.log("Orphan process. Exiting...");
+      return;
     }
-    console.log("No activity. Stopped listening for queries");
-  }
+    console.log("Running query injection.");
+    await getImage();
+    await getButtons();
+    setTimeout(() => getTextInput(), 2000);
+    let { unstable } = await chrome.storage.local.get("unstable");
+    if (!unstable) return;
+    console.log("Unstable Feature activated. listening...");
+    await runWithDelay();
+    async function runWithDelay() {
+      while (counter++ < MAX_COUNTER) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 seconds
+        await getImage();
+        await getTextInput();
+        await getLastResponse();
+      }
+      console.log("No activity. Stopped listening for queries");
+    }
+  });
 }
 
 async function getLastResponse() {
-  let { CopilotLast } = await chrome.storage.local.get(["CopilotLast"]);
-  await chrome.storage.local.remove("CopilotLast");
-  if (!CopilotLast) return;
-  let lastResponse = document.querySelectorAll("div[role='article']");
+  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get([
+    SELECTORS.lastResponse,
+  ]);
+  await chrome.storage.local.remove(SELECTORS.lastResponse);
+  if (!getLast) return;
+  let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
   if (lastResponse.length === 0) return;
   let content = lastResponse[lastResponse.length - 1].innerHTML;
   chrome.runtime.sendMessage({
     lastResponse: content,
-    engine: "Copilot",
+    engine: SELECTORS.AI,
   });
 }
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  const { query, time, Copilot } = await chrome.storage.local.get([
-    "query",
-    "time",
-    "Copilot",
-  ]);
-  await chrome.storage.local.remove("Copilot"); //remove immediately off the queue
-  const searchQuery = (Copilot ? query : "")?.trim();
+  const {
+    query,
+    time,
+    [SELECTORS.AI]: curAI,
+  } = await chrome.storage.local.get(["query", "time", SELECTORS.AI]);
+  await chrome.storage.local.remove(SELECTORS.AI); //remove immediately off the queue
+  const searchQuery = (curAI ? query : "")?.trim();
 
   if (!searchQuery) return;
   const curTime = Date.now();
@@ -65,10 +72,8 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   let attempts = 0;
   counter = 0; //reset the counter
   while (attempts < maxRetries) {
-    console.log(
-      `Attempt ${attempts + 1}: Injecting ${element} of query: ${searchQuery}`
-    );
-
+    element = document.querySelector(SELECTORS.textbox);
+    console.log(`Attempt ${attempts + 1}: Injecting Query`);
     if (element) {
       // Simulate input for React compatibility
       let lastValue = element.value || "";
@@ -84,13 +89,10 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
       }
       element.dispatchEvent(event);
 
-      await clickButton("button[title='Submit message']");
+      await clickButton();
       return;
     } else {
-      element = element || document.querySelector("#userInput");
-      console.log(
-        `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
-      );
+      console.log(`Element not found. Retrying after ${retryDelay}ms.`);
       attempts++;
       if (attempts < maxRetries) {
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -101,15 +103,15 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   update();
 }
 
-async function clickButton(attribute) {
+async function clickButton() {
   setTimeout(() => {
-    const button = document.querySelector(attribute);
+    const button = document.querySelector(SELECTORS.send);
     if (button) {
       button.click();
-      console.log(`Clicked button: ${attribute}`);
+      console.log(`Clicked button: ${button}`);
       update();
     } else {
-      console.log(`Button not found: ${attribute}`);
+      console.log(`Button not found`);
     }
   }, 3000);
   return;
@@ -118,16 +120,18 @@ function update() {
   // Send a message after the button click
   chrome.runtime.sendMessage({
     buttonClicked: true,
-    content: "",
-    engine: "Copilot",
+    engine: SELECTORS.AI,
   });
 }
 
 async function getImage() {
+  const { [SELECTORS.AI]: curAI } = await chrome.storage.local.get(
+    SELECTORS.AI
+  );
   const STORAGE_KEY_PREFIX = "pasted-file-";
-  const fileUploadInput = document.querySelector("input");
+  const fileUploadInput = document.querySelector(SELECTORS.file);
+  if (!curAI || !fileUploadInput) return;
   const dataTransfer = new DataTransfer();
-
   // Map MIME types to file extensions
   const mimeToExtension = {
     "image/png": ".png",
@@ -211,12 +215,10 @@ async function getImage() {
 
 async function getButtons() {
   let { deep } = await chrome.storage.local.get("deep");
-  if (deep) {
+  if (deep && SELECTORS.deep) {
     document.querySelector("button[title='Open chat mode menu']").click();
     setTimeout(() => {
-      document
-        .querySelector("button[title='composer.chatModes.reasoning.title']")
-        .click();
+      document.querySelector(SELECTORS.deep).click();
       return true;
     }, 1000);
   }

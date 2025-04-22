@@ -1,62 +1,67 @@
 // script.js
-(async () => {
-  chrome.storage.local.get("Claude").then((e) => {
-    orphan = e.Claude;
-  });
-  setTimeout(runAfterFullLoad, 3000);
-})();
-
+(async () => setTimeout(runAfterFullLoad, 3000))();
+const SELECTORS = {
+  AI: "Claude",
+  lastResponse: "ClaudeLast",
+  textbox: "div[enterkeyhint='enter'] p",
+  send: "button[aria-label='Send message']",
+  file: "input",
+  deep: null,
+  web: null,
+  code: null,
+  lastHTML: "[data-test-render-count]",
+};
 const MAX_COUNTER = 3000;
 let counter = 0;
-// if it was opened
-let orphan;
+let element;
 async function runAfterFullLoad() {
-  if (!orphan) {
-    console.log("Orphan process. Exiting...");
-    return;
-  }
-  console.log("Running query injection.");
-  await getImage();
-  await getTextInput("textContent", "div[enterkeyhint='enter'] p");
-  let { unstable } = await chrome.storage.local.get("unstable");
-  if (!unstable) return;
-  console.log("Unstable Feature activated. listening...");
-  await runWithDelay();
-  async function runWithDelay() {
-    while (counter++ < MAX_COUNTER) {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
-      await getTextInput("textContent", "div[enterkeyhint='enter'] p");
-      await getLastResponse();
+  chrome.storage.local.get(SELECTORS.AI).then(async (e) => {
+    let orphan = e[SELECTORS.AI];
+    if (!orphan) {
+      console.log("Orphan process. Exiting...");
+      return;
     }
-    console.log("No activity. Stopped listening for queries");
-  }
+    console.log("Running query injection.");
+    await getImage();
+    await getTextInput();
+    let { unstable } = await chrome.storage.local.get("unstable");
+    if (!unstable) return;
+    console.log("Unstable Feature activated. listening...");
+    await runWithDelay();
+    async function runWithDelay() {
+      while (counter++ < MAX_COUNTER) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await getImage();
+        await getTextInput();
+        await getLastResponse();
+      }
+      console.log("No activity. Stopped listening for queries");
+    }
+  });
 }
 
 async function getLastResponse() {
-  let { ClaudeLast } = await chrome.storage.local.get(["ClaudeLast"]);
-  await chrome.storage.local.remove("ClaudeLast");
-  if (!ClaudeLast) return;
-  let lastResponse = document.querySelectorAll("[data-test-render-count]");
+  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get([
+    SELECTORS.lastResponse,
+  ]);
+  await chrome.storage.local.remove(SELECTORS.lastResponse);
+  if (!getLast) return;
+  let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
   if (lastResponse.length === 0) return;
   let content = lastResponse[lastResponse.length - 1].innerHTML;
   chrome.runtime.sendMessage({
     lastResponse: content,
-    engine: "Claude",
+    engine: SELECTORS.AI,
   });
 }
-async function getTextInput(
-  type,
-  attribute,
-  maxRetries = 5,
-  retryDelay = 3000
-) {
-  const { query, time, Claude } = await chrome.storage.local.get([
-    "query",
-    "time",
-    "Claude",
-  ]);
-  const searchQuery = (Claude ? query : "")?.trim();
-  await chrome.storage.local.remove("Claude"); //remove immediately off the queue
+async function getTextInput(maxRetries = 5, retryDelay = 3000) {
+  const {
+    query,
+    time,
+    [SELECTORS.AI]: curAI,
+  } = await chrome.storage.local.get(["query", "time", SELECTORS.AI]);
+  const searchQuery = (curAI ? query : "")?.trim();
+  await chrome.storage.local.remove(SELECTORS.AI); //remove immediately off the queue
   if (!searchQuery) return;
   const curTime = Date.now();
   if (curTime > time + 1000 * 15) return;
@@ -65,28 +70,14 @@ async function getTextInput(
   counter = 0; //reset the counter
 
   while (attempts < maxRetries) {
-    const element = document.querySelector(attribute);
-    console.log(
-      `Attempt ${
-        attempts + 1
-      }: Injecting ${element} via ${type} of query: ${searchQuery}`
-    );
-
+    element = document.querySelector(SELECTORS.textbox);
+    console.log(`Attempt ${attempts + 1}: Injecting Query`);
     if (element) {
-      switch (type) {
-        case "value":
-          element.value = searchQuery;
-          break;
-        case "textContent":
-          element.textContent = searchQuery;
-          break;
-      }
-      clickButton("button[aria-label='Send message']");
+      element.textContent = searchQuery;
+      clickButton();
       return;
     } else {
-      console.log(
-        `Element not found: ${attribute}. Retrying after ${retryDelay}ms.`
-      );
+      console.log(`Element not found. Retrying after ${retryDelay}ms.`);
       attempts++;
       if (attempts < maxRetries) {
         await new Promise((resolve) => setTimeout(resolve, retryDelay)); // Wait before retry
@@ -98,15 +89,15 @@ async function getTextInput(
   update();
 }
 
-async function clickButton(attribute) {
+async function clickButton() {
   setTimeout(() => {
-    const button = document.querySelector(attribute);
+    const button = document.querySelector(SELECTORS.send);
     if (button) {
       button.click();
-      console.log(`Clicked button: ${attribute}`);
+      console.log(`Clicked button: ${button}`);
       update();
     } else {
-      console.log(`Button not found: ${attribute}`);
+      console.log(`Button not found.`);
     }
   }, 3000);
   return;
@@ -115,16 +106,19 @@ function update() {
   // Send a message after the button click
   chrome.runtime.sendMessage({
     buttonClicked: true,
-    content: "",
-    engine: "Claude",
+    engine: SELECTORS.AI,
   });
 }
 
 async function getImage() {
-  const STORAGE_KEY_PREFIX = "pasted-file-";
-  const fileUploadInput = document.querySelector("input");
-  const dataTransfer = new DataTransfer();
+  const { [SELECTORS.AI]: curAI } = await chrome.storage.local.get(
+    SELECTORS.AI
+  );
 
+  const STORAGE_KEY_PREFIX = "pasted-file-";
+  const fileUploadInput = document.querySelector(SELECTORS.file);
+  const dataTransfer = new DataTransfer();
+  if (!curAI || !fileUploadInput) return;
   // Map MIME types to file extensions
   const mimeToExtension = {
     "image/png": ".png",

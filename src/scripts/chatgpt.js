@@ -1,59 +1,68 @@
 // script.js
-(async () => {
-  chrome.storage.local.get("ChatGPT").then((e) => {
-    orphan = e.ChatGPT;
-  });
-  setTimeout(runAfterFullLoad, 3000);
-})();
+(async () => setTimeout(runAfterFullLoad, 3000))();
+const SELECTORS = {
+  AI: "ChatGPT",
+  lastResponse: "ChatGPTLast",
+  textbox: "#prompt-textarea p",
+  send: "#composer-submit-button",
+  file: "input[type='file']",
+  deep: "button[title='composer.chatModes.reasoning.title']",
+  web: "button[data-testid='composer-button-search']",
+  code: null,
+  lastHTML: "article",
+};
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
 
-// if it was opened
-let orphan;
 async function runAfterFullLoad() {
-  if (!orphan) {
-    console.log("Orphan process. Exiting...");
-    return;
-  }
-  console.log("Running query injection.");
-  await getImage();
-  await getButtons();
-  element = document.querySelector("#prompt-textarea p");
-  await getTextInput();
-  let { unstable } = await chrome.storage.local.get("unstable");
-  if (!unstable) return;
-  console.log("Unstable Feature activated. listening...");
-  await runWithDelay();
-  async function runWithDelay() {
-    while (counter++ < MAX_COUNTER) {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 5 seconds
-      await getTextInput();
-      await getLastResponse();
+  chrome.storage.local.get(SELECTORS.AI).then(async (e) => {
+    let orphan = e[SELECTORS.AI];
+    if (!orphan) {
+      console.log("Orphan process. Exiting...");
+      return;
     }
-    console.log("No activity. Stopped listening for queries");
-  }
+    console.log("Running query injection.");
+    await getImage();
+    await getButtons();
+    await getTextInput();
+    let { unstable } = await chrome.storage.local.get("unstable");
+    if (!unstable) return;
+    console.log("Unstable Feature activated. listening...");
+    await runWithDelay();
+    async function runWithDelay() {
+      while (counter++ < MAX_COUNTER) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 seconds
+        await getImage();
+        await getTextInput();
+        await getLastResponse();
+      }
+      console.log("No activity. Stopped listening for queries");
+    }
+  });
 }
 async function getLastResponse() {
-  let { ChatGPTLast } = await chrome.storage.local.get(["ChatGPTLast"]);
-  await chrome.storage.local.remove("ChatGPTLast");
-  if (!ChatGPTLast) return;
-  let lastResponse = document.querySelectorAll("article");
+  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get([
+    SELECTORS.lastResponse,
+  ]);
+  await chrome.storage.local.remove(SELECTORS.lastResponse);
+  if (!getLast) return;
+  let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
   if (lastResponse.length === 0) return;
   let content = lastResponse[lastResponse.length - 1].innerHTML;
   chrome.runtime.sendMessage({
     lastResponse: content,
-    engine: "ChatGPT",
+    engine: SELECTORS.AI,
   });
 }
 async function getTextInput(maxRetries = 10, retryDelay = 3000) {
-  const { query, time, ChatGPT } = await chrome.storage.local.get([
-    "query",
-    "time",
-    "ChatGPT",
-  ]);
-  await chrome.storage.local.remove("ChatGPT"); //remove immediately off the queue
-  const searchQuery = (ChatGPT ? query : "")?.trim();
+  const {
+    query,
+    time,
+    [SELECTORS.AI]: curAI,
+  } = await chrome.storage.local.get(["query", "time", SELECTORS.AI]);
+  await chrome.storage.local.remove(SELECTORS.AI); //remove immediately off the queue
+  const searchQuery = (curAI ? query : "")?.trim();
   if (!searchQuery) return;
   const curTime = Date.now();
   if (curTime > time + 1000 * 15) return;
@@ -61,16 +70,14 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   let attempts = 0;
   counter = 0; //reset the counter
   while (attempts < maxRetries) {
-    console.log(
-      `Attempt ${attempts + 1}: Injecting ${element} of query: ${searchQuery}`
-    );
+    element = document.querySelector(SELECTORS.textbox);
+    console.log(`Attempt ${attempts + 1}: Injecting Query`);
 
     if (element) {
       element.textContent = searchQuery;
-      clickButton("#composer-submit-button");
+      clickButton();
       return;
     } else {
-      element = document.querySelector("#prompt-textarea p"); // try finding it again
       console.log(`Element not found. Retrying after ${retryDelay}ms.`);
       attempts++;
       if (attempts < maxRetries) {
@@ -83,32 +90,33 @@ async function getTextInput(maxRetries = 10, retryDelay = 3000) {
   update();
 }
 
-async function clickButton(attribute) {
+async function clickButton() {
   setTimeout(() => {
-    const button = document.querySelector(attribute);
+    const button = document.querySelector(SELECTORS.send);
     if (button) {
       button.click();
-      console.log(`Clicked button: ${attribute}`);
+      console.log(`Clicked button: ${button}`);
       update();
     } else {
-      console.log(`Button not found: ${attribute}`);
+      console.log(`Button not found`);
     }
   }, 3000);
   return;
 }
-function update(content = "") {
+function update() {
   // Send a message after the button click
   chrome.runtime.sendMessage({
     buttonClicked: true,
-    engine: "ChatGPT",
+    engine: SELECTORS.AI,
   });
 }
 
 async function getImage() {
+  const { ChatGPT } = await chrome.storage.local.get(SELECTORS.AI);
   const STORAGE_KEY_PREFIX = "pasted-file-";
-  const fileUploadInput = document.querySelector("input[type='file']");
+  const fileUploadInput = document.querySelector(SELECTORS.file);
   const dataTransfer = new DataTransfer();
-
+  if (!ChatGPT || !fileUploadInput) return;
   // Map MIME types to file extensions
   const mimeToExtension = {
     "image/png": ".png",
@@ -188,16 +196,13 @@ async function getImage() {
     console.log("No valid files to assign to input");
   }
 }
+
 async function getButtons() {
   let { deep, web } = await chrome.storage.local.get(["deep", "web"]);
-  if (web) {
-    document
-      .querySelector("button[data-testid='composer-button-search']")
-      .click();
+  if (web && SELECTORS.web) {
+    document.querySelector(SELECTORS.web).click();
   }
-  if (deep) {
-    document
-      .querySelector("button[data-testid='composer-button-reason']")
-      .click();
+  if (deep && SELECTORS.deep) {
+    document.querySelector(SELECTORS.deep).click();
   }
 }
