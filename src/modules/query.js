@@ -27,6 +27,10 @@ query.addEventListener("keydown", (e) => {
       if (newClick) goBtn.click();
       else multiBtn.click();
     } else if (goBtn.disabled) {
+      if (!newClick) {
+        multiBtn.click();
+        return;
+      }
       let y = selectedEngine?.url;
       if (!y) toggleDropdown("open");
     }
