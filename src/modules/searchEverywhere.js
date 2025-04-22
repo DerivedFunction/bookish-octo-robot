@@ -345,7 +345,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const engines = await getSearchEngineList();
   let { unstable } = await chrome.storage.local.get("unstable");
+  const messageListener = (e) => handleChatMessage(e, engines);
+
   if (unstable) {
-    chrome.runtime.onMessage.addListener((e) => handleChatMessage(e, engines));
+    chrome.runtime.onMessage.addListener(messageListener);
   }
+
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "local" && changes.unstable) {
+      if (changes.unstable.newValue) {
+        chrome.runtime.onMessage.addListener(messageListener);
+      } else {
+        chrome.runtime.onMessage.removeListener(messageListener);
+      }
+    }
+  });
 });
