@@ -29,7 +29,6 @@ async function runAfterFullLoad() {
     let { unstable } = await chrome.storage.local.get("unstable");
     if (!unstable) return;
     console.log("Unstable Feature activated. listening...");
-    await runWithDelay();
     chrome.storage.onChanged.addListener(handleStorageChange);
   });
 }
