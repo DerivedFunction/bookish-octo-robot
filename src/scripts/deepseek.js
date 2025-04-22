@@ -56,9 +56,6 @@ async function handleStorageChange(changes, areaName) {
   // Check if the main AI trigger key was added or changed
   // This indicates a potential new query or image task
   if (changes[SELECTORS.AI] && changes[SELECTORS.AI].newValue) {
-    console.log(
-      `Change detected for ${SELECTORS.AI}. Running getImage and getTextInput.`
-    );
     // Run the functions; they will check storage again to see if action is needed
     await getImage();
     await getTextInput(); // This function checks internally if query/time are valid and removes the key if processed.
@@ -69,9 +66,6 @@ async function handleStorageChange(changes, areaName) {
     changes[SELECTORS.lastResponse] &&
     changes[SELECTORS.lastResponse].newValue
   ) {
-    console.log(
-      `Change detected for ${SELECTORS.lastResponse}. Running getLastResponse.`
-    );
     await getLastResponse(); // This function checks internally and removes the key if processed.
   }
 }
