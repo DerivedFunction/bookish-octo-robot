@@ -2,7 +2,7 @@ import { toggleButton } from "../app.js";
 import { query, getLimit } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
 import {
-  getSearchEngineUrlHostName,
+  getSearchEngineUrl,
   toggleDropdown,
   selectedEngine,
   getScriptStatus,
@@ -14,7 +14,7 @@ import { resetBtn } from "../app.js";
 export const goBtn = document.getElementById("go");
 goBtn.addEventListener("click", async () => {
   let hasPerm = await getScriptStatus();
-  let hostname = getSearchEngineUrlHostName();
+  let hostname = getSearchEngineUrl();
   if (!selectedEngine) {
     toggleDropdown();
     return;

@@ -2,11 +2,7 @@ import { goBtn } from "./actionButtons.js";
 import { toggleButton } from "../app.js";
 import { suggestionResult } from "./suggestions.js";
 import { multiBtn, newClick } from "./searchEverywhere.js";
-import {
-  getSearchEngineUrl,
-  selectedEngine,
-  toggleDropdown,
-} from "./searchEngine.js";
+import { selectedEngine, toggleDropdown } from "./searchEngine.js";
 import { hasScripts } from "./searchEngine.js";
 export const query = document.getElementById("search");
 export function getLimit() {
@@ -23,7 +19,7 @@ query.addEventListener("focus", () => {
   // Set the height to match the content (scrollHeight)
   queryEvents();
 });
-query.addEventListener("keydown", async (e) => {
+query.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
 
@@ -31,7 +27,7 @@ query.addEventListener("keydown", async (e) => {
       if (newClick) goBtn.click();
       else multiBtn.click();
     } else if (goBtn.disabled) {
-      let y = await getSearchEngineUrl();
+      let y = selectedEngine?.url;
       if (!y) toggleDropdown("open");
     }
   } else if (e.key === "Enter" && e.shiftKey) {
@@ -43,7 +39,7 @@ export function queryEvents() {
   query.style.height = "auto"; // Reset height to auto
   query.style.height = `${query.scrollHeight}px`; // Recalculate height
   let x = query.value.length > 0;
-  let y = getSearchEngineUrl();
+  let y = selectedEngine?.url;
   toggleButton(goBtn, x && y);
   toggleButton(multiBtn, x);
   if (x) multiBtn.style.display = "";

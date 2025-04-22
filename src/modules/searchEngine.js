@@ -17,7 +17,7 @@ searchEnginePickerBtn.addEventListener("click", () => {
 curSearchBtn.addEventListener("click", async () => {
   if (!selectedEngine) {
     toggleDropdown();
-  } else window.location.href = getSearchEngineUrlHostName();
+  } else window.location.href = getSearchEngineUrl();
 });
 
 document.addEventListener("click", (e) => {
@@ -103,22 +103,7 @@ export async function addSearchEngines() {
 setupTooltip(searchEnginePickerBtn, () => !dropdown.classList.contains("open"));
 
 export function getSearchEngineUrl() {
-  if (selectedEngine) return selectedEngine.url;
-  else return null;
-}
-export function getSearchEngineUrlHostName() {
-  if (selectedEngine) {
-    function hostnameToURL(hostname) {
-      // the inital value of the URL object can be anything
-      const url = new URL("https://example.com");
-      url.hostname = hostname;
-      return url.href;
-    }
-    let url = hostnameToURL(new URL(selectedEngine.url).hostname);
-    if (url.includes("huggingface")) url += "chat";
-    if (url.includes("gemini")) url += "app";
-    return url;
-  } else return null;
+  return selectedEngine?.url.split("?")[0];
 }
 
 export async function getSearchEngineList() {
@@ -376,7 +361,7 @@ async function goToLink() {
       if (hasScripts) {
         // Content scripts supports this experimental feature
         await chrome.storage.local.set({ [selectedEngine.name]: true });
-        window.location.href = getSearchEngineUrlHostName();
+        window.location.href = getSearchEngineUrl();
         return;
       } else if (selectedEngine.needsPerm) {
         // We don't have scripts and we need it
@@ -395,7 +380,8 @@ async function goToLink() {
 
   async function getQueryLink() {
     await chrome.storage.local.remove("query");
-    let url = `${getSearchEngineUrl()}${encodeURIComponent(q.trim())}`;
+    if (!selectedEngine) return;
+    let url = `${selectedEngine.url}${encodeURIComponent(q.trim())}`;
     window.location.href = url;
   }
 }

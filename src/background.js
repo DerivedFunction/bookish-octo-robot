@@ -87,7 +87,7 @@ async function createTab(query) {
         const shouldCreateTab = await waitForNoPing();
         console.log("create tab?", shouldCreateTab);
         if (shouldCreateTab) {
-          url = hostnameToURL(new URL(selectedEngine.url).hostname);
+          url = hostnameToURL();
           chrome.tabs.create({ url });
           return;
         }
@@ -117,21 +117,8 @@ async function deleteMenu() {
   selectedEngine = null;
   menusCreated = false;
 }
-function hostnameToURL(hostname) {
-  // Create a URL object with a base URL
-  const urlObject = new URL("https://example.com");
-  // Update the hostname
-  urlObject.hostname = hostname;
-  // Get the full URL string
-  let url = urlObject.href;
-  // Append specific paths based on hostname content
-  if (hostname.includes("huggingface")) {
-    url += "chat";
-  }
-  if (hostname.includes("gemini")) {
-    url += "app";
-  }
-  return url;
+function hostnameToURL() {
+  return selectedEngine?.url.split("?")[0];
 }
 
 // Load the context menus dynamically
@@ -364,9 +351,8 @@ let hasScripts = false;
 getPrompts();
 
 chrome.action.onClicked.addListener(async () => {
-  let x = await getSearchEngine();
-  if (x) {
-    let url = hostnameToURL(new URL(x.url).hostname);
+  if (selectedEngine) {
+    let url = hostnameToURL();
     chrome.tabs.create({ url: url });
   }
 });
