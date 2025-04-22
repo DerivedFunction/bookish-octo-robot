@@ -215,7 +215,7 @@ async function getImage() {
 
 async function getButtons() {
   let { deep } = await chrome.storage.local.get("deep");
-  if (deep && SELECTORS.deep) {
+  if (deep) {
     document.querySelector("button[title='Open chat mode menu']").click();
     setTimeout(() => {
       document.querySelector(SELECTORS.deep).click();

@@ -199,10 +199,10 @@ async function getImage() {
 
 async function getButtons() {
   let { deep, web } = await chrome.storage.local.get(["deep", "web"]);
-  if (web && SELECTORS.web) {
+  if (web) {
     document.querySelector(SELECTORS.web).click();
   }
-  if (deep && SELECTORS.deep) {
+  if (deep) {
     document.querySelector(SELECTORS.deep).click();
   }
 }
