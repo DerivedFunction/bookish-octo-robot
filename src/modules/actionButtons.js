@@ -1,5 +1,5 @@
 import { toggleButton } from "../app.js";
-import { query, queryEvents, getLimit } from "./query.js";
+import { query, getLimit } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
 import {
   getSearchEngineUrlHostName,
