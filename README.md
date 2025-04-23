@@ -91,7 +91,7 @@ chmod +x dev.sh
 
 ## Experimental Features (in Experimental)
 
-- **Gemini** and **DeepSeek** is currently supported using Experimental content scripts (Permissions: scripting). You can revoke them at any time by pressing "reset" or the "beaker" button.
+- **Gemini**, **DeepSeek**, and **Qwen** is currently supported using Experimental content scripts (Permissions: scripting). You can revoke them at any time by pressing "reset" or the "beaker" button.
 - Send longer queries
 
 - Paste Images into the prompt.
