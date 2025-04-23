@@ -9,7 +9,7 @@ const SELECTORS = {
   deep: null,
   web: null,
   code: null,
-  lastHTML: "div[dir='auto']",
+  lastHTML: "div[id]",
 };
 const MAX_COUNTER = 3000;
 let counter = 0;
@@ -49,10 +49,10 @@ async function handleStorageChange(changes, areaName) {
   }
 }
 async function getLastResponse() {
-  let { [SELECTORS.AI]: getLast } = await chrome.storage.local.get([
-    SELECTORS.AI,
+  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get([
+    SELECTORS.lastResponse,
   ]);
-  await chrome.storage.local.remove(SELECTORS.AI);
+  await chrome.storage.local.remove(SELECTORS.lastResponse);
   if (!getLast) return;
   let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
   if (lastResponse.length === 0) return;
