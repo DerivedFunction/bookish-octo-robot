@@ -65,23 +65,6 @@ export async function loadJsonData(type) {
     };
   }
 }
-
-export function hostnameToURL(hostname) {
-  // Create a URL object with a base URL
-  const urlObject = new URL("https://example.com");
-  // Update the hostname
-  urlObject.hostname = hostname;
-  // Get the full URL string
-  let url = urlObject.href;
-  // Append specific paths based on hostname content
-  if (hostname.includes("huggingface")) {
-    url += "chat";
-  }
-  if (hostname.includes("gemini")) {
-    url += "app";
-  }
-  return url;
-}
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     resetBtn.addEventListener("click", async () => {

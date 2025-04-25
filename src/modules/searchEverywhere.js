@@ -4,7 +4,7 @@ import {
   searchEnginePickerBtn,
 } from "./searchEngine.js";
 import { appendSvg } from "./appendSvg.js";
-import { resetBtn, toggleClass, hostnameToURL } from "../app.js";
+import { resetBtn, toggleClass } from "../app.js";
 import { query, queryEvents } from "./query.js";
 import { showToast } from "./toaster.js";
 import { greetingContainer } from "./greetings.js";
@@ -195,7 +195,7 @@ async function handleMultiSearch(textContent, resend = false) {
       } else {
         if (newClick) {
           await chrome.tabs.create({
-            url: hostnameToURL(new URL(engine.url).hostname),
+            url: engine.url.split("?")[0],
             active,
           });
         }
