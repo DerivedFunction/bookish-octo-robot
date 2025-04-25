@@ -15,8 +15,7 @@
       "image": "/assets/images/ai/copilot.svg",
       "experimental": true,
       "limit": 10240,
-      "fileImage": true,
-      "advanced": true
+      "fileImage": true
     },
     {
       "name": "Gemini",

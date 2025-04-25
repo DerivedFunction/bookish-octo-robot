@@ -6,7 +6,7 @@ const SELECTORS = {
   textbox: "#userInput",
   send: "button[title='Submit message']",
   file: "input",
-  deep: "button[title='composer.chatModes.reasoning.title']",
+  deep: null,
   web: null,
   code: null,
   lastHTML: "div[role='article']",
@@ -24,8 +24,7 @@ async function runAfterFullLoad() {
     }
     console.log("Running query injection.");
     await getImage();
-    await getButtons();
-    setTimeout(() => getTextInput(), 2000);
+    await getTextInput();
     let { unstable } = await chrome.storage.local.get("unstable");
     if (!unstable) return;
     console.log("Unstable Feature activated. listening...");
@@ -222,16 +221,5 @@ async function getImage() {
     fileUploadInput.dispatchEvent(event);
   } else {
     console.log("No valid files to assign to input");
-  }
-}
-
-async function getButtons() {
-  let { deep } = await chrome.storage.local.get("deep");
-  if (deep) {
-    document.querySelector("button[title='Open chat mode menu']").click();
-    setTimeout(() => {
-      document.querySelector(SELECTORS.deep).click();
-      return true;
-    }, 1000);
   }
 }
