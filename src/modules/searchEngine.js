@@ -377,8 +377,10 @@ async function goToLink() {
       getQueryLink();
     }
   } else {
-    query.value = q;
-    queryEvents();
+    if (q) {
+      query.value = q;
+      queryEvents();
+    }
   }
 
   async function getQueryLink() {
