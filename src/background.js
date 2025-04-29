@@ -64,46 +64,41 @@ chrome.omnibox.onInputEntered.addListener(async (text) => {
   if (text.startsWith("@")) {
     // there is a flag to temporarily switch engines
     let engineName = text.split(" ")[0].slice(1).toLowerCase();
-    let found = false;
-    aiList.forEach(async (ai) => {
+    for (const ai of aiList) {
       if (
-        !found &&
-        (ai.name.toLowerCase() === engineName ||
-          ai.omnibox.includes(engineName))
+        ai.name.toLowerCase() === engineName ||
+        ai.omnibox.includes(engineName)
       ) {
         query = text.slice(engineName.length + 1).trim();
-        found = true;
         await chrome.storage.local.set({ query });
         await createTab(query, ai);
+        return;
       }
-    });
-    if (found) return;
+    }
   }
   query = text.trim();
   await chrome.storage.local.set({ query });
   await createTab(query);
 });
-chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
+chrome.omnibox.onInputChanged.addListener((text, suggest) => {
   if (text.startsWith("@")) {
     let engineName = text.split(" ")[0].slice(1).toLowerCase();
-    let found = false;
-    aiList.forEach((ai) => {
+    for (const ai of aiList) {
       if (
-        !found &&
-        (ai.name.toLowerCase() === engineName ||
-          ai.omnibox.includes(engineName))
+        ai.name.toLowerCase() === engineName ||
+        ai.omnibox.includes(engineName)
       ) {
-        found = true;
         chrome.omnibox.setDefaultSuggestion({
           description: `Ask ${ai.name} (@${ai.omnibox[0]}, @${ai.omnibox[1]})`,
         });
+        return;
       }
-    });
-    if (!found) setDefaultSuggestion();
+    }
+    setDefaultSuggestion();
   } else {
     // Set the default suggestion to the current search engine
     setDefaultSuggestion();
-    aiList.forEach((ai) => {
+    for (const ai of aiList) {
       if (ai.name !== selectedEngine?.name)
         suggest([
           {
@@ -111,7 +106,7 @@ chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
             description: `Ask ${ai.name} (@${ai.omnibox[0]}, @${ai.omnibox[1]})`,
           },
         ]);
-    });
+    }
   }
 });
 chrome.omnibox.onInputStarted.addListener(() => {
