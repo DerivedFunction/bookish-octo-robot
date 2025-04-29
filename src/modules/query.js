@@ -48,7 +48,7 @@ export function queryEvents() {
   toggleButton(multiBtn, x);
   getCharCount();
 }
-export const MAX_LIMIT = 5000; // max char count
+export const MAX_LIMIT = 8000; // max char count
 export function getCharCount() {
   const charLength = query.value.length;
   const LIMIT = getLimit();
