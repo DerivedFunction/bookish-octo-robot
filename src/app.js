@@ -74,11 +74,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       const name = path.split("#")[1].split("-")[1];
       showToast(`${name} may not work without permissions`);
       let { query: text } = await chrome.storage.local.get("query");
-      query.value = text;
+      if (text) query.value = text;
     }
     if (path.includes("none")) {
       let { query: text } = await chrome.storage.local.get("query");
-      query.value = text;
+      if (text) query.value = text;
     }
     resetBtn.addEventListener("click", async () => {
       localStorage.clear();
