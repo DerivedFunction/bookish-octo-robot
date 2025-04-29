@@ -1,4 +1,5 @@
 import "./modules/index.js";
+import { query } from "./modules/query.js";
 import { showToast } from "./modules/toaster.js";
 export const resetBtn = document.getElementById("reset");
 export function toggleButton(button, enabled, style = "enabled") {
@@ -67,6 +68,18 @@ export async function loadJsonData(type) {
 }
 document.addEventListener("DOMContentLoaded", async () => {
   try {
+    // parse the URL to see if #failed is present
+    const path = window.location.href;
+    if (path.includes("failed")) {
+      const name = path.split("#")[1].split("-")[1];
+      showToast(`${name} may not work without permissions`);
+      let { query: text } = await chrome.storage.local.get("query");
+      query.value = text;
+    }
+    if (path.includes("none")) {
+      let { query: text } = await chrome.storage.local.get("query");
+      query.value = text;
+    }
     resetBtn.addEventListener("click", async () => {
       localStorage.clear();
       await chrome.storage.local.clear();

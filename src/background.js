@@ -58,20 +58,100 @@ chrome.contextMenus.onClicked.addListener(async (info) => {
     return;
   }
 });
-async function createTab(query) {
-  selectedEngine = await getSearchEngine();
+chrome.omnibox.onInputEntered.addListener(async (text) => {
+  let query;
+  await chrome.storage.local.set({ time: Date.now() });
+  if (text.startsWith("@")) {
+    // there is a flag to temporarily switch engines
+    let engineName = text.split(" ")[0].slice(1).toLowerCase();
+    let found = false;
+    aiList.forEach(async (ai) => {
+      if (
+        !found &&
+        (ai.name.toLowerCase() === engineName ||
+          ai.omnibox.includes(engineName))
+      ) {
+        query = text.slice(engineName.length + 1).trim();
+        found = true;
+        await chrome.storage.local.set({ query });
+        await createTab(query, ai);
+      }
+    });
+    if (found) return;
+  }
+  query = text.trim();
+  await chrome.storage.local.set({ query });
+  await createTab(query);
+});
+chrome.omnibox.onInputChanged.addListener(async (text, suggest) => {
+  if (text.startsWith("@")) {
+    let engineName = text.split(" ")[0].slice(1).toLowerCase();
+    let found = false;
+    aiList.forEach((ai) => {
+      if (
+        !found &&
+        (ai.name.toLowerCase() === engineName ||
+          ai.omnibox.includes(engineName))
+      ) {
+        found = true;
+        chrome.omnibox.setDefaultSuggestion({
+          description: `Ask ${ai.name} (@${ai.omnibox[0]}, @${ai.omnibox[1]})`,
+        });
+      }
+    });
+    if (!found) setDefaultSuggestion();
+  } else {
+    // Set the default suggestion to the current search engine
+    setDefaultSuggestion();
+    aiList.forEach((ai) => {
+      if (ai.name !== selectedEngine?.name)
+        suggest([
+          {
+            content: `@${ai.name} ${text}`,
+            description: `Ask ${ai.name} (@${ai.omnibox[0]}, @${ai.omnibox[1]})`,
+          },
+        ]);
+    });
+  }
+});
+chrome.omnibox.onInputStarted.addListener(() => {
+  setDefaultSuggestion();
+});
+function setDefaultSuggestion() {
   if (selectedEngine) {
+    // Set the default suggestion to the current search engine
+    chrome.omnibox.setDefaultSuggestion({
+      description: `Ask ${selectedEngine.name} (@${selectedEngine.omnibox[0]}, @${selectedEngine.omnibox[1]})`,
+    });
+  } else {
+    // If no engine is selected, set a generic suggestion
+    chrome.omnibox.setDefaultSuggestion({
+      description: "None Selected",
+    });
+  }
+}
+
+async function createTab(query, engine = null) {
+  let curEngine;
+  if (engine) curEngine = engine;
+  else {
+    curEngine = selectedEngine;
+  }
+  if (!query) {
+    if (curEngine) chrome.tabs.create({ url: curEngine.url.split("?")[0] });
+    return;
+  }
+  if (curEngine) {
     let url;
-    await getScriptStatus(); // If we have permissions
-    if (selectedEngine.experimental) {
+    let curEngineScripts = await getScriptStatus(curEngine.name); // If we have permissions
+    if (curEngine.experimental) {
       // If set to true, use the original url
-      if (hasScripts) {
-        await chrome.storage.local.set({ [selectedEngine.name]: true });
+      if (curEngineScripts) {
+        await chrome.storage.local.set({ [curEngine.name]: true });
 
         const waitForNoPing = () =>
           new Promise((resolve) => {
             let checkInterval = setInterval(() => {
-              console.log(tabReceived);
               if (tabReceived > 0) {
                 clearInterval(checkInterval);
                 resolve(false); // A tab picked it up
@@ -80,29 +160,35 @@ async function createTab(query) {
 
             setTimeout(() => {
               clearInterval(checkInterval);
-              resolve(true); // No tab responded within 2 sec
-            }, 2000);
+              resolve(true);
+            }, 1000);
           });
 
         const shouldCreateTab = await waitForNoPing();
         console.log("create tab?", shouldCreateTab);
         if (shouldCreateTab) {
-          url = hostnameToURL();
+          url = hostnameToURL(curEngine.url);
           chrome.tabs.create({ url });
           return;
         }
       }
       // Else use the query form
       else {
-        chrome.storage.local.remove("query");
-        url = `${selectedEngine.url}${encodeURIComponent(query)}`;
-        chrome.tabs.create({ url: url });
+        if (curEngine.needsPerm) {
+          chrome.tabs.create({ url: `index.html#failed-${curEngine.name}` });
+        } else {
+          chrome.storage.local.remove("query");
+          url = `${curEngine.url}${encodeURIComponent(query)}`;
+          chrome.tabs.create({ url: url });
+        }
       }
     } else {
       chrome.storage.local.remove("query");
-      url = `${selectedEngine.url}${encodeURIComponent(query)}`;
+      url = `${curEngine.url}${encodeURIComponent(query)}`;
       chrome.tabs.create({ url: url });
     }
+  } else {
+    chrome.tabs.create({ url: "index.html#none" });
   }
 }
 
@@ -117,8 +203,9 @@ async function deleteMenu() {
   selectedEngine = null;
   menusCreated = false;
 }
-function hostnameToURL() {
-  return selectedEngine?.url.split("?")[0];
+function hostnameToURL(url = null) {
+  let base = url || selectedEngine?.url;
+  return base.split("?")[0];
 }
 
 // Load the context menus dynamically
@@ -332,14 +419,22 @@ chrome.runtime.onMessage.addListener(async (e) => {
     await loadMenu(); // Rebuild menu on permission change
   }
 });
-async function getScriptStatus() {
+async function getScriptStatus(name = null) {
+  let curHasScripts = false;
   try {
+    let curName = name || selectedEngine?.name;
+    if (!curName) return;
     const scripts = await chrome.scripting.getRegisteredContentScripts();
-    hasScripts = scripts.some((script) => script.id === selectedEngine?.name);
+    curHasScripts = scripts.some((script) => script.id === curName);
   } catch {
-    hasScripts = false;
+    curHasScripts = false;
   }
-  return hasScripts;
+  if (name === selectedEngine?.name || name === null) {
+    // Update the global variable only if the name matches the selected engine
+    // or if name is null (initial check)
+    hasScripts = curHasScripts;
+  }
+  return curHasScripts;
 }
 
 // Initial menu setup

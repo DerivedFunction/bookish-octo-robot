@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tabbed: AI chatbot in New Tab/Sidebar",
   "short_name": "Tabbed",
-  "version": "1.0.7.2",
+  "version": "1.0.7.3",
   "description": "A new tab page and sidebar with an AI-like user interface",
   "icons": {
     "48": "assets/images/icon.svg"
@@ -15,6 +15,7 @@
   "background": {
     "scripts": ["background.js"]
   },
+  "omnibox": { "keyword": "tb" },
   "action": {
     "default_icon": {
       "16": "assets/images/icon.svg",
