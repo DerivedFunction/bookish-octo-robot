@@ -32,6 +32,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     if (!unstable) {
       browser.sidebarAction.setPanel({ panel: "./index.html#sidebar" });
       browser.sidebarAction.open();
+      chrome.storage.local.set({ lastQuery: query });
       return;
     }
     if (!sidebarStatus)
@@ -136,6 +137,7 @@ async function createTab(query, engine = null) {
     if (curEngine) chrome.tabs.create({ url: curEngine.url.split("?")[0] });
     return;
   }
+  chrome.storage.local.set({ lastQuery: query });
   if (curEngine) {
     let url;
     let curEngineScripts = await getScriptStatus(curEngine.name); // If we have permissions

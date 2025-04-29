@@ -13,8 +13,8 @@ import { resetBtn } from "../app.js";
 
 export const goBtn = document.getElementById("go");
 const historyBtn = document.getElementById("history-button");
-historyBtn.addEventListener("click", () => {
-  const lastQuery = localStorage.getItem("lastQuery");
+historyBtn.addEventListener("click", async () => {
+  const { lastQuery } = await chrome.storage.local.get("lastQuery");
   query.value = lastQuery || query.value || "";
   queryEvents();
 });
@@ -33,7 +33,7 @@ goBtn.addEventListener("click", async () => {
     toggleButton(goBtn, false);
     return;
   }
-  localStorage.setItem("lastQuery", query.value);
+  chrome.storage.local.set({ lastQuery: query.value });
   let url = `${selectedEngine.url}${encodeURIComponent(query.value)}`;
   if (hasPerm) {
     // Not an experimental one
