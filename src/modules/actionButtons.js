@@ -1,5 +1,5 @@
 import { toggleButton } from "../app.js";
-import { query, getLimit } from "./query.js";
+import { query, getLimit, queryEvents } from "./query.js";
 import { setupTooltip } from "./tooltip.js";
 import {
   getSearchEngineUrl,
@@ -12,6 +12,12 @@ import { showToast } from "./toaster.js";
 import { resetBtn } from "../app.js";
 
 export const goBtn = document.getElementById("go");
+const historyBtn = document.getElementById("history-button");
+historyBtn.addEventListener("click", () => {
+  const lastQuery = localStorage.getItem("lastQuery");
+  query.value = lastQuery || query.value || "";
+  queryEvents();
+});
 goBtn.addEventListener("click", async () => {
   let hasPerm = await getScriptStatus();
   let hostname = getSearchEngineUrl();
@@ -27,7 +33,7 @@ goBtn.addEventListener("click", async () => {
     toggleButton(goBtn, false);
     return;
   }
-
+  localStorage.setItem("lastQuery", query.value);
   let url = `${selectedEngine.url}${encodeURIComponent(query.value)}`;
   if (hasPerm) {
     // Not an experimental one
@@ -74,8 +80,14 @@ ellipse.addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", () => {
   appendSvg({ image: "assets/images/buttons/go.svg" }, goBtn);
   appendSvg({ image: "assets/images/buttons/ellipse.svg" }, ellipse);
+  appendSvg(
+    {
+      image: "assets/images/buttons/history.svg",
+    },
+    historyBtn
+  );
   extras.style.display = "none";
-  [ellipse].forEach((btn) => {
+  [ellipse, historyBtn].forEach((btn) => {
     setupTooltip(btn);
   });
   setupTooltip(goBtn, () => query.value.length === 0);
