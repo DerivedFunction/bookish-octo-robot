@@ -269,7 +269,7 @@ function updateMenu(engine) {
     chrome.contextMenus.update(
       "search",
       {
-        title: `Ask ${engine.name}`,
+        title: `Ask ${engine ? engine.name : "AI"}`,
       },
       () => void chrome.runtime.lastError
     );
