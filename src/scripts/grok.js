@@ -123,16 +123,15 @@ async function getTextInput(maxRetries = 5, retryDelay = 3000) {
   update();
 }
 async function clickButton() {
-  setTimeout(() => {
-    const button = document.querySelector(SELECTORS.send);
-    if (button) {
-      button.click();
-      console.log(`Clicked button: ${button}`);
-      update();
-    } else {
-      console.log(`Button not found.`);
-    }
-  }, 3000);
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  const button = document.querySelector(SELECTORS.send);
+  if (button) {
+    button.click();
+    console.log(`Clicked button: ${button}`);
+    update();
+  } else {
+    console.log(`Button not found.`);
+  }
   return;
 }
 async function update() {
