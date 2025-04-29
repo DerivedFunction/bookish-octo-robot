@@ -5,7 +5,7 @@ A new tab page with an AI-like user interface. Note: You may have to sign in to 
 [![Microsoft Edge](https://img.shields.io/badge/Edge-1.0.5.0-green.svg)](https://microsoftedge.microsoft.com/addons/detail/tabbed-ai-chatbot-in-new/jbhemcgchnpebmchepbcjfmneagnpnpa)
 [![Google Chrome](https://img.shields.io/badge/Chrome-1.0.7.1-green.svg)](https://chromewebstore.google.com/detail/jbpmodbjedoloelbepnpfhjoohjjkand)
 [![Mozilla Firefox](https://img.shields.io/badge/Firefox-1.0.7.2-green.svg)](https://addons.mozilla.org/en-US/firefox/addon/tabbed/)
-[![Current Version](https://img.shields.io/badge/Github-1.0.7.2-green.svg)](https://github.com/DerivedFunction/bookish-octo-robot/)
+[![Current Version](https://img.shields.io/badge/Github-1.0.7.3-green.svg)](https://github.com/DerivedFunction/bookish-octo-robot/)
 
 ## Youtube Video
 
@@ -71,6 +71,7 @@ chmod +x dev.sh
 - Eight default suggestion ideas to save time on commands.
 - Click on the Extension Icon:
   - To launch your current AI chatbot in a new Tab.
+- Omnibox with keyword `tb`. (Try typing `tb @cg Hello` in the address bar)
 - Permissions are optional but extend the basic features. You can revoke them any time by pressing "reset" in the options menu.
 - Context menus provide suggestions as your browse and select text.
   ![Sample 5](./samples/Sample_5.png)
