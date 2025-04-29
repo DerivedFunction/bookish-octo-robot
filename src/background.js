@@ -210,63 +210,13 @@ async function loadMenu() {
 
   selectedEngine = await getSearchEngine();
   await getScriptStatus();
-  // If no search engine is selected, create only the switch menu
-  if (!selectedEngine) {
-    chrome.contextMenus.create(
-      {
-        id: "switch",
-        title: "Switch to different AI chatbot",
-        contexts: ["all"],
-      },
-      () => void chrome.runtime.lastError
-    );
-    aiList.forEach((type) => {
-      chrome.contextMenus.create(
-        {
-          id: type.name,
-          title: type.name,
-          parentId: "switch",
-          contexts: ["all"],
-        },
-        () => void chrome.runtime.lastError
-      );
-    });
-    menusCreated = true;
-    console.log("No AI chatbots selected.");
-    return;
-  }
-
-  // Check if the selected engine requires permissions and Experimental is false
-  if (selectedEngine.needsPerm && !hasScripts) {
-    chrome.contextMenus.create(
-      {
-        id: "switch",
-        title: "Switch to different AI chatbot",
-        contexts: ["all"],
-      },
-      () => void chrome.runtime.lastError
-    );
-    aiList.forEach((type) => {
-      chrome.contextMenus.create(
-        {
-          id: type.name,
-          title: type.name,
-          parentId: "switch",
-          contexts: ["all"],
-        },
-        () => void chrome.runtime.lastError
-      );
-    });
-    console.log(`No permissions for ${selectedEngine.name}.`);
-    menusCreated = true;
-    return;
-  }
+  let response = selectedEngine ? `Ask ${selectedEngine?.name}` : `Ask AI`;
 
   // Create full menu for valid engine with permissions
   chrome.contextMenus.create(
     {
       id: "search",
-      title: `Ask ${selectedEngine.name}`,
+      title: response,
       contexts: ["selection", "link", "page"],
     },
     () => void chrome.runtime.lastError
@@ -401,17 +351,14 @@ chrome.runtime.onMessage.addListener(async (e) => {
     console.log("AI chatbot changed", e.engine?.name);
     selectedEngine = e.engine;
     await getScriptStatus();
-    if (!hasScripts && selectedEngine?.needsPerm) {
-      await loadMenu(); // Rebuild menu if permissions are lacking
-    } else {
-      updateMenu(e.engine);
-    }
+    updateMenu(e.engine);
   } else if (e.message === "reset") {
     console.log("Removing context menus");
     await deleteMenu();
   } else if (e.message === "Experimental") {
     console.log("Scripting Permissions changed for ", selectedEngine?.name);
-    await loadMenu(); // Rebuild menu on permission change
+    await getScriptStatus();
+    updateMenu(e.engine); // Rebuild menu on permission change
   }
 });
 async function getScriptStatus(name = null) {

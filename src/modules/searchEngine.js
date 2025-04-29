@@ -376,6 +376,9 @@ async function goToLink() {
       // Generate regular link (scriptless)
       getQueryLink();
     }
+  } else {
+    query.value = q;
+    queryEvents();
   }
 
   async function getQueryLink() {
