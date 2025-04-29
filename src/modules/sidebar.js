@@ -9,6 +9,7 @@ import {
   removePermissions,
 } from "./searchEngine.js";
 import { appendList } from "./searchEverywhere.js";
+import { setupTooltip } from "./tooltip.js";
 export const optionBtn = document.getElementById("options-button");
 optionBtn.addEventListener("click", async () => {
   sidebar.style.display = "block";
@@ -122,6 +123,9 @@ unstable.addEventListener("change", async () => {
 document.addEventListener("DOMContentLoaded", async () => {
   appendSvg({ image: "assets/images/buttons/options.svg" }, optionBtn);
   appendSvg({ image: "assets/images/buttons/unlocked.svg" }, scriptsBtn);
+  [optionBtn, scriptsBtn].forEach((btn) => {
+    setupTooltip(btn);
+  });
   const aiList = await getSearchEngineList();
   aiList.forEach(async (ai) => {
     if (ai.fileImage) {
