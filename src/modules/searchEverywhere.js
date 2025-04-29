@@ -195,7 +195,7 @@ async function handleMultiSearch(textContent, resend = false) {
       } else {
         if (newClick) {
           await chrome.tabs.create({
-            url: engine.url.split("?")[0],
+            url: engine.home ? engine.home : engine.url.split("?")[0],
             active,
           });
         }

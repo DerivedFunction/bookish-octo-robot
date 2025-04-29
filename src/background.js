@@ -134,7 +134,10 @@ async function createTab(query, engine = null) {
     curEngine = selectedEngine;
   }
   if (!query) {
-    if (curEngine) chrome.tabs.create({ url: curEngine.url.split("?")[0] });
+    if (curEngine)
+      chrome.tabs.create({
+        url: hostnameToURL(curEngine),
+      });
     return;
   }
   chrome.storage.local.set({ lastQuery: query });
@@ -164,7 +167,7 @@ async function createTab(query, engine = null) {
         const shouldCreateTab = await waitForNoPing();
         console.log("create tab?", shouldCreateTab);
         if (shouldCreateTab) {
-          url = hostnameToURL(curEngine.url);
+          url = hostnameToURL(curEngine);
           chrome.tabs.create({ url });
           return;
         }
@@ -200,9 +203,10 @@ async function deleteMenu() {
   selectedEngine = null;
   menusCreated = false;
 }
-function hostnameToURL(url = null) {
-  let base = url || selectedEngine?.url;
-  return base.split("?")[0];
+function hostnameToURL(engine = null) {
+  if (!engine) engine = selectedEngine;
+  if (engine.home) return engine.home;
+  else return engine.url.split("?")[0];
 }
 
 // Load the context menus dynamically

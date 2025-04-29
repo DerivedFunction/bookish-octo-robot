@@ -103,7 +103,8 @@ export async function addSearchEngines() {
 setupTooltip(searchEnginePickerBtn, () => !dropdown.classList.contains("open"));
 
 export function getSearchEngineUrl() {
-  return selectedEngine?.url.split("?")[0];
+  if (selectedEngine?.home) return selectedEngine?.home;
+  else return selectedEngine?.url.split("?")[0];
 }
 
 export async function getSearchEngineList() {
