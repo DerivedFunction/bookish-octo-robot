@@ -145,7 +145,7 @@ async function handleMultiSearch(textContent, resend = false) {
   if (storedID !== curMultID) {
     showToast("Warning: New Tab opened. This session may be outdated");
   }
-
+  chrome.storage.local.set({ lastQuery: queryText });
   const searchEngines = await getSearchEngineList();
   const searchEverywhere = getSearchEverywhere();
 
