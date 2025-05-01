@@ -6,9 +6,6 @@ const SELECTORS = {
   textbox: "textarea",
   send: "button[type='submit']",
   file: "input[type='file']",
-  deep: "button[aria-label='Think']",
-  web: "button[aria-label='DeepSearch']",
-  code: null,
   lastHTML: ".last-response",
 };
 const MAX_COUNTER = 3000;

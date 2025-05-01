@@ -6,9 +6,6 @@ const SELECTORS = {
   textbox: "div[contenteditable='true']",
   send: "div[aria-label='Send Message']",
   file: "input",
-  deep: null,
-  web: null,
-  code: "div[aria-label='Canvas']",
   lastHTML: ".x78zum5.xdt5ytf div[dir='auto']",
 };
 const MAX_COUNTER = 3000;

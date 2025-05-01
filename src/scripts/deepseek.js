@@ -7,9 +7,6 @@ const SELECTORS = {
   textbox: "textarea",
   send: "._7436101",
   file: "input[type='file']",
-  deep: "div.ds-button:nth-child(1)",
-  web: "div.ds-button:nth-child(2)",
-  code: null,
   lastHTML: "div.ds-markdown.ds-markdown--block",
 };
 const MAX_COUNTER = 3000;

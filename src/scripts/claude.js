@@ -6,9 +6,6 @@ const SELECTORS = {
   textbox: "div[enterkeyhint='enter'] p",
   send: "button[aria-label='Send message']",
   file: "input",
-  deep: null,
-  web: null,
-  code: null,
   lastHTML: "[data-test-render-count]",
 };
 const MAX_COUNTER = 3000;

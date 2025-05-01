@@ -6,9 +6,6 @@ const SELECTORS = {
   textbox: "textarea",
   send: "button[type='submit']",
   file: null,
-  deep: null,
-  web: null,
-  code: null,
   lastHTML: "div[id]",
 };
 const MAX_COUNTER = 3000;

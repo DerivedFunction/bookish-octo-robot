@@ -7,9 +7,6 @@ const SELECTORS = {
   textbox: ".textarea",
   send: ".send-button",
   file: "input",
-  deep: "button.mat-ripple",
-  web: null,
-  code: "button.mat-ripple",
   lastHTML: ".response-content",
 };
 const MAX_COUNTER = 3000;

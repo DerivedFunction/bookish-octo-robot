@@ -6,9 +6,6 @@ const SELECTORS = {
   textbox: "#prompt-textarea p",
   send: "#composer-submit-button",
   file: "input[type='file']",
-  deep: "button[title='composer.chatModes.reasoning.title']",
-  web: "button[data-testid='composer-button-search']",
-  code: null,
   lastHTML: "article",
 };
 const MAX_COUNTER = 3000;

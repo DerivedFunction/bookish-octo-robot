@@ -6,9 +6,7 @@ const SELECTORS = {
   textbox: "#userInput",
   send: "button[title='Submit message']",
   file: "input",
-  deep: null,
-  web: null,
-  code: null,
+
   lastHTML: "div[role='article']",
 };
 const MAX_COUNTER = 3000;

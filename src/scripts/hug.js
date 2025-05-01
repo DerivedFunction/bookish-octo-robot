@@ -6,9 +6,6 @@ const SELECTORS = {
   textbox: "textarea[placeholder='Ask anything']",
   send: "button[name='submit']",
   file: null,
-  deep: null,
-  web: "button.base-tool",
-  code: null,
   lastHTML: "[data-message-role='assistant']",
 };
 const MAX_COUNTER = 3000;
