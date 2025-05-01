@@ -353,7 +353,7 @@ async function refresh() {
 }
 async function goToLink() {
   let { query: q } = await chrome.storage.local.get("query");
-
+  if (!q) window.location.href = getSearchEngineUrl();
   if (selectedEngine && q && q.trim().length > 0) {
     if (selectedEngine.experimental) {
       if (hasScripts) {
