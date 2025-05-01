@@ -251,13 +251,18 @@ function t(key, substitutions = {}) {
   key = key.toLowerCase().replace(" ", "_").replace("-", "_");
   let text = null;
   if (!currentLocale) {
-    text = chrome.i18n.getMessage(key, substitutions) || key;
+    // get the values of each item in subs in array
+    let subs = [];
+    Object.values(substitutions).forEach((value) => {
+      subs.push(value);
+    });
+    text = chrome.i18n.getMessage(key, subs) || key;
   } else {
     text = localeKeys?.[key]?.message || key;
+    Object.entries(substitutions).forEach(([key, value]) => {
+      text = text.replace(new RegExp(`\\$${key}\\$`, "g"), value);
+    });
   }
-  Object.entries(substitutions).forEach(([key, value]) => {
-    text = text.replace(new RegExp(`\\$${key}\\$`, "g"), value);
-  });
   return text;
 }
 

@@ -29,6 +29,15 @@
       }
     }
   },
+  "welcome": {
+    "message": "$GREETING$。",
+
+    "placeholders": {
+      "greeting": {
+        "content": "$1"
+      }
+    }
+  },
   "reset_button": {
     "message": "初期設定に戻す"
   },

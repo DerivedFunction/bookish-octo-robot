@@ -46,7 +46,7 @@ export function getGreeting() {
   greetingContainer.style.display = !greeting ? "none" : "";
   x.textContent = y
     ? t("welcome_name", { GREETING: greeting, NAME: y })
-    : `${greeting}.`;
+    : t("welcome", { GREETING: greeting });
   x2.textContent = greeting ? t("greeting_help") : "";
 }
 document.addEventListener("DOMContentLoaded", () => {

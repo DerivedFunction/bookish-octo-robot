@@ -29,6 +29,14 @@
       }
     }
   },
+  "welcome": {
+    "message": "$GREETING$.",
+    "placeholders": {
+      "greeting": {
+        "content": "$1"
+      }
+    }
+  },
   "reset_button": {
     "message": "Reset to Defaults"
   },
