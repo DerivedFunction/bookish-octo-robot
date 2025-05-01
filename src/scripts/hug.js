@@ -23,7 +23,7 @@ async function runAfterFullLoad() {
       return;
     }
     console.log("Running query injection.");
-    await getButtons();
+
     await getTextInput();
     let { unstable } = await chrome.storage.local.get("unstable");
     if (!unstable) return;
@@ -129,10 +129,4 @@ async function update() {
     buttonClicked: true,
     engine: SELECTORS.AI,
   });
-}
-async function getButtons() {
-  let { web } = await chrome.storage.local.get("web");
-  if (web) {
-    document.querySelector(SELECTORS.web).click();
-  }
 }

@@ -41,7 +41,7 @@ async function runAfterFullLoad() {
     }
     console.log("Running query injection.");
     await getImage();
-    await getButtons();
+
     await getTextInput();
     let { unstable } = await chrome.storage.local.get("unstable");
     if (!unstable) return;
@@ -135,16 +135,6 @@ async function update() {
     buttonClicked: true,
     engine: SELECTORS.AI,
   });
-}
-async function getButtons() {
-  let { deep, web } = await chrome.storage.local.get(["deep", "web"]);
-  let buttons = document.querySelectorAll(".operationBtn button");
-  if (web) {
-    buttons[1].click();
-  }
-  if (deep) {
-    buttons[0].click();
-  }
 }
 
 async function getImage() {

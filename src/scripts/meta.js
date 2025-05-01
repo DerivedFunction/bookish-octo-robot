@@ -25,7 +25,7 @@ async function runAfterFullLoad() {
     console.log("Running query injection.");
 
     await getImage();
-    await getButtons();
+
     await getTextInput();
     let { unstable } = await chrome.storage.local.get("unstable");
     if (!unstable) return;
@@ -245,12 +245,5 @@ async function getImage() {
     fileUploadInput.dispatchEvent(event);
   } else {
     console.log("No valid files to assign to input");
-  }
-}
-
-async function getButtons() {
-  let { code } = await chrome.storage.local.get("code");
-  if (code) {
-    document.querySelector(SELECTORS.code).click();
   }
 }

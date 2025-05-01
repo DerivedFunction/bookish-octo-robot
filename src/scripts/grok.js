@@ -45,7 +45,7 @@ async function runAfterFullLoad() {
     }
     console.log("Running query injection.");
     await getImage();
-    await getButtons();
+
     element = document.querySelector("textarea");
     await getTextInput();
     let { unstable } = await chrome.storage.local.get("unstable");
@@ -229,14 +229,5 @@ async function getImage() {
     fileUploadInput.dispatchEvent(event);
   } else {
     console.log("No valid files to assign to input");
-  }
-}
-async function getButtons() {
-  let { deep, web } = await chrome.storage.local.get(["deep", "web"]);
-  if (web) {
-    document.querySelector(SELECTORS.web).click();
-  }
-  if (deep) {
-    document.querySelector(SELECTORS.deep).click();
   }
 }
