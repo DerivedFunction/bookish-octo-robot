@@ -4,7 +4,6 @@ import { showToast } from "./toaster.js";
 import { resetBtn, loadJsonData, toggleClass } from "../app.js";
 import { query, queryEvents } from "./query.js";
 import { t } from "./locales.js";
-import { highlightRequired } from "./sidebar.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
 
@@ -367,7 +366,6 @@ async function goToLink() {
         showToast(`${selectedEngine.name} ${t("no_perm")}`);
         query.value = q;
         queryEvents();
-        highlightRequired();
       } else {
         // Generate regular link (scriptless)
         getQueryLink();

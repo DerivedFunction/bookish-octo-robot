@@ -38,10 +38,6 @@ closeScriptBtn.addEventListener("click", () => {
 });
 const scriptsBtn = document.getElementById("scripts-button");
 scriptsBtn.addEventListener("click", async () => {
-  toggleClass(requiredList.parentElement, false, "highlight");
-  requiredList.querySelectorAll("button").forEach((btn) => {
-    toggleClass(btn, false, "highlight");
-  });
   exp_sidebar.style.display = "block";
 
   await chrome.storage.local.get("unstable").then((e) => {
@@ -51,13 +47,7 @@ scriptsBtn.addEventListener("click", async () => {
   const aiList = await getSearchEngineList(); // or cache it if you want
   await refreshCurrentEnabled(aiList);
 });
-export function highlightRequired() {
-  exp_sidebar.style.display = "block";
-  toggleClass(requiredList.parentElement, true, "highlight");
-  requiredList.querySelectorAll("button").forEach((btn) => {
-    toggleClass(btn, true, "highlight");
-  });
-}
+
 export const requiredList = document.getElementById("required-scripts-ai");
 const imageList = document.getElementById("ai-image-support");
 const scriptsList = document.getElementById("ai-experimental-support");
