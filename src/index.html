@@ -125,40 +125,28 @@
       <div class="section">
         <div class="horizontal-container">
           <div class="form-group">
-            <label for="bg-select" id="bg-label">Background</label>
+            <label for="bg-select" id="bg-label"></label>
             <select name="bg-select" id="bg-select">
-              <option value="default" selected>Default</option>
-              <option value="bg-img">Background Image</option>
-              <option value="color">Solid Color</option>
-              <option value="gradient">Gradient</option>
-              <option value="own-img">Own Image</option>
+              <option value="default" selected></option>
+              <option value="bg-img"></option>
+              <option value="color"></option>
+              <option value="gradient"></option>
+              <option value="own-img"></option>
             </select>
           </div>
           <button id="save-bg" class="submit"></button>
         </div>
         <div class="horizontal-container">
           <select name="bg-img-exp" id="bg-img-exp">
-            <option value="-1" data-time="never">Never</option>
-            <option value="0" data-time="refresh">On Refresh</option>
-            <option value="300" data-time="5" data-unit="minutes">
-              Every 5 Minutes
-            </option>
-            <option value="900" data-time="15" data-unit="minutes">
-              Every 15 Minutes
-            </option>
-            <option value="1800" data-time="30" data-unit="minutes">
-              Every 30 Minutes
-            </option>
-            <option value="3600" data-time="1" data-unit="hours">
-              Every Hour
-            </option>
-            <option value="43200" data-time="12" data-unit="hours">
-              Every 12 Hours
-            </option>
+            <option value="-1" data-time="never"></option>
+            <option value="0" data-time="refresh"></option>
+            <option value="300" data-time="5" data-unit="minutes"></option>
+            <option value="900" data-time="15" data-unit="minutes"></option>
+            <option value="1800" data-time="30" data-unit="minutes"></option>
+            <option value="3600" data-time="1" data-unit="hours"></option>
+            <option value="43200" data-time="12" data-unit="hours"></option>
             <option value="86400" data-time="1" data-unit="days">Daily</option>
-            <option value="604800" data-time="1" data-unit="weeks">
-              Weekly
-            </option>
+            <option value="604800" data-time="1" data-unit="weeks"></option>
           </select>
           <label for="solid-color"></label>
           <input type="color" id="solid-color" class="input-field" />
@@ -174,9 +162,11 @@
             max="360"
             value="0"
           />
-          <label for="img-file" id="img-file-label" class="button-format"
-            >Click to upload...</label
-          >
+          <label
+            for="img-file"
+            id="img-file-label"
+            class="button-format"
+          ></label>
           <input id="img-file" type="file" accept="image/*" hidden="true" />
         </div>
       </div>
@@ -196,13 +186,13 @@
       <div class="section">
         <form>
           <fieldset class="horizontal-container" id="time-format">
-            <legend>Choose Time Format</legend>
+            <legend></legend>
             <input type="radio" id="no-time" name="time" value="hide" />
-            <label for="no-time">Hide</label>
+            <label for="no-time"></label>
             <input type="radio" id="24" name="time" value="24" />
-            <label for="24">24 Hours</label>
+            <label for="24"></label>
             <input type="radio" id="12" name="time" value="12" />
-            <label for="12">12 Hours</label>
+            <label for="12"></label>
           </fieldset>
         </form>
       </div>
