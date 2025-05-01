@@ -280,5 +280,8 @@
   },
   "enabled_label": {
     "message": "Actualmente Habilitado"
+  },
+  "too_long": {
+    "message": "El prompt actual es demasiado largo."
   }
 }

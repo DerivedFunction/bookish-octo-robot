@@ -292,5 +292,8 @@
   },
   "enabled_label": {
     "message": "Derzeit Aktiviert"
+  },
+  "too_long": {
+    "message": "Aktuelles Prompt ist zu lang."
   }
 }
