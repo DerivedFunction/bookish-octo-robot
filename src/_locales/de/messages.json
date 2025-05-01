@@ -1,31 +1,31 @@
 {
   "greeting_morning": {
     "message": "Guten Morgen",
-    "description": "Morning greeting"
+    
   },
   "greeting_afternoon": {
     "message": "Guten Tag",
-    "description": "Afternoon greeting"
+    
   },
   "greeting_evening": {
     "message": "Guten Abend",
-    "description": "Evening greeting"
+    
   },
   "greeting_hello": {
     "message": "Hallo",
-    "description": "Informal greeting"
+    
   },
   "greeting_help": {
     "message": "Wie kann ich Ihnen heute helfen?",
-    "description": "Help message after greeting"
+    
   },
   "search_placeholder": {
     "message": "Was kann ich für Sie tun?",
-    "description": "Placeholder text for search input"
+    
   },
   "welcome_name": {
     "message": "$GREETING$, $NAME$.",
-    "description": "Welcome message with name",
+    ,
     "placeholders": {
       "greeting": {
         "content": "$1"
@@ -37,75 +37,75 @@
   },
   "reset_button": {
     "message": "Zurücksetzen",
-    "description": "Reset button text"
+    
   },
   "close_button": {
     "message": "Schließen",
-    "description": "Close button text"
+    
   },
   "options_title": {
     "message": "Optionen",
-    "description": "Options sidebar title"
+    
   },
   "name_label": {
     "message": "Name",
-    "description": "Name field label"
+    
   },
   "greeting_type_label": {
     "message": "Begrüßungsart",
-    "description": "Greeting type fieldset label"
+    
   },
   "formal_option": {
     "message": "Formell",
-    "description": "Formal greeting option"
+    
   },
   "informal_option": {
     "message": "Informell",
-    "description": "Informal greeting option"
+    
   },
   "custom_option": {
     "message": "Benutzerdefiniert",
-    "description": "Custom greeting option"
+    
   },
   "none_option": {
     "message": "Keine",
-    "description": "No greeting option"
+    
   },
   "enter_custom_greeting": {
     "message": "Geben Sie Ihre benutzerdefinierte Begrüßung ein",
-    "description": "Prompt for custom greeting input"
+    
   },
   "show_suggestions_label": {
     "message": "Anzeigen Sie",
-    "description": "Checkbox label for showing suggestions"
+    
   },
   "sug-show": {
     "message": "Anzeigen",
-    "description": "Show option"
+    
   },
   "sug-hide": {
     "message": "Verbergen",
-    "description": "Hide option"
+    
   },
   "lang": {
     "message": "Sprache",
-    "description": "Language field label"
+    
   },
   "theme": {
     "message": "Thema",
-    "description": "Theme field label"
+    
   },
   "theme_auto": {
     "message": "Auto",
-    "description": "Auto theme option"
+    
   },
   "theme_dark": {
     "message": "Dunkel",
-    "description": "Dark theme option"
+    
   },
   "theme_light": {
     "message": "Licht",
-    "description": "Light theme option"
+    
   },
   "tooltip_options": {
     "message": "Optionen"
@@ -138,179 +138,195 @@
     "message": "Leere Nachricht"
   },
   "tooltip_search_everywhere": {
-    "message": "Überall Suchen"
+    "message": "Suche überall"
   },
   "prompt_solve": {
     "message": "Lösen Sie das folgende Problem und geben Sie die Logik Schritt für Schritt an: ",
-    "description": "Help me solve this problem"
+    
   },
   "prompt_solve_quick": {
     "message": "Geben Sie eine schnelle Antwort: ",
-    "description": "Find a quick solution"
+    
   },
   "prompt_solve_check": {
     "message": "Überprüfen Sie meine Antwort: ",
-    "description": "Check my solution"
+    
   },
   "prompt_solve_fill": {
     "message": "Fehlende Teile ergänzen",
-    "description": "Fill in missing parts"
+    
   },
   "prompt_research": {
     "message": "Dieses Thema recherchieren",
-    "description": "Research "
+    
   },
   "prompt_research_compare": {
     "message": "Verschiedene Ansätze vergleichen",
-    "description": "Compare Options"
+    
   },
   "prompt_research_latest": {
     "message": "Neueste Informationen finden",
-    "description": "Find Latest Info"
+    
   },
   "prompt_summarize": {
     "message": "Fassen Sie kurz und prägnant zusammen, mit Stichpunkten zu den wichtigsten Begriffen: ",
-    "description": "Summarize briefly and concisely, with bullet points on key terms: "
+    
   },
   "prompt_summarize_quick": {
     "message": "Geben Sie eine kurze Zusammenfassung: ",
-    "description": "Give a Quick Summary"
+    
   },
   "prompt_summarize_paraphrase": {
     "message": "Umformulieren",
-    "description": "Paraphrase"
+    
   },
   "prompt_summarize_highlight": {
     "message": "Kernpunkte hervorheben",
-    "description": "Highlight Important Terms"
+    
   },
   "prompt_explain": {
     "message": "Erklären Sie ausführlich mit Schritt-für-Schritt-Logik und fügen Sie leicht verständliche Beispiele hinzu: ",
-    "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
+    
   },
   "prompt_explain_brief": {
     "message": "Erklären Sie kurz: ",
-    "description": "Explain briefly"
+    
   },
   "prompt_explain_detail": {
     "message": "Erklären Sie im Detail: ",
-    "description": "Explain in Detail"
+    
   },
   "prompt_analyze": {
     "message": "Analysieren Sie das Folgende: ",
-    "description": "Analyze the following: "
+    
   },
   "prompt_analyze_pros": {
     "message": "Vor- und Nachteile",
-    "description": "Analyze Pros and Cons"
+    
   },
   "prompt_analyze_fact": {
     "message": "Faktencheck",
-    "description": "Fact Check"
+    
   },
   "prompt_analyze_patterns": {
     "message": "Muster finden",
-    "description": "Find Patterns or Trends"
+    
   },
   "prompt_analyze_strengths": {
     "message": "Stärken und Schwächen",
-    "description": "Spot Strengths and Weaknesses"
+    
   },
   "prompt_analyze_errors": {
     "message": "Fehler finden",
-    "description": "Fix Errors"
+    
   },
   "prompt_image": {
     "message": "Bild erstellen",
-    "description": "Generate an image of "
+    
   },
   "prompt_code": {
     "message": "Programmieren und erklären Sie: ",
-    "description": "Code and explain: "
+    
   },
   "prompt_code_fix": {
     "message": "Codefehler reparieren",
-    "description": "Fix Errors"
+    
   },
   "prompt_code_error": {
     "message": "Diese Fehlermeldung erklären",
-    "description": "Explain This Error Message"
+    
   },
   "prompt_code_refactor": {
     "message": "Code refaktorisieren",
-    "description": "Refactor"
+    
   },
   "prompt_code_docs": {
     "message": "Dokumentation für Code hinzufügen",
-    "description": "Generate Code Documentation"
+    
   },
   "prompt_code_tests": {
     "message": "Tests für Code schreiben",
-    "description": "Generate Code Tests"
+    
   },
   "prompt_code_review": {
     "message": "Code überprüfen und kommentieren",
-    "description": "Review and Comment"
+    
   },
   "prompt_generate": {
     "message": "Erstellen Sie einen Plan oder eine Idee: ",
-    "description": "Create a plan or idea: "
+    
   },
   "prompt_generate_ideas": {
     "message": "Ideen entwickeln",
-    "description": "Brainstorm Ideas"
+    
   },
   "prompt_generate_plan": {
     "message": "Plan erstellen",
-    "description": "Make a Plan"
+    
   },
   "prompt_generate_draft": {
     "message": "Entwurf schreiben",
-    "description": "Write a Draft"
+    
   },
   "prompt_generate_outline": {
     "message": "Gliederung erstellen",
-    "description": "Create an Outline"
+    
   },
   "prompt_generate_email": {
     "message": "E-Mail schreiben",
-    "description": "Write an Email"
+    
   },
   "prompt_generate_resume": {
     "message": "Lebenslauf schreiben",
-    "description": "Write and improve my Resume"
+    
   },
   "solve": {
     "message": "Lösen",
-    "description": "Solve menu item"
+    
   },
   "research": {
     "message": "Recherchieren",
-    "description": "Research menu item"
+    
   },
   "summarize": {
     "message": "Zusammenfassen",
-    "description": "Summarize menu item"
+    
   },
   "explain": {
     "message": "Erklären",
-    "description": "Explain menu item"
+    
   },
   "analyze": {
     "message": "Analysieren",
-    "description": "Analyze menu item"
+    
   },
   "create image": {
     "message": "Bild erstellen",
-    "description": "Create image menu item"
+    
   },
   "code": {
     "message": "Code",
-    "description": "Code menu item"
+    
   },
   "generate": {
     "message": "Generieren",
-    "description": "Generate menu item"
+    
+  },
+  "ask": {
+    "message": "Fragen",
+    
+  },
+  "ask_ai": {
+    "message": "KI Fragen",
+    
+  },
+  "paste_selection": {
+    "message": "Auswahl Einfügen",
+    
+  },
+  "switch_ai": {
+    "message": "KI Wechseln",
+    
   },
   "no_perm": {
     "message": "funktioniert möglicherweise nicht ohne Berechtigungen"
@@ -329,5 +345,23 @@
   },
   "scripts_desc": {
     "message": "Berechtigungen sind erforderlich, um experimentelle Inhaltsskripte zur Verbesserung der Funktionalität zu verwenden. Diese Funktion ist experimentell, funktioniert möglicherweise nicht wie erwartet und ist für die grundlegende Funktionalität nicht erforderlich. Klicken Sie auf jedes Symbol, um sie zu aktivieren/deaktivieren."
+  },
+  "supported_label": {
+    "message": "Unterstützte KI-Chatbots"
+  },
+  "required_label": {
+    "message": "Erfordert Berechtigungen zur Nutzung"
+  },
+  "image_support_label": {
+    "message": "Bildunterstützung"
+  },
+  "unstable_label": {
+    "message": "Ziel: Offene Chats/Erweiterte Suche überall"
+  },
+  "unstable_p": {
+    "message": "Ermöglicht Tabs, die von dieser Erweiterung geöffnet wurden, Anfragen zu überwachen und Daten zurückzusenden (falls vom Benutzer angefordert). Sie müssen diese Tabs schließen, um diese Funktion zu deaktivieren."
+  },
+  "enabled_label": {
+    "message": "Derzeit Aktiviert"
   }
 }

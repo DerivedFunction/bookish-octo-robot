@@ -1,31 +1,31 @@
 {
   "greeting_morning": {
     "message": "おはようございます",
-    "description": "Morning greeting"
+    
   },
   "greeting_afternoon": {
     "message": "こんにちは",
-    "description": "Afternoon greeting"
+    
   },
   "greeting_evening": {
     "message": "こんばんは",
-    "description": "Evening greeting"
+    
   },
   "greeting_hello": {
     "message": "やあ",
-    "description": "Informal greeting"
+    
   },
   "greeting_help": {
     "message": "今日は何をお手伝いできますか？",
-    "description": "Help message after greeting"
+    
   },
   "search_placeholder": {
     "message": "ご用件をお聞かせください",
-    "description": "Placeholder text for search input"
+    
   },
   "welcome_name": {
     "message": "$GREETING$、$NAME$さん。",
-    "description": "Welcome message with name",
+    ,
     "placeholders": {
       "greeting": {
         "content": "$1"
@@ -37,75 +37,75 @@
   },
   "reset_button": {
     "message": "初期設定に戻す",
-    "description": "Reset button text"
+    
   },
   "close_button": {
     "message": "閉じる",
-    "description": "Close button text"
+    
   },
   "options_title": {
     "message": "設定",
-    "description": "Options sidebar title"
+    
   },
   "name_label": {
     "message": "名前",
-    "description": "Name field label"
+    
   },
   "greeting_type_label": {
     "message": "挨拶の種類",
-    "description": "Greeting type fieldset label"
+    
   },
   "formal_option": {
     "message": "フォーマル",
-    "description": "Formal greeting option"
+    
   },
   "informal_option": {
     "message": "カジュアル",
-    "description": "Informal greeting option"
+    
   },
   "custom_option": {
     "message": "カスタム",
-    "description": "Custom greeting option"
+    
   },
   "none_option": {
     "message": "なし",
-    "description": "No greeting option"
+    
   },
   "enter_custom_greeting": {
     "message": "カスタム挨拶を入力してください",
-    "description": "Prompt for custom greeting input"
+    
   },
   "show_suggestions_label": {
     "message": "提案を表示する",
-    "description": "Checkbox label for showing suggestions"
+    
   },
   "sug-show": {
     "message": "表示する",
-    "description": "Show option"
+    
   },
   "sug-hide": {
     "message": "隠す",
-    "description": "Hide option"
+    
   },
   "lang": {
     "message": "言語",
-    "description": "Language field label"
+    
   },
   "theme": {
     "message": "テーマ",
-    "description": "Theme field label"
+    
   },
   "theme_auto": {
     "message": "自動",
-    "description": "Auto theme option"
+    
   },
   "theme_dark": {
     "message": "ダーク",
-    "description": "Dark theme option"
+    
   },
   "theme_light": {
     "message": "ライト",
-    "description": "Light theme option"
+    
   },
   "tooltip_options": {
     "message": "オプション"
@@ -142,175 +142,191 @@
   },
   "prompt_solve": {
     "message": "以下の問題を解決し、ステップごとの論理を説明してください： ",
-    "description": "Help me solve this problem"
+    
   },
   "prompt_solve_quick": {
     "message": "素早い回答を提供してください",
-    "description": "Find a quick solution"
+    
   },
   "prompt_solve_check": {
     "message": "私の回答を確認してください",
-    "description": "Check my solution"
+    
   },
   "prompt_solve_fill": {
     "message": "不足している部分を補完する",
-    "description": "Fill in missing parts"
+    
   },
   "prompt_research": {
     "message": "このトピックを調査する",
-    "description": "Research "
+    
   },
   "prompt_research_compare": {
     "message": "異なるアプローチを比較する",
-    "description": "Compare Options"
+    
   },
   "prompt_research_latest": {
     "message": "最新情報を探す",
-    "description": "Find Latest Info"
+    
   },
   "prompt_summarize": {
     "message": "簡潔かつ簡潔に要約し、重要な用語を箇条書きにしてください： ",
-    "description": "Summarize briefly and concisely, with bullet points on key terms: "
+    
   },
   "prompt_summarize_quick": {
     "message": "素早い要約を提供してください",
-    "description": "Give a Quick Summary"
+    
   },
   "prompt_summarize_paraphrase": {
     "message": "言い換える",
-    "description": "Paraphrase"
+    
   },
   "prompt_summarize_highlight": {
     "message": "要点をハイライト",
-    "description": "Highlight Important Terms"
+    
   },
   "prompt_explain": {
     "message": "ステップごとの論理で徹底的に説明し、わかりやすい例を入れてください： ",
-    "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
+    
   },
   "prompt_explain_brief": {
     "message": "簡潔に説明してください",
-    "description": "Explain briefly"
+    
   },
   "prompt_explain_detail": {
     "message": "詳細に説明してください",
-    "description": "Explain in Detail"
+    
   },
   "prompt_analyze": {
     "message": "以下を分析してください： ",
-    "description": "Analyze the following: "
+    
   },
   "prompt_analyze_pros": {
     "message": "長所と短所",
-    "description": "Analyze Pros and Cons"
+    
   },
   "prompt_analyze_fact": {
     "message": "事実確認",
-    "description": "Fact Check"
+    
   },
   "prompt_analyze_patterns": {
     "message": "パターンを見つける",
-    "description": "Find Patterns or Trends"
+    
   },
   "prompt_analyze_strengths": {
     "message": "強みと弱み",
-    "description": "Spot Strengths and Weaknesses"
+    
   },
   "prompt_analyze_errors": {
     "message": "エラーを探す",
-    "description": "Fix Errors"
+    
   },
   "prompt_image": {
     "message": "画像を作成",
-    "description": "Generate an image of "
+    
   },
   "prompt_code": {
     "message": "コードを書いて説明してください： ",
-    "description": "Code and explain: "
+    
   },
   "prompt_code_fix": {
     "message": "コードのエラーを修正",
-    "description": "Fix Errors"
+    
   },
   "prompt_code_error": {
     "message": "このエラーメッセージを説明",
-    "description": "Explain This Error Message"
+    
   },
   "prompt_code_refactor": {
     "message": "コードをリファクタリング",
-    "description": "Refactor"
+    
   },
   "prompt_code_docs": {
     "message": "コードのドキュメントを生成",
-    "description": "Generate Code Documentation"
+    
   },
   "prompt_code_tests": {
     "message": "コードのテストを生成",
-    "description": "Generate Code Tests"
+    
   },
   "prompt_code_review": {
     "message": "コードをレビューしてコメント",
-    "description": "Review and Comment"
+    
   },
   "prompt_generate": {
     "message": "計画またはアイデアを作成してください： ",
-    "description": "Create a plan or idea: "
+    
   },
   "prompt_generate_ideas": {
     "message": "アイデアを出す",
-    "description": "Brainstorm Ideas"
+    
   },
   "prompt_generate_plan": {
     "message": "計画を作成",
-    "description": "Make a Plan"
+    
   },
   "prompt_generate_draft": {
     "message": "下書きを作成",
-    "description": "Write a Draft"
+    
   },
   "prompt_generate_outline": {
     "message": "アウトラインを作成",
-    "description": "Create an Outline"
+    
   },
   "prompt_generate_email": {
     "message": "メールを作成",
-    "description": "Write an Email"
+    
   },
   "prompt_generate_resume": {
     "message": "履歴書を作成",
-    "description": "Write and improve my Resume"
+    
   },
   "solve": {
     "message": "解決",
-    "description": "Solve menu item"
+    
   },
   "research": {
     "message": "調査",
-    "description": "Research menu item"
+    
   },
   "summarize": {
     "message": "要約",
-    "description": "Summarize menu item"
+    
   },
   "explain": {
     "message": "説明",
-    "description": "Explain menu item"
+    
   },
   "analyze": {
     "message": "分析",
-    "description": "Analyze menu item"
+    
   },
   "create image": {
     "message": "画像作成",
-    "description": "Create image menu item"
+    
   },
   "code": {
     "message": "コード",
-    "description": "Code menu item"
+    
   },
   "generate": {
     "message": "生成",
-    "description": "Generate menu item"
+    
+  },
+  "ask": {
+    "message": "聞く",
+    
+  },
+  "ask_ai": {
+    "message": "AIに聞く",
+    
+  },
+  "paste_selection": {
+    "message": "選択を貼り付け",
+    
+  },
+  "switch_ai": {
+    "message": "AI切り替え",
+    
   },
   "no_perm": {
     "message": "は権限がないと動作しない可能性があります"
@@ -329,5 +345,23 @@
   },
   "scripts_desc": {
     "message": "機能向上のために実験的なコンテンツスクリプトを使用するには、権限が必要です。この機能は実験的であり、期待通りに動作しない場合があり、基本的な機能には必要ありません。各アイコンをクリックして有効/無効にしてください。"
+  },
+  "supported_label": {
+    "message": "サポートされているAIチャットボット"
+  },
+  "required_label": {
+    "message": "使用には権限が必要"
+  },
+  "image_support_label": {
+    "message": "画像サポート"
+  },
+  "unstable_label": {
+    "message": "対象：オープンなチャット/高度などこでも検索"
+  },
+  "unstable_p": {
+    "message": "この拡張機能によって開かれたタブが、すべてのクエリを監視し、ユーザーの要求に応じてデータを送信することを許可します。この機能を停止するには、それらのタブを閉じる必要があります。"
+  },
+  "enabled_label": {
+    "message": "現在有効"
   }
 }

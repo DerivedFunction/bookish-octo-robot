@@ -1,12 +1,7 @@
 import "./modules/index.js";
 import { query } from "./modules/query.js";
 import { showToast } from "./modules/toaster.js";
-import {
-  initLocales,
-  initLocaleSelector,
-  t,
-  updateUIText,
-} from "./modules/locales.js";
+import { initLocales, t } from "./modules/locales.js";
 
 export const resetBtn = document.getElementById("reset");
 export function toggleButton(button, enabled, style = "enabled") {
@@ -76,8 +71,6 @@ export async function loadJsonData(type) {
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     await initLocales(); // Now fires localechange event after loading
-    initLocaleSelector();
-    updateUIText();
     // parse the URL to see if #failed is present
     const path = window.location.href;
     if (path.includes("failed")) {

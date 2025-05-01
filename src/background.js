@@ -1,8 +1,36 @@
 let sidebarStatus = false;
 let selectedEngine = getSearchEngine();
 let tabReceived = 0;
+let translations = {};
+let currentLocale = "en";
+
+async function loadBackgroundTranslations(locale) {
+  try {
+    const response = await fetch(`/_locales/${locale}/messages.json`);
+    if (!response.ok) {
+      console.warn(`Translations for ${locale} not found, falling back to en`);
+      if (locale !== "en") {
+        return loadBackgroundTranslations("en");
+      }
+      return;
+    }
+    translations = await response.json();
+    currentLocale = locale;
+  } catch (error) {
+    console.error("Error loading translations:", error);
+  }
+}
+
+function t(key) {
+  const translation = translations[key];
+  if (!translation) {
+    console.warn(`Translation missing for key: ${key}`);
+    return key;
+  }
+  return translation.message;
+}
+
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-  // AI searches
   let prompt = info.menuItemId;
   let query = prompt == "paste" ? "" : prompt;
   if (info.selectionText) {
@@ -38,7 +66,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     if (!sidebarStatus)
       browser.sidebarAction.open().catch((error) => {
         console.error("Failed to open sidebar:", error);
-        createTab(query); // Fallback to creating a tab
+        createTab(query);
       });
     chrome.storage.local.set({ [selectedEngine.name]: true });
   } catch (error) {
@@ -63,7 +91,6 @@ chrome.omnibox.onInputEntered.addListener(async (text) => {
   let query;
   await chrome.storage.local.set({ time: Date.now() });
   if (text.startsWith("@")) {
-    // there is a flag to temporarily switch engines
     let engineName = text.split(" ")[0].slice(1).toLowerCase();
     for (const ai of aiList) {
       if (
@@ -97,7 +124,6 @@ chrome.omnibox.onInputChanged.addListener((text, suggest) => {
     }
     setDefaultSuggestion();
   } else {
-    // Set the default suggestion to the current search engine
     setDefaultSuggestion();
     for (const ai of aiList) {
       if (ai.name !== selectedEngine?.name)
@@ -115,12 +141,10 @@ chrome.omnibox.onInputStarted.addListener(() => {
 });
 function setDefaultSuggestion() {
   if (selectedEngine) {
-    // Set the default suggestion to the current search engine
     chrome.omnibox.setDefaultSuggestion({
       description: `Ask ${selectedEngine.name} (@${selectedEngine.omnibox[0]}, @${selectedEngine.omnibox[1]})`,
     });
   } else {
-    // If no engine is selected, set a generic suggestion
     chrome.omnibox.setDefaultSuggestion({
       description: "None Selected",
     });
@@ -143,9 +167,8 @@ async function createTab(query, engine = null) {
   chrome.storage.local.set({ lastQuery: query });
   if (curEngine) {
     let url;
-    let curEngineScripts = await getScriptStatus(curEngine.name); // If we have permissions
+    let curEngineScripts = await getScriptStatus(curEngine.name);
     if (curEngine.experimental) {
-      // If set to true, use the original url
       if (curEngineScripts) {
         await chrome.storage.local.set({ [curEngine.name]: true });
 
@@ -154,7 +177,7 @@ async function createTab(query, engine = null) {
             let checkInterval = setInterval(() => {
               if (tabReceived > 0) {
                 clearInterval(checkInterval);
-                resolve(false); // A tab picked it up
+                resolve(false);
               }
             }, 100);
 
@@ -171,9 +194,7 @@ async function createTab(query, engine = null) {
           chrome.tabs.create({ url });
           return;
         }
-      }
-      // Else use the query form
-      else {
+      } else {
         if (curEngine.needsPerm) {
           chrome.tabs.create({ url: `index.html#failed-${curEngine.name}` });
         } else {
@@ -209,16 +230,21 @@ function hostnameToURL(engine = null) {
   else return engine.url.split("?")[0];
 }
 
-// Load the context menus dynamically
 async function loadMenu() {
-  // Remove existing menus
   await deleteMenu();
 
   selectedEngine = await getSearchEngine();
   await getScriptStatus();
-  let response = selectedEngine ? `Ask ${selectedEngine?.name}` : `Ask AI`;
 
-  // Create full menu for valid engine with permissions
+  const { locale } = await chrome.storage.local.get("locale");
+  if (locale) {
+    await loadBackgroundTranslations(locale);
+  }
+
+  let response = selectedEngine
+    ? `${t("ask")} ${selectedEngine?.name}`
+    : t("ask_ai");
+
   chrome.contextMenus.create(
     {
       id: "search",
@@ -227,24 +253,27 @@ async function loadMenu() {
     },
     () => void chrome.runtime.lastError
   );
+
   chrome.contextMenus.create(
     {
       id: "paste",
-      title: "Paste Selection Into Prompt",
+      title: t("paste_selection"),
       parentId: "search",
       contexts: ["selection", "link"],
     },
     () => void chrome.runtime.lastError
   );
+
   chrome.contextMenus.create(
     {
       id: "switch",
-      title: "Switch to different AI chatbot",
+      title: t("switch_ai"),
       parentId: "search",
       contexts: ["all"],
     },
     () => void chrome.runtime.lastError
   );
+
   aiList.forEach((type) => {
     chrome.contextMenus.create(
       {
@@ -259,23 +288,24 @@ async function loadMenu() {
   prompts.forEach((type) => {
     chrome.contextMenus.create(
       {
-        id: type.prompt,
-        title: type.id,
+        id: t(type.prompt),
+        title: t(`${type.id.toLowerCase()}`),
         parentId: "search",
         contexts: type.context,
       },
       () => void chrome.runtime.lastError
     );
   });
+
   menusCreated = true;
 }
-// Update menu title when engine changes
+
 function updateMenu(engine) {
   if (menusCreated) {
     chrome.contextMenus.update(
       "search",
       {
-        title: `Ask ${engine ? engine.name : "AI"}`,
+        title: `${t("ask")} ${engine ? engine.name : t("ask_ai")}`,
       },
       () => void chrome.runtime.lastError
     );
@@ -316,6 +346,12 @@ async function switchEngine(name) {
   aiList.forEach((ai) => {
     if (ai.name === name) selectedEngine = ai;
   });
+
+  const { locale } = await chrome.storage.local.get("locale");
+  if (locale) {
+    await loadBackgroundTranslations(locale);
+  }
+
   await chrome.storage.local.set({ engine: selectedEngine });
   await loadMenu();
   try {
@@ -328,7 +364,6 @@ async function switchEngine(name) {
   const iconUrl = chrome.runtime.getURL(selectedEngine.image);
   if (!iconUrl) return;
   try {
-    // Firefox works
     await chrome.action.setIcon({ path: iconUrl });
     browser.sidebarAction.setIcon({ path: iconUrl });
   } catch (error) {
@@ -338,20 +373,17 @@ async function switchEngine(name) {
         r.blob()
       );
       const img = await createImageBitmap(imgblob);
-      const canvas = new OffscreenCanvas(32, 32); // Recommended base size for extension icons
+      const canvas = new OffscreenCanvas(32, 32);
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      // Get the ImageData from the canvas
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      // Set the icon using imageData
       await chrome.action.setIcon({ imageData: imageData });
     } catch (error) {
       console.error("Error setting extension icon:", error);
     }
   }
 }
-// Message listener for dynamic updates
 chrome.runtime.onMessage.addListener(async (e) => {
   if (e.message === "selectedSearchEngine") {
     console.log("AI chatbot changed", e.engine?.name);
@@ -364,7 +396,13 @@ chrome.runtime.onMessage.addListener(async (e) => {
   } else if (e.message === "Experimental") {
     console.log("Scripting Permissions changed for ", selectedEngine?.name);
     await getScriptStatus();
-    updateMenu(e.engine); // Rebuild menu on permission change
+    updateMenu(e.engine);
+  } else if (e.message === "localechange") {
+    const { locale } = await chrome.storage.local.get("locale");
+    if (locale) {
+      await loadBackgroundTranslations(locale);
+      await loadMenu();
+    }
   }
 });
 async function getScriptStatus(name = null) {
@@ -378,14 +416,11 @@ async function getScriptStatus(name = null) {
     curHasScripts = false;
   }
   if (name === selectedEngine?.name || name === null) {
-    // Update the global variable only if the name matches the selected engine
-    // or if name is null (initial check)
     hasScripts = curHasScripts;
   }
   return curHasScripts;
 }
 
-// Initial menu setup
 let prompts = [];
 let aiList = [];
 let unstable = false;
@@ -400,29 +435,22 @@ chrome.action.onClicked.addListener(async () => {
   }
 });
 
-// background.js
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.buttonClicked) {
-    // Retrieve stored engine states
     const keys = await chrome.storage.local.get();
 
-    // Check if none of the engines are enabled (aka ChatGPT: false), or if no such key exist (aka not in storage)
     let noneEnabled = true;
 
-    // Iterate through the list of engines
     for (const ai of aiList) {
       const aiName = ai.name;
-      // Check if the key exists in the stored keys and if its value is true
       if (keys.hasOwnProperty(aiName) && keys[aiName] === true) {
-        // If at least one engine is enabled, set noneEnabled to false and break the loop
         noneEnabled = false;
         break;
       }
     }
 
     if (noneEnabled) {
-      // Get all keys from storage
-      const allKeys = await chrome.storage.local.get(null); // null retrieves all key-value pairs
+      const allKeys = await chrome.storage.local.get(null);
       const files = Object.keys(allKeys).filter((key) =>
         key.startsWith("pasted-file-")
       );
@@ -438,7 +466,6 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 chrome.runtime.onMessage.addListener((e) => {
   if (e.ping) {
     tabReceived++;
-    // Reset the tab listener after 1 sec
     setTimeout(() => tabReceived--, 1000);
   }
 });
@@ -451,10 +478,8 @@ chrome.runtime.onMessage.addListener((e) => {
 chrome.runtime.onMessage.addListener((e) => {
   if (e.lastResponse) {
     function stripAttributes(html) {
-      // Remove all <svg> elements entirely
       html = html.replace(/<svg[^>]*?>.*?<\/svg>/gis, "");
 
-      // Preserve href for <a> and src for <img>, strip everything else
       html = html.replace(/<([a-z]+)([^>]*)>/gi, (match, tagName, attrs) => {
         tagName = tagName.toLowerCase();
 
@@ -471,7 +496,6 @@ chrome.runtime.onMessage.addListener((e) => {
           return `<img style="max-width:150px; max-height:150px; height:auto; width:auto;">`;
         }
 
-        // For semantic tags like h1, strong, p, etc., just keep the tag name
         return `<${tagName}>`;
       });
       return html;
@@ -482,4 +506,12 @@ chrome.runtime.onMessage.addListener((e) => {
       engine: e.engine,
     });
   }
+});
+
+// handle locale changes
+chrome.runtime.onMessage.addListener((e) => {
+  if (e.message === "localechange")
+    chrome.storage.local.get("locale").then((e) => {
+      loadBackgroundTranslations(e.locale);
+    });
 });

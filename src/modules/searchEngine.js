@@ -299,7 +299,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
       if (e?.message === "Experimental") {
-        console.log("recevied");
         toggleClass(curSearchBtn, e.status);
       }
     });

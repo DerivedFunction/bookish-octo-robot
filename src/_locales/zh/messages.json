@@ -1,31 +1,31 @@
 {
   "greeting_morning": {
     "message": "早上好",
-    "description": "Morning greeting"
+    
   },
   "greeting_afternoon": {
     "message": "下午好",
-    "description": "Afternoon greeting"
+    
   },
   "greeting_evening": {
     "message": "晚上好",
-    "description": "Evening greeting"
+    
   },
   "greeting_hello": {
     "message": "你好",
-    "description": "Informal greeting"
+    
   },
   "greeting_help": {
     "message": "今天我能为您做什么？",
-    "description": "Help message after greeting"
+    
   },
   "search_placeholder": {
     "message": "我能为您做什么？",
-    "description": "Placeholder text for search input"
+    
   },
   "welcome_name": {
     "message": "$GREETING$，$NAME$。",
-    "description": "Welcome message with name",
+    ,
     "placeholders": {
       "greeting": {
         "content": "$1"
@@ -37,75 +37,75 @@
   },
   "reset_button": {
     "message": "重置为默认值",
-    "description": "Reset button text"
+    
   },
   "close_button": {
     "message": "关闭",
-    "description": "Close button text"
+    
   },
   "options_title": {
     "message": "选项",
-    "description": "Options sidebar title"
+    
   },
   "name_label": {
     "message": "姓名",
-    "description": "Name field label"
+    
   },
   "greeting_type_label": {
     "message": "问候类型",
-    "description": "Greeting type fieldset label"
+    
   },
   "formal_option": {
     "message": "正式",
-    "description": "Formal greeting option"
+    
   },
   "informal_option": {
     "message": "非正式",
-    "description": "Informal greeting option"
+    
   },
   "custom_option": {
     "message": "自定义",
-    "description": "Custom greeting option"
+    
   },
   "none_option": {
     "message": "无",
-    "description": "No greeting option"
+    
   },
   "enter_custom_greeting": {
     "message": "请输入您的自定义问候语",
-    "description": "Prompt for custom greeting input"
+    
   },
   "show_suggestions_label": {
     "message": "显示建议",
-    "description": "Checkbox label for showing suggestions"
+    
   },
   "sug-show": {
     "message": "显示",
-    "description": "Show option"
+    
   },
   "sug-hide": {
     "message": "隐藏",
-    "description": "Hide option"
+    
   },
   "lang": {
     "message": "语言",
-    "description": "Language field label"
+    
   },
   "theme": {
     "message": "主题",
-    "description": "Theme field label"
+    
   },
   "theme_auto": {
     "message": "自动",
-    "description": "Auto theme option"
+    
   },
   "theme_dark": {
     "message": "暗色",
-    "description": "Dark theme option"
+    
   },
   "theme_light": {
     "message": "亮色",
-    "description": "Light theme option"
+    
   },
   "tooltip_options": {
     "message": "选项"
@@ -142,175 +142,191 @@
   },
   "prompt_solve": {
     "message": "解决以下问题并提供逐步的逻辑",
-    "description": "Help me solve this problem"
+    
   },
   "prompt_solve_quick": {
     "message": "提供快速回答",
-    "description": "Find a quick solution"
+    
   },
   "prompt_solve_check": {
     "message": "检查我的回答",
-    "description": "Check my solution"
+    
   },
   "prompt_solve_fill": {
     "message": "填补缺失部分",
-    "description": "Fill in missing parts"
+    
   },
   "prompt_research": {
     "message": "研究这个主题",
-    "description": "Research "
+    
   },
   "prompt_research_compare": {
     "message": "比较不同的方法",
-    "description": "Compare Options"
+    
   },
   "prompt_research_latest": {
     "message": "查找最新信息",
-    "description": "Find Latest Info"
+    
   },
   "prompt_summarize": {
     "message": "简短且简洁地总结，列出关键术语的项目符号： ",
-    "description": "Summarize briefly and concisely, with bullet points on key terms: "
+    
   },
   "prompt_summarize_quick": {
     "message": "提供快速总结",
-    "description": "Give a Quick Summary"
+    
   },
   "prompt_summarize_paraphrase": {
     "message": "重新表述",
-    "description": "Paraphrase"
+    
   },
   "prompt_summarize_highlight": {
     "message": "突出要点",
-    "description": "Highlight Important Terms"
+    
   },
   "prompt_explain": {
     "message": "详细解释，包含逐步逻辑，并加入易于理解的示例： ",
-    "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
+    
   },
   "prompt_explain_brief": {
     "message": "简短解释",
-    "description": "Explain briefly"
+    
   },
   "prompt_explain_detail": {
     "message": "详细解释",
-    "description": "Explain in Detail"
+    
   },
   "prompt_analyze": {
     "message": "分析以下内容： ",
-    "description": "Analyze the following: "
+    
   },
   "prompt_analyze_pros": {
     "message": "优缺点分析",
-    "description": "Analyze Pros and Cons"
+    
   },
   "prompt_analyze_fact": {
     "message": "事实核查",
-    "description": "Fact Check"
+    
   },
   "prompt_analyze_patterns": {
     "message": "寻找模式",
-    "description": "Find Patterns or Trends"
+    
   },
   "prompt_analyze_strengths": {
     "message": "优势和劣势",
-    "description": "Spot Strengths and Weaknesses"
+    
   },
   "prompt_analyze_errors": {
     "message": "查找错误",
-    "description": "Fix Errors"
+    
   },
   "prompt_image": {
     "message": "创建图像",
-    "description": "Generate an image of "
+    
   },
   "prompt_code": {
     "message": "编写代码并解释： ",
-    "description": "Code and explain: "
+    
   },
   "prompt_code_fix": {
     "message": "修复代码错误",
-    "description": "Fix Errors"
+    
   },
   "prompt_code_error": {
     "message": "解释此错误消息",
-    "description": "Explain This Error Message"
+    
   },
   "prompt_code_refactor": {
     "message": "重构代码",
-    "description": "Refactor"
+    
   },
   "prompt_code_docs": {
     "message": "生成代码文档",
-    "description": "Generate Code Documentation"
+    
   },
   "prompt_code_tests": {
     "message": "生成代码测试",
-    "description": "Generate Code Tests"
+    
   },
   "prompt_code_review": {
     "message": "审查并评论代码",
-    "description": "Review and Comment"
+    
   },
   "prompt_generate": {
     "message": "创建计划或想法： ",
-    "description": "Create a plan or idea: "
+    
   },
   "prompt_generate_ideas": {
     "message": "头脑风暴",
-    "description": "Brainstorm Ideas"
+    
   },
   "prompt_generate_plan": {
     "message": "创建计划",
-    "description": "Make a Plan"
+    
   },
   "prompt_generate_draft": {
     "message": "写初稿",
-    "description": "Write a Draft"
+    
   },
   "prompt_generate_outline": {
     "message": "创建大纲",
-    "description": "Create an Outline"
+    
   },
   "prompt_generate_email": {
     "message": "写邮件",
-    "description": "Write an Email"
+    
   },
   "prompt_generate_resume": {
     "message": "写简历",
-    "description": "Write and improve my Resume"
+    
   },
   "solve": {
     "message": "解决",
-    "description": "Solve menu item"
+    
   },
   "research": {
     "message": "研究",
-    "description": "Research menu item"
+    
   },
   "summarize": {
     "message": "总结",
-    "description": "Summarize menu item"
+    
   },
   "explain": {
     "message": "解释",
-    "description": "Explain menu item"
+    
   },
   "analyze": {
     "message": "分析",
-    "description": "Analyze menu item"
+    
   },
   "create image": {
     "message": "创建图像",
-    "description": "Create image menu item"
+    
   },
   "code": {
     "message": "代码",
-    "description": "Code menu item"
+    
   },
   "generate": {
     "message": "生成",
-    "description": "Generate menu item"
+    
+  },
+  "ask": {
+    "message": "询问",
+    
+  },
+  "ask_ai": {
+    "message": "询问AI",
+    
+  },
+  "paste_selection": {
+    "message": "粘贴选择",
+    
+  },
+  "switch_ai": {
+    "message": "切换AI",
+    
   },
   "no_perm": {
     "message": "可能无法工作(如果没有权限)"
@@ -329,5 +345,23 @@
   },
   "scripts_desc": {
     "message": "需要权限才能使用实验性内容脚本以增强功能。此功能为实验性，可能无法按预期工作，且不用于基本功能。点击每个图标以启用/禁用它们。"
+  },
+  "supported_label": {
+    "message": "支持的AI聊天机器人"
+  },
+  "required_label": {
+    "message": "使用需要权限"
+  },
+  "image_support_label": {
+    "message": "图像支持"
+  },
+  "unstable_label": {
+    "message": "目标：开放聊天/高级全域搜索"
+  },
+  "unstable_p": {
+    "message": "允许此扩展打开的标签监听和拦截任何查询，并根据用户请求发送数据。必须关闭这些标签以停止此功能。"
+  },
+  "enabled_label": {
+    "message": "目前已启用"
   }
 }

@@ -17,12 +17,13 @@ let currentLocale = DEFAULT_LOCALE;
 let translations = {};
 
 export async function initLocales() {
-  currentLocale =
-    localStorage.getItem("locale") ||
-    navigator.language.split("-")[0] ||
-    DEFAULT_LOCALE;
-  await loadTranslations(currentLocale);
-  initLocaleSelector();
+  chrome.storage.local.get("locale").then(async (e) => {
+    currentLocale =
+      e.locale || navigator.language.split("-")[0] || DEFAULT_LOCALE;
+    await loadTranslations(currentLocale);
+    initLocaleSelector();
+    updateUIText();
+  });
 }
 const localeSelect = document.getElementById("locale-select");
 export function initLocaleSelector() {
@@ -32,6 +33,10 @@ export function initLocaleSelector() {
       await loadTranslations(e.target.value);
 
       window.dispatchEvent(new Event("localechange"));
+      chrome.runtime.sendMessage({
+        message: "localechange",
+        locale: e.target.value,
+      });
     });
   }
 }
@@ -50,7 +55,7 @@ export async function loadTranslations(locale) {
     }
     translations = await response.json();
     currentLocale = locale;
-    localStorage.setItem("locale", locale);
+    chrome.storage.local.set({ locale });
   } catch (error) {
     console.error("Error loading translations:", error);
   }
@@ -97,9 +102,7 @@ export function updateUIText() {
   document.querySelector("#lang").textContent = t("lang");
   document.querySelector("#theme-label").textContent = t("theme");
   userThemeForm.querySelectorAll("label").forEach((label) => {
-    // find the label for attribute
-    let input = label.getAttribute("for");
-    label.textContent = t(`theme_${input}`);
+    label.textContent = t(`theme_${label.getAttribute("for")}`);
   });
   document.querySelector("#se-label").textContent = t(
     "tooltip_search_everywhere"
@@ -107,9 +110,26 @@ export function updateUIText() {
   closeScriptBtn.textContent = t("close_button");
   exp_sidebar.querySelector("h1").textContent = t("tooltip_experimental");
   exp_sidebar.querySelector("p").textContent = t("scripts_desc");
+  exp_sidebar.querySelector("#enabled-label").textContent = t("enabled_label");
+  exp_sidebar.querySelector("#supported-label").textContent =
+    t("supported_label");
+  exp_sidebar.querySelector("#required-label").textContent =
+    t("required_label");
+  exp_sidebar.querySelector("#image-support-label").textContent = t(
+    "image_support_label"
+  );
+  exp_sidebar.querySelector("#unstable-section label").textContent =
+    t("unstable_label");
+  exp_sidebar.querySelector("#unstable-section p").textContent =
+    t("unstable_p");
   enableAll.textContent = t("enable_all");
   revokeAll.textContent = t("revoke_all");
 }
 
 // Listen for locale changes
 window.addEventListener("localechange", updateUIText);
+chrome.runtime.onMessage.addListener((e) => {
+  if (e.message === "localechange") {
+    initLocales();
+  }
+});
