@@ -152,7 +152,7 @@ export function updateUIText() {
 }
 
 // Listen for locale changes
-window.addEventListener("localechange", updateUIText);
+window.addEventListener("localechange", () => initLocales());
 chrome.runtime.onMessage.addListener((e) => {
   if (e.message === "localechange") {
     initLocales();
