@@ -316,5 +316,80 @@
   },
   "time_seconds": {
     "message": "秒"
+  },
+  "time_days": {
+    "message": "日"
+  },
+  "time_weeks": {
+    "message": "週"
+  },
+  "background_label": {
+    "message": "背景"
+  },
+  "background_type": {
+    "message": "背景タイプ"
+  },
+  "background_default": {
+    "message": "デフォルト"
+  },
+  "background_image": {
+    "message": "ランダム画像"
+  },
+  "background_solid": {
+    "message": "単色"
+  },
+  "background_gradient": {
+    "message": "グラデーション"
+  },
+  "background_custom": {
+    "message": "カスタム画像"
+  },
+  "background_update": {
+    "message": "更新頻度"
+  },
+  "background_never": {
+    "message": "更新しない"
+  },
+  "background_startup": {
+    "message": "起動時"
+  },
+  "background_daily": {
+    "message": "毎日"
+  },
+  "background_hourly": {
+    "message": "毎時"
+  },
+  "change_every": {
+    "message": "更新間隔："
+  },
+  "bg_change_never": {
+    "message": "画像を変更しない"
+  },
+  "bg_change_refresh": {
+    "message": "更新時に変更"
+  },
+  "background": {
+    "message": "背景"
+  },
+  "upload_image": {
+    "message": "クリックしてアップロード..."
+  },
+  "gradient_angle": {
+    "message": "角度"
+  },
+  "bg_type_default": {
+    "message": "デフォルト"
+  },
+  "bg_type_bg-img": {
+    "message": "背景画像"
+  },
+  "bg_type_color": {
+    "message": "単色"
+  },
+  "bg_type_gradient": {
+    "message": "グラデーション"
+  },
+  "bg_type_own-img": {
+    "message": "カスタム画像"
   }
 }

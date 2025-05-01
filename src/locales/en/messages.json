@@ -316,5 +316,80 @@
   },
   "time_seconds": {
     "message": "Seconds"
+  },
+  "time_days": {
+    "message": "Days"
+  },
+  "time_weeks": {
+    "message": "Weeks"
+  },
+  "background_label": {
+    "message": "Background"
+  },
+  "background_type": {
+    "message": "Background Type"
+  },
+  "background_default": {
+    "message": "Default"
+  },
+  "background_image": {
+    "message": "Random Image"
+  },
+  "background_solid": {
+    "message": "Solid Color"
+  },
+  "background_gradient": {
+    "message": "Gradient"
+  },
+  "background_custom": {
+    "message": "Custom Image"
+  },
+  "background_update": {
+    "message": "Update Frequency"
+  },
+  "background_never": {
+    "message": "Never"
+  },
+  "background_startup": {
+    "message": "On Startup"
+  },
+  "background_daily": {
+    "message": "Daily"
+  },
+  "background_hourly": {
+    "message": "Hourly"
+  },
+  "change_every": {
+    "message": "Change Every"
+  },
+  "bg_change_never": {
+    "message": "Never Change Image"
+  },
+  "bg_change_refresh": {
+    "message": "Change On Refresh"
+  },
+  "background": {
+    "message": "Background"
+  },
+  "upload_image": {
+    "message": "Click to upload..."
+  },
+  "gradient_angle": {
+    "message": "Angle"
+  },
+  "bg_type_default": {
+    "message": "Default"
+  },
+  "bg_type_bg-img": {
+    "message": "Background Image"
+  },
+  "bg_type_color": {
+    "message": "Solid Color"
+  },
+  "bg_type_gradient": {
+    "message": "Gradient"
+  },
+  "bg_type_own-img": {
+    "message": "Own Image"
   }
 }

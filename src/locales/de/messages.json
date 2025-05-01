@@ -316,5 +316,80 @@
   },
   "time_seconds": {
     "message": "Sekunden"
+  },
+  "time_days": {
+    "message": "Tage"
+  },
+  "time_weeks": {
+    "message": "Wochen"
+  },
+  "background_label": {
+    "message": "Hintergrund"
+  },
+  "background_type": {
+    "message": "Hintergrundtyp"
+  },
+  "background_default": {
+    "message": "Standard"
+  },
+  "background_image": {
+    "message": "Zufallsbild"
+  },
+  "background_solid": {
+    "message": "Einzelfarbe"
+  },
+  "background_gradient": {
+    "message": "Farbverlauf"
+  },
+  "background_custom": {
+    "message": "Benutzerdefiniertes Bild"
+  },
+  "background_update": {
+    "message": "Aktualisierungsintervall"
+  },
+  "background_never": {
+    "message": "Nie"
+  },
+  "background_startup": {
+    "message": "Beim Start"
+  },
+  "background_daily": {
+    "message": "Täglich"
+  },
+  "background_hourly": {
+    "message": "Stündlich"
+  },
+  "change_every": {
+    "message": "Ändern Alle"
+  },
+  "bg_change_never": {
+    "message": "Bild Niemals Ändern"
+  },
+  "bg_change_refresh": {
+    "message": "Beim Aktualisieren Ändern"
+  },
+  "background": {
+    "message": "Hintergrund"
+  },
+  "upload_image": {
+    "message": "Klicken zum Hochladen..."
+  },
+  "gradient_angle": {
+    "message": "Winkel"
+  },
+  "bg_type_default": {
+    "message": "Standard"
+  },
+  "bg_type_bg-img": {
+    "message": "Hintergrundbild"
+  },
+  "bg_type_color": {
+    "message": "Einfarbig"
+  },
+  "bg_type_gradient": {
+    "message": "Farbverlauf"
+  },
+  "bg_type_own-img": {
+    "message": "Eigenes Bild"
   }
 }

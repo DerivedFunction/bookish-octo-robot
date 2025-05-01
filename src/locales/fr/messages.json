@@ -288,7 +288,7 @@
     "message": "Cible : Chats ouverts/Recherche Avancée Partout"
   },
   "unstable_p": {
-    "message": "Permet aux onglets ouverts par cette extension d'écouter et d'intercepter toutes les requêtes et de renvoyer des données (si demandé par l'utilisateur). Vous devez fermer ces onglets pour arrêter cette fonctionnalité."
+    "message": "Permet aux ongtabs ouverts par cette extension d'écouter et d'intercepter toutes les requêtes et de renvoyer des données (si demandé par l'utilisateur). Vous devez fermer ces onglets pour arrêter cette fonctionnalité."
   },
   "enabled_label": {
     "message": "Actuellement Activé"
@@ -315,6 +315,57 @@
     "message": "Minutes"
   },
   "time_seconds": {
-    "message": "Seconds"
+    "message": "Secondes"
+  },
+  "time_days": {
+    "message": "Jours"
+  },
+  "time_weeks": {
+    "message": "Semaines"
+  },
+  "background_label": {
+    "message": "Arrière-plan"
+  },
+  "background_type": {
+    "message": "Type d'arrière-plan"
+  },
+  "background_default": {
+    "message": "Par défaut"
+  },
+  "background_image": {
+    "message": "Image aléatoire"
+  },
+  "background_solid": {
+    "message": "Couleur unie"
+  },
+  "background_gradient": {
+    "message": "Dégradé"
+  },
+  "background_custom": {
+    "message": "Image personnalisée"
+  },
+  "background_update": {
+    "message": "Fréquence de mise à jour"
+  },
+  "background_never": {
+    "message": "Jamais"
+  },
+  "background_startup": {
+    "message": "Au démarrage"
+  },
+  "background_daily": {
+    "message": "Quotidien"
+  },
+  "background_hourly": {
+    "message": "Toutes les heures"
+  },
+  "change_every": {
+    "message": "Changer Tous Les"
+  },
+  "bg_change_never": {
+    "message": "Ne Jamais Changer l'Image"
+  },
+  "bg_change_refresh": {
+    "message": "Changer à l'Actualisation"
   }
 }

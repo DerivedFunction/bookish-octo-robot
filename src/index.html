@@ -124,34 +124,41 @@
       </div>
       <div class="section">
         <div class="horizontal-container">
-          <span>Background</span>
-          <select id="bg-select">
-            <option value="default">Default</option>
-            <option value="bg-img">Pexels/Unsplash</option>
-            <option value="color">Solid Color</option>
-            <option value="gradient">Gradient</option>
-            <option value="own-img">Upload Image</option>
-          </select>
+          <div class="form-group">
+            <label for="bg-select" id="bg-label">Background</label>
+            <select name="bg-select" id="bg-select">
+              <option value="default" selected>Default</option>
+              <option value="bg-img">Background Image</option>
+              <option value="color">Solid Color</option>
+              <option value="gradient">Gradient</option>
+              <option value="own-img">Own Image</option>
+            </select>
+          </div>
           <button id="save-bg" class="submit"></button>
         </div>
         <div class="horizontal-container">
-          <select id="bg-img-exp">
-            <option value="-1">Never Change Image</option>
-            <option value="0">Change Every New Tab</option>
-            <option value="300">Change Every 5 Minutes</option>
-            <!-- 5 * 60 = 300 seconds -->
-            <option value="900">Change Every 15 Minutes</option>
-            <!-- 15 * 60 = 900 seconds -->
-            <option value="1800">Change Every 30 Minutes</option>
-            <!-- 30 * 60 = 1800 seconds -->
-            <option value="3600">Change Every Hour</option>
-            <!-- 60 * 60 = 3600 seconds -->
-            <option value="43200">Change Every 12 Hours</option>
-            <!-- 12 * 60 * 60 = 43200 seconds -->
-            <option value="86400">Change Daily</option>
-            <!-- 24 * 60 * 60 = 86400 seconds -->
-            <option value="604800">Change Weekly</option>
-            <!-- 24 * 60 * 60 * 7 = 604800 seconds -->
+          <select name="bg-img-exp" id="bg-img-exp">
+            <option value="-1" data-time="never">Never</option>
+            <option value="0" data-time="refresh">On Refresh</option>
+            <option value="300" data-time="5" data-unit="minutes">
+              Every 5 Minutes
+            </option>
+            <option value="900" data-time="15" data-unit="minutes">
+              Every 15 Minutes
+            </option>
+            <option value="1800" data-time="30" data-unit="minutes">
+              Every 30 Minutes
+            </option>
+            <option value="3600" data-time="1" data-unit="hours">
+              Every Hour
+            </option>
+            <option value="43200" data-time="12" data-unit="hours">
+              Every 12 Hours
+            </option>
+            <option value="86400" data-time="1" data-unit="days">Daily</option>
+            <option value="604800" data-time="1" data-unit="weeks">
+              Weekly
+            </option>
           </select>
           <label for="solid-color"></label>
           <input type="color" id="solid-color" class="input-field" />

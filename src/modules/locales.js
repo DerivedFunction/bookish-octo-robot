@@ -11,8 +11,14 @@ import {
 import { suggestDisplay } from "./suggestions.js";
 import { userThemeForm } from "./theme.js";
 import { getSuggestionButtons } from "./suggestions.js";
-import { unitLabel, unitToggle, weatherField } from "./weather.js";
+import { unitLabel, weatherField } from "./weather.js";
 import { timeFormat } from "./updateTime.js";
+import {
+  backgroundSelect,
+  bgImgExpSelect,
+  bgNum,
+  ownImgLabel,
+} from "./backgroundImage.js";
 // Handle localization
 const DEFAULT_LOCALE = "en";
 let currentLocale = DEFAULT_LOCALE;
@@ -77,6 +83,15 @@ export function t(key, substitutions = {}) {
   return text;
 }
 
+export function formatTimeOption(option) {
+  if (option.dataset.time === "never") return t("bg_change_never");
+  if (option.dataset.time === "refresh") return t("bg_change_refresh");
+
+  const time = option.dataset.time;
+  const unit = option.dataset.unit;
+  return `${t("change_every")} ${time} ${t(`time_${unit}`)}`;
+}
+
 // Update UI text when locale changes
 export function updateUIText() {
   getGreeting();
@@ -115,8 +130,7 @@ export function updateUIText() {
   timeFormat.querySelectorAll("label").forEach((label) => {
     if (label.getAttribute("for") === "no-time")
       label.textContent = t("sug-hide");
-    else
-      label.textContent = t(`${label.getAttribute("for")} ${t("time_hours")}`);
+    else label.textContent = `${label.getAttribute("for")} ${t("time_hours")}`;
   });
   closeScriptBtn.textContent = t("close_button");
   exp_sidebar.querySelector("h1").textContent = t("tooltip_experimental");
@@ -135,6 +149,17 @@ export function updateUIText() {
     t("unstable_p");
   enableAll.textContent = t("enable_all");
   revokeAll.textContent = t("revoke_all");
+
+  document.querySelector("#bg-label").textContent = t("background");
+  ownImgLabel.textContent = t("upload_image");
+  bgNum.placeholder = t("gradient_angle");
+  backgroundSelect.querySelectorAll("option").forEach((option) => {
+    option.textContent = t(`bg_type_${option.value}`);
+  });
+
+  bgImgExpSelect.querySelectorAll("option").forEach((option) => {
+    option.textContent = formatTimeOption(option);
+  });
 }
 
 // Listen for locale changes

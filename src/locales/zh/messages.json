@@ -316,5 +316,80 @@
   },
   "time_seconds": {
     "message": "秒"
+  },
+  "time_days": {
+    "message": "天"
+  },
+  "time_weeks": {
+    "message": "周"
+  },
+  "background_label": {
+    "message": "背景"
+  },
+  "background_type": {
+    "message": "背景类型"
+  },
+  "background_default": {
+    "message": "默认"
+  },
+  "background_image": {
+    "message": "随机图片"
+  },
+  "background_solid": {
+    "message": "纯色"
+  },
+  "background_gradient": {
+    "message": "渐变色"
+  },
+  "background_custom": {
+    "message": "自定义图片"
+  },
+  "background_update": {
+    "message": "更新频率"
+  },
+  "background_never": {
+    "message": "从不"
+  },
+  "background_startup": {
+    "message": "启动时"
+  },
+  "background_daily": {
+    "message": "每天"
+  },
+  "background_hourly": {
+    "message": "每小时"
+  },
+  "change_every": {
+    "message": "每"
+  },
+  "bg_change_never": {
+    "message": "从不更换图片"
+  },
+  "bg_change_refresh": {
+    "message": "刷新时更换"
+  },
+  "background": {
+    "message": "背景"
+  },
+  "upload_image": {
+    "message": "点击上传..."
+  },
+  "gradient_angle": {
+    "message": "角度"
+  },
+  "bg_type_default": {
+    "message": "默认"
+  },
+  "bg_type_bg-img": {
+    "message": "背景图片"
+  },
+  "bg_type_color": {
+    "message": "纯色"
+  },
+  "bg_type_gradient": {
+    "message": "渐变"
+  },
+  "bg_type_own-img": {
+    "message": "自定义图片"
   }
 }
