@@ -25,10 +25,14 @@ let currentLocale = DEFAULT_LOCALE;
 let translations = {};
 
 export async function initLocales() {
-  await chrome.storage.local.get("locale").then(async (e) => {
-    currentLocale =
-      e.locale || navigator.language.split("-")[0] || DEFAULT_LOCALE;
-  });
+  // First check storage for explicitly chosen locale
+  const stored = await chrome.storage.local.get("locale");
+  if (stored.locale) {
+    currentLocale = stored.locale;
+  } else {
+    // If no explicit choice, use chrome.i18n.getUILanguage()
+    currentLocale = chrome.i18n.getUILanguage().split("-")[0] || DEFAULT_LOCALE;
+  }
   await loadTranslations(currentLocale);
   initLocaleSelector();
   updateUIText();
@@ -38,6 +42,7 @@ export function initLocaleSelector() {
   if (localeSelect) {
     localeSelect.value = currentLocale;
     localeSelect.addEventListener("change", async (e) => {
+      await chrome.storage.local.set({ locale: e.target.value });
       await loadTranslations(e.target.value);
       window.dispatchEvent(new Event("localechange"));
       chrome.runtime.sendMessage({
@@ -50,7 +55,29 @@ export function initLocaleSelector() {
 
 export async function loadTranslations(locale) {
   try {
-    const response = await fetch(`/locales/${locale}/messages.json`);
+    // First try to get translations from chrome.i18n if no explicit locale is set
+    const stored = await chrome.storage.local.get("locale");
+    if (!stored.locale && chrome.i18n) {
+      translations = {};
+      // Load each message from chrome.i18n
+      const keys = Object.keys(
+        await fetch(`/_locales/${DEFAULT_LOCALE}/messages.json`).then((r) =>
+          r.json()
+        )
+      );
+      for (const key of keys) {
+        const msg = chrome.i18n.getMessage(key);
+        if (msg) {
+          translations[key] = { message: msg };
+        }
+      }
+      currentLocale = locale;
+      return;
+    }
+
+    // Fall back to loading from file if chrome.i18n doesn't have the translations
+    // or if locale was explicitly chosen
+    const response = await fetch(`/_locales/${locale}/messages.json`);
     if (!response.ok) {
       console.warn(
         `Translations for ${locale} not found, falling back to ${DEFAULT_LOCALE}`
@@ -62,13 +89,18 @@ export async function loadTranslations(locale) {
     }
     translations = await response.json();
     currentLocale = locale;
-    chrome.storage.local.set({ locale });
+
+    // Only store in local if explicitly chosen through selector
+    if (document.getElementById("locale-select")?.value === locale) {
+      chrome.storage.local.set({ locale });
+    }
   } catch (error) {
     console.error("Error loading translations:", error);
   }
 }
 
 export function t(key, substitutions = {}) {
+  key = key.replace(" ", "_");
   const translation = translations[key];
   if (!translation) {
     console.warn(`Translation missing for key: ${key}`);
@@ -129,7 +161,7 @@ export function updateUIText() {
   timeFormat.querySelector("legend").textContent = t("time_format");
   timeFormat.querySelectorAll("label").forEach((label) => {
     if (label.getAttribute("for") === "no-time")
-      label.textContent = t("sug-hide");
+      label.textContent = t("sug_hide");
     else label.textContent = `${label.getAttribute("for")} ${t("time_hours")}`;
   });
   closeScriptBtn.textContent = t("close_button");

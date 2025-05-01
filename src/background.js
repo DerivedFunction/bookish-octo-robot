@@ -1,159 +1,257 @@
 let sidebarStatus = false;
-let selectedEngine = getSearchEngine();
+let selectedEngine = null;
 let tabReceived = 0;
-let translations = {};
-let currentLocale = "en";
+let locale = null;
+let localeKeys = null;
+let prompts = [];
+let aiList = [];
+let unstable = false;
+let menusCreated = false;
+let hasScripts = false;
 
-async function loadBackgroundTranslations(locale) {
-  try {
-    const response = await fetch(`/locales/${locale}/messages.json`);
-    if (!response.ok) {
-      console.warn(`Translations for ${locale} not found, falling back to en`);
-      if (locale !== "en") {
-        return loadBackgroundTranslations("en");
-      }
-      return;
-    }
-    translations = await response.json();
-    currentLocale = locale;
-  } catch (error) {
-    console.error("Error loading translations:", error);
-  }
+// Initialize core functionality
+async function initialize() {
+  await getLocale();
+  selectedEngine = await getSearchEngine();
+  await getPrompts();
+
+  // Set up event listeners after initialization
+  setupEventListeners();
 }
 
-function t(key) {
-  const translation = translations[key];
-  if (!translation) {
-    console.warn(`Translation missing for key: ${key}`);
-    return key;
-  }
-  return translation.message;
-}
-
-chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-  let prompt = info.menuItemId;
-  let query = prompt == "paste" ? "" : prompt;
-  if (info.selectionText) {
-    query = `${query} ${info.selectionText}`;
-  } else if (info.linkUrl) {
-    query = `${query} ${info.linkUrl}`;
-  } else if (tab.url) {
-    query = `${query} ${tab.url}`;
-  } else {
-    query = "";
-  }
-  query =
-    info.parentMenuItemId === "switch" || info.menuItemId == "switch"
-      ? null
-      : query.trim();
-  if (!query) return;
-  console.log(`Sending ${query} to sidebar...`);
-  chrome.storage.local.set({ query });
-  chrome.storage.local.set({ time: Date.now() });
-  chrome.runtime
-    .sendMessage({
-      message: "sendQuery",
-    })
-    .catch(() => {});
-  try {
-    console.log("sidebar status", sidebarStatus, "unstable status", unstable);
-    if (!unstable) {
-      browser.sidebarAction.setPanel({ panel: "./index.html#sidebar" });
-      browser.sidebarAction.open();
-      chrome.storage.local.set({ lastQuery: query });
-      return;
+function setupEventListeners() {
+  chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+    let prompt = info.menuItemId;
+    let query = prompt == "paste" ? "" : prompt;
+    if (info.selectionText) {
+      query = `${query} ${info.selectionText}`;
+    } else if (info.linkUrl) {
+      query = `${query} ${info.linkUrl}`;
+    } else if (tab.url) {
+      query = `${query} ${tab.url}`;
+    } else {
+      query = "";
     }
-    if (!sidebarStatus)
-      browser.sidebarAction.open().catch((error) => {
-        console.error("Failed to open sidebar:", error);
-        createTab(query);
-      });
-    chrome.storage.local.set({ [selectedEngine.name]: true });
-  } catch (error) {
-    console.log("In chrome. Creating tab", error);
-    createTab(query);
-  }
-});
-chrome.contextMenus.onClicked.addListener(async (info) => {
-  let firefox = false;
-  try {
-    await browser.sidebarAction.isOpen({}).then((e) => (firefox = e));
-  } catch {
-    firefox = false;
-  }
-  sidebarStatus = hasScripts && firefox;
-  if (info.menuItemId == "switch" || info.parentMenuItemId == "switch") {
-    await switchEngine(info.menuItemId);
-    return;
-  }
-});
-chrome.omnibox.onInputEntered.addListener(async (text) => {
-  let query;
-  await chrome.storage.local.set({ time: Date.now() });
-  if (text.startsWith("@")) {
-    let engineName = text.split(" ")[0].slice(1).toLowerCase();
-    for (const ai of aiList) {
-      if (
-        ai.name.toLowerCase() === engineName ||
-        ai.omnibox.includes(engineName)
-      ) {
-        query = text.slice(engineName.length + 1).trim();
-        await chrome.storage.local.set({ query });
-        await createTab(query, ai);
+    query =
+      info.parentMenuItemId === "switch" || info.menuItemId == "switch"
+        ? null
+        : query.trim();
+    if (!query) return;
+    console.log(`Sending ${query} to sidebar...`);
+    chrome.storage.local.set({ query });
+    chrome.storage.local.set({ time: Date.now() });
+    chrome.runtime
+      .sendMessage({
+        message: "sendQuery",
+      })
+      .catch(() => {});
+    try {
+      console.log("sidebar status", sidebarStatus, "unstable status", unstable);
+      if (!unstable) {
+        browser.sidebarAction.setPanel({ panel: "./index.html#sidebar" });
+        browser.sidebarAction.open();
+        chrome.storage.local.set({ lastQuery: query });
         return;
       }
-    }
-  }
-  query = text.trim();
-  await chrome.storage.local.set({ query });
-  await createTab(query);
-});
-chrome.omnibox.onInputChanged.addListener((text, suggest) => {
-  if (text.startsWith("@")) {
-    let engineName = text.split(" ")[0].slice(1).toLowerCase();
-    for (const ai of aiList) {
-      if (
-        ai.name.toLowerCase() === engineName ||
-        ai.omnibox.includes(engineName)
-      ) {
-        chrome.omnibox.setDefaultSuggestion({
-          description: `${t("ask")} ${ai.name} (@${ai.omnibox[0]}, @${
-            ai.omnibox[1]
-          })`,
+      if (!sidebarStatus)
+        browser.sidebarAction.open().catch((error) => {
+          console.error("Failed to open sidebar:", error);
+          createTab(query);
         });
-        return;
+      chrome.storage.local.set({ [selectedEngine.name]: true });
+    } catch (error) {
+      console.log("In chrome. Creating tab", error);
+      createTab(query);
+    }
+  });
+
+  chrome.contextMenus.onClicked.addListener(async (info) => {
+    let firefox = false;
+    try {
+      await browser.sidebarAction.isOpen({}).then((e) => (firefox = e));
+    } catch {
+      firefox = false;
+    }
+    sidebarStatus = hasScripts && firefox;
+    if (info.menuItemId == "switch" || info.parentMenuItemId == "switch") {
+      await switchEngine(info.menuItemId);
+      return;
+    }
+  });
+
+  chrome.omnibox.onInputEntered.addListener(async (text) => {
+    let query;
+    await chrome.storage.local.set({ time: Date.now() });
+    if (text.startsWith("@")) {
+      let engineName = text.split(" ")[0].slice(1).toLowerCase();
+      for (const ai of aiList) {
+        if (
+          ai.name.toLowerCase() === engineName ||
+          ai.omnibox.includes(engineName)
+        ) {
+          query = text.slice(engineName.length + 1).trim();
+          await chrome.storage.local.set({ query });
+          await createTab(query, ai);
+          return;
+        }
       }
     }
-    setDefaultSuggestion();
-  } else {
-    setDefaultSuggestion();
-    for (const ai of aiList) {
-      if (ai.name !== selectedEngine?.name)
-        suggest([
-          {
-            content: `@${ai.name} ${text}`,
+    query = text.trim();
+    await chrome.storage.local.set({ query });
+    await createTab(query);
+  });
+
+  chrome.omnibox.onInputChanged.addListener((text, suggest) => {
+    if (text.startsWith("@")) {
+      let engineName = text.split(" ")[0].slice(1).toLowerCase();
+      for (const ai of aiList) {
+        if (
+          ai.name.toLowerCase() === engineName ||
+          ai.omnibox.includes(engineName)
+        ) {
+          chrome.omnibox.setDefaultSuggestion({
             description: `${t("ask")} ${ai.name} (@${ai.omnibox[0]}, @${
               ai.omnibox[1]
             })`,
-          },
-        ]);
+          });
+          return;
+        }
+      }
+      setDefaultSuggestion();
+    } else {
+      setDefaultSuggestion();
+      for (const ai of aiList) {
+        if (ai.name !== selectedEngine?.name)
+          suggest([
+            {
+              content: `@${ai.name} ${text}`,
+              description: `${t("ask")} ${ai.name} (@${ai.omnibox[0]}, @${
+                ai.omnibox[1]
+              })`,
+            },
+          ]);
+      }
     }
-  }
-});
-chrome.omnibox.onInputStarted.addListener(() => {
-  setDefaultSuggestion();
-});
-function setDefaultSuggestion() {
-  if (selectedEngine) {
-    chrome.omnibox.setDefaultSuggestion({
-      description: `${t("ask")} ${selectedEngine.name} (@${
-        selectedEngine.omnibox[0]
-      }, @${selectedEngine.omnibox[1]})`,
-    });
+  });
+
+  chrome.omnibox.onInputStarted.addListener(() => {
+    setDefaultSuggestion();
+  });
+
+  chrome.runtime.onMessage.addListener(async (e) => {
+    if (e.message === "selectedSearchEngine") {
+      console.log("AI chatbot changed", e.engine?.name);
+      selectedEngine = e.engine;
+      await getScriptStatus();
+      updateMenu(e.engine);
+    } else if (e.message === "reset") {
+      console.log("Removing context menus");
+      await deleteMenu();
+    } else if (e.message === "Experimental") {
+      console.log("Scripting Permissions changed for ", selectedEngine?.name);
+      await getScriptStatus();
+      updateMenu(e.engine);
+    } else if (e.message === "localechange") {
+      await getLocale();
+      await loadMenu();
+    }
+  });
+
+  chrome.action.onClicked.addListener(async () => {
+    if (selectedEngine) {
+      let url = hostnameToURL();
+      chrome.tabs.create({ url: url });
+    }
+  });
+
+  chrome.runtime.onMessage.addListener(
+    async (request, sender, sendResponse) => {
+      if (request.buttonClicked) {
+        const keys = await chrome.storage.local.get();
+
+        let noneEnabled = true;
+
+        for (const ai of aiList) {
+          const aiName = ai.name;
+          if (keys.hasOwnProperty(aiName) && keys[aiName] === true) {
+            noneEnabled = false;
+            break;
+          }
+        }
+
+        if (noneEnabled) {
+          const allKeys = await chrome.storage.local.get(null);
+          const files = Object.keys(allKeys).filter((key) =>
+            key.startsWith("pasted-file-")
+          );
+          if (files.length > 0) {
+            await chrome.storage.local.remove(files);
+            chrome.runtime.sendMessage({ message: "clearImage" });
+          }
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          await chrome.storage.local.remove("query");
+        }
+      }
+    }
+  );
+
+  chrome.runtime.onMessage.addListener((e) => {
+    if (e.ping) {
+      tabReceived++;
+      setTimeout(() => tabReceived--, 1000);
+    }
+  });
+
+  chrome.runtime.onMessage.addListener((e) => {
+    if (e.unstable) {
+      unstable = e.value;
+      console.log("unstable status", unstable);
+    }
+  });
+
+  chrome.runtime.onMessage.addListener((e) => {
+    if (e.lastResponse) {
+      function stripAttributes(html) {
+        html = html.replace(/<svg[^>]*?>.*?<\/svg>/gis, "");
+
+        html = html.replace(/<([a-z]+)([^>]*)>/gi, (match, tagName, attrs) => {
+          tagName = tagName.toLowerCase();
+
+          if (tagName === "a") {
+            const hrefMatch = attrs.match(/\s*href\s*=\s*(['"])(.*?)\1/i);
+            return hrefMatch ? `<a href="${hrefMatch[2]}">` : `<a>`;
+          }
+
+          if (tagName === "img") {
+            const srcMatch = attrs.match(/\s*src\s*=\s*(['"])(.*?)\1/i);
+            if (srcMatch) {
+              return `<img src="${srcMatch[2]}" style="max-width:150px; max-height:150px; height:auto; width:auto;">`;
+            }
+            return `<img style="max-width:150px; max-height:150px; height:auto; width:auto;">`;
+          }
+
+          return `<${tagName}>`;
+        });
+        return html;
+      }
+
+      chrome.runtime.sendMessage({
+        content: stripAttributes(e.lastResponse),
+        engine: e.engine,
+      });
+    }
+  });
+}
+
+// Start initialization
+initialize().catch(console.error);
+
+// Remove the simple t() function and replace with proper i18n handling
+function t(key) {
+  if (!locale) {
+    return chrome.i18n.getMessage(key.replace(" ", "_"), null) || key;
   } else {
-    chrome.omnibox.setDefaultSuggestion({
-      description: t("ask_ai"),
-    });
+    return localeKeys?.[key]?.message || key;
   }
 }
 
@@ -238,15 +336,8 @@ function hostnameToURL(engine = null) {
 
 async function loadMenu() {
   await deleteMenu();
-
   selectedEngine = await getSearchEngine();
   await getScriptStatus();
-
-  const { locale } = await chrome.storage.local.get("locale");
-  if (locale) {
-    await loadBackgroundTranslations(locale);
-  }
-
   let response = selectedEngine
     ? `${t("ask")} ${selectedEngine?.name}`
     : t("ask_ai");
@@ -306,6 +397,20 @@ async function loadMenu() {
   menusCreated = true;
 }
 
+async function getLocale() {
+  localeKeys = null;
+  locale = null;
+  await chrome.storage.local.get("locale").then((e) => {
+    if (e.locale) locale = e.locale.split("-")[0];
+  });
+  if (locale) {
+    const response = await fetch(`/_locales/${locale}/messages.json`);
+    if (response.ok) {
+      localeKeys = await response.json();
+    }
+  }
+}
+
 function updateMenu(engine) {
   if (menusCreated) {
     chrome.contextMenus.update(
@@ -353,11 +458,6 @@ async function switchEngine(name) {
     if (ai.name === name) selectedEngine = ai;
   });
 
-  const { locale } = await chrome.storage.local.get("locale");
-  if (locale) {
-    await loadBackgroundTranslations(locale);
-  }
-
   await chrome.storage.local.set({ engine: selectedEngine });
   await loadMenu();
   try {
@@ -390,27 +490,6 @@ async function switchEngine(name) {
     }
   }
 }
-chrome.runtime.onMessage.addListener(async (e) => {
-  if (e.message === "selectedSearchEngine") {
-    console.log("AI chatbot changed", e.engine?.name);
-    selectedEngine = e.engine;
-    await getScriptStatus();
-    updateMenu(e.engine);
-  } else if (e.message === "reset") {
-    console.log("Removing context menus");
-    await deleteMenu();
-  } else if (e.message === "Experimental") {
-    console.log("Scripting Permissions changed for ", selectedEngine?.name);
-    await getScriptStatus();
-    updateMenu(e.engine);
-  } else if (e.message === "localechange") {
-    const { locale } = await chrome.storage.local.get("locale");
-    if (locale) {
-      await loadBackgroundTranslations(locale);
-      await loadMenu();
-    }
-  }
-});
 async function getScriptStatus(name = null) {
   let curHasScripts = false;
   try {
@@ -426,98 +505,3 @@ async function getScriptStatus(name = null) {
   }
   return curHasScripts;
 }
-
-let prompts = [];
-let aiList = [];
-let unstable = false;
-let menusCreated = false;
-let hasScripts = false;
-getPrompts();
-
-chrome.action.onClicked.addListener(async () => {
-  if (selectedEngine) {
-    let url = hostnameToURL();
-    chrome.tabs.create({ url: url });
-  }
-});
-
-chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-  if (request.buttonClicked) {
-    const keys = await chrome.storage.local.get();
-
-    let noneEnabled = true;
-
-    for (const ai of aiList) {
-      const aiName = ai.name;
-      if (keys.hasOwnProperty(aiName) && keys[aiName] === true) {
-        noneEnabled = false;
-        break;
-      }
-    }
-
-    if (noneEnabled) {
-      const allKeys = await chrome.storage.local.get(null);
-      const files = Object.keys(allKeys).filter((key) =>
-        key.startsWith("pasted-file-")
-      );
-      if (files.length > 0) {
-        await chrome.storage.local.remove(files);
-        chrome.runtime.sendMessage({ message: "clearImage" });
-      }
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      await chrome.storage.local.remove("query");
-    }
-  }
-});
-chrome.runtime.onMessage.addListener((e) => {
-  if (e.ping) {
-    tabReceived++;
-    setTimeout(() => tabReceived--, 1000);
-  }
-});
-chrome.runtime.onMessage.addListener((e) => {
-  if (e.unstable) {
-    unstable = e.value;
-    console.log("unstable status", unstable);
-  }
-});
-chrome.runtime.onMessage.addListener((e) => {
-  if (e.lastResponse) {
-    function stripAttributes(html) {
-      html = html.replace(/<svg[^>]*?>.*?<\/svg>/gis, "");
-
-      html = html.replace(/<([a-z]+)([^>]*)>/gi, (match, tagName, attrs) => {
-        tagName = tagName.toLowerCase();
-
-        if (tagName === "a") {
-          const hrefMatch = attrs.match(/\s*href\s*=\s*(['"])(.*?)\1/i);
-          return hrefMatch ? `<a href="${hrefMatch[2]}">` : `<a>`;
-        }
-
-        if (tagName === "img") {
-          const srcMatch = attrs.match(/\s*src\s*=\s*(['"])(.*?)\1/i);
-          if (srcMatch) {
-            return `<img src="${srcMatch[2]}" style="max-width:150px; max-height:150px; height:auto; width:auto;">`;
-          }
-          return `<img style="max-width:150px; max-height:150px; height:auto; width:auto;">`;
-        }
-
-        return `<${tagName}>`;
-      });
-      return html;
-    }
-
-    chrome.runtime.sendMessage({
-      content: stripAttributes(e.lastResponse),
-      engine: e.engine,
-    });
-  }
-});
-
-// handle locale changes
-chrome.runtime.onMessage.addListener((e) => {
-  if (e.message === "localechange")
-    chrome.storage.local.get("locale").then((e) => {
-      loadBackgroundTranslations(e.locale);
-    });
-});

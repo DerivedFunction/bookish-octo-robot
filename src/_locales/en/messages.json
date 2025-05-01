@@ -1,0 +1,392 @@
+{
+  "greeting_morning": {
+    "message": "Good Morning"
+  },
+  "greeting_afternoon": {
+    "message": "Good Afternoon"
+  },
+  "greeting_evening": {
+    "message": "Good Evening"
+  },
+  "greeting_hello": {
+    "message": "Hello"
+  },
+  "greeting_help": {
+    "message": "How can I help you today?"
+  },
+  "search_placeholder": {
+    "message": "What can I do for you?"
+  },
+  "welcome_name": {
+    "message": "$GREETING$, $NAME$.",
+
+    "placeholders": {
+      "greeting": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      }
+    }
+  },
+  "reset_button": {
+    "message": "Reset to Defaults"
+  },
+  "close_button": {
+    "message": "Close"
+  },
+  "options_title": {
+    "message": "Options"
+  },
+  "name_label": {
+    "message": "Name"
+  },
+  "greeting_type_label": {
+    "message": "Greeting Type"
+  },
+  "formal_option": {
+    "message": "Formal"
+  },
+  "informal_option": {
+    "message": "Informal"
+  },
+  "custom_option": {
+    "message": "Custom"
+  },
+  "none_option": {
+    "message": "None"
+  },
+  "enter_custom_greeting": {
+    "message": "Enter your custom greeting"
+  },
+  "show_suggestions_label": {
+    "message": "Show Suggestions"
+  },
+  "sug_show": {
+    "message": "Show"
+  },
+  "sug_hide": {
+    "message": "Hide"
+  },
+  "lang": {
+    "message": "Language"
+  },
+  "theme": {
+    "message": "Theme"
+  },
+  "theme_auto": {
+    "message": "Auto"
+  },
+  "theme_dark": {
+    "message": "Dark"
+  },
+  "theme_light": {
+    "message": "Light"
+  },
+  "tooltip_options": {
+    "message": "Options"
+  },
+  "tooltip_experimental": {
+    "message": "Experimental Features"
+  },
+  "tooltip_fetch_prompt": {
+    "message": "Fetch Last Prompt"
+  },
+  "tooltip_current_ai": {
+    "message": "Current AI"
+  },
+  "tooltip_pick_ai": {
+    "message": "Choose AI"
+  },
+  "tooltip_advanced": {
+    "message": "Advanced Options"
+  },
+  "tooltip_upload_file": {
+    "message": "Upload Files"
+  },
+  "tooltip_get_response": {
+    "message": "Get Response"
+  },
+  "tooltip_send_again": {
+    "message": "Send Again"
+  },
+  "tooltip_empty_message": {
+    "message": "Empty Message"
+  },
+  "tooltip_search_everywhere": {
+    "message": "Search Everywhere"
+  },
+  "prompt_solve": {
+    "message": "Solve the following problem and give step-by-step logic: "
+  },
+  "prompt_solve_quick": {
+    "message": "Give a Quick Answer"
+  },
+  "prompt_solve_check": {
+    "message": "Check My Answer"
+  },
+  "prompt_solve_fill": {
+    "message": "Fill in the Blanks"
+  },
+  "prompt_research": {
+    "message": "Research "
+  },
+  "prompt_research_compare": {
+    "message": "Compare Options"
+  },
+  "prompt_research_latest": {
+    "message": "Find Latest Info"
+  },
+  "prompt_summarize": {
+    "message": "Summarize briefly and concisely, with bullet points on key terms: "
+  },
+  "prompt_summarize_quick": {
+    "message": "Give a Quick Summary"
+  },
+  "prompt_summarize_paraphrase": {
+    "message": "Paraphrase"
+  },
+  "prompt_summarize_highlight": {
+    "message": "Highlight Important Terms"
+  },
+  "prompt_explain": {
+    "message": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
+  },
+  "prompt_explain_brief": {
+    "message": "Explain briefly"
+  },
+  "prompt_explain_detail": {
+    "message": "Explain in Detail"
+  },
+  "prompt_analyze": {
+    "message": "Analyze the following: "
+  },
+  "prompt_analyze_pros": {
+    "message": "Analyze Pros and Cons"
+  },
+  "prompt_analyze_fact": {
+    "message": "Fact Check"
+  },
+  "prompt_analyze_patterns": {
+    "message": "Find Patterns or Trends"
+  },
+  "prompt_analyze_strengths": {
+    "message": "Spot Strengths and Weaknesses"
+  },
+  "prompt_analyze_errors": {
+    "message": "Fix Errors"
+  },
+  "prompt_image": {
+    "message": "Generate an image of "
+  },
+  "prompt_code": {
+    "message": "Code and explain: "
+  },
+  "prompt_code_fix": {
+    "message": "Fix Errors"
+  },
+  "prompt_code_error": {
+    "message": "Explain This Error Message"
+  },
+  "prompt_code_refactor": {
+    "message": "Refactor"
+  },
+  "prompt_code_docs": {
+    "message": "Generate Code Documentation"
+  },
+  "prompt_code_tests": {
+    "message": "Generate Code Tests"
+  },
+  "prompt_code_review": {
+    "message": "Review and Comment"
+  },
+  "prompt_generate": {
+    "message": "Create a plan or idea: "
+  },
+  "prompt_generate_ideas": {
+    "message": "Brainstorm Ideas"
+  },
+  "prompt_generate_plan": {
+    "message": "Make a Plan"
+  },
+  "prompt_generate_draft": {
+    "message": "Write a Draft"
+  },
+  "prompt_generate_outline": {
+    "message": "Create an Outline"
+  },
+  "prompt_generate_email": {
+    "message": "Write an Email"
+  },
+  "prompt_generate_resume": {
+    "message": "Write and improve my Resume"
+  },
+  "solve": {
+    "message": "Solve"
+  },
+  "research": {
+    "message": "Research"
+  },
+  "summarize": {
+    "message": "Summarize"
+  },
+  "explain": {
+    "message": "Explain"
+  },
+  "analyze": {
+    "message": "Analyze"
+  },
+  "create_image": {
+    "message": "Create Image"
+  },
+  "code": {
+    "message": "Code"
+  },
+  "generate": {
+    "message": "Generate"
+  },
+  "ask": {
+    "message": "Ask"
+  },
+  "ask_ai": {
+    "message": "Ask AI"
+  },
+  "paste_selection": {
+    "message": "Paste Selection"
+  },
+  "switch_ai": {
+    "message": "Switch AI"
+  },
+  "no_perm": {
+    "message": "may not work without permissions"
+  },
+  "reset_success": {
+    "message": "All options and data cleared"
+  },
+  "file_limit": {
+    "message": "Cannot store file: Total size limit of 4MB exceeded."
+  },
+  "enable_all": {
+    "message": "Enable All"
+  },
+  "revoke_all": {
+    "message": "Revoke All"
+  },
+  "scripts_desc": {
+    "message": "Permissions are required to use experimental content scripts to enhance functionality. This feature is experimental, may not work as expected, and is not required for basic functionality. Click each icon to enable/disable them."
+  },
+  "supported_label": {
+    "message": "Supported AI chatbots"
+  },
+  "required_label": {
+    "message": "Requires Permissions to Use"
+  },
+  "image_support_label": {
+    "message": "Image Support"
+  },
+  "unstable_label": {
+    "message": "Target Open Chats/Advanced Search Everywhere"
+  },
+  "unstable_p": {
+    "message": " Allows tabs opened by this extension to listen and intercept any queries and send data back (if requested by user). You must close those tabs to stop this feature."
+  },
+  "enabled_label": {
+    "message": "Currently Enabled"
+  },
+  "too_long": {
+    "message": "Current prompt is too long."
+  },
+  "weather": {
+    "message": "Weather"
+  },
+  "weather_placeholder": {
+    "message": "Coordinates, Postal Code, or Name"
+  },
+  "unit_toggle": {
+    "message": "Use °F instead of °C"
+  },
+  "time_format": {
+    "message": "Choose Time Format"
+  },
+  "time_hours": {
+    "message": "Hours"
+  },
+  "time_minutes": {
+    "message": "Minutes"
+  },
+  "time_seconds": {
+    "message": "Seconds"
+  },
+  "time_days": {
+    "message": "Days"
+  },
+  "time_weeks": {
+    "message": "Weeks"
+  },
+  "background_type": {
+    "message": "Background Type"
+  },
+  "background_default": {
+    "message": "Default"
+  },
+  "background_image": {
+    "message": "Random Image"
+  },
+  "background_solid": {
+    "message": "Solid Color"
+  },
+  "background_gradient": {
+    "message": "Gradient"
+  },
+  "background_custom": {
+    "message": "Custom Image"
+  },
+  "background_update": {
+    "message": "Update Frequency"
+  },
+  "background_never": {
+    "message": "Never"
+  },
+  "background_startup": {
+    "message": "On Startup"
+  },
+  "background_daily": {
+    "message": "Daily"
+  },
+  "background_hourly": {
+    "message": "Hourly"
+  },
+  "change_every": {
+    "message": "Change Every"
+  },
+  "bg_change_never": {
+    "message": "Never Change Image"
+  },
+  "bg_change_refresh": {
+    "message": "Change On Refresh"
+  },
+  "background": {
+    "message": "Background"
+  },
+  "upload_image": {
+    "message": "Click to upload..."
+  },
+  "gradient_angle": {
+    "message": "Angle"
+  },
+  "bg_type_default": {
+    "message": "Default"
+  },
+  "bg_type_bg_img": {
+    "message": "Online Image (Pexels/Unsplash)"
+  },
+  "bg_type_color": {
+    "message": "Solid Color"
+  },
+  "bg_type_gradient": {
+    "message": "Gradient"
+  },
+  "bg_type_own_img": {
+    "message": "Own Image"
+  }
+}

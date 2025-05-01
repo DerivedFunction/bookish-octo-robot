@@ -62,10 +62,10 @@
   "show_suggestions_label": {
     "message": "显示建议"
   },
-  "sug-show": {
+  "sug_show": {
     "message": "显示"
   },
-  "sug-hide": {
+  "sug_hide": {
     "message": "隐藏"
   },
   "lang": {
@@ -236,7 +236,7 @@
   "analyze": {
     "message": "分析"
   },
-  "create image": {
+  "create_image": {
     "message": "创建图像"
   },
   "code": {
@@ -377,7 +377,7 @@
   "bg_type_default": {
     "message": "默认"
   },
-  "bg_type_bg-img": {
+  "bg_type_bg_img": {
     "message": "在线图片 (Pexels/Unsplash)"
   },
   "bg_type_color": {
@@ -386,7 +386,7 @@
   "bg_type_gradient": {
     "message": "渐变"
   },
-  "bg_type_own-img": {
+  "bg_type_own_img": {
     "message": "自定义图片"
   }
 }

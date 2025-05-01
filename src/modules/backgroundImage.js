@@ -5,8 +5,8 @@ import { t } from "./locales.js";
 let expirationTimeout = null;
 const CACHE_NAME = "bg-image-cache";
 
-// Dummy base URL for own-img (must be a valid HTTPS URL)
-const DUMMY_OWN_IMG_URL = "https://bookish.octo.robot/own-img";
+// Dummy base URL for own_img (must be a valid HTTPS URL)
+const DUMMY_OWN_IMG_URL = "https://bookish.octo.robot/own_img";
 
 // Store image data in cache with a valid Request object
 async function putInCache(key, imageData) {
@@ -106,7 +106,7 @@ export async function loadData() {
 
   if (bgOption && bgOption.type) {
     switch (bgOption.type) {
-      case "bg-img":
+      case "bg_img":
         if (bgOption.expiration === -1) {
           await clearCachedImageData(bgOption.url);
           await applyBackgroundImage(bgOption);
@@ -124,7 +124,7 @@ export async function loadData() {
         const [ang, color1, color2] = bgOption.url.split(",");
         body.style.backgroundImage = `linear-gradient(${ang}deg, ${color1}, ${color2})`;
         break;
-      case "own-img":
+      case "own_img":
         await applyBackgroundImage(bgOption);
         break;
       default:
@@ -137,7 +137,7 @@ export async function loadData() {
 
 export const backgroundSelect = document.getElementById("bg-select");
 const bgText = document.getElementsByClassName("bg-text");
-export const bgImgExpSelect = document.getElementById("bg-img-exp");
+export const bgImgExpSelect = document.getElementById("bg_img-exp");
 export const bgBtn = document.getElementById("save-bg");
 export const bgColor = document.getElementById("solid-color");
 export const bgColor2 = document.getElementById("solid-color-2");
@@ -185,7 +185,7 @@ bgBtn.addEventListener("click", async () => {
   ownImgLabel.textContent = t("upload_image");
 
   switch (selectedOption) {
-    case "bg-img":
+    case "bg_img":
       if (!bgData.url) {
         await setNewBackgroundImage(body, bgData);
       } else {
@@ -211,7 +211,7 @@ bgBtn.addEventListener("click", async () => {
       bgData.credits = null;
       setBgOption(bgData);
       break;
-    case "own-img":
+    case "own_img":
       const file = ownImgInput.files[0];
       if (file) {
         await putInCache(DUMMY_OWN_IMG_URL, file); // Cache under dummy URL
@@ -231,7 +231,7 @@ bgBtn.addEventListener("click", async () => {
       break;
   }
 
-  if (selectedOption === "bg-img") {
+  if (selectedOption === "bg_img") {
     const expirationOption =
       bgImgExpSelect.options[bgImgExpSelect.selectedIndex].value;
     const now = Date.now();
@@ -259,7 +259,7 @@ bgBtn.addEventListener("click", async () => {
   if (
     bgData.url ||
     selectedOption === "default" ||
-    selectedOption === "own-img"
+    selectedOption === "own_img"
   ) {
     setBgOption(bgData);
   }
@@ -293,7 +293,7 @@ async function applyBackgroundImage(bgData) {
   body.style.backgroundColor = "";
   let imageUrl;
 
-  if (bgData.type === "bg-img") {
+  if (bgData.type === "bg_img") {
     // Try cache first, fall back to HTTPS URL
     imageUrl = await getCachedImageData(bgData.url);
     if (!imageUrl) {
@@ -308,15 +308,15 @@ async function applyBackgroundImage(bgData) {
           imageUrl = bgData.url; // Fallback to URL directly
         }
       } catch (error) {
-        console.error("Error fetching bg-img:", error);
+        console.error("Error fetching bg_img:", error);
         imageUrl = bgData.url; // Use URL as last resort
       }
     }
-  } else if (bgData.type === "own-img") {
+  } else if (bgData.type === "own_img") {
     // Try cache first
     imageUrl = await getCachedImageData(DUMMY_OWN_IMG_URL);
     if (!imageUrl) {
-      console.warn("No cached image data found for own-img");
+      console.warn("No cached image data found for own_img");
       resetBackground();
       return;
     }
@@ -418,7 +418,7 @@ export function resetBackground() {
   credits.innerHTML = "";
   credits.style.display = "none";
   Array.from(bgText).forEach((element) => element.removeAttribute("style"));
-  clearCachedImageData(DUMMY_OWN_IMG_URL); // Clear own-img cache
+  clearCachedImageData(DUMMY_OWN_IMG_URL); // Clear own_img cache
 }
 
 function getExpirationDetails(expirationOption, now) {
@@ -442,7 +442,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     ownImgLabel.textContent = t("upload_image");
     switch (selectedOption) {
-      case "bg-img":
+      case "bg_img":
         bgImgExpSelect.style.display = "";
         break;
       case "color":
@@ -453,19 +453,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         bgColor2.style.display = "";
         bgNum.style.display = "";
         break;
-      case "own-img":
+      case "own_img":
         ownImgLabel.style.display = "";
         break;
       default:
         break;
     }
-    if (selectedOption !== "bg-img") {
+    if (selectedOption !== "bg_img") {
       setTextColor();
     }
   });
 
   if (bgOption) {
-    if (bgOption.type !== "bg-img") {
+    if (bgOption.type !== "bg_img") {
       setTextColor();
     }
     for (let i = 0; i < backgroundSelect.options.length; i++) {
@@ -479,7 +479,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     switch (bgOption.type) {
-      case "bg-img":
+      case "bg_img":
         bgImgExpSelect.style.display = "";
         for (let i = 0; i < bgImgExpSelect.options.length; i++) {
           if (bgImgExpSelect.options[i].value == bgOption.expiration) {
@@ -501,7 +501,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         bgColor2.style.display = "";
         bgNum.style.display = "";
         break;
-      case "own-img":
+      case "own_img":
         ownImgLabel.textContent = bgOption.credits[0]
           ? bgOption.credits[0]
           : t("upload_image");

@@ -62,10 +62,10 @@
   "show_suggestions_label": {
     "message": "提案を表示する"
   },
-  "sug-show": {
+  "sug_show": {
     "message": "表示する"
   },
-  "sug-hide": {
+  "sug_hide": {
     "message": "隠す"
   },
   "lang": {
@@ -236,7 +236,7 @@
   "analyze": {
     "message": "分析"
   },
-  "create image": {
+  "create_image": {
     "message": "画像作成"
   },
   "code": {
@@ -377,7 +377,7 @@
   "bg_type_default": {
     "message": "デフォルト"
   },
-  "bg_type_bg-img": {
+  "bg_type_bg_img": {
     "message": "オンライン画像 (Pexels/Unsplash)"
   },
   "bg_type_color": {
@@ -386,7 +386,7 @@
   "bg_type_gradient": {
     "message": "グラデーション"
   },
-  "bg_type_own-img": {
+  "bg_type_own_img": {
     "message": "カスタム画像"
   }
 }

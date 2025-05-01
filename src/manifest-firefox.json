@@ -52,5 +52,6 @@
     "*://chat.mistral.ai/*",
     "*://*.huggingface.co/chat/*",
     "*://*.meta.ai/*"
-  ]
+  ],
+  "default_locale": "en"
 }
