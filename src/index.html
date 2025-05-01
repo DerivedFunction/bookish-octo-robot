@@ -59,11 +59,6 @@
         <span>Image Support</span>
         <div id="ai-image-support" class="horizontal-container"></div>
       </div>
-
-      <div class="section">
-        <span>Advanced Search (Web, Reason, and/or Canvas)</span>
-        <div id="ai-advanced-support" class="horizontal-container"></div>
-      </div>
       <div class="section">
         <input type="checkbox" id="unstable" />
         <label for="unstable"
@@ -134,7 +129,7 @@
       <div class="section">
         <form>
           <fieldset class="horizontal-container" id="user-theme">
-            <legend>Choose Theme</legend>
+            <legend id="theme-label">Choose Theme</legend>
             <input type="radio" id="auto" name="theme" value="auto" />
             <label for="auto">Auto</label>
             <input type="radio" id="light" name="theme" value="true" />
@@ -145,10 +140,11 @@
         </form>
       </div>
       <div class="section">
-        <span>Search Everywhere:</span>
+        <span id="se-label">Search Everywhere</span>
         <div id="search-everywhere-list" class="horizontal-container"></div>
       </div>
-      <div class="section">
+      <div class="horizontal-container section">
+        <span id="lang">Language</span>
         <select id="locale-select">
           <option value="en">English</option>
           <option value="zh">中文</option>
@@ -200,9 +196,6 @@
                       data-tooltip="Experimental Features"
                     ></button>
                     <div class="right-buttons" id="extra-stuff">
-                      <button id="web-search"></button>
-                      <button id="deep-search"></button>
-                      <button id="code-canvas"></button>
                       <label
                         data-tooltip="Upload File"
                         class="button-format"

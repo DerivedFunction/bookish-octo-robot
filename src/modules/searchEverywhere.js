@@ -11,7 +11,6 @@ import { greetingContainer } from "./greetings.js";
 import { ellipse, goBtn } from "./actionButtons.js";
 import { suggestionContainer } from "./suggestions.js";
 import { chatBotResponse, responseBox } from "./response.js";
-import { hide } from "./advanceSearch.js";
 import { fileUploadBtn } from "./files.js";
 import { setupTooltip } from "./tooltip.js";
 
@@ -241,7 +240,6 @@ async function handleMultiSearch(textContent, resend = false) {
     ].forEach((e) => {
       e.style.display = "none";
     });
-    hide();
     newClick = false;
     responseContainer.style.display = "block";
     responseBtn.style.display = "";

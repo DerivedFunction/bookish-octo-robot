@@ -3,6 +3,7 @@ import { setupTooltip } from "./tooltip.js";
 import { showToast } from "./toaster.js";
 import { resetBtn, loadJsonData, toggleClass } from "../app.js";
 import { query, queryEvents } from "./query.js";
+import { t } from "./locales.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
 
@@ -122,7 +123,7 @@ export async function getSearchEngine() {
           : "/assets/images/ai/default.svg",
         description: selectedEngine
           ? `Search with ${selectedEngine?.name}`
-          : "Set an AI Chatbot",
+          : null,
       },
       curSearchBtn,
       null,

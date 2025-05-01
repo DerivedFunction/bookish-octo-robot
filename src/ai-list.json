@@ -7,7 +7,7 @@
       "experimental": true,
       "limit": 39720,
       "fileImage": true,
-      "advanced": true,
+
       "omnibox": ["chatgpt", "cg"]
     },
     {
@@ -25,7 +25,7 @@
       "image": "/assets/images/ai/gemini.svg",
       "experimental": true,
       "limit": 31022,
-      "advanced": true,
+
       "needsPerm": true,
       "omnibox": ["gemini", "ge"]
     },
@@ -36,7 +36,7 @@
       "experimental": true,
       "limit": 100000,
       "fileImage": true,
-      "advanced": true,
+
       "omnibox": ["grok", "gr"]
     },
     {
@@ -45,7 +45,7 @@
       "image": "/assets/images/ai/deepseek.svg",
       "experimental": true,
       "limit": 100000,
-      "advanced": true,
+
       "needsPerm": true,
       "fileImage": true,
       "omnibox": ["deepseek", "ds"]
@@ -83,7 +83,7 @@
       "limit": 100000,
       "needsPerm": true,
       "experimental": true,
-      "advanced": true,
+
       "fileImage": true,
       "omnibox": ["qwen", "qw"]
     },
@@ -94,7 +94,7 @@
       "limit": 15000,
       "experimental": true,
       "fileImage": true,
-      "advanced": true,
+
       "omnibox": ["meta", "me"]
     },
     {
@@ -103,7 +103,7 @@
       "image": "/assets/images/ai/hug.svg",
       "experimental": true,
       "limit": 15000,
-      "advanced": true,
+
       "omnibox": ["huggingface", "hf"]
     },
     {
