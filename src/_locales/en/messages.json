@@ -1,4 +1,10 @@
 {
+  "appName": {
+    "message": "Tabbed: AI chatbot in New Tab"
+  },
+  "appDesc": {
+    "message": "Redefining the New Tab Page. Directly search with ChatGPT, Claude, DeepSeek, Grok, and more."
+  },
   "greeting_morning": {
     "message": "Good Morning"
   },

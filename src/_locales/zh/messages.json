@@ -1,4 +1,10 @@
 {
+  "appName": {
+    "message": "Tabbed: AI聊天机器人"
+  },
+  "appDesc": {
+    "message": "重新定义新标签页。使用 ChatGPT、Claude、DeepSeek、Grok 等工具直接搜索。"
+  },
   "greeting_morning": {
     "message": "早上好"
   },

@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Tabbed: AI chatbot in New Tab",
+  "name": "__MSG_appName__",
   "short_name": "Tabbed",
-  "version": "1.0.8.0",
-  "description": "A new tab page with an AI-like user interface",
+  "version": "1.0.8.1",
+  "description": "__MSG_appDesc__",
   "icons": {
     "16": "assets/images/icon.png",
     "32": "assets/images/icon.png",

@@ -1,4 +1,10 @@
 {
+  "appName": {
+    "message": "Tabbed: Chatbot IA en Nouvelle Onglet"
+  },
+  "appDesc": {
+    "message": "Redéfinition de la page Nouvel onglet. Recherche directe avec ChatGPT, Claude, DeepSeek, Grok, et bien d'autres."
+  },
   "greeting_morning": {
     "message": "Bonjour"
   },

@@ -1,4 +1,10 @@
 {
+  "appName": {
+    "message": "Tabbed: Chatbot en Nueva Pestaña"
+  },
+  "appDesc": {
+    "message": "Redefinición de la página de Nueva Pestaña. Busque directamente con ChatGPT, Claude, DeepSeek, Grok y más."
+  },
   "greeting_morning": {
     "message": "Buenos Días"
   },

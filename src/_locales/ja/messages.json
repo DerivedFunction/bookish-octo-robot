@@ -1,4 +1,10 @@
 {
+  "appName": {
+    "message": "Tabbed: 新しいタブのAIチャットボット"
+  },
+  "appDesc": {
+    "message": "新しいタブページを再定義。ChatGPT、Claude、DeepSeek、Grokなどを使って直接検索できます。"
+  },
   "greeting_morning": {
     "message": "おはようございます"
   },

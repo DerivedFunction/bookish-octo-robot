@@ -1,4 +1,10 @@
 {
+  "appName": {
+    "message": "Tabbed: KI-Chatbot in Nuem Tab"
+  },
+  "appDesc": {
+    "message": "Neudefinition der „Neuer Tab“-Seite. Direktsuche mit ChatGPT, Claude, DeepSeek, Grok und mehr."
+  },
   "greeting_morning": {
     "message": "Guten Morgen"
   },
