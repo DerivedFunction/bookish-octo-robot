@@ -20,98 +20,53 @@ import {
   ownImgLabel,
 } from "./backgroundImage.js";
 // Handle localization
-const DEFAULT_LOCALE = "en";
-let currentLocale = DEFAULT_LOCALE;
-let translations = {};
+let currentLocale = null;
+let localeKeys = null;
 
 export async function initLocales() {
-  // First check storage for explicitly chosen locale
-  const stored = await chrome.storage.local.get("locale");
-  if (stored.locale) {
-    currentLocale = stored.locale;
-  } else {
-    // If no explicit choice, use chrome.i18n.getUILanguage()
-    currentLocale = chrome.i18n.getUILanguage().split("-")[0] || DEFAULT_LOCALE;
+  localeKeys = null;
+  currentLocale = null;
+  await chrome.storage.local.get("locale").then((e) => {
+    if (e.locale) currentLocale = e.locale.split("-")[0];
+  });
+  if (currentLocale) {
+    const response = await fetch(`/_locales/${currentLocale}/messages.json`);
+    if (response.ok) {
+      localeKeys = await response.json();
+    }
   }
-  await loadTranslations(currentLocale);
   initLocaleSelector();
   updateUIText();
 }
 const localeSelect = document.getElementById("locale-select");
 export function initLocaleSelector() {
   if (localeSelect) {
-    localeSelect.value = currentLocale;
+    localeSelect.value = currentLocale || "default";
     localeSelect.addEventListener("change", async (e) => {
-      await chrome.storage.local.set({ locale: e.target.value });
-      await loadTranslations(e.target.value);
+      let value = e.target.value;
+      if (value === "default") {
+        await chrome.storage.local.remove("locale");
+        value = null;
+      } else await chrome.storage.local.set({ locale: value });
       window.dispatchEvent(new Event("localechange"));
       chrome.runtime.sendMessage({
         message: "localechange",
-        locale: e.target.value,
       });
     });
   }
 }
 
-export async function loadTranslations(locale) {
-  try {
-    // First try to get translations from chrome.i18n if no explicit locale is set
-    const stored = await chrome.storage.local.get("locale");
-    if (!stored.locale && chrome.i18n) {
-      translations = {};
-      // Load each message from chrome.i18n
-      const keys = Object.keys(
-        await fetch(`/_locales/${DEFAULT_LOCALE}/messages.json`).then((r) =>
-          r.json()
-        )
-      );
-      for (const key of keys) {
-        const msg = chrome.i18n.getMessage(key);
-        if (msg) {
-          translations[key] = { message: msg };
-        }
-      }
-      currentLocale = locale;
-      return;
-    }
-
-    // Fall back to loading from file if chrome.i18n doesn't have the translations
-    // or if locale was explicitly chosen
-    const response = await fetch(`/_locales/${locale}/messages.json`);
-    if (!response.ok) {
-      console.warn(
-        `Translations for ${locale} not found, falling back to ${DEFAULT_LOCALE}`
-      );
-      if (locale !== DEFAULT_LOCALE) {
-        return loadTranslations(DEFAULT_LOCALE);
-      }
-      return;
-    }
-    translations = await response.json();
-    currentLocale = locale;
-
-    // Only store in local if explicitly chosen through selector
-    if (document.getElementById("locale-select")?.value === locale) {
-      chrome.storage.local.set({ locale });
-    }
-  } catch (error) {
-    console.error("Error loading translations:", error);
-  }
-}
-
 export function t(key, substitutions = {}) {
-  key = key.replace(" ", "_");
-  const translation = translations[key];
-  if (!translation) {
-    console.warn(`Translation missing for key: ${key}`);
-    return key;
+  key = key.toLowerCase().replace(" ", "_").replace("-", "_");
+  let text = null;
+  if (!currentLocale) {
+    text = chrome.i18n.getMessage(key, substitutions) || key;
+  } else {
+    text = localeKeys?.[key]?.message || key;
   }
-
-  let text = translation.message;
   Object.entries(substitutions).forEach(([key, value]) => {
     text = text.replace(new RegExp(`\\$${key}\\$`, "g"), value);
   });
-
   return text;
 }
 
@@ -192,6 +147,8 @@ export function updateUIText() {
   bgImgExpSelect.querySelectorAll("option").forEach((option) => {
     option.textContent = formatTimeOption(option);
   });
+  localeSelect.querySelector("option[value='default']").textContent =
+    t("background_default");
 }
 
 // Listen for locale changes
@@ -203,7 +160,11 @@ chrome.runtime.onMessage.addListener((e) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  resetBtn.addEventListener("click", () => {
+  resetBtn.addEventListener("click", async () => {
+    await chrome.storage.local.remove("locale");
     initLocales();
+    chrome.runtime.sendMessage({
+      message: "localechange",
+    });
   });
 });

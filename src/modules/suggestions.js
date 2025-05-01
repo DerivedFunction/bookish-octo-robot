@@ -32,7 +32,7 @@ export async function getSuggestionButtons() {
     if (!prompt.id || !prompt.prompt) return;
 
     const btn = document.createElement("button");
-    btn.textContent = t(prompt.id.toLowerCase());
+    btn.textContent = t(prompt.id);
     btn.id = prompt.id.toLowerCase();
 
     if (prompt.image) {

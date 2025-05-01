@@ -1,7 +1,7 @@
 let sidebarStatus = false;
 let selectedEngine = null;
 let tabReceived = 0;
-let locale = null;
+let currentLocale = null;
 let localeKeys = null;
 let prompts = [];
 let aiList = [];
@@ -247,12 +247,18 @@ function setupEventListeners() {
 initialize().catch(console.error);
 
 // Remove the simple t() function and replace with proper i18n handling
-function t(key) {
-  if (!locale) {
-    return chrome.i18n.getMessage(key.replace(" ", "_"), null) || key;
+function t(key, substitutions = {}) {
+  key = key.toLowerCase().replace(" ", "_").replace("-", "_");
+  let text = null;
+  if (!currentLocale) {
+    text = chrome.i18n.getMessage(key, substitutions) || key;
   } else {
-    return localeKeys?.[key]?.message || key;
+    text = localeKeys?.[key]?.message || key;
   }
+  Object.entries(substitutions).forEach(([key, value]) => {
+    text = text.replace(new RegExp(`\\$${key}\\$`, "g"), value);
+  });
+  return text;
 }
 
 async function createTab(query, engine = null) {
@@ -386,7 +392,7 @@ async function loadMenu() {
     chrome.contextMenus.create(
       {
         id: t(type.prompt),
-        title: t(`${type.id.toLowerCase()}`),
+        title: t(`${type.id}`),
         parentId: "search",
         contexts: type.context,
       },
@@ -399,12 +405,12 @@ async function loadMenu() {
 
 async function getLocale() {
   localeKeys = null;
-  locale = null;
+  currentLocale = null;
   await chrome.storage.local.get("locale").then((e) => {
-    if (e.locale) locale = e.locale.split("-")[0];
+    if (e.locale) currentLocale = e.locale.split("-")[0];
   });
-  if (locale) {
-    const response = await fetch(`/_locales/${locale}/messages.json`);
+  if (currentLocale) {
+    const response = await fetch(`/_locales/${currentLocale}/messages.json`);
     if (response.ok) {
       localeKeys = await response.json();
     }
