@@ -511,3 +511,19 @@ async function getScriptStatus(name = null) {
   }
   return curHasScripts;
 }
+
+function setDefaultSuggestion() {
+  if (selectedEngine) {
+    // Set the default suggestion to the current search engine
+    chrome.omnibox.setDefaultSuggestion({
+      description: `${t("ask")} ${selectedEngine.name} (@${
+        selectedEngine.omnibox[0]
+      }, @${selectedEngine.omnibox[1]})`,
+    });
+  } else {
+    // If no engine is selected, set a generic suggestion
+    chrome.omnibox.setDefaultSuggestion({
+      description: t("ask_ai"),
+    });
+  }
+}
