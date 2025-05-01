@@ -2,6 +2,7 @@ import "./actionButtons.js";
 import "./appendSvg.js";
 import "./files.js";
 import "./greetings.js";
+import "./locales.js";
 import "./nameInput.js";
 import "./query.js";
 import "./response.js";
