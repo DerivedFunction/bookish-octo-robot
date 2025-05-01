@@ -28,7 +28,7 @@ document.addEventListener("click", (e) => {
     exp_sidebar.style.display = "none";
   }
 });
-const closeBtn = document.getElementById("close-options");
+export const closeBtn = document.getElementById("close-options");
 closeBtn.addEventListener("click", () => {
   sidebar.style.display = "none";
 });
