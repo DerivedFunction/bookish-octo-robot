@@ -13,6 +13,7 @@ import { suggestionContainer } from "./suggestions.js";
 import { chatBotResponse, responseBox } from "./response.js";
 import { fileUploadBtn } from "./files.js";
 import { setupTooltip } from "./tooltip.js";
+import { t } from "./locales.js";
 
 // Constants
 const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
@@ -45,7 +46,6 @@ function createToggleButton(engine, isActive, onClick) {
   appendSvg(
     {
       image: engine.image,
-      description: engine.name,
     },
     button,
     null,
@@ -79,7 +79,6 @@ async function handleChatMessage(e, engines) {
     appendSvg(
       {
         image: engine.image,
-        description: e.engine,
       },
       messageButton,
       "5px",
@@ -197,7 +196,7 @@ async function handleMultiSearch(textContent, resend = false) {
     } else {
       if (engine.experimental) {
         if (engine.needsPerm) {
-          showToast(`${engine.name} may not work without permissions`);
+          showToast(`${engine.name} ${t("no_perm")}`);
           keep = true;
         } else {
           await chrome.tabs.create({ url, active });

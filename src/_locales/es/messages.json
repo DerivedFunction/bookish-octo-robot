@@ -145,11 +145,11 @@
     "description": "Help me solve this problem"
   },
   "prompt_solve_quick": {
-    "message": "Proporcione una respuesta rápida: ",
+    "message": "Proporcione una respuesta rápida",
     "description": "Find a quick solution"
   },
   "prompt_solve_check": {
-    "message": "Verifique mi respuesta: ",
+    "message": "Verifique mi respuesta",
     "description": "Check my solution"
   },
   "prompt_solve_fill": {
@@ -173,7 +173,7 @@
     "description": "Summarize briefly and concisely, with bullet points on key terms: "
   },
   "prompt_summarize_quick": {
-    "message": "Proporcione una resumen rápido: ",
+    "message": "Proporcione una resumen rápido",
     "description": "Give a Quick Summary"
   },
   "prompt_summarize_paraphrase": {
@@ -189,11 +189,11 @@
     "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
   },
   "prompt_explain_brief": {
-    "message": "Explique brevemente: ",
+    "message": "Explique brevemente",
     "description": "Explain briefly"
   },
   "prompt_explain_detail": {
-    "message": "Explique en detalle: ",
+    "message": "Explique en detalle",
     "description": "Explain in Detail"
   },
   "prompt_analyze": {
@@ -320,5 +320,14 @@
   },
   "file_limit": {
     "message": "No se puede almacenar el archivo: se excedió el límite de tamaño total de 4 MB."
+  },
+  "enable_all": {
+    "message": "Habilitar todo"
+  },
+  "revoke_all": {
+    "message": "Revocar todo"
+  },
+  "scripts_desc": {
+    "message": "Se requieren permisos para usar scripts de contenido experimental para mejorar la funcionalidad. Esta característica es experimental, puede no funcionar como se espera y no es necesaria para la funcionalidad básica. Haga clic en cada ícono para habilitarlos/deshabilitarlos."
   }
 }

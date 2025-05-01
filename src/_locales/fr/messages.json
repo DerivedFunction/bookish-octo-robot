@@ -141,15 +141,15 @@
     "message": "Rechercher Partout"
   },
   "prompt_solve": {
-    "message": "Résolvez le problème suivant et fournissez la logique étape par étape : ",
+    "message": "Résolvez le problème suivant et fournissez la logique étape par étape: ",
     "description": "Help me solve this problem"
   },
   "prompt_solve_quick": {
-    "message": "Fournissez une réponse rapide : ",
+    "message": "Fournissez une réponse rapide",
     "description": "Find a quick solution"
   },
   "prompt_solve_check": {
-    "message": "Vérifiez ma réponse : ",
+    "message": "Vérifiez ma réponse",
     "description": "Check my solution"
   },
   "prompt_solve_fill": {
@@ -173,7 +173,7 @@
     "description": "Summarize briefly and concisely, with bullet points on key terms: "
   },
   "prompt_summarize_quick": {
-    "message": "Fournissez un résumé rapide : ",
+    "message": "Fournissez un résumé rapide",
     "description": "Give a Quick Summary"
   },
   "prompt_summarize_paraphrase": {
@@ -189,11 +189,11 @@
     "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
   },
   "prompt_explain_brief": {
-    "message": "Expliquez brièvement : ",
+    "message": "Expliquez brièvement",
     "description": "Explain briefly"
   },
   "prompt_explain_detail": {
-    "message": "Expliquez en détail : ",
+    "message": "Expliquez en détail",
     "description": "Explain in Detail"
   },
   "prompt_analyze": {
@@ -320,5 +320,14 @@
   },
   "file_limit": {
     "message": "Impossible de stocker le fichier: la limite de taille totale de 4 Mo est dépassée."
+  },
+  "enable_all": {
+    "message": "Tout activer"
+  },
+  "revoke_all": {
+    "message": "Tout révoquer"
+  },
+  "scripts_desc": {
+    "message": "Des autorisations sont requises pour utiliser des scripts de contenu expérimentaux afin d'améliorer la fonctionnalité. Cette fonctionnalité est expérimentale, peut ne pas fonctionner comme prévu et n'est pas requise pour la fonctionnalité de base. Cliquez sur chaque icône pour les activer/désactiver."
   }
 }

@@ -173,9 +173,6 @@
   "prompt_summarize_highlight": {
     "message": "Highlight Important Terms"
   },
-  "prompt_summarize_simple": {
-    "message": "Summarize in Simple Words"
-  },
   "prompt_explain": {
     "message": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
   },
@@ -280,5 +277,14 @@
   },
   "file_limit": {
     "message": "Cannot store file: Total size limit of 4MB exceeded."
+  },
+  "enable_all": {
+    "message": "Enable All"
+  },
+  "revoke_all": {
+    "message": "Revoke All"
+  },
+  "scripts_desc": {
+    "message": "Permissions are required to use experimental content scripts to enhance functionality. This feature is experimental, may not work as expected, and is not required for basic functionality. Click each icon to enable/disable them."
   }
 }

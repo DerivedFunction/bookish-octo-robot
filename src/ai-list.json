@@ -143,8 +143,7 @@
       "suggestions": [
         "prompt_summarize_quick",
         "prompt_summarize_paraphrase",
-        "prompt_summarize_highlight",
-        "prompt_summarize_simple"
+        "prompt_summarize_highlight"
       ],
       "replace": true,
       "context": ["editable", "selection", "link"]

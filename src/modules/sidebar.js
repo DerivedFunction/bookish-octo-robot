@@ -16,7 +16,7 @@ optionBtn.addEventListener("click", async () => {
   await appendList();
 });
 const sidebar = document.getElementById("sidebar");
-const exp_sidebar = document.getElementById("scripts-sidebar");
+export const exp_sidebar = document.getElementById("scripts-sidebar");
 document.addEventListener("click", (e) => {
   if (!sidebar.contains(e.target) && !optionBtn.contains(e.target)) {
     sidebar.style.display = "none";
@@ -29,7 +29,7 @@ export const closeBtn = document.getElementById("close-options");
 closeBtn.addEventListener("click", () => {
   sidebar.style.display = "none";
 });
-const closeScriptBtn = document.getElementById("close-scripts");
+export const closeScriptBtn = document.getElementById("close-scripts");
 closeScriptBtn.addEventListener("click", () => {
   exp_sidebar.style.display = "none";
 });
@@ -46,9 +46,9 @@ scriptsBtn.addEventListener("click", async () => {
 const requiredList = document.getElementById("required-scripts-ai");
 const imageList = document.getElementById("ai-image-support");
 const scriptsList = document.getElementById("ai-experimental-support");
-const enableAll = document.getElementById("enable-all-scripts");
+export const enableAll = document.getElementById("enable-all-scripts");
 
-const revokeAll = document.getElementById("revoke-all-scripts");
+export const revokeAll = document.getElementById("revoke-all-scripts");
 revokeAll.addEventListener("click", async () => {
   await removePermissions(true);
   currentEnabled.innerHTML = "";
@@ -70,9 +70,6 @@ function createPermissionButton(ai, enable = true) {
   appendSvg(
     {
       image: ai.image,
-      description: `${enable ? "Enable" : "Disable"} Permissions for ${
-        ai.name
-      }`,
     },
     button,
     null,

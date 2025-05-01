@@ -1,7 +1,13 @@
 import { query } from "./query.js";
-import { getGreeting } from "./greetings.js";
+import { getGreeting, greeting } from "./greetings.js";
 import { resetBtn } from "../app.js";
-import { closeBtn } from "./sidebar.js";
+import {
+  closeBtn,
+  closeScriptBtn,
+  enableAll,
+  exp_sidebar,
+  revokeAll,
+} from "./sidebar.js";
 import { suggestDisplay } from "./suggestions.js";
 import { userThemeForm } from "./theme.js";
 import { getSuggestionButtons } from "./suggestions.js";
@@ -68,6 +74,7 @@ export function t(key, substitutions = {}) {
 // Update UI text when locale changes
 export function updateUIText() {
   getGreeting();
+  getSuggestionButtons();
   // Set initial placeholder
   query.placeholder = t("search_placeholder");
   resetBtn.textContent = t("reset_button");
@@ -84,10 +91,9 @@ export function updateUIText() {
     label.textContent = t(`${label.getAttribute("for")}`);
   });
   // Update radio labels
-  document.querySelector('[for="formal"]').textContent = t("formal_option");
-  document.querySelector('[for="informal"]').textContent = t("informal_option");
-  document.querySelector('[for="custom"]').textContent = t("custom_option");
-  document.querySelector('[for="no-greeting"]').textContent = t("none_option");
+  greeting.querySelectorAll("label").forEach((label) => {
+    label.textContent = t(`${label.getAttribute("for")}_option`);
+  });
   document.querySelector("#lang").textContent = t("lang");
   document.querySelector("#theme-label").textContent = t("theme");
   userThemeForm.querySelectorAll("label").forEach((label) => {
@@ -98,7 +104,11 @@ export function updateUIText() {
   document.querySelector("#se-label").textContent = t(
     "tooltip_search_everywhere"
   );
-  getSuggestionButtons();
+  closeScriptBtn.textContent = t("close_button");
+  exp_sidebar.querySelector("h1").textContent = t("tooltip_experimental");
+  exp_sidebar.querySelector("p").textContent = t("scripts_desc");
+  enableAll.textContent = t("enable_all");
+  revokeAll.textContent = t("revoke_all");
 }
 
 // Listen for locale changes

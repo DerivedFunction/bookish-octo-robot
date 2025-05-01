@@ -320,5 +320,14 @@
   },
   "file_limit": {
     "message": "Datei kann nicht gespeichert werden: Gesamtgrößenbeschränkung von 4 MB überschritten."
+  },
+  "enable_all": {
+    "message": "Alle aktivieren"
+  },
+  "revoke_all": {
+    "message": "Alle widerrufen"
+  },
+  "scripts_desc": {
+    "message": "Berechtigungen sind erforderlich, um experimentelle Inhaltsskripte zur Verbesserung der Funktionalität zu verwenden. Diese Funktion ist experimentell, funktioniert möglicherweise nicht wie erwartet und ist für die grundlegende Funktionalität nicht erforderlich. Klicken Sie auf jedes Symbol, um sie zu aktivieren/deaktivieren."
   }
 }

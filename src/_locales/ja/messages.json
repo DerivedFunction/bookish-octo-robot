@@ -145,11 +145,11 @@
     "description": "Help me solve this problem"
   },
   "prompt_solve_quick": {
-    "message": "素早い回答を提供してください： ",
+    "message": "素早い回答を提供してください",
     "description": "Find a quick solution"
   },
   "prompt_solve_check": {
-    "message": "私の回答を確認してください： ",
+    "message": "私の回答を確認してください",
     "description": "Check my solution"
   },
   "prompt_solve_fill": {
@@ -173,7 +173,7 @@
     "description": "Summarize briefly and concisely, with bullet points on key terms: "
   },
   "prompt_summarize_quick": {
-    "message": "素早い要約を提供してください： ",
+    "message": "素早い要約を提供してください",
     "description": "Give a Quick Summary"
   },
   "prompt_summarize_paraphrase": {
@@ -189,11 +189,11 @@
     "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
   },
   "prompt_explain_brief": {
-    "message": "簡潔に説明してください： ",
+    "message": "簡潔に説明してください",
     "description": "Explain briefly"
   },
   "prompt_explain_detail": {
-    "message": "詳細に説明してください： ",
+    "message": "詳細に説明してください",
     "description": "Explain in Detail"
   },
   "prompt_analyze": {
@@ -320,5 +320,14 @@
   },
   "file_limit": {
     "message": "ファイルを保存できません: 合計サイズ制限の 4 MB を超えています。"
+  },
+  "enable_all": {
+    "message": "すべて有効にする"
+  },
+  "revoke_all": {
+    "message": "すべて取り消す"
+  },
+  "scripts_desc": {
+    "message": "機能向上のために実験的なコンテンツスクリプトを使用するには、権限が必要です。この機能は実験的であり、期待通りに動作しない場合があり、基本的な機能には必要ありません。各アイコンをクリックして有効/無効にしてください。"
   }
 }
