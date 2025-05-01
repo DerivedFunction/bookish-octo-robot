@@ -4,8 +4,8 @@ A new tab page with an AI-like user interface. Note: You may have to sign in to 
 
 [![Microsoft Edge](https://img.shields.io/badge/Edge-1.0.7-green.svg)](https://microsoftedge.microsoft.com/addons/detail/tabbed-ai-chatbot-in-new/jbhemcgchnpebmchepbcjfmneagnpnpa)
 [![Google Chrome](https://img.shields.io/badge/Chrome-1.0.7-green.svg)](https://chromewebstore.google.com/detail/jbpmodbjedoloelbepnpfhjoohjjkand)
-[![Mozilla Firefox](https://img.shields.io/badge/Firefox-1.0.7-green.svg)](https://addons.mozilla.org/en-US/firefox/addon/tabbed/)
-[![Current Version](https://img.shields.io/badge/Github-1.0.7.6-green.svg)](https://github.com/DerivedFunction/bookish-octo-robot/)
+[![Mozilla Firefox](https://img.shields.io/badge/Firefox-1.0.8-green.svg)](https://addons.mozilla.org/en-US/firefox/addon/tabbed/)
+[![Current Version](https://img.shields.io/badge/Github-1.0.8.0-green.svg)](https://github.com/DerivedFunction/bookish-octo-robot/)
 
 ## Youtube Video
 
