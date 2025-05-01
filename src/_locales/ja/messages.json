@@ -145,11 +145,11 @@
     "description": "Help me solve this problem"
   },
   "prompt_solve_quick": {
-    "message": "素早い解決策を見つける",
+    "message": "素早い回答を提供してください： ",
     "description": "Find a quick solution"
   },
   "prompt_solve_check": {
-    "message": "私の解決策を確認する",
+    "message": "私の回答を確認してください： ",
     "description": "Check my solution"
   },
   "prompt_solve_fill": {
@@ -157,124 +157,128 @@
     "description": "Fill in missing parts"
   },
   "prompt_research": {
-    "message": "このトピックを調査する"
+    "message": "このトピックを調査する",
+    "description": "Research "
   },
   "prompt_research_compare": {
-    "message": "異なるアプローチを比較する"
+    "message": "異なるアプローチを比較する",
+    "description": "Compare Options"
   },
   "prompt_research_latest": {
-    "message": "最新情報を探す"
+    "message": "最新情報を探す",
+    "description": "Find Latest Info"
   },
   "prompt_summarize": {
     "message": "簡潔かつ簡潔に要約し、重要な用語を箇条書きにしてください： ",
     "description": "Summarize briefly and concisely, with bullet points on key terms: "
   },
   "prompt_summarize_quick": {
-    "message": "クイック要約"
+    "message": "素早い要約を提供してください： ",
+    "description": "Give a Quick Summary"
   },
   "prompt_summarize_paraphrase": {
-    "message": "言い換える"
+    "message": "言い換える",
+    "description": "Paraphrase"
   },
   "prompt_summarize_highlight": {
-    "message": "要点をハイライト"
-  },
-  "prompt_summarize_simple": {
-    "message": "簡略化する"
+    "message": "要点をハイライト",
+    "description": "Highlight Important Terms"
   },
   "prompt_explain": {
     "message": "ステップごとの論理で徹底的に説明し、わかりやすい例を入れてください： ",
     "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
   },
   "prompt_explain_brief": {
-    "message": "簡単な説明"
-  },
-  "prompt_explain_simple": {
-    "message": "分かりやすく説明"
+    "message": "簡潔に説明してください： ",
+    "description": "Explain briefly"
   },
   "prompt_explain_detail": {
-    "message": "詳細な説明"
+    "message": "詳細に説明してください： ",
+    "description": "Explain in Detail"
   },
   "prompt_analyze": {
     "message": "以下を分析してください： ",
     "description": "Analyze the following: "
   },
   "prompt_analyze_pros": {
-    "message": "長所と短所"
+    "message": "長所と短所",
+    "description": "Analyze Pros and Cons"
   },
   "prompt_analyze_fact": {
-    "message": "事実確認"
+    "message": "事実確認",
+    "description": "Fact Check"
   },
   "prompt_analyze_patterns": {
-    "message": "パターンを見つける"
+    "message": "パターンを見つける",
+    "description": "Find Patterns or Trends"
   },
   "prompt_analyze_strengths": {
-    "message": "強みと弱み"
+    "message": "強みと弱み",
+    "description": "Spot Strengths and Weaknesses"
   },
   "prompt_analyze_errors": {
-    "message": "エラーを探す"
+    "message": "エラーを探す",
+    "description": "Fix Errors"
   },
   "prompt_image": {
-    "message": "画像を作成"
-  },
-  "prompt_image_photo": {
-    "message": "写真のような画像"
-  },
-  "prompt_image_3d": {
-    "message": "3Dレンダリング"
-  },
-  "prompt_image_2d": {
-    "message": "2Dイラスト"
-  },
-  "prompt_image_anime": {
-    "message": "アニメ風"
-  },
-  "prompt_image_icon": {
-    "message": "アイコンデザイン"
-  },
-  "prompt_image_logo": {
-    "message": "ロゴデザイン"
+    "message": "画像を作成",
+    "description": "Generate an image of "
   },
   "prompt_code": {
-    "message": "コードのヘルプ"
+    "message": "コードを書いて説明してください： ",
+    "description": "Code and explain: "
   },
   "prompt_code_fix": {
-    "message": "コードを修正"
+    "message": "コードのエラーを修正",
+    "description": "Fix Errors"
   },
   "prompt_code_error": {
-    "message": "エラーをデバッグ"
+    "message": "このエラーメッセージを説明",
+    "description": "Explain This Error Message"
   },
   "prompt_code_refactor": {
-    "message": "コードをリファクタリング"
+    "message": "コードをリファクタリング",
+    "description": "Refactor"
   },
   "prompt_code_docs": {
-    "message": "ドキュメントを追加"
+    "message": "コードのドキュメントを生成",
+    "description": "Generate Code Documentation"
   },
   "prompt_code_tests": {
-    "message": "テストを作成"
+    "message": "コードのテストを生成",
+    "description": "Generate Code Tests"
   },
   "prompt_code_review": {
-    "message": "コードレビュー"
+    "message": "コードをレビューしてコメント",
+    "description": "Review and Comment"
   },
   "prompt_generate": {
-    "message": "コンテンツを生成"
+    "message": "計画またはアイデアを作成してください： ",
+    "description": "Create a plan or idea: "
   },
   "prompt_generate_ideas": {
-    "message": "アイデアを出す"
+    "message": "アイデアを出す",
+    "description": "Brainstorm Ideas"
   },
   "prompt_generate_plan": {
-    "message": "計画を作成"
+    "message": "計画を作成",
+    "description": "Make a Plan"
   },
   "prompt_generate_draft": {
-    "message": "下書きを作成"
+    "message": "下書きを作成",
+    "description": "Write a Draft"
   },
   "prompt_generate_outline": {
-    "message": "アウトラインを作成"
+    "message": "アウトラインを作成",
+    "description": "Create an Outline"
   },
   "prompt_generate_email": {
-    "message": "メールを作成"
+    "message": "メールを作成",
+    "description": "Write an Email"
   },
   "prompt_generate_resume": {
-    "message": "履歴書を作成"
+    "message": "履歴書を作成",
+    "description": "Write and improve my Resume"
   },
   "solve": {
     "message": "解決",
@@ -313,5 +317,8 @@
   },
   "reset_success": {
     "message": "すべてのオプションとデータがクリアされました"
+  },
+  "file_limit": {
+    "message": "ファイルを保存できません: 合計サイズ制限の 4 MB を超えています。"
   }
 }

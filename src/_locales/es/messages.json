@@ -145,11 +145,11 @@
     "description": "Help me solve this problem"
   },
   "prompt_solve_quick": {
-    "message": "Encontrar una solución rápida",
+    "message": "Proporcione una respuesta rápida: ",
     "description": "Find a quick solution"
   },
   "prompt_solve_check": {
-    "message": "Revisar mi solución",
+    "message": "Verifique mi respuesta: ",
     "description": "Check my solution"
   },
   "prompt_solve_fill": {
@@ -157,124 +157,128 @@
     "description": "Fill in missing parts"
   },
   "prompt_research": {
-    "message": "Investigar este tema"
+    "message": "Investigar este tema",
+    "description": "Research "
   },
   "prompt_research_compare": {
-    "message": "Comparar diferentes enfoques"
+    "message": "Comparar diferentes enfoques",
+    "description": "Compare Options"
   },
   "prompt_research_latest": {
-    "message": "Encontrar la información más reciente"
+    "message": "Encontrar la información más reciente",
+    "description": "Find Latest Info"
   },
   "prompt_summarize": {
     "message": "Resuma brevemente y de forma concisa, con puntos clave en viñetas: ",
     "description": "Summarize briefly and concisely, with bullet points on key terms: "
   },
   "prompt_summarize_quick": {
-    "message": "Resumen rápido"
+    "message": "Proporcione una resumen rápido: ",
+    "description": "Give a Quick Summary"
   },
   "prompt_summarize_paraphrase": {
-    "message": "Parafrasear esto"
+    "message": "Parafrasear esto",
+    "description": "Paraphrase"
   },
   "prompt_summarize_highlight": {
-    "message": "Destacar puntos clave"
-  },
-  "prompt_summarize_simple": {
-    "message": "Simplificar esto"
+    "message": "Destacar puntos clave",
+    "description": "Highlight Important Terms"
   },
   "prompt_explain": {
     "message": "Explique detalladamente con lógica paso a paso e incluya ejemplos fáciles de entender: ",
     "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
   },
   "prompt_explain_brief": {
-    "message": "Explicación breve"
-  },
-  "prompt_explain_simple": {
-    "message": "Explicar de forma simple"
+    "message": "Explique brevemente: ",
+    "description": "Explain briefly"
   },
   "prompt_explain_detail": {
-    "message": "Explicación detallada"
+    "message": "Explique en detalle: ",
+    "description": "Explain in Detail"
   },
   "prompt_analyze": {
     "message": "Analice lo siguiente: ",
     "description": "Analyze the following: "
   },
   "prompt_analyze_pros": {
-    "message": "Pros y contras"
+    "message": "Pros y contras",
+    "description": "Analyze Pros and Cons"
   },
   "prompt_analyze_fact": {
-    "message": "Verificar hechos"
+    "message": "Verificar hechos",
+    "description": "Fact Check"
   },
   "prompt_analyze_patterns": {
-    "message": "Encontrar patrones"
+    "message": "Encontrar patrones",
+    "description": "Find Patterns or Trends"
   },
   "prompt_analyze_strengths": {
-    "message": "Fortalezas y debilidades"
+    "message": "Fortalezas y debilidades",
+    "description": "Spot Strengths and Weaknesses"
   },
   "prompt_analyze_errors": {
-    "message": "Encontrar errores"
+    "message": "Encontrar errores",
+    "description": "Fix Errors"
   },
   "prompt_image": {
-    "message": "Crear una imagen"
-  },
-  "prompt_image_photo": {
-    "message": "Imagen fotorrealista"
-  },
-  "prompt_image_3d": {
-    "message": "Renderizado 3D"
-  },
-  "prompt_image_2d": {
-    "message": "Ilustración 2D"
-  },
-  "prompt_image_anime": {
-    "message": "Estilo anime"
-  },
-  "prompt_image_icon": {
-    "message": "Diseño de icono"
-  },
-  "prompt_image_logo": {
-    "message": "Diseño de logo"
+    "message": "Crear una imagen",
+    "description": "Generate an image of "
   },
   "prompt_code": {
-    "message": "Ayuda con código"
+    "message": "Codifique y explique: ",
+    "description": "Code and explain: "
   },
   "prompt_code_fix": {
-    "message": "Arreglar este código"
+    "message": "Arreglar errores de código",
+    "description": "Fix Errors"
   },
   "prompt_code_error": {
-    "message": "Depurar error"
+    "message": "Explicar este mensaje de error",
+    "description": "Explain This Error Message"
   },
   "prompt_code_refactor": {
-    "message": "Refactorizar código"
+    "message": "Refactorizar código",
+    "description": "Refactor"
   },
   "prompt_code_docs": {
-    "message": "Agregar documentación"
+    "message": "Generar documentación de código",
+    "description": "Generate Code Documentation"
   },
   "prompt_code_tests": {
-    "message": "Escribir pruebas"
+    "message": "Generar pruebas de código",
+    "description": "Generate Code Tests"
   },
   "prompt_code_review": {
-    "message": "Revisar código"
+    "message": "Revisar y comentar código",
+    "description": "Review and Comment"
   },
   "prompt_generate": {
-    "message": "Generar contenido"
+    "message": "Cree un plan o una idea: ",
+    "description": "Create a plan or idea: "
   },
   "prompt_generate_ideas": {
-    "message": "Generar ideas"
+    "message": "Generar ideas",
+    "description": "Brainstorm Ideas"
   },
   "prompt_generate_plan": {
-    "message": "Crear un plan"
+    "message": "Crear un plan",
+    "description": "Make a Plan"
   },
   "prompt_generate_draft": {
-    "message": "Escribir borrador"
+    "message": "Escribir borrador",
+    "description": "Write a Draft"
   },
   "prompt_generate_outline": {
-    "message": "Crear esquema"
+    "message": "Crear esquema",
+    "description": "Create an Outline"
   },
   "prompt_generate_email": {
-    "message": "Escribir email"
+    "message": "Escribir email",
+    "description": "Write an Email"
   },
   "prompt_generate_resume": {
-    "message": "Escribir currículum"
+    "message": "Escribir currículum",
+    "description": "Write and improve my Resume"
   },
   "solve": {
     "message": "Resolver",
@@ -313,5 +317,8 @@
   },
   "reset_success": {
     "message": "Todas las opciones y datos se han restablecido"
+  },
+  "file_limit": {
+    "message": "No se puede almacenar el archivo: se excedió el límite de tamaño total de 4 MB."
   }
 }

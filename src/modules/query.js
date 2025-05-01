@@ -1,6 +1,6 @@
 import { goBtn } from "./actionButtons.js";
 import { toggleButton } from "../app.js";
-import { suggestionResult } from "./suggestions.js";
+import { suggestDisplay, suggestionResult } from "./suggestions.js";
 import { multiBtn, newClick } from "./searchEverywhere.js";
 import { selectedEngine, toggleDropdown } from "./searchEngine.js";
 import { hasScripts } from "./searchEngine.js";

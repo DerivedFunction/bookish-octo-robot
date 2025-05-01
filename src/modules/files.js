@@ -1,4 +1,5 @@
 import { appendSvg } from "./appendSvg.js";
+import { t } from "./locales.js";
 import { showToast } from "./toaster.js";
 import { setupTooltip } from "./tooltip.js";
 
@@ -46,7 +47,7 @@ async function getUniqueFilename(baseName) {
 async function storeFile(filename, file) {
   const totalSize = await getTotalStoredSize();
   if (totalSize + file.size > MAX_TOTAL_SIZE) {
-    showToast("Cannot store file: Total size limit of 4MB exceeded.");
+    showToast(t("file_limit"));
     return null; // Return null to indicate failure
   }
 

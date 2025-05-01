@@ -27,7 +27,6 @@ const multiTools = document.getElementById("multi-tools");
 
 // State Variables
 export let newClick = true;
-const curMultID = Date.now().toString();
 
 // --- Helper Functions ---
 
@@ -140,10 +139,6 @@ export async function appendList() {
 async function handleMultiSearch(textContent, resend = false) {
   const queryText = textContent ?? query.value;
   if (queryText.length < 1) return;
-  const storedID = localStorage.getItem("multi-mode");
-  if (storedID !== curMultID) {
-    showToast("Warning: New Tab opened. This session may be outdated");
-  }
   chrome.storage.local.set({ lastQuery: queryText });
   const searchEngines = await getSearchEngineList();
   const searchEverywhere = getSearchEverywhere();
@@ -222,13 +217,6 @@ async function handleMultiSearch(textContent, resend = false) {
   if (!unstable) return;
   if (resend) return;
   if (newClick) {
-    showToast(
-      "If permissions are enabled, clicking the same button again will not open new tabs." +
-        "Please close all other tabs that are already listening, as it may intercept queries. " +
-        "Opening a new tab will invalidate this session." +
-        "This is an unstable feature that may/may not work as expected",
-      "Active Search Everywhere session started"
-    );
     [
       greetingContainer,
       curSearchBtn,
@@ -312,7 +300,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     setupTooltip(btn, () => true);
   });
   setupTooltip(multiBtn, () => query.value.length === 0);
-  localStorage.setItem("multi-mode", curMultID);
   appendSvg(
     {
       image: "assets/images/buttons/response.svg",

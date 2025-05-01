@@ -182,9 +182,6 @@
   "prompt_explain_brief": {
     "message": "Explain briefly"
   },
-  "prompt_explain_simple": {
-    "message": "ELI5"
-  },
   "prompt_explain_detail": {
     "message": "Explain in Detail"
   },
@@ -208,24 +205,6 @@
   },
   "prompt_image": {
     "message": "Generate an image of "
-  },
-  "prompt_image_photo": {
-    "message": "a Realistic Photo"
-  },
-  "prompt_image_3d": {
-    "message": "a 3D Render"
-  },
-  "prompt_image_2d": {
-    "message": "a 2D Illustration"
-  },
-  "prompt_image_anime": {
-    "message": "an Anime-Style Image"
-  },
-  "prompt_image_icon": {
-    "message": "an Icon"
-  },
-  "prompt_image_logo": {
-    "message": "a Logo"
   },
   "prompt_code": {
     "message": "Code and explain: "
@@ -298,5 +277,8 @@
   },
   "reset_success": {
     "message": "All options and data cleared"
+  },
+  "file_limit": {
+    "message": "Cannot store file: Total size limit of 4MB exceeded."
   }
 }

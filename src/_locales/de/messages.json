@@ -145,11 +145,11 @@
     "description": "Help me solve this problem"
   },
   "prompt_solve_quick": {
-    "message": "Schnelle Lösung finden",
+    "message": "Geben Sie eine schnelle Antwort: ",
     "description": "Find a quick solution"
   },
   "prompt_solve_check": {
-    "message": "Meine Lösung überprüfen",
+    "message": "Überprüfen Sie meine Antwort: ",
     "description": "Check my solution"
   },
   "prompt_solve_fill": {
@@ -157,124 +157,128 @@
     "description": "Fill in missing parts"
   },
   "prompt_research": {
-    "message": "Dieses Thema recherchieren"
+    "message": "Dieses Thema recherchieren",
+    "description": "Research "
   },
   "prompt_research_compare": {
-    "message": "Verschiedene Ansätze vergleichen"
+    "message": "Verschiedene Ansätze vergleichen",
+    "description": "Compare Options"
   },
   "prompt_research_latest": {
-    "message": "Neueste Informationen finden"
+    "message": "Neueste Informationen finden",
+    "description": "Find Latest Info"
   },
   "prompt_summarize": {
     "message": "Fassen Sie kurz und prägnant zusammen, mit Stichpunkten zu den wichtigsten Begriffen: ",
     "description": "Summarize briefly and concisely, with bullet points on key terms: "
   },
   "prompt_summarize_quick": {
-    "message": "Kurzzusammenfassung"
+    "message": "Geben Sie eine kurze Zusammenfassung: ",
+    "description": "Give a Quick Summary"
   },
   "prompt_summarize_paraphrase": {
-    "message": "Umformulieren"
+    "message": "Umformulieren",
+    "description": "Paraphrase"
   },
   "prompt_summarize_highlight": {
-    "message": "Kernpunkte hervorheben"
-  },
-  "prompt_summarize_simple": {
-    "message": "Vereinfachen"
+    "message": "Kernpunkte hervorheben",
+    "description": "Highlight Important Terms"
   },
   "prompt_explain": {
     "message": "Erklären Sie ausführlich mit Schritt-für-Schritt-Logik und fügen Sie leicht verständliche Beispiele hinzu: ",
     "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
   },
   "prompt_explain_brief": {
-    "message": "Kurze Erklärung"
-  },
-  "prompt_explain_simple": {
-    "message": "Einfach erklären"
+    "message": "Erklären Sie kurz: ",
+    "description": "Explain briefly"
   },
   "prompt_explain_detail": {
-    "message": "Detaillierte Erklärung"
+    "message": "Erklären Sie im Detail: ",
+    "description": "Explain in Detail"
   },
   "prompt_analyze": {
     "message": "Analysieren Sie das Folgende: ",
     "description": "Analyze the following: "
   },
   "prompt_analyze_pros": {
-    "message": "Vor- und Nachteile"
+    "message": "Vor- und Nachteile",
+    "description": "Analyze Pros and Cons"
   },
   "prompt_analyze_fact": {
-    "message": "Faktencheck"
+    "message": "Faktencheck",
+    "description": "Fact Check"
   },
   "prompt_analyze_patterns": {
-    "message": "Muster finden"
+    "message": "Muster finden",
+    "description": "Find Patterns or Trends"
   },
   "prompt_analyze_strengths": {
-    "message": "Stärken und Schwächen"
+    "message": "Stärken und Schwächen",
+    "description": "Spot Strengths and Weaknesses"
   },
   "prompt_analyze_errors": {
-    "message": "Fehler finden"
+    "message": "Fehler finden",
+    "description": "Fix Errors"
   },
   "prompt_image": {
-    "message": "Bild erstellen"
-  },
-  "prompt_image_photo": {
-    "message": "Fotorealistisches Bild"
-  },
-  "prompt_image_3d": {
-    "message": "3D-Rendering"
-  },
-  "prompt_image_2d": {
-    "message": "2D-Illustration"
-  },
-  "prompt_image_anime": {
-    "message": "Anime-Stil"
-  },
-  "prompt_image_icon": {
-    "message": "Icon-Design"
-  },
-  "prompt_image_logo": {
-    "message": "Logo-Design"
+    "message": "Bild erstellen",
+    "description": "Generate an image of "
   },
   "prompt_code": {
-    "message": "Code-Hilfe"
+    "message": "Programmieren und erklären Sie: ",
+    "description": "Code and explain: "
   },
   "prompt_code_fix": {
-    "message": "Code reparieren"
+    "message": "Codefehler reparieren",
+    "description": "Fix Errors"
   },
   "prompt_code_error": {
-    "message": "Fehler debuggen"
+    "message": "Diese Fehlermeldung erklären",
+    "description": "Explain This Error Message"
   },
   "prompt_code_refactor": {
-    "message": "Code refaktorisieren"
+    "message": "Code refaktorisieren",
+    "description": "Refactor"
   },
   "prompt_code_docs": {
-    "message": "Dokumentation hinzufügen"
+    "message": "Dokumentation für Code hinzufügen",
+    "description": "Generate Code Documentation"
   },
   "prompt_code_tests": {
-    "message": "Tests schreiben"
+    "message": "Tests für Code schreiben",
+    "description": "Generate Code Tests"
   },
   "prompt_code_review": {
-    "message": "Code-Review"
+    "message": "Code überprüfen und kommentieren",
+    "description": "Review and Comment"
   },
   "prompt_generate": {
-    "message": "Inhalt generieren"
+    "message": "Erstellen Sie einen Plan oder eine Idee: ",
+    "description": "Create a plan or idea: "
   },
   "prompt_generate_ideas": {
-    "message": "Ideen entwickeln"
+    "message": "Ideen entwickeln",
+    "description": "Brainstorm Ideas"
   },
   "prompt_generate_plan": {
-    "message": "Plan erstellen"
+    "message": "Plan erstellen",
+    "description": "Make a Plan"
   },
   "prompt_generate_draft": {
-    "message": "Entwurf schreiben"
+    "message": "Entwurf schreiben",
+    "description": "Write a Draft"
   },
   "prompt_generate_outline": {
-    "message": "Gliederung erstellen"
+    "message": "Gliederung erstellen",
+    "description": "Create an Outline"
   },
   "prompt_generate_email": {
-    "message": "E-Mail schreiben"
+    "message": "E-Mail schreiben",
+    "description": "Write an Email"
   },
   "prompt_generate_resume": {
-    "message": "Lebenslauf schreiben"
+    "message": "Lebenslauf schreiben",
+    "description": "Write and improve my Resume"
   },
   "solve": {
     "message": "Lösen",
@@ -313,5 +317,8 @@
   },
   "reset_success": {
     "message": "Alle Optionen und Daten wurden zurückgesetzt"
+  },
+  "file_limit": {
+    "message": "Datei kann nicht gespeichert werden: Gesamtgrößenbeschränkung von 4 MB überschritten."
   }
 }

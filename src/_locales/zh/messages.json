@@ -145,11 +145,11 @@
     "description": "Help me solve this problem"
   },
   "prompt_solve_quick": {
-    "message": "找到快速解决方案",
+    "message": "提供快速回答： ",
     "description": "Find a quick solution"
   },
   "prompt_solve_check": {
-    "message": "检查我的解决方案",
+    "message": "检查我的回答： ",
     "description": "Check my solution"
   },
   "prompt_solve_fill": {
@@ -157,124 +157,128 @@
     "description": "Fill in missing parts"
   },
   "prompt_research": {
-    "message": "研究这个主题"
+    "message": "研究这个主题",
+    "description": "Research "
   },
   "prompt_research_compare": {
-    "message": "比较不同的方法"
+    "message": "比较不同的方法",
+    "description": "Compare Options"
   },
   "prompt_research_latest": {
-    "message": "查找最新信息"
+    "message": "查找最新信息",
+    "description": "Find Latest Info"
   },
   "prompt_summarize": {
     "message": "简短且简洁地总结，列出关键术语的项目符号： ",
     "description": "Summarize briefly and concisely, with bullet points on key terms: "
   },
   "prompt_summarize_quick": {
-    "message": "快速总结"
+    "message": "提供快速总结： ",
+    "description": "Give a Quick Summary"
   },
   "prompt_summarize_paraphrase": {
-    "message": "重新表述"
+    "message": "重新表述",
+    "description": "Paraphrase"
   },
   "prompt_summarize_highlight": {
-    "message": "突出要点"
-  },
-  "prompt_summarize_simple": {
-    "message": "简化内容"
+    "message": "突出要点",
+    "description": "Highlight Important Terms"
   },
   "prompt_explain": {
     "message": "详细解释，包含逐步逻辑，并加入易于理解的示例： ",
     "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
   },
   "prompt_explain_brief": {
-    "message": "简短解释"
-  },
-  "prompt_explain_simple": {
-    "message": "通俗解释"
+    "message": "简短解释： ",
+    "description": "Explain briefly"
   },
   "prompt_explain_detail": {
-    "message": "详细解释"
+    "message": "详细解释： ",
+    "description": "Explain in Detail"
   },
   "prompt_analyze": {
     "message": "分析以下内容： ",
     "description": "Analyze the following: "
   },
   "prompt_analyze_pros": {
-    "message": "优缺点分析"
+    "message": "优缺点分析",
+    "description": "Analyze Pros and Cons"
   },
   "prompt_analyze_fact": {
-    "message": "事实核查"
+    "message": "事实核查",
+    "description": "Fact Check"
   },
   "prompt_analyze_patterns": {
-    "message": "寻找模式"
+    "message": "寻找模式",
+    "description": "Find Patterns or Trends"
   },
   "prompt_analyze_strengths": {
-    "message": "优势和劣势"
+    "message": "优势和劣势",
+    "description": "Spot Strengths and Weaknesses"
   },
   "prompt_analyze_errors": {
-    "message": "查找错误"
+    "message": "查找错误",
+    "description": "Fix Errors"
   },
   "prompt_image": {
-    "message": "创建图像"
-  },
-  "prompt_image_photo": {
-    "message": "真实照片风格"
-  },
-  "prompt_image_3d": {
-    "message": "3D渲染"
-  },
-  "prompt_image_2d": {
-    "message": "2D插图"
-  },
-  "prompt_image_anime": {
-    "message": "动漫风格"
-  },
-  "prompt_image_icon": {
-    "message": "图标设计"
-  },
-  "prompt_image_logo": {
-    "message": "标志设计"
+    "message": "创建图像",
+    "description": "Generate an image of "
   },
   "prompt_code": {
-    "message": "代码帮助"
+    "message": "编写代码并解释： ",
+    "description": "Code and explain: "
   },
   "prompt_code_fix": {
-    "message": "修复代码"
+    "message": "修复代码错误",
+    "description": "Fix Errors"
   },
   "prompt_code_error": {
-    "message": "调试错误"
+    "message": "解释此错误消息",
+    "description": "Explain This Error Message"
   },
   "prompt_code_refactor": {
-    "message": "重构代码"
+    "message": "重构代码",
+    "description": "Refactor"
   },
   "prompt_code_docs": {
-    "message": "添加文档"
+    "message": "生成代码文档",
+    "description": "Generate Code Documentation"
   },
   "prompt_code_tests": {
-    "message": "编写测试"
+    "message": "生成代码测试",
+    "description": "Generate Code Tests"
   },
   "prompt_code_review": {
-    "message": "代码审查"
+    "message": "审查并评论代码",
+    "description": "Review and Comment"
   },
   "prompt_generate": {
-    "message": "生成内容"
+    "message": "创建计划或想法： ",
+    "description": "Create a plan or idea: "
   },
   "prompt_generate_ideas": {
-    "message": "头脑风暴"
+    "message": "头脑风暴",
+    "description": "Brainstorm Ideas"
   },
   "prompt_generate_plan": {
-    "message": "创建计划"
+    "message": "创建计划",
+    "description": "Make a Plan"
   },
   "prompt_generate_draft": {
-    "message": "写初稿"
+    "message": "写初稿",
+    "description": "Write a Draft"
   },
   "prompt_generate_outline": {
-    "message": "创建大纲"
+    "message": "创建大纲",
+    "description": "Create an Outline"
   },
   "prompt_generate_email": {
-    "message": "写邮件"
+    "message": "写邮件",
+    "description": "Write an Email"
   },
   "prompt_generate_resume": {
-    "message": "写简历"
+    "message": "写简历",
+    "description": "Write and improve my Resume"
   },
   "solve": {
     "message": "解决",
@@ -313,5 +317,8 @@
   },
   "reset_success": {
     "message": "所有选项和数据已清除"
+  },
+  "file_limit": {
+    "message": "无法存储文件：超出 4MB 的总大小限制。"
   }
 }

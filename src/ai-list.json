@@ -153,11 +153,7 @@
       "id": "Explain",
       "prompt": "prompt_explain",
       "image": "/assets/images/prompts/explain.svg",
-      "suggestions": [
-        "prompt_explain_brief",
-        "prompt_explain_simple",
-        "prompt_explain_detail"
-      ],
+      "suggestions": ["prompt_explain_brief", "prompt_explain_detail"],
       "replace": true,
       "context": ["editable", "selection", "link"]
     },
@@ -179,14 +175,6 @@
       "id": "Create Image",
       "prompt": "prompt_image",
       "image": "/assets/images/prompts/image.svg",
-      "suggestions": [
-        "prompt_image_photo",
-        "prompt_image_3d",
-        "prompt_image_2d",
-        "prompt_image_anime",
-        "prompt_image_icon",
-        "prompt_image_logo"
-      ],
       "replace": false,
       "context": ["editable", "selection"]
     },

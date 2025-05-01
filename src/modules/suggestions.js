@@ -43,10 +43,10 @@ export async function getSuggestionButtons() {
       if (goBtn.disabled) {
         query.value = t(prompt.prompt);
         getCharCount();
+        findSuggestions(`prompt_${btn.id}`);
       } else {
         query.value = t(prompt.prompt) + query.value;
       }
-      findSuggestions(`prompt_${btn.id}`);
     });
 
     fragment.appendChild(btn);
@@ -62,6 +62,7 @@ async function findSuggestions(id) {
     !promptList.suggestions ||
     promptList.suggestions.length === 0
   ) {
+    suggestionResult.innerHTML = "";
     return;
   }
   const fragment = document.createDocumentFragment();
