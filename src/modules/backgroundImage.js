@@ -1,5 +1,6 @@
 import { toggleButton, loadJsonData, resetBtn } from "../app.js";
 import { appendSvg } from "./appendSvg.js";
+import { t } from "./locales.js";
 
 let expirationTimeout = null;
 const CACHE_NAME = "bg-image-cache";
@@ -148,12 +149,12 @@ bgColor.addEventListener("input", () => toggleButton(bgBtn, true));
 bgColor2.addEventListener("input", () => toggleButton(bgBtn, true));
 bgNum.addEventListener("input", () => toggleButton(bgBtn, true));
 ownImgInput.addEventListener("change", () => {
-  ownImgLabel.textContent = "Click to upload again...";
   toggleButton(bgBtn, true);
+  bgBtn.click();
 });
 bgImgExpSelect.addEventListener("change", () => toggleButton(bgBtn, true));
 backgroundSelect.addEventListener("change", () => {
-  ownImgLabel.textContent = "Click to upload...";
+  ownImgLabel.textContent = t("upload_image");
   toggleButton(bgBtn, true);
 });
 
@@ -181,7 +182,7 @@ bgBtn.addEventListener("click", async () => {
       lightModeText: null,
     };
   }
-  ownImgLabel.textContent = "Click to upload...";
+  ownImgLabel.textContent = t("upload_image");
 
   switch (selectedOption) {
     case "bg-img":
@@ -439,7 +440,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     [bgColor, bgImgExpSelect, bgColor2, bgNum, ownImgLabel].forEach((e) => {
       e.style.display = "none";
     });
-    ownImgLabel.textContent = "Click to upload...";
+    ownImgLabel.textContent = t("upload_image");
     switch (selectedOption) {
       case "bg-img":
         bgImgExpSelect.style.display = "";
@@ -503,7 +504,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       case "own-img":
         ownImgLabel.textContent = bgOption.credits[0]
           ? bgOption.credits[0]
-          : "Click to upload...";
+          : t("upload_image");
         ownImgLabel.style.display = "";
         break;
       default:
@@ -526,7 +527,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     clearBgOption();
     resetBackground();
     setTextColor();
-    ownImgLabel.textContent = "Click to upload...";
+    ownImgLabel.textContent = t("upload_image");
     [bgImgExpSelect, backgroundSelect].forEach((selectElement) => {
       Array.from(selectElement.options).forEach((option) =>
         option.removeAttribute("selected")
