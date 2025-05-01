@@ -1,0 +1,82 @@
+{
+  "greeting_morning": {
+    "message": "Guten Morgen",
+    "description": "Morning greeting"
+  },
+  "greeting_afternoon": {
+    "message": "Guten Tag",
+    "description": "Afternoon greeting"
+  },
+  "greeting_evening": {
+    "message": "Guten Abend",
+    "description": "Evening greeting"
+  },
+  "greeting_hello": {
+    "message": "Hallo",
+    "description": "Informal greeting"
+  },
+  "greeting_help": {
+    "message": "Wie kann ich Ihnen heute helfen?",
+    "description": "Help message after greeting"
+  },
+  "search_placeholder": {
+    "message": "Was kann ich für Sie tun?",
+    "description": "Placeholder text for search input"
+  },
+  "welcome_name": {
+    "message": "$GREETING$, $NAME$.",
+    "description": "Welcome message with name",
+    "placeholders": {
+      "greeting": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      }
+    }
+  },
+  "reset_button": {
+    "message": "Zurücksetzen",
+    "description": "Reset button text"
+  },
+  "close_button": {
+    "message": "Schließen",
+    "description": "Close button text"
+  },
+  "options_title": {
+    "message": "Optionen",
+    "description": "Options sidebar title"
+  },
+  "name_label": {
+    "message": "Name",
+    "description": "Name field label"
+  },
+  "greeting_type_label": {
+    "message": "Begrüßungsart",
+    "description": "Greeting type fieldset label"
+  },
+  "formal_option": {
+    "message": "Formell",
+    "description": "Formal greeting option"
+  },
+  "informal_option": {
+    "message": "Informell",
+    "description": "Informal greeting option"
+  },
+  "custom_option": {
+    "message": "Benutzerdefiniert",
+    "description": "Custom greeting option"
+  },
+  "none_option": {
+    "message": "Keine",
+    "description": "No greeting option"
+  },
+  "enter_custom_greeting": {
+    "message": "Geben Sie Ihre benutzerdefinierte Begrüßung ein",
+    "description": "Prompt for custom greeting input"
+  },
+  "language_label": {
+    "message": "Sprache:",
+    "description": "Language selector label"
+  }
+}

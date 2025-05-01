@@ -1,0 +1,82 @@
+{
+  "greeting_morning": {
+    "message": "おはようございます",
+    "description": "Morning greeting"
+  },
+  "greeting_afternoon": {
+    "message": "こんにちは",
+    "description": "Afternoon greeting"
+  },
+  "greeting_evening": {
+    "message": "こんばんは",
+    "description": "Evening greeting"
+  },
+  "greeting_hello": {
+    "message": "やあ",
+    "description": "Informal greeting"
+  },
+  "greeting_help": {
+    "message": "今日は何をお手伝いできますか？",
+    "description": "Help message after greeting"
+  },
+  "search_placeholder": {
+    "message": "ご用件をお聞かせください",
+    "description": "Placeholder text for search input"
+  },
+  "welcome_name": {
+    "message": "$GREETING$、$NAME$さん。",
+    "description": "Welcome message with name",
+    "placeholders": {
+      "greeting": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      }
+    }
+  },
+  "reset_button": {
+    "message": "初期設定に戻す",
+    "description": "Reset button text"
+  },
+  "close_button": {
+    "message": "閉じる",
+    "description": "Close button text"
+  },
+  "options_title": {
+    "message": "設定",
+    "description": "Options sidebar title"
+  },
+  "name_label": {
+    "message": "名前",
+    "description": "Name field label"
+  },
+  "greeting_type_label": {
+    "message": "挨拶の種類",
+    "description": "Greeting type fieldset label"
+  },
+  "formal_option": {
+    "message": "フォーマル",
+    "description": "Formal greeting option"
+  },
+  "informal_option": {
+    "message": "カジュアル",
+    "description": "Informal greeting option"
+  },
+  "custom_option": {
+    "message": "カスタム",
+    "description": "Custom greeting option"
+  },
+  "none_option": {
+    "message": "なし",
+    "description": "No greeting option"
+  },
+  "enter_custom_greeting": {
+    "message": "カスタム挨拶を入力してください",
+    "description": "Prompt for custom greeting input"
+  },
+  "language_label": {
+    "message": "言語：",
+    "description": "Language selector label"
+  }
+}

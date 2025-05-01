@@ -1,0 +1,82 @@
+{
+  "greeting_morning": {
+    "message": "Good Morning",
+    "description": "Morning greeting"
+  },
+  "greeting_afternoon": {
+    "message": "Good Afternoon",
+    "description": "Afternoon greeting"
+  },
+  "greeting_evening": {
+    "message": "Good Evening",
+    "description": "Evening greeting"
+  },
+  "greeting_hello": {
+    "message": "Hello",
+    "description": "Informal greeting"
+  },
+  "greeting_help": {
+    "message": "How can I help you today?",
+    "description": "Help message after greeting"
+  },
+  "search_placeholder": {
+    "message": "What can I do for you?",
+    "description": "Placeholder text for search input"
+  },
+  "welcome_name": {
+    "message": "$GREETING$, $NAME$.",
+    "description": "Welcome message with name",
+    "placeholders": {
+      "greeting": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      }
+    }
+  },
+  "reset_button": {
+    "message": "Reset to Defaults",
+    "description": "Reset button text"
+  },
+  "close_button": {
+    "message": "Close",
+    "description": "Close button text"
+  },
+  "options_title": {
+    "message": "Options",
+    "description": "Options sidebar title"
+  },
+  "name_label": {
+    "message": "Name",
+    "description": "Name field label"
+  },
+  "greeting_type_label": {
+    "message": "Greeting Type",
+    "description": "Greeting type fieldset label"
+  },
+  "formal_option": {
+    "message": "Formal",
+    "description": "Formal greeting option"
+  },
+  "informal_option": {
+    "message": "Informal",
+    "description": "Informal greeting option"
+  },
+  "custom_option": {
+    "message": "Custom",
+    "description": "Custom greeting option"
+  },
+  "none_option": {
+    "message": "None",
+    "description": "No greeting option"
+  },
+  "enter_custom_greeting": {
+    "message": "Enter your custom greeting",
+    "description": "Prompt for custom greeting input"
+  },
+  "language_label": {
+    "message": "Language:",
+    "description": "Language selector label"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "greeting_morning": {
+    "message": "早上好",
+    "description": "Morning greeting"
+  },
+  "greeting_afternoon": {
+    "message": "下午好",
+    "description": "Afternoon greeting"
+  },
+  "greeting_evening": {
+    "message": "晚上好",
+    "description": "Evening greeting"
+  },
+  "greeting_hello": {
+    "message": "你好",
+    "description": "Informal greeting"
+  },
+  "greeting_help": {
+    "message": "今天我能为您做什么？",
+    "description": "Help message after greeting"
+  },
+  "search_placeholder": {
+    "message": "我能为您做什么？",
+    "description": "Placeholder text for search input"
+  },
+  "welcome_name": {
+    "message": "$GREETING$，$NAME$。",
+    "description": "Welcome message with name",
+    "placeholders": {
+      "greeting": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      }
+    }
+  },
+  "reset_button": {
+    "message": "重置为默认值",
+    "description": "Reset button text"
+  },
+  "close_button": {
+    "message": "关闭",
+    "description": "Close button text"
+  },
+  "options_title": {
+    "message": "选项",
+    "description": "Options sidebar title"
+  },
+  "name_label": {
+    "message": "姓名",
+    "description": "Name field label"
+  },
+  "greeting_type_label": {
+    "message": "问候类型",
+    "description": "Greeting type fieldset label"
+  },
+  "formal_option": {
+    "message": "正式",
+    "description": "Formal greeting option"
+  },
+  "informal_option": {
+    "message": "非正式",
+    "description": "Informal greeting option"
+  },
+  "custom_option": {
+    "message": "自定义",
+    "description": "Custom greeting option"
+  },
+  "none_option": {
+    "message": "无",
+    "description": "No greeting option"
+  },
+  "enter_custom_greeting": {
+    "message": "请输入您的自定义问候语",
+    "description": "Prompt for custom greeting input"
+  },
+  "language_label": {
+    "message": "语言：",
+    "description": "Language selector label"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "greeting_morning": {
+    "message": "Buenos Días",
+    "description": "Morning greeting"
+  },
+  "greeting_afternoon": {
+    "message": "Buenas Tardes",
+    "description": "Afternoon greeting"
+  },
+  "greeting_evening": {
+    "message": "Buenas Noches",
+    "description": "Evening greeting"
+  },
+  "greeting_hello": {
+    "message": "Hola",
+    "description": "Informal greeting"
+  },
+  "greeting_help": {
+    "message": "¿Cómo puedo ayudarte hoy?",
+    "description": "Help message after greeting"
+  },
+  "search_placeholder": {
+    "message": "¿Qué puedo hacer por ti?",
+    "description": "Placeholder text for search input"
+  },
+  "welcome_name": {
+    "message": "$GREETING$, $NAME$.",
+    "description": "Welcome message with name",
+    "placeholders": {
+      "greeting": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      }
+    }
+  },
+  "reset_button": {
+    "message": "Restablecer valores predeterminados",
+    "description": "Reset button text"
+  },
+  "close_button": {
+    "message": "Cerrar",
+    "description": "Close button text"
+  },
+  "options_title": {
+    "message": "Opciones",
+    "description": "Options sidebar title"
+  },
+  "name_label": {
+    "message": "Nombre",
+    "description": "Name field label"
+  },
+  "greeting_type_label": {
+    "message": "Tipo de saludo",
+    "description": "Greeting type fieldset label"
+  },
+  "formal_option": {
+    "message": "Formal",
+    "description": "Formal greeting option"
+  },
+  "informal_option": {
+    "message": "Informal",
+    "description": "Informal greeting option"
+  },
+  "custom_option": {
+    "message": "Personalizado",
+    "description": "Custom greeting option"
+  },
+  "none_option": {
+    "message": "Ninguno",
+    "description": "No greeting option"
+  },
+  "enter_custom_greeting": {
+    "message": "Ingrese su saludo personalizado",
+    "description": "Prompt for custom greeting input"
+  },
+  "language_label": {
+    "message": "Idioma:",
+    "description": "Language selector label"
+  }
+}
