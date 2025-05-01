@@ -1,5 +1,9 @@
 import { query } from "./query.js";
 import { getGreeting } from "./greetings.js";
+import { resetBtn } from "../app.js";
+import { closeBtn } from "./sidebar.js";
+import { suggestDisplay } from "./suggestions.js";
+import { userThemeForm } from "./theme.js";
 // Handle localization
 const DEFAULT_LOCALE = "en";
 let currentLocale = DEFAULT_LOCALE;
@@ -62,22 +66,34 @@ export function t(key, substitutions = {}) {
 
 // Update UI text when locale changes
 export function updateUIText() {
-  document.querySelector("#reset").textContent = t("reset_button");
-  document.querySelector("#close-options").textContent = t("close_button");
+  getGreeting();
+  // Set initial placeholder
+  query.placeholder = t("search_placeholder");
+  resetBtn.textContent = t("reset_button");
+  closeBtn.textContent = t("close_button");
   document.querySelector("#sidebar h1").textContent = t("options_title");
   document.querySelector("#name-label").textContent = t("name_label");
   document.querySelector("#greeting-form legend").textContent = t(
     "greeting_type_label"
   );
-
+  suggestDisplay.querySelector("legend").textContent = t(
+    "show_suggestions_label"
+  );
+  suggestDisplay.querySelectorAll("label").forEach((label) => {
+    label.textContent = t(`${label.getAttribute("for")}`);
+  });
   // Update radio labels
   document.querySelector('[for="formal"]').textContent = t("formal_option");
   document.querySelector('[for="informal"]').textContent = t("informal_option");
   document.querySelector('[for="custom"]').textContent = t("custom_option");
   document.querySelector('[for="no-greeting"]').textContent = t("none_option");
-  getGreeting();
-  // Set initial placeholder
-  query.placeholder = t("search_placeholder");
+  document.querySelector("#lang").textContent = t("lang");
+  document.querySelector("#theme-label").textContent = t("theme");
+  userThemeForm.querySelectorAll("label").forEach((label) => {
+    // find the label for attribute
+    let input = label.getAttribute("for");
+    label.textContent = t(`theme_${input}`);
+  });
 }
 
 // Listen for locale changes

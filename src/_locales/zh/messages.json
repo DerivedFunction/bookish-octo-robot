@@ -75,8 +75,36 @@
     "message": "请输入您的自定义问候语",
     "description": "Prompt for custom greeting input"
   },
-  "language_label": {
-    "message": "语言：",
-    "description": "Language selector label"
+  "show_suggestions_label": {
+    "message": "显示建议",
+    "description": "Checkbox label for showing suggestions"
+  },
+  "sug-show": {
+    "message": "显示",
+    "description": "Show option"
+  },
+  "sug-hide": {
+    "message": "隐藏",
+    "description": "Hide option"
+  },
+  "lang": {
+    "message": "语言",
+    "description": "Language field label"
+  },
+  "theme": {
+    "message": "主题",
+    "description": "Theme field label"
+  },
+  "theme_auto": {
+    "message": "自动",
+    "description": "Auto theme option"
+  },
+  "theme_dark": {
+    "message": "暗色",
+    "description": "Dark theme option"
+  },
+  "theme_light": {
+    "message": "亮色",
+    "description": "Light theme option"
   }
 }

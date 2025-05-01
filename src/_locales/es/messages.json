@@ -75,8 +75,36 @@
     "message": "Ingrese su saludo personalizado",
     "description": "Prompt for custom greeting input"
   },
-  "language_label": {
-    "message": "Idioma:",
-    "description": "Language selector label"
+  "show_suggestions_label": {
+    "message": "Mostrar sugerencias",
+    "description": "Checkbox label for showing suggestions"
+  },
+  "sug-show": {
+    "message": "Mostrar",
+    "description": "Show option"
+  },
+  "sug-hide": {
+    "message": "Ocultar",
+    "description": "Hide option"
+  },
+  "lang": {
+    "message": "Idioma",
+    "description": "Language field label"
+  },
+  "theme": {
+    "message": "Tema",
+    "description": "Theme field label"
+  },
+  "theme_auto": {
+    "message": "Auto",
+    "description": "Auto theme option"
+  },
+  "theme_dark": {
+    "message": "Oscuro",
+    "description": "Dark theme option"
+  },
+  "theme_light": {
+    "message": "Ligero",
+    "description": "Light theme option"
   }
 }

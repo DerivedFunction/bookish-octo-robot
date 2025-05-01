@@ -75,8 +75,36 @@
     "message": "Enter your custom greeting",
     "description": "Prompt for custom greeting input"
   },
-  "language_label": {
-    "message": "Language:",
-    "description": "Language selector label"
+  "show_suggestions_label": {
+    "message": "Show Suggestions",
+    "description": "Checkbox label for showing suggestions"
+  },
+  "sug-show": {
+    "message": "Show",
+    "description": "Show option"
+  },
+  "sug-hide": {
+    "message": "Hide",
+    "description": "Hide option"
+  },
+  "lang": {
+    "message": "Language",
+    "description": "Language field label"
+  },
+  "theme": {
+    "message": "Theme",
+    "description": "Theme field label"
+  },
+  "theme_auto": {
+    "message": "Auto",
+    "description": "Auto theme option"
+  },
+  "theme_dark": {
+    "message": "Dark",
+    "description": "Dark theme option"
+  },
+  "theme_light": {
+    "message": "Light",
+    "description": "Light theme option"
   }
 }

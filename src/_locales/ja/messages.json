@@ -75,8 +75,36 @@
     "message": "カスタム挨拶を入力してください",
     "description": "Prompt for custom greeting input"
   },
-  "language_label": {
-    "message": "言語：",
-    "description": "Language selector label"
+  "show_suggestions_label": {
+    "message": "提案を表示する",
+    "description": "Checkbox label for showing suggestions"
+  },
+  "sug-show": {
+    "message": "表示する",
+    "description": "Show option"
+  },
+  "sug-hide": {
+    "message": "隠す",
+    "description": "Hide option"
+  },
+  "lang": {
+    "message": "言語",
+    "description": "Language field label"
+  },
+  "theme": {
+    "message": "テーマ",
+    "description": "Theme field label"
+  },
+  "theme_auto": {
+    "message": "自動",
+    "description": "Auto theme option"
+  },
+  "theme_dark": {
+    "message": "ダーク",
+    "description": "Dark theme option"
+  },
+  "theme_light": {
+    "message": "ライト",
+    "description": "Light theme option"
   }
 }

@@ -75,8 +75,36 @@
     "message": "Geben Sie Ihre benutzerdefinierte Begrüßung ein",
     "description": "Prompt for custom greeting input"
   },
-  "language_label": {
-    "message": "Sprache:",
-    "description": "Language selector label"
+  "show_suggestions_label": {
+    "message": "Anzeigen Sie",
+    "description": "Checkbox label for showing suggestions"
+  },
+  "sug-show": {
+    "message": "Anzeigen",
+    "description": "Show option"
+  },
+  "sug-hide": {
+    "message": "Verbergen",
+    "description": "Hide option"
+  },
+  "lang": {
+    "message": "Sprache",
+    "description": "Language field label"
+  },
+  "theme": {
+    "message": "Thema",
+    "description": "Theme field label"
+  },
+  "theme_auto": {
+    "message": "Auto",
+    "description": "Auto theme option"
+  },
+  "theme_dark": {
+    "message": "Dunkel",
+    "description": "Dark theme option"
+  },
+  "theme_light": {
+    "message": "Licht",
+    "description": "Light theme option"
   }
 }
