@@ -17,7 +17,7 @@ rm -rf "$DIST_DIR" firefox chrome
 mkdir -p "$DIST_DIR" firefox chrome
 
 # Copy necessary files and directories to the distribution directory
-cp -r "$SOURCE_DIR"/*.{json,css,html} "$SOURCE_DIR"/{assets,scripts,locales} "$DIST_DIR"
+cp -r "$SOURCE_DIR"/*.{json,css,html} "$SOURCE_DIR"/{assets,scripts,_locales} "$DIST_DIR"
 
 # Run the npm build script
 echo "Updating and building with NPM"
