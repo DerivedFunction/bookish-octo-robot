@@ -89,11 +89,15 @@
     <div id="sidebar" class="sidebar">
       <h1>Options</h1>
       <div class="section">
-        <div class="horizontal-container">
-          <span id="name-label">Name</span>
-          <input type="text" id="name-field" class="input-field" />
-          <button id="submit-name" class="submit"></button>
-        </div>
+        <form>
+          <fieldset>
+            <legend id="name-label">Name</legend>
+            <div class="horizontal-container">
+              <input type="text" id="name-field" class="input-field" />
+              <button id="submit-name" class="submit"></button>
+            </div>
+          </fieldset>
+        </form>
       </div>
       <div class="section">
         <form>
@@ -127,74 +131,6 @@
           </fieldset>
         </form>
       </div>
-
-      <div class="section">
-        <div class="horizontal-container">
-          <span>Weather</span>
-          <input
-            type="text"
-            id="weather-field"
-            placeholder="Name, Postal Code, or Coordinates"
-            class="input-field"
-          />
-          <button id="submit-weather" class="submit"></button>
-        </div>
-        <div id="unit-toggle-label">
-          <input type="checkbox" id="unit-toggle" />
-          <label for="unit-toggle">Use &#176;F instead of &#176;C</label>
-        </div>
-      </div>
-      <div class="section">
-        <div class="horizontal-container">
-          <span>Background</span>
-          <select id="bg-select">
-            <option value="default">Default</option>
-            <option value="bg-img">Pexels/Unsplash</option>
-            <option value="color">Solid Color</option>
-            <option value="gradient">Gradient</option>
-            <option value="own-img">Upload Image</option>
-          </select>
-          <button id="save-bg" class="submit"></button>
-        </div>
-        <div class="horizontal-container">
-          <select id="bg-img-exp">
-            <option value="-1">Never Change Image</option>
-            <option value="0">Change Every New Tab</option>
-            <option value="300">Change Every 5 Minutes</option>
-            <!-- 5 * 60 = 300 seconds -->
-            <option value="900">Change Every 15 Minutes</option>
-            <!-- 15 * 60 = 900 seconds -->
-            <option value="1800">Change Every 30 Minutes</option>
-            <!-- 30 * 60 = 1800 seconds -->
-            <option value="3600">Change Every Hour</option>
-            <!-- 60 * 60 = 3600 seconds -->
-            <option value="43200">Change Every 12 Hours</option>
-            <!-- 12 * 60 * 60 = 43200 seconds -->
-            <option value="86400">Change Daily</option>
-            <!-- 24 * 60 * 60 = 86400 seconds -->
-            <option value="604800">Change Weekly</option>
-            <!-- 24 * 60 * 60 * 7 = 604800 seconds -->
-          </select>
-          <label for="solid-color"></label>
-          <input type="color" id="solid-color" class="input-field" />
-          <label for="solid-color-2"></label>
-          <input type="color" id="solid-color-2" class="input-field" />
-          <label for="gradient-number"></label>
-          <input
-            type="number"
-            id="gradient-number"
-            class="input-field"
-            placeholder="0-360"
-            min="0"
-            max="360"
-            value="0"
-          />
-          <label for="img-file" id="img-file-label" class="button-format"
-            >Click to upload...</label
-          >
-          <input id="img-file" type="file" accept="image/*" hidden="true" />
-        </div>
-      </div>
       <div class="section">
         <form>
           <fieldset class="horizontal-container" id="user-theme">
@@ -207,29 +143,6 @@
             <label for="dark">Dark Mode</label>
           </fieldset>
         </form>
-      </div>
-      <div class="section">
-        <form>
-          <fieldset class="horizontal-container" id="time-format">
-            <legend>Choose Time Format</legend>
-            <input type="radio" id="no-time" name="time" value="hide" />
-            <label for="no-time">Hide</label>
-            <input type="radio" id="24" name="time" value="24" />
-            <label for="24">24 Hours</label>
-            <input type="radio" id="12" name="time" value="12" />
-            <label for="12">12 Hours</label>
-          </fieldset>
-        </form>
-      </div>
-      <div class="horizontal-container section">
-        Fade after inactivity:
-        <select id="content-transparent">
-          <option value="-1">Never Fade</option>
-          <option value="0">Instantly</option>
-          <option value="5">5 sec</option>
-          <option value="15">15 sec</option>
-          <option value="30">30 sec</option>
-        </select>
       </div>
       <div class="section">
         <span>Search Everywhere:</span>

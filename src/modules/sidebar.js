@@ -1,4 +1,3 @@
-import { weatherField } from "./weather.js";
 import { nameInput } from "./nameInput.js";
 import { appendSvg } from "./appendSvg.js";
 import { loadJsonData } from "../app.js";
@@ -14,8 +13,6 @@ export const optionBtn = document.getElementById("options-button");
 optionBtn.addEventListener("click", async () => {
   sidebar.style.display = "block";
   nameInput.value = localStorage.getItem("name") || "";
-  let x = JSON.parse(localStorage.getItem("location"));
-  weatherField.value = x ? x.inputValue : "";
   await appendList();
 });
 const sidebar = document.getElementById("sidebar");
@@ -28,7 +25,7 @@ document.addEventListener("click", (e) => {
     exp_sidebar.style.display = "none";
   }
 });
-const closeBtn = document.getElementById("close-options");
+export const closeBtn = document.getElementById("close-options");
 closeBtn.addEventListener("click", () => {
   sidebar.style.display = "none";
 });
