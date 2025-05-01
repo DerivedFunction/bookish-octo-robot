@@ -1,31 +1,25 @@
 {
   "greeting_morning": {
-    "message": "Good Morning",
-    
+    "message": "Good Morning"
   },
   "greeting_afternoon": {
-    "message": "Good Afternoon",
-    
+    "message": "Good Afternoon"
   },
   "greeting_evening": {
-    "message": "Good Evening",
-    
+    "message": "Good Evening"
   },
   "greeting_hello": {
-    "message": "Hello",
-    
+    "message": "Hello"
   },
   "greeting_help": {
-    "message": "How can I help you today?",
-    
+    "message": "How can I help you today?"
   },
   "search_placeholder": {
-    "message": "What can I do for you?",
-    
+    "message": "What can I do for you?"
   },
   "welcome_name": {
     "message": "$GREETING$, $NAME$.",
-    ,
+
     "placeholders": {
       "greeting": {
         "content": "$1"
@@ -36,76 +30,58 @@
     }
   },
   "reset_button": {
-    "message": "Reset to Defaults",
-    
+    "message": "Reset to Defaults"
   },
   "close_button": {
-    "message": "Close",
-    
+    "message": "Close"
   },
   "options_title": {
-    "message": "Options",
-    
+    "message": "Options"
   },
   "name_label": {
-    "message": "Name",
-    
+    "message": "Name"
   },
   "greeting_type_label": {
-    "message": "Greeting Type",
-    
+    "message": "Greeting Type"
   },
   "formal_option": {
-    "message": "Formal",
-    
+    "message": "Formal"
   },
   "informal_option": {
-    "message": "Informal",
-    
+    "message": "Informal"
   },
   "custom_option": {
-    "message": "Custom",
-    
+    "message": "Custom"
   },
   "none_option": {
-    "message": "None",
-    
+    "message": "None"
   },
   "enter_custom_greeting": {
-    "message": "Enter your custom greeting",
-    
+    "message": "Enter your custom greeting"
   },
   "show_suggestions_label": {
-    "message": "Show Suggestions",
-    
+    "message": "Show Suggestions"
   },
   "sug-show": {
-    "message": "Show",
-    
+    "message": "Show"
   },
   "sug-hide": {
-    "message": "Hide",
-    
+    "message": "Hide"
   },
   "lang": {
-    "message": "Language",
-    
+    "message": "Language"
   },
   "theme": {
-    "message": "Theme",
-    
+    "message": "Theme"
   },
   "theme_auto": {
-    "message": "Auto",
-    
+    "message": "Auto"
   },
   "theme_dark": {
-    "message": "Dark",
-    
+    "message": "Dark"
   },
   "theme_light": {
-    "message": "Light",
-    
+    "message": "Light"
   },
   "tooltip_options": {
     "message": "Options"
@@ -270,20 +246,16 @@
     "message": "Generate"
   },
   "ask": {
-    "message": "Ask",
-    
+    "message": "Ask"
   },
   "ask_ai": {
-    "message": "Ask AI",
-    
+    "message": "Ask AI"
   },
   "paste_selection": {
-    "message": "Paste Selection",
-    
+    "message": "Paste Selection"
   },
   "switch_ai": {
-    "message": "Switch AI",
-    
+    "message": "Switch AI"
   },
   "no_perm": {
     "message": "may not work without permissions"

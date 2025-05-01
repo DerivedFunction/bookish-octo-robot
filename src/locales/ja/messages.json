@@ -1,31 +1,25 @@
 {
   "greeting_morning": {
-    "message": "おはようございます",
-    
+    "message": "おはようございます"
   },
   "greeting_afternoon": {
-    "message": "こんにちは",
-    
+    "message": "こんにちは"
   },
   "greeting_evening": {
-    "message": "こんばんは",
-    
+    "message": "こんばんは"
   },
   "greeting_hello": {
-    "message": "やあ",
-    
+    "message": "やあ"
   },
   "greeting_help": {
-    "message": "今日は何をお手伝いできますか？",
-    
+    "message": "今日は何をお手伝いできますか？"
   },
   "search_placeholder": {
-    "message": "ご用件をお聞かせください",
-    
+    "message": "ご用件をお聞かせください"
   },
   "welcome_name": {
     "message": "$GREETING$、$NAME$さん。",
-    ,
+
     "placeholders": {
       "greeting": {
         "content": "$1"
@@ -36,76 +30,58 @@
     }
   },
   "reset_button": {
-    "message": "初期設定に戻す",
-    
+    "message": "初期設定に戻す"
   },
   "close_button": {
-    "message": "閉じる",
-    
+    "message": "閉じる"
   },
   "options_title": {
-    "message": "設定",
-    
+    "message": "設定"
   },
   "name_label": {
-    "message": "名前",
-    
+    "message": "名前"
   },
   "greeting_type_label": {
-    "message": "挨拶の種類",
-    
+    "message": "挨拶の種類"
   },
   "formal_option": {
-    "message": "フォーマル",
-    
+    "message": "フォーマル"
   },
   "informal_option": {
-    "message": "カジュアル",
-    
+    "message": "カジュアル"
   },
   "custom_option": {
-    "message": "カスタム",
-    
+    "message": "カスタム"
   },
   "none_option": {
-    "message": "なし",
-    
+    "message": "なし"
   },
   "enter_custom_greeting": {
-    "message": "カスタム挨拶を入力してください",
-    
+    "message": "カスタム挨拶を入力してください"
   },
   "show_suggestions_label": {
-    "message": "提案を表示する",
-    
+    "message": "提案を表示する"
   },
   "sug-show": {
-    "message": "表示する",
-    
+    "message": "表示する"
   },
   "sug-hide": {
-    "message": "隠す",
-    
+    "message": "隠す"
   },
   "lang": {
-    "message": "言語",
-    
+    "message": "言語"
   },
   "theme": {
-    "message": "テーマ",
-    
+    "message": "テーマ"
   },
   "theme_auto": {
-    "message": "自動",
-    
+    "message": "自動"
   },
   "theme_dark": {
-    "message": "ダーク",
-    
+    "message": "ダーク"
   },
   "theme_light": {
-    "message": "ライト",
-    
+    "message": "ライト"
   },
   "tooltip_options": {
     "message": "オプション"
@@ -141,192 +117,145 @@
     "message": "すべて検索"
   },
   "prompt_solve": {
-    "message": "以下の問題を解決し、ステップごとの論理を説明してください： ",
-    
+    "message": "以下の問題を解決し、ステップごとの論理を説明してください： "
   },
   "prompt_solve_quick": {
-    "message": "素早い回答を提供してください",
-    
+    "message": "素早い回答を提供してください"
   },
   "prompt_solve_check": {
-    "message": "私の回答を確認してください",
-    
+    "message": "私の回答を確認してください"
   },
   "prompt_solve_fill": {
-    "message": "不足している部分を補完する",
-    
+    "message": "不足している部分を補完する"
   },
   "prompt_research": {
-    "message": "このトピックを調査する",
-    
+    "message": "このトピックを調査する"
   },
   "prompt_research_compare": {
-    "message": "異なるアプローチを比較する",
-    
+    "message": "異なるアプローチを比較する"
   },
   "prompt_research_latest": {
-    "message": "最新情報を探す",
-    
+    "message": "最新情報を探す"
   },
   "prompt_summarize": {
-    "message": "簡潔かつ簡潔に要約し、重要な用語を箇条書きにしてください： ",
-    
+    "message": "簡潔かつ簡潔に要約し、重要な用語を箇条書きにしてください： "
   },
   "prompt_summarize_quick": {
-    "message": "素早い要約を提供してください",
-    
+    "message": "素早い要約を提供してください"
   },
   "prompt_summarize_paraphrase": {
-    "message": "言い換える",
-    
+    "message": "言い換える"
   },
   "prompt_summarize_highlight": {
-    "message": "要点をハイライト",
-    
+    "message": "要点をハイライト"
   },
   "prompt_explain": {
-    "message": "ステップごとの論理で徹底的に説明し、わかりやすい例を入れてください： ",
-    
+    "message": "ステップごとの論理で徹底的に説明し、わかりやすい例を入れてください： "
   },
   "prompt_explain_brief": {
-    "message": "簡潔に説明してください",
-    
+    "message": "簡潔に説明してください"
   },
   "prompt_explain_detail": {
-    "message": "詳細に説明してください",
-    
+    "message": "詳細に説明してください"
   },
   "prompt_analyze": {
-    "message": "以下を分析してください： ",
-    
+    "message": "以下を分析してください： "
   },
   "prompt_analyze_pros": {
-    "message": "長所と短所",
-    
+    "message": "長所と短所"
   },
   "prompt_analyze_fact": {
-    "message": "事実確認",
-    
+    "message": "事実確認"
   },
   "prompt_analyze_patterns": {
-    "message": "パターンを見つける",
-    
+    "message": "パターンを見つける"
   },
   "prompt_analyze_strengths": {
-    "message": "強みと弱み",
-    
+    "message": "強みと弱み"
   },
   "prompt_analyze_errors": {
-    "message": "エラーを探す",
-    
+    "message": "エラーを探す"
   },
   "prompt_image": {
-    "message": "画像を作成",
-    
+    "message": "画像を作成"
   },
   "prompt_code": {
-    "message": "コードを書いて説明してください： ",
-    
+    "message": "コードを書いて説明してください： "
   },
   "prompt_code_fix": {
-    "message": "コードのエラーを修正",
-    
+    "message": "コードのエラーを修正"
   },
   "prompt_code_error": {
-    "message": "このエラーメッセージを説明",
-    
+    "message": "このエラーメッセージを説明"
   },
   "prompt_code_refactor": {
-    "message": "コードをリファクタリング",
-    
+    "message": "コードをリファクタリング"
   },
   "prompt_code_docs": {
-    "message": "コードのドキュメントを生成",
-    
+    "message": "コードのドキュメントを生成"
   },
   "prompt_code_tests": {
-    "message": "コードのテストを生成",
-    
+    "message": "コードのテストを生成"
   },
   "prompt_code_review": {
-    "message": "コードをレビューしてコメント",
-    
+    "message": "コードをレビューしてコメント"
   },
   "prompt_generate": {
-    "message": "計画またはアイデアを作成してください： ",
-    
+    "message": "計画またはアイデアを作成してください： "
   },
   "prompt_generate_ideas": {
-    "message": "アイデアを出す",
-    
+    "message": "アイデアを出す"
   },
   "prompt_generate_plan": {
-    "message": "計画を作成",
-    
+    "message": "計画を作成"
   },
   "prompt_generate_draft": {
-    "message": "下書きを作成",
-    
+    "message": "下書きを作成"
   },
   "prompt_generate_outline": {
-    "message": "アウトラインを作成",
-    
+    "message": "アウトラインを作成"
   },
   "prompt_generate_email": {
-    "message": "メールを作成",
-    
+    "message": "メールを作成"
   },
   "prompt_generate_resume": {
-    "message": "履歴書を作成",
-    
+    "message": "履歴書を作成"
   },
   "solve": {
-    "message": "解決",
-    
+    "message": "解決"
   },
   "research": {
-    "message": "調査",
-    
+    "message": "調査"
   },
   "summarize": {
-    "message": "要約",
-    
+    "message": "要約"
   },
   "explain": {
-    "message": "説明",
-    
+    "message": "説明"
   },
   "analyze": {
-    "message": "分析",
-    
+    "message": "分析"
   },
   "create image": {
-    "message": "画像作成",
-    
+    "message": "画像作成"
   },
   "code": {
-    "message": "コード",
-    
+    "message": "コード"
   },
   "generate": {
-    "message": "生成",
-    
+    "message": "生成"
   },
   "ask": {
-    "message": "聞く",
-    
+    "message": "聞く"
   },
   "ask_ai": {
-    "message": "AIに聞く",
-    
+    "message": "AIに聞く"
   },
   "paste_selection": {
-    "message": "選択を貼り付け",
-    
+    "message": "選択を貼り付け"
   },
   "switch_ai": {
-    "message": "AI切り替え",
-    
+    "message": "AI切り替え"
   },
   "no_perm": {
     "message": "は権限がないと動作しない可能性があります"

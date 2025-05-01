@@ -6,7 +6,7 @@ let currentLocale = "en";
 
 async function loadBackgroundTranslations(locale) {
   try {
-    const response = await fetch(`/_locales/${locale}/messages.json`);
+    const response = await fetch(`/locales/${locale}/messages.json`);
     if (!response.ok) {
       console.warn(`Translations for ${locale} not found, falling back to en`);
       if (locale !== "en") {
@@ -117,7 +117,9 @@ chrome.omnibox.onInputChanged.addListener((text, suggest) => {
         ai.omnibox.includes(engineName)
       ) {
         chrome.omnibox.setDefaultSuggestion({
-          description: `Ask ${ai.name} (@${ai.omnibox[0]}, @${ai.omnibox[1]})`,
+          description: `${t("ask")} ${ai.name} (@${ai.omnibox[0]}, @${
+            ai.omnibox[1]
+          })`,
         });
         return;
       }
@@ -130,7 +132,9 @@ chrome.omnibox.onInputChanged.addListener((text, suggest) => {
         suggest([
           {
             content: `@${ai.name} ${text}`,
-            description: `Ask ${ai.name} (@${ai.omnibox[0]}, @${ai.omnibox[1]})`,
+            description: `${t("ask")} ${ai.name} (@${ai.omnibox[0]}, @${
+              ai.omnibox[1]
+            })`,
           },
         ]);
     }
@@ -142,11 +146,13 @@ chrome.omnibox.onInputStarted.addListener(() => {
 function setDefaultSuggestion() {
   if (selectedEngine) {
     chrome.omnibox.setDefaultSuggestion({
-      description: `Ask ${selectedEngine.name} (@${selectedEngine.omnibox[0]}, @${selectedEngine.omnibox[1]})`,
+      description: `${t("ask")} ${selectedEngine.name} (@${
+        selectedEngine.omnibox[0]
+      }, @${selectedEngine.omnibox[1]})`,
     });
   } else {
     chrome.omnibox.setDefaultSuggestion({
-      description: "None Selected",
+      description: t("ask_ai"),
     });
   }
 }
@@ -305,7 +311,7 @@ function updateMenu(engine) {
     chrome.contextMenus.update(
       "search",
       {
-        title: `${t("ask")} ${engine ? engine.name : t("ask_ai")}`,
+        title: engine ? `${t("ask")} ${engine.name}` : t("ask_ai"),
       },
       () => void chrome.runtime.lastError
     );

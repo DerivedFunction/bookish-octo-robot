@@ -17,13 +17,13 @@ let currentLocale = DEFAULT_LOCALE;
 let translations = {};
 
 export async function initLocales() {
-  chrome.storage.local.get("locale").then(async (e) => {
+  await chrome.storage.local.get("locale").then(async (e) => {
     currentLocale =
       e.locale || navigator.language.split("-")[0] || DEFAULT_LOCALE;
-    await loadTranslations(currentLocale);
-    initLocaleSelector();
-    updateUIText();
   });
+  await loadTranslations(currentLocale);
+  initLocaleSelector();
+  updateUIText();
 }
 const localeSelect = document.getElementById("locale-select");
 export function initLocaleSelector() {
@@ -31,7 +31,6 @@ export function initLocaleSelector() {
     localeSelect.value = currentLocale;
     localeSelect.addEventListener("change", async (e) => {
       await loadTranslations(e.target.value);
-
       window.dispatchEvent(new Event("localechange"));
       chrome.runtime.sendMessage({
         message: "localechange",
@@ -43,7 +42,7 @@ export function initLocaleSelector() {
 
 export async function loadTranslations(locale) {
   try {
-    const response = await fetch(`/_locales/${locale}/messages.json`);
+    const response = await fetch(`/locales/${locale}/messages.json`);
     if (!response.ok) {
       console.warn(
         `Translations for ${locale} not found, falling back to ${DEFAULT_LOCALE}`
@@ -132,4 +131,10 @@ chrome.runtime.onMessage.addListener((e) => {
   if (e.message === "localechange") {
     initLocales();
   }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  resetBtn.addEventListener("click", () => {
+    initLocales();
+  });
 });

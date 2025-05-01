@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tabbed: AI chatbot in New Tab",
   "short_name": "Tabbed",
-  "version": "1.0.7.6",
+  "version": "1.0.8.0",
   "description": "A new tab page with an AI-like user interface",
   "icons": {
     "16": "assets/images/icon.png",
@@ -36,6 +36,5 @@
     "*://chat.mistral.ai/*",
     "*://*.huggingface.co/chat/*",
     "*://*.meta.ai/*"
-  ],
-  "default_locale": "en"
+  ]
 }

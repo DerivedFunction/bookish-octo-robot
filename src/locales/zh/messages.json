@@ -1,31 +1,25 @@
 {
   "greeting_morning": {
-    "message": "早上好",
-    
+    "message": "早上好"
   },
   "greeting_afternoon": {
-    "message": "下午好",
-    
+    "message": "下午好"
   },
   "greeting_evening": {
-    "message": "晚上好",
-    
+    "message": "晚上好"
   },
   "greeting_hello": {
-    "message": "你好",
-    
+    "message": "你好"
   },
   "greeting_help": {
-    "message": "今天我能为您做什么？",
-    
+    "message": "今天我能为您做什么？"
   },
   "search_placeholder": {
-    "message": "我能为您做什么？",
-    
+    "message": "我能为您做什么？"
   },
   "welcome_name": {
     "message": "$GREETING$，$NAME$。",
-    ,
+
     "placeholders": {
       "greeting": {
         "content": "$1"
@@ -36,76 +30,58 @@
     }
   },
   "reset_button": {
-    "message": "重置为默认值",
-    
+    "message": "重置为默认值"
   },
   "close_button": {
-    "message": "关闭",
-    
+    "message": "关闭"
   },
   "options_title": {
-    "message": "选项",
-    
+    "message": "选项"
   },
   "name_label": {
-    "message": "姓名",
-    
+    "message": "姓名"
   },
   "greeting_type_label": {
-    "message": "问候类型",
-    
+    "message": "问候类型"
   },
   "formal_option": {
-    "message": "正式",
-    
+    "message": "正式"
   },
   "informal_option": {
-    "message": "非正式",
-    
+    "message": "非正式"
   },
   "custom_option": {
-    "message": "自定义",
-    
+    "message": "自定义"
   },
   "none_option": {
-    "message": "无",
-    
+    "message": "无"
   },
   "enter_custom_greeting": {
-    "message": "请输入您的自定义问候语",
-    
+    "message": "请输入您的自定义问候语"
   },
   "show_suggestions_label": {
-    "message": "显示建议",
-    
+    "message": "显示建议"
   },
   "sug-show": {
-    "message": "显示",
-    
+    "message": "显示"
   },
   "sug-hide": {
-    "message": "隐藏",
-    
+    "message": "隐藏"
   },
   "lang": {
-    "message": "语言",
-    
+    "message": "语言"
   },
   "theme": {
-    "message": "主题",
-    
+    "message": "主题"
   },
   "theme_auto": {
-    "message": "自动",
-    
+    "message": "自动"
   },
   "theme_dark": {
-    "message": "暗色",
-    
+    "message": "暗色"
   },
   "theme_light": {
-    "message": "亮色",
-    
+    "message": "亮色"
   },
   "tooltip_options": {
     "message": "选项"
@@ -141,192 +117,145 @@
     "message": "搜索所有"
   },
   "prompt_solve": {
-    "message": "解决以下问题并提供逐步的逻辑",
-    
+    "message": "解决以下问题并提供逐步的逻辑"
   },
   "prompt_solve_quick": {
-    "message": "提供快速回答",
-    
+    "message": "提供快速回答"
   },
   "prompt_solve_check": {
-    "message": "检查我的回答",
-    
+    "message": "检查我的回答"
   },
   "prompt_solve_fill": {
-    "message": "填补缺失部分",
-    
+    "message": "填补缺失部分"
   },
   "prompt_research": {
-    "message": "研究这个主题",
-    
+    "message": "研究这个主题"
   },
   "prompt_research_compare": {
-    "message": "比较不同的方法",
-    
+    "message": "比较不同的方法"
   },
   "prompt_research_latest": {
-    "message": "查找最新信息",
-    
+    "message": "查找最新信息"
   },
   "prompt_summarize": {
-    "message": "简短且简洁地总结，列出关键术语的项目符号： ",
-    
+    "message": "简短且简洁地总结，列出关键术语的项目符号： "
   },
   "prompt_summarize_quick": {
-    "message": "提供快速总结",
-    
+    "message": "提供快速总结"
   },
   "prompt_summarize_paraphrase": {
-    "message": "重新表述",
-    
+    "message": "重新表述"
   },
   "prompt_summarize_highlight": {
-    "message": "突出要点",
-    
+    "message": "突出要点"
   },
   "prompt_explain": {
-    "message": "详细解释，包含逐步逻辑，并加入易于理解的示例： ",
-    
+    "message": "详细解释，包含逐步逻辑，并加入易于理解的示例： "
   },
   "prompt_explain_brief": {
-    "message": "简短解释",
-    
+    "message": "简短解释"
   },
   "prompt_explain_detail": {
-    "message": "详细解释",
-    
+    "message": "详细解释"
   },
   "prompt_analyze": {
-    "message": "分析以下内容： ",
-    
+    "message": "分析以下内容： "
   },
   "prompt_analyze_pros": {
-    "message": "优缺点分析",
-    
+    "message": "优缺点分析"
   },
   "prompt_analyze_fact": {
-    "message": "事实核查",
-    
+    "message": "事实核查"
   },
   "prompt_analyze_patterns": {
-    "message": "寻找模式",
-    
+    "message": "寻找模式"
   },
   "prompt_analyze_strengths": {
-    "message": "优势和劣势",
-    
+    "message": "优势和劣势"
   },
   "prompt_analyze_errors": {
-    "message": "查找错误",
-    
+    "message": "查找错误"
   },
   "prompt_image": {
-    "message": "创建图像",
-    
+    "message": "创建图像"
   },
   "prompt_code": {
-    "message": "编写代码并解释： ",
-    
+    "message": "编写代码并解释： "
   },
   "prompt_code_fix": {
-    "message": "修复代码错误",
-    
+    "message": "修复代码错误"
   },
   "prompt_code_error": {
-    "message": "解释此错误消息",
-    
+    "message": "解释此错误消息"
   },
   "prompt_code_refactor": {
-    "message": "重构代码",
-    
+    "message": "重构代码"
   },
   "prompt_code_docs": {
-    "message": "生成代码文档",
-    
+    "message": "生成代码文档"
   },
   "prompt_code_tests": {
-    "message": "生成代码测试",
-    
+    "message": "生成代码测试"
   },
   "prompt_code_review": {
-    "message": "审查并评论代码",
-    
+    "message": "审查并评论代码"
   },
   "prompt_generate": {
-    "message": "创建计划或想法： ",
-    
+    "message": "创建计划或想法： "
   },
   "prompt_generate_ideas": {
-    "message": "头脑风暴",
-    
+    "message": "头脑风暴"
   },
   "prompt_generate_plan": {
-    "message": "创建计划",
-    
+    "message": "创建计划"
   },
   "prompt_generate_draft": {
-    "message": "写初稿",
-    
+    "message": "写初稿"
   },
   "prompt_generate_outline": {
-    "message": "创建大纲",
-    
+    "message": "创建大纲"
   },
   "prompt_generate_email": {
-    "message": "写邮件",
-    
+    "message": "写邮件"
   },
   "prompt_generate_resume": {
-    "message": "写简历",
-    
+    "message": "写简历"
   },
   "solve": {
-    "message": "解决",
-    
+    "message": "解决"
   },
   "research": {
-    "message": "研究",
-    
+    "message": "研究"
   },
   "summarize": {
-    "message": "总结",
-    
+    "message": "总结"
   },
   "explain": {
-    "message": "解释",
-    
+    "message": "解释"
   },
   "analyze": {
-    "message": "分析",
-    
+    "message": "分析"
   },
   "create image": {
-    "message": "创建图像",
-    
+    "message": "创建图像"
   },
   "code": {
-    "message": "代码",
-    
+    "message": "代码"
   },
   "generate": {
-    "message": "生成",
-    
+    "message": "生成"
   },
   "ask": {
-    "message": "询问",
-    
+    "message": "询问"
   },
   "ask_ai": {
-    "message": "询问AI",
-    
+    "message": "询问AI"
   },
   "paste_selection": {
-    "message": "粘贴选择",
-    
+    "message": "粘贴选择"
   },
   "switch_ai": {
-    "message": "切换AI",
-    
+    "message": "切换AI"
   },
   "no_perm": {
     "message": "可能无法工作(如果没有权限)"

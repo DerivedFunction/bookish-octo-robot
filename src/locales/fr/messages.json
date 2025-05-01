@@ -1,31 +1,25 @@
 {
   "greeting_morning": {
-    "message": "Bonjour",
-    
+    "message": "Bonjour"
   },
   "greeting_afternoon": {
-    "message": "Bon après-midi",
-    
+    "message": "Bon après-midi"
   },
   "greeting_evening": {
-    "message": "Bonsoir",
-    
+    "message": "Bonsoir"
   },
   "greeting_hello": {
-    "message": "Salut",
-    
+    "message": "Salut"
   },
   "greeting_help": {
-    "message": "Comment puis-je vous aider aujourd'hui?",
-    
+    "message": "Comment puis-je vous aider aujourd'hui?"
   },
   "search_placeholder": {
-    "message": "Que puis-je faire pour vous?",
-    
+    "message": "Que puis-je faire pour vous?"
   },
   "welcome_name": {
     "message": "$GREETING$, $NAME$.",
-    ,
+
     "placeholders": {
       "greeting": {
         "content": "$1"
@@ -36,76 +30,58 @@
     }
   },
   "reset_button": {
-    "message": "Réinitialiser",
-    
+    "message": "Réinitialiser"
   },
   "close_button": {
-    "message": "Fermer",
-    
+    "message": "Fermer"
   },
   "options_title": {
-    "message": "Options",
-    
+    "message": "Options"
   },
   "name_label": {
-    "message": "Nom",
-    
+    "message": "Nom"
   },
   "greeting_type_label": {
-    "message": "Type de salutation",
-    
+    "message": "Type de salutation"
   },
   "formal_option": {
-    "message": "Formel",
-    
+    "message": "Formel"
   },
   "informal_option": {
-    "message": "Informel",
-    
+    "message": "Informel"
   },
   "custom_option": {
-    "message": "Personnalisé",
-    
+    "message": "Personnalisé"
   },
   "none_option": {
-    "message": "Aucun",
-    
+    "message": "Aucun"
   },
   "enter_custom_greeting": {
-    "message": "Entrez votre salutation personnalisée",
-    
+    "message": "Entrez votre salutation personnalisée"
   },
   "show_suggestions_label": {
-    "message": "Afficher les suggestions",
-    
+    "message": "Afficher les suggestions"
   },
   "sug-show": {
-    "message": "Afficher",
-    
+    "message": "Afficher"
   },
   "sug-hide": {
-    "message": "Cacher",
-    
+    "message": "Cacher"
   },
   "lang": {
-    "message": "Langue",
-    
+    "message": "Langue"
   },
   "theme": {
-    "message": "Thème",
-    
+    "message": "Thème"
   },
   "theme_auto": {
-    "message": "Automatique",
-    
+    "message": "Automatique"
   },
   "theme_dark": {
-    "message": "Sombre",
-    
+    "message": "Sombre"
   },
   "theme_light": {
-    "message": "Clair",
-    
+    "message": "Clair"
   },
   "tooltip_options": {
     "message": "Options"
@@ -141,192 +117,145 @@
     "message": "Recherche Partout"
   },
   "prompt_solve": {
-    "message": "Résolvez le problème suivant et fournissez la logique étape par étape: ",
-    
+    "message": "Résolvez le problème suivant et fournissez la logique étape par étape: "
   },
   "prompt_solve_quick": {
-    "message": "Fournissez une réponse rapide",
-    
+    "message": "Fournissez une réponse rapide"
   },
   "prompt_solve_check": {
-    "message": "Vérifiez ma réponse",
-    
+    "message": "Vérifiez ma réponse"
   },
   "prompt_solve_fill": {
-    "message": "Compléter les parties manquantes",
-    
+    "message": "Compléter les parties manquantes"
   },
   "prompt_research": {
-    "message": "Rechercher ce sujet",
-    
+    "message": "Rechercher ce sujet"
   },
   "prompt_research_compare": {
-    "message": "Comparer différentes approches",
-    
+    "message": "Comparer différentes approches"
   },
   "prompt_research_latest": {
-    "message": "Trouver les dernières informations",
-    
+    "message": "Trouver les dernières informations"
   },
   "prompt_summarize": {
-    "message": "Résumez brièvement et de manière concise, avec des points clés sous forme de puces : ",
-    
+    "message": "Résumez brièvement et de manière concise, avec des points clés sous forme de puces : "
   },
   "prompt_summarize_quick": {
-    "message": "Fournissez un résumé rapide",
-    
+    "message": "Fournissez un résumé rapide"
   },
   "prompt_summarize_paraphrase": {
-    "message": "Paraphraser ceci",
-    
+    "message": "Paraphraser ceci"
   },
   "prompt_summarize_highlight": {
-    "message": "Points clés",
-    
+    "message": "Points clés"
   },
   "prompt_explain": {
-    "message": "Expliquez de manière approfondie avec une logique étape par étape et incluez des exemples faciles à comprendre : ",
-    
+    "message": "Expliquez de manière approfondie avec une logique étape par étape et incluez des exemples faciles à comprendre : "
   },
   "prompt_explain_brief": {
-    "message": "Expliquez brièvement",
-    
+    "message": "Expliquez brièvement"
   },
   "prompt_explain_detail": {
-    "message": "Expliquez en détail",
-    
+    "message": "Expliquez en détail"
   },
   "prompt_analyze": {
-    "message": "Analysez ce qui suit : ",
-    
+    "message": "Analysez ce qui suit : "
   },
   "prompt_analyze_pros": {
-    "message": "Pour et contre",
-    
+    "message": "Pour et contre"
   },
   "prompt_analyze_fact": {
-    "message": "Vérifier les faits",
-    
+    "message": "Vérifier les faits"
   },
   "prompt_analyze_patterns": {
-    "message": "Trouver des motifs",
-    
+    "message": "Trouver des motifs"
   },
   "prompt_analyze_strengths": {
-    "message": "Forces et faiblesses",
-    
+    "message": "Forces et faiblesses"
   },
   "prompt_analyze_errors": {
-    "message": "Trouver des erreurs",
-    
+    "message": "Trouver des erreurs"
   },
   "prompt_image": {
-    "message": "Créer une image",
-    
+    "message": "Créer une image"
   },
   "prompt_code": {
-    "message": "Codez et expliquez : ",
-    
+    "message": "Codez et expliquez : "
   },
   "prompt_code_fix": {
-    "message": "Corriger les erreurs de code",
-    
+    "message": "Corriger les erreurs de code"
   },
   "prompt_code_error": {
-    "message": "Expliquer ce message d'erreur",
-    
+    "message": "Expliquer ce message d'erreur"
   },
   "prompt_code_refactor": {
-    "message": "Refactoriser le code",
-    
+    "message": "Refactoriser le code"
   },
   "prompt_code_docs": {
-    "message": "Ajouter la documentation du code",
-    
+    "message": "Ajouter la documentation du code"
   },
   "prompt_code_tests": {
-    "message": "Écrire des tests de code",
-    
+    "message": "Écrire des tests de code"
   },
   "prompt_code_review": {
-    "message": "Réviser et commenter le code",
-    
+    "message": "Réviser et commenter le code"
   },
   "prompt_generate": {
-    "message": "Créez un plan ou une idée : ",
-    
+    "message": "Créez un plan ou une idée : "
   },
   "prompt_generate_ideas": {
-    "message": "Générer des idées",
-    
+    "message": "Générer des idées"
   },
   "prompt_generate_plan": {
-    "message": "Créer un plan",
-    
+    "message": "Créer un plan"
   },
   "prompt_generate_draft": {
-    "message": "Écrire un brouillon",
-    
+    "message": "Écrire un brouillon"
   },
   "prompt_generate_outline": {
-    "message": "Créer un plan détaillé",
-    
+    "message": "Créer un plan détaillé"
   },
   "prompt_generate_email": {
-    "message": "Rédiger un email",
-    
+    "message": "Rédiger un email"
   },
   "prompt_generate_resume": {
-    "message": "Rédiger un CV",
-    
+    "message": "Rédiger un CV"
   },
   "solve": {
-    "message": "Résoudre",
-    
+    "message": "Résoudre"
   },
   "research": {
-    "message": "Rechercher",
-    
+    "message": "Rechercher"
   },
   "summarize": {
-    "message": "Résumer",
-    
+    "message": "Résumer"
   },
   "explain": {
-    "message": "Expliquer",
-    
+    "message": "Expliquer"
   },
   "analyze": {
-    "message": "Analyser",
-    
+    "message": "Analyser"
   },
   "create image": {
-    "message": "Créer Image",
-    
+    "message": "Créer Image"
   },
   "code": {
-    "message": "Code",
-    
+    "message": "Code"
   },
   "generate": {
-    "message": "Générer",
-    
+    "message": "Générer"
   },
   "ask": {
-    "message": "Demander à",
-    
+    "message": "Demander à"
   },
   "ask_ai": {
-    "message": "Demander à l'IA",
-    
+    "message": "Demander à l'IA"
   },
   "paste_selection": {
-    "message": "Coller la Sélection",
-    
+    "message": "Coller la Sélection"
   },
   "switch_ai": {
-    "message": "Changer d'IA",
-    
+    "message": "Changer d'IA"
   },
   "no_perm": {
     "message": "ne peut pas fonctionner sans autorisations"
