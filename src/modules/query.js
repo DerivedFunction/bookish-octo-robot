@@ -4,7 +4,15 @@ import { suggestionResult } from "./suggestions.js";
 import { multiBtn, newClick } from "./searchEverywhere.js";
 import { selectedEngine, toggleDropdown } from "./searchEngine.js";
 import { hasScripts } from "./searchEngine.js";
+import { t } from "./locales.js";
+
 export const query = document.getElementById("search");
+
+// Update placeholder when locale changes
+window.addEventListener("localechange", () => {
+  query.placeholder = t("search_placeholder");
+});
+
 export function getLimit() {
   return hasScripts ? selectedEngine?.limit || 0 : MAX_LIMIT;
 }

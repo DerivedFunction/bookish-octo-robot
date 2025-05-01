@@ -90,7 +90,7 @@
       <h1>Options</h1>
       <div class="section">
         <div class="horizontal-container">
-          <span>Name</span>
+          <span id="name-label">Name</span>
           <input type="text" id="name-field" class="input-field" />
           <button id="submit-name" class="submit"></button>
         </div>
@@ -235,6 +235,17 @@
         <span>Search Everywhere:</span>
         <div id="search-everywhere-list" class="horizontal-container"></div>
       </div>
+      <div class="section">
+        <select id="locale-select">
+          <option value="en">English</option>
+          <option value="zh">中文</option>
+          <option value="ja">日本語</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+          <option value="de">Deutsch</option>
+        </select>
+      </div>
+
       <div class="horizontal-container section">
         <button id="reset" class="clear">Reset to Defaults</button>
         <button id="close-options">Close</button>

@@ -1,11 +1,13 @@
 import { resetBtn } from "../app.js";
+import { t } from "./locales.js";
+
 export const greeting = document.getElementById("greeting-form");
 export const greetingContainer = document.getElementById("greeting-container");
 greeting.addEventListener("change", async (e) => {
   localStorage.setItem("greeting", e.target.value);
   if (e.target.value === "custom") {
-    let x = prompt("Enter greeting", "Hi");
-    localStorage.setItem("greeting", x ? x : "Hi");
+    let x = prompt(t("enter_custom_greeting"), t("greeting_hello"));
+    localStorage.setItem("greeting", x ? x : t("greeting_hello"));
   }
   getGreeting();
 });
@@ -25,18 +27,15 @@ export function getGreeting() {
   switch (z) {
     case "formal":
       if (hour >= 4 && hour < 12) {
-        // Morning: 4:00 - 11:59
-        greeting = "Good Morning";
+        greeting = t("greeting_morning");
       } else if (hour >= 12 && hour < 16) {
-        // Afternoon: 12:00 - 15:59
-        greeting = "Good Afternoon";
+        greeting = t("greeting_afternoon");
       } else if ((hour >= 16 && hour < 24) || (hour >= 0 && hour < 4)) {
-        // Evening: 16:00 - 19:59
-        greeting = "Good Evening";
+        greeting = t("greeting_evening");
       }
       break;
     case "informal":
-      greeting = "Hello";
+      greeting = t("greeting_hello");
       break;
     case "none":
       greeting = null;
@@ -45,11 +44,12 @@ export function getGreeting() {
       greeting = z;
   }
   greetingContainer.style.display = !greeting ? "none" : "";
-  x.textContent = y ? `${greeting}, ${y}.` : `${greeting}.`;
-  x2.textContent = greeting ? `How can I help you today?` : "";
+  x.textContent = y
+    ? t("welcome_name", { GREETING: greeting, NAME: y })
+    : `${greeting}.`;
+  x2.textContent = greeting ? t("greeting_help") : "";
 }
 document.addEventListener("DOMContentLoaded", () => {
-  getGreeting();
   const storedGreeting = localStorage.getItem("greeting");
   const options = Array.from(greeting.querySelectorAll("input"));
   if (storedGreeting) {
