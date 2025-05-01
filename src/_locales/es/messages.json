@@ -245,6 +245,12 @@
   "generate": {
     "message": "Generar"
   },
+  "ask": {
+    "message": "Preguntar"
+  },
+  "ask_ai": {
+    "message": "Preguntar a la IA"
+  },
   "no_perm": {
     "message": "puede no funcionar sin permisos"
   },
@@ -376,5 +382,11 @@
   },
   "bg_type_own_img": {
     "message": "Imagen Propia"
+  },
+  "paste_selection": {
+    "message": "Pegar selección"
+  },
+  "switch_ai": {
+    "message": "Cambiar IA"
   }
 }
