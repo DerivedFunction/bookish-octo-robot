@@ -295,5 +295,26 @@
   },
   "too_long": {
     "message": "Le prompt actuel est trop long."
+  },
+  "weather": {
+    "message": "Météo"
+  },
+  "weather_placeholder": {
+    "message": "Coordonnées, code postal ou nom"
+  },
+  "unit_toggle": {
+    "message": "Utiliser °F au lieu de °C"
+  },
+  "time_format": {
+    "message": "Format de l'heure"
+  },
+  "time_hours": {
+    "message": "Heures"
+  },
+  "time_minutes": {
+    "message": "Minutes"
+  },
+  "time_seconds": {
+    "message": "Seconds"
   }
 }

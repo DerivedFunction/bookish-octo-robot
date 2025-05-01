@@ -11,6 +11,8 @@ import {
 import { suggestDisplay } from "./suggestions.js";
 import { userThemeForm } from "./theme.js";
 import { getSuggestionButtons } from "./suggestions.js";
+import { unitLabel, unitToggle, weatherField } from "./weather.js";
+import { timeFormat } from "./updateTime.js";
 // Handle localization
 const DEFAULT_LOCALE = "en";
 let currentLocale = DEFAULT_LOCALE;
@@ -106,6 +108,16 @@ export function updateUIText() {
   document.querySelector("#se-label").textContent = t(
     "tooltip_search_everywhere"
   );
+  weatherField.parentElement.previousElementSibling.textContent = t("weather");
+  weatherField.placeholder = t("weather_placeholder");
+  unitLabel.querySelector("label").textContent = t("unit_toggle");
+  timeFormat.querySelector("legend").textContent = t("time_format");
+  timeFormat.querySelectorAll("label").forEach((label) => {
+    if (label.getAttribute("for") === "no-time")
+      label.textContent = t("sug-hide");
+    else
+      label.textContent = t(`${label.getAttribute("for")} ${t("time_hours")}`);
+  });
   closeScriptBtn.textContent = t("close_button");
   exp_sidebar.querySelector("h1").textContent = t("tooltip_experimental");
   exp_sidebar.querySelector("p").textContent = t("scripts_desc");

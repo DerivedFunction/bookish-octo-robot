@@ -68,15 +68,13 @@
     <div id="sidebar" class="sidebar">
       <h1></h1>
       <div class="section">
-        <form>
-          <fieldset>
-            <legend id="name-label"></legend>
-            <div class="horizontal-container">
-              <input type="text" id="name-field" class="input-field" />
-              <button id="submit-name" class="submit"></button>
-            </div>
-          </fieldset>
-        </form>
+        <fieldset>
+          <legend id="name-label"></legend>
+          <div class="horizontal-container">
+            <input type="text" id="name-field" class="input-field" />
+            <button id="submit-name" class="submit"></button>
+          </div>
+        </fieldset>
       </div>
       <div class="section">
         <form>
@@ -112,19 +110,16 @@
       </div>
 
       <div class="section">
-        <div class="horizontal-container">
-          <span>Weather</span>
-          <input
-            type="text"
-            id="weather-field"
-            placeholder="Name, Postal Code, or Coordinates"
-            class="input-field"
-          />
-          <button id="submit-weather" class="submit"></button>
-        </div>
+        <fieldset>
+          <legend></legend>
+          <div class="horizontal-container">
+            <input type="text" id="weather-field" class="input-field" />
+            <button id="submit-weather" class="submit"></button>
+          </div>
+        </fieldset>
         <div id="unit-toggle-label">
           <input type="checkbox" id="unit-toggle" />
-          <label for="unit-toggle">Use &#176;F instead of &#176;C</label>
+          <label for="unit-toggle"></label>
         </div>
       </div>
       <div class="section">

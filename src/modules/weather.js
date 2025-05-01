@@ -7,7 +7,7 @@ const weather_exp = 15 * 60 * 1000; // 15 minute expiration
 export const weatherBtn = document.getElementById("submit-weather");
 export const weatherField = document.getElementById("weather-field");
 export const unitToggle = document.getElementById("unit-toggle");
-export const container = document.getElementById("unit-toggle-label");
+export const unitLabel = document.getElementById("unit-toggle-label");
 
 // Single constant for weather codes, descriptions, and icons
 const WEATHER_CONDITIONS = {
@@ -234,7 +234,7 @@ export async function displayWeather() {
     "5px",
     false
   ); // Custom size for weather icons
-  container.style.display = "";
+  unitLabel.style.display = "";
 }
 
 // Clear fields
@@ -243,7 +243,7 @@ function clearFields(removeLocation = false) {
   weatherField.value = "";
   if (removeLocation) localStorage.removeItem("location");
   localStorage.removeItem("weatherData");
-  container.style.display = "none";
+  unitLabel.style.display = "none";
   toggleButton(weatherBtn, false);
 }
 

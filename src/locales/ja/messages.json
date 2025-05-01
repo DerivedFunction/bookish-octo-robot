@@ -295,5 +295,26 @@
   },
   "too_long": {
     "message": "現在のプロンプトは長すぎます。"
+  },
+  "weather": {
+    "message": "天気"
+  },
+  "weather_placeholder": {
+    "message": "座標、郵便番号または名前"
+  },
+  "unit_toggle": {
+    "message": "°Fではなく°Cを使用する"
+  },
+  "time_format": {
+    "message": "時刻のフォーマットを選択"
+  },
+  "time_hours": {
+    "message": "時間"
+  },
+  "time_minutes": {
+    "message": "分"
+  },
+  "time_seconds": {
+    "message": "秒"
   }
 }

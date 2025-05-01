@@ -295,5 +295,26 @@
   },
   "too_long": {
     "message": "当前提示过长。"
+  },
+  "weather": {
+    "message": "天气"
+  },
+  "weather_placeholder": {
+    "message": "坐标、邮政编码或名称"
+  },
+  "unit_toggle": {
+    "message": "使用 °F 而不是 °C"
+  },
+  "time_format": {
+    "message": "选择时间格式"
+  },
+  "time_hours": {
+    "message": "小时"
+  },
+  "time_minutes": {
+    "message": "分钟"
+  },
+  "time_seconds": {
+    "message": "秒"
   }
 }
