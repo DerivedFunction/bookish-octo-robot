@@ -106,5 +106,212 @@
   "theme_light": {
     "message": "Clair",
     "description": "Light theme option"
+  },
+  "tooltip_options": {
+    "message": "Options"
+  },
+  "tooltip_experimental": {
+    "message": "Fonctions Expérimentales"
+  },
+  "tooltip_fetch_prompt": {
+    "message": "Récupérer Dernier Prompt"
+  },
+  "tooltip_current_ai": {
+    "message": "IA Actuelle"
+  },
+  "tooltip_pick_ai": {
+    "message": "Choisir IA"
+  },
+  "tooltip_advanced": {
+    "message": "Options Avancées"
+  },
+  "tooltip_upload_file": {
+    "message": "Télécharger Fichiers"
+  },
+  "tooltip_get_response": {
+    "message": "Obtenir Réponse"
+  },
+  "tooltip_send_again": {
+    "message": "Renvoyer"
+  },
+  "tooltip_empty_message": {
+    "message": "Message Vide"
+  },
+  "tooltip_search_everywhere": {
+    "message": "Rechercher Partout"
+  },
+  "prompt_solve": {
+    "message": "Résolvez le problème suivant et fournissez la logique étape par étape : ",
+    "description": "Help me solve this problem"
+  },
+  "prompt_solve_quick": {
+    "message": "Trouver une solution rapide",
+    "description": "Find a quick solution"
+  },
+  "prompt_solve_check": {
+    "message": "Vérifier ma solution",
+    "description": "Check my solution"
+  },
+  "prompt_solve_fill": {
+    "message": "Compléter les parties manquantes",
+    "description": "Fill in missing parts"
+  },
+  "prompt_research": {
+    "message": "Rechercher ce sujet"
+  },
+  "prompt_research_compare": {
+    "message": "Comparer différentes approches"
+  },
+  "prompt_research_latest": {
+    "message": "Trouver les dernières informations"
+  },
+  "prompt_summarize": {
+    "message": "Résumez brièvement et de manière concise, avec des points clés sous forme de puces : ",
+    "description": "Summarize briefly and concisely, with bullet points on key terms: "
+  },
+  "prompt_summarize_quick": {
+    "message": "Résumé rapide"
+  },
+  "prompt_summarize_paraphrase": {
+    "message": "Paraphraser ceci"
+  },
+  "prompt_summarize_highlight": {
+    "message": "Points clés"
+  },
+  "prompt_summarize_simple": {
+    "message": "Simplifier ceci"
+  },
+  "prompt_explain": {
+    "message": "Expliquez de manière approfondie avec une logique étape par étape et incluez des exemples faciles à comprendre : ",
+    "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
+  },
+  "prompt_explain_brief": {
+    "message": "Explication brève"
+  },
+  "prompt_explain_simple": {
+    "message": "Expliquer simplement"
+  },
+  "prompt_explain_detail": {
+    "message": "Explication détaillée"
+  },
+  "prompt_analyze": {
+    "message": "Analysez ce qui suit : ",
+    "description": "Analyze the following: "
+  },
+  "prompt_analyze_pros": {
+    "message": "Pour et contre"
+  },
+  "prompt_analyze_fact": {
+    "message": "Vérifier les faits"
+  },
+  "prompt_analyze_patterns": {
+    "message": "Trouver des motifs"
+  },
+  "prompt_analyze_strengths": {
+    "message": "Forces et faiblesses"
+  },
+  "prompt_analyze_errors": {
+    "message": "Trouver des erreurs"
+  },
+  "prompt_image": {
+    "message": "Créer une image"
+  },
+  "prompt_image_photo": {
+    "message": "Image photoréaliste"
+  },
+  "prompt_image_3d": {
+    "message": "Rendu 3D"
+  },
+  "prompt_image_2d": {
+    "message": "Illustration 2D"
+  },
+  "prompt_image_anime": {
+    "message": "Style anime"
+  },
+  "prompt_image_icon": {
+    "message": "Design d'icône"
+  },
+  "prompt_image_logo": {
+    "message": "Design de logo"
+  },
+  "prompt_code": {
+    "message": "Aide avec le code"
+  },
+  "prompt_code_fix": {
+    "message": "Corriger ce code"
+  },
+  "prompt_code_error": {
+    "message": "Déboguer l'erreur"
+  },
+  "prompt_code_refactor": {
+    "message": "Refactoriser le code"
+  },
+  "prompt_code_docs": {
+    "message": "Ajouter la documentation"
+  },
+  "prompt_code_tests": {
+    "message": "Écrire des tests"
+  },
+  "prompt_code_review": {
+    "message": "Révision de code"
+  },
+  "prompt_generate": {
+    "message": "Générer du contenu"
+  },
+  "prompt_generate_ideas": {
+    "message": "Générer des idées"
+  },
+  "prompt_generate_plan": {
+    "message": "Créer un plan"
+  },
+  "prompt_generate_draft": {
+    "message": "Écrire un brouillon"
+  },
+  "prompt_generate_outline": {
+    "message": "Créer un plan détaillé"
+  },
+  "prompt_generate_email": {
+    "message": "Rédiger un email"
+  },
+  "prompt_generate_resume": {
+    "message": "Rédiger un CV"
+  },
+  "solve": {
+    "message": "Résoudre",
+    "description": "Solve menu item"
+  },
+  "research": {
+    "message": "Rechercher",
+    "description": "Research menu item"
+  },
+  "summarize": {
+    "message": "Résumer",
+    "description": "Summarize menu item"
+  },
+  "explain": {
+    "message": "Expliquer",
+    "description": "Explain menu item"
+  },
+  "analyze": {
+    "message": "Analyser",
+    "description": "Analyze menu item"
+  },
+  "create image": {
+    "message": "Créer Image",
+    "description": "Create image menu item"
+  },
+  "code": {
+    "message": "Code",
+    "description": "Code menu item"
+  },
+  "generate": {
+    "message": "Générer",
+    "description": "Generate menu item"
+  },
+  "no_perm": {
+    "message": "ne peut pas fonctionner sans autorisations"
+  },
+  "reset_success": {
+    "message": "Toutes les options et données ont été effacées"
   }
 }

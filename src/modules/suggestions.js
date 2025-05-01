@@ -2,6 +2,7 @@ import { loadJsonData, toggleButton, resetBtn } from "../app.js";
 import { goBtn } from "./actionButtons.js";
 import { appendSvg } from "./appendSvg.js";
 import { query, getCharCount } from "./query.js";
+import { t } from "./locales.js";
 
 export const suggestionContainer = document.getElementById("suggestions");
 export const suggestionResult = document.getElementById("suggestions-result");
@@ -25,14 +26,14 @@ export async function getSuggestionButtons() {
     return;
   }
 
-  const fragment = document.createDocumentFragment(); // Use a fragment for better performance
+  const fragment = document.createDocumentFragment();
 
   promptList.forEach((prompt) => {
-    if (!prompt.id || !prompt.prompt) return; // Skip invalid prompts
+    if (!prompt.id || !prompt.prompt) return;
 
     const btn = document.createElement("button");
-    btn.textContent = prompt.id;
-    btn.id = prompt.id;
+    btn.textContent = t(prompt.id.toLowerCase());
+    btn.id = prompt.id.toLowerCase();
 
     if (prompt.image) {
       appendSvg({ image: prompt.image }, btn, "4px", false);
@@ -40,22 +41,22 @@ export async function getSuggestionButtons() {
 
     btn.addEventListener("click", async () => {
       if (goBtn.disabled) {
-        query.value = prompt.prompt;
+        query.value = t(prompt.prompt);
         getCharCount();
       } else {
-        query.value = prompt.prompt + query.value;
+        query.value = t(prompt.prompt) + query.value;
       }
-      findSuggestions();
+      findSuggestions(`prompt_${btn.id}`);
     });
 
-    fragment.appendChild(btn); // Append button to the fragment
+    fragment.appendChild(btn);
   });
-  suggestionContainer.replaceChildren(fragment); // Append the fragment to the container
+  suggestionContainer.replaceChildren(fragment);
 }
 
-async function findSuggestions() {
+async function findSuggestions(id) {
   const prompts = await getPrompt();
-  const promptList = prompts.find((p) => p.prompt === query.value);
+  const promptList = prompts.find((p) => p.prompt === id);
   if (
     !promptList ||
     !promptList.suggestions ||
@@ -67,7 +68,7 @@ async function findSuggestions() {
   promptList.suggestions.forEach((suggestion) => {
     const suggestionElement = document.createElement("button");
     suggestionElement.className = "suggestion-item";
-    suggestionElement.textContent = suggestion;
+    suggestionElement.textContent = t(suggestion);
     suggestionElement.setAttribute(
       "data-replace",
       promptList.replace ? promptList.replace : false
@@ -75,8 +76,8 @@ async function findSuggestions() {
     suggestionElement.addEventListener("click", () => {
       query.value = `${
         suggestionElement.getAttribute("data-replace") === "true"
-          ? suggestion
-          : query.value + suggestion
+          ? t(suggestion)
+          : query.value + t(suggestion)
       }: `;
       suggestionResult.innerHTML = "";
       query.focus();
@@ -92,7 +93,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       option.checked = true;
     }
   });
-  await getSuggestionButtons();
   resetBtn.addEventListener("click", async () => {
     localStorage.removeItem("show-suggestions");
     suggestDisplay.querySelectorAll("input").forEach((option) => {

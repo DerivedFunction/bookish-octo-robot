@@ -4,6 +4,7 @@ import { showToast } from "./modules/toaster.js";
 import {
   initLocales,
   initLocaleSelector,
+  t,
   updateUIText,
 } from "./modules/locales.js";
 
@@ -81,7 +82,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const path = window.location.href;
     if (path.includes("failed")) {
       const name = path.split("#")[1].split("-")[1];
-      showToast(`${name} may not work without permissions`);
+      showToast(`${name} ${t("no_perm")}`);
       let { query: text } = await chrome.storage.local.get("query");
       if (text) query.value = text;
     }
@@ -103,7 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Send a message to the background script to remove the contextMenu
         message: "reset",
       });
-      showToast("All options and data cleared");
+      showToast(t("reset_success"));
     });
   } catch (error) {
     console.error("Error initializing application:", error);

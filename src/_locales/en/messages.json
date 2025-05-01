@@ -106,5 +106,197 @@
   "theme_light": {
     "message": "Light",
     "description": "Light theme option"
+  },
+  "tooltip_options": {
+    "message": "Options"
+  },
+  "tooltip_experimental": {
+    "message": "Experimental Features"
+  },
+  "tooltip_fetch_prompt": {
+    "message": "Fetch Last Prompt"
+  },
+  "tooltip_current_ai": {
+    "message": "Current AI"
+  },
+  "tooltip_pick_ai": {
+    "message": "Choose AI"
+  },
+  "tooltip_advanced": {
+    "message": "Advanced Options"
+  },
+  "tooltip_upload_file": {
+    "message": "Upload Files"
+  },
+  "tooltip_get_response": {
+    "message": "Get Response"
+  },
+  "tooltip_send_again": {
+    "message": "Send Again"
+  },
+  "tooltip_empty_message": {
+    "message": "Empty Message"
+  },
+  "tooltip_search_everywhere": {
+    "message": "Search Everywhere"
+  },
+  "prompt_solve": {
+    "message": "Solve the following problem and give step-by-step logic: "
+  },
+  "prompt_solve_quick": {
+    "message": "Give a Quick Answer"
+  },
+  "prompt_solve_check": {
+    "message": "Check My Answer"
+  },
+  "prompt_solve_fill": {
+    "message": "Fill in the Blanks"
+  },
+  "prompt_research": {
+    "message": "Research "
+  },
+  "prompt_research_compare": {
+    "message": "Compare Options"
+  },
+  "prompt_research_latest": {
+    "message": "Find Latest Info"
+  },
+  "prompt_summarize": {
+    "message": "Summarize briefly and concisely, with bullet points on key terms: "
+  },
+  "prompt_summarize_quick": {
+    "message": "Give a Quick Summary"
+  },
+  "prompt_summarize_paraphrase": {
+    "message": "Paraphrase"
+  },
+  "prompt_summarize_highlight": {
+    "message": "Highlight Important Terms"
+  },
+  "prompt_summarize_simple": {
+    "message": "Summarize in Simple Words"
+  },
+  "prompt_explain": {
+    "message": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
+  },
+  "prompt_explain_brief": {
+    "message": "Explain briefly"
+  },
+  "prompt_explain_simple": {
+    "message": "ELI5"
+  },
+  "prompt_explain_detail": {
+    "message": "Explain in Detail"
+  },
+  "prompt_analyze": {
+    "message": "Analyze the following: "
+  },
+  "prompt_analyze_pros": {
+    "message": "Analyze Pros and Cons"
+  },
+  "prompt_analyze_fact": {
+    "message": "Fact Check"
+  },
+  "prompt_analyze_patterns": {
+    "message": "Find Patterns or Trends"
+  },
+  "prompt_analyze_strengths": {
+    "message": "Spot Strengths and Weaknesses"
+  },
+  "prompt_analyze_errors": {
+    "message": "Fix Errors"
+  },
+  "prompt_image": {
+    "message": "Generate an image of "
+  },
+  "prompt_image_photo": {
+    "message": "a Realistic Photo"
+  },
+  "prompt_image_3d": {
+    "message": "a 3D Render"
+  },
+  "prompt_image_2d": {
+    "message": "a 2D Illustration"
+  },
+  "prompt_image_anime": {
+    "message": "an Anime-Style Image"
+  },
+  "prompt_image_icon": {
+    "message": "an Icon"
+  },
+  "prompt_image_logo": {
+    "message": "a Logo"
+  },
+  "prompt_code": {
+    "message": "Code and explain: "
+  },
+  "prompt_code_fix": {
+    "message": "Fix Errors"
+  },
+  "prompt_code_error": {
+    "message": "Explain This Error Message"
+  },
+  "prompt_code_refactor": {
+    "message": "Refactor"
+  },
+  "prompt_code_docs": {
+    "message": "Generate Code Documentation"
+  },
+  "prompt_code_tests": {
+    "message": "Generate Code Tests"
+  },
+  "prompt_code_review": {
+    "message": "Review and Comment"
+  },
+  "prompt_generate": {
+    "message": "Create a plan or idea: "
+  },
+  "prompt_generate_ideas": {
+    "message": "Brainstorm Ideas"
+  },
+  "prompt_generate_plan": {
+    "message": "Make a Plan"
+  },
+  "prompt_generate_draft": {
+    "message": "Write a Draft"
+  },
+  "prompt_generate_outline": {
+    "message": "Create an Outline"
+  },
+  "prompt_generate_email": {
+    "message": "Write an Email"
+  },
+  "prompt_generate_resume": {
+    "message": "Write and improve my Resume"
+  },
+  "solve": {
+    "message": "Solve"
+  },
+  "research": {
+    "message": "Research"
+  },
+  "summarize": {
+    "message": "Summarize"
+  },
+  "explain": {
+    "message": "Explain"
+  },
+  "analyze": {
+    "message": "Analyze"
+  },
+  "create image": {
+    "message": "Create Image"
+  },
+  "code": {
+    "message": "Code"
+  },
+  "generate": {
+    "message": "Generate"
+  },
+  "no_perm": {
+    "message": "may not work without permissions"
+  },
+  "reset_success": {
+    "message": "All options and data cleared"
   }
 }

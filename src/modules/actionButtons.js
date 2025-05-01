@@ -10,6 +10,7 @@ import {
 import { appendSvg } from "./appendSvg.js";
 import { showToast } from "./toaster.js";
 import { resetBtn } from "../app.js";
+import { t } from "./locales.js";
 
 export const goBtn = document.getElementById("go");
 const historyBtn = document.getElementById("history-button");
@@ -52,7 +53,7 @@ goBtn.addEventListener("click", async () => {
     if (selectedEngine.experimental) {
       // the current engine requires content scripts, but we have not enabled it
       if (selectedEngine.needsPerm) {
-        showToast(`${selectedEngine.name} may not work without permissions`);
+        showToast(`${selectedEngine.name} ${t("no_perm")}`);
         toggleButton(goBtn, false);
       } else {
         // we don't need content scripts because needPerm says it doesn't need it

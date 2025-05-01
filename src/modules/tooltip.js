@@ -1,4 +1,6 @@
 const tooltip = document.getElementById("tooltip");
+import { t } from "./locales.js";
+
 export function setupTooltip(element, condition = () => true, message = null) {
   const hideTooltip = () => {
     tooltip.style.display = "none";
@@ -31,8 +33,8 @@ export function setupTooltip(element, condition = () => true, message = null) {
     tooltip.style.left = `${left}px`;
     tooltip.style.top = `${top}px`;
     tooltip.textContent = message
-      ? message
-      : element.getAttribute("data-tooltip");
+      ? t(message)
+      : t(element.getAttribute("data-tooltip"));
     tooltip.style.display = "block";
   });
 

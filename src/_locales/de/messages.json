@@ -106,5 +106,212 @@
   "theme_light": {
     "message": "Licht",
     "description": "Light theme option"
+  },
+  "tooltip_options": {
+    "message": "Optionen"
+  },
+  "tooltip_experimental": {
+    "message": "Experimentelle Funktionen"
+  },
+  "tooltip_fetch_prompt": {
+    "message": "Letzten Prompt Abrufen"
+  },
+  "tooltip_current_ai": {
+    "message": "Aktuelle KI"
+  },
+  "tooltip_pick_ai": {
+    "message": "KI Auswählen"
+  },
+  "tooltip_advanced": {
+    "message": "Erweiterte Optionen"
+  },
+  "tooltip_upload_file": {
+    "message": "Dateien Hochladen"
+  },
+  "tooltip_get_response": {
+    "message": "Antwort Abrufen"
+  },
+  "tooltip_send_again": {
+    "message": "Erneut Senden"
+  },
+  "tooltip_empty_message": {
+    "message": "Leere Nachricht"
+  },
+  "tooltip_search_everywhere": {
+    "message": "Überall Suchen"
+  },
+  "prompt_solve": {
+    "message": "Lösen Sie das folgende Problem und geben Sie die Logik Schritt für Schritt an: ",
+    "description": "Help me solve this problem"
+  },
+  "prompt_solve_quick": {
+    "message": "Schnelle Lösung finden",
+    "description": "Find a quick solution"
+  },
+  "prompt_solve_check": {
+    "message": "Meine Lösung überprüfen",
+    "description": "Check my solution"
+  },
+  "prompt_solve_fill": {
+    "message": "Fehlende Teile ergänzen",
+    "description": "Fill in missing parts"
+  },
+  "prompt_research": {
+    "message": "Dieses Thema recherchieren"
+  },
+  "prompt_research_compare": {
+    "message": "Verschiedene Ansätze vergleichen"
+  },
+  "prompt_research_latest": {
+    "message": "Neueste Informationen finden"
+  },
+  "prompt_summarize": {
+    "message": "Fassen Sie kurz und prägnant zusammen, mit Stichpunkten zu den wichtigsten Begriffen: ",
+    "description": "Summarize briefly and concisely, with bullet points on key terms: "
+  },
+  "prompt_summarize_quick": {
+    "message": "Kurzzusammenfassung"
+  },
+  "prompt_summarize_paraphrase": {
+    "message": "Umformulieren"
+  },
+  "prompt_summarize_highlight": {
+    "message": "Kernpunkte hervorheben"
+  },
+  "prompt_summarize_simple": {
+    "message": "Vereinfachen"
+  },
+  "prompt_explain": {
+    "message": "Erklären Sie ausführlich mit Schritt-für-Schritt-Logik und fügen Sie leicht verständliche Beispiele hinzu: ",
+    "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
+  },
+  "prompt_explain_brief": {
+    "message": "Kurze Erklärung"
+  },
+  "prompt_explain_simple": {
+    "message": "Einfach erklären"
+  },
+  "prompt_explain_detail": {
+    "message": "Detaillierte Erklärung"
+  },
+  "prompt_analyze": {
+    "message": "Analysieren Sie das Folgende: ",
+    "description": "Analyze the following: "
+  },
+  "prompt_analyze_pros": {
+    "message": "Vor- und Nachteile"
+  },
+  "prompt_analyze_fact": {
+    "message": "Faktencheck"
+  },
+  "prompt_analyze_patterns": {
+    "message": "Muster finden"
+  },
+  "prompt_analyze_strengths": {
+    "message": "Stärken und Schwächen"
+  },
+  "prompt_analyze_errors": {
+    "message": "Fehler finden"
+  },
+  "prompt_image": {
+    "message": "Bild erstellen"
+  },
+  "prompt_image_photo": {
+    "message": "Fotorealistisches Bild"
+  },
+  "prompt_image_3d": {
+    "message": "3D-Rendering"
+  },
+  "prompt_image_2d": {
+    "message": "2D-Illustration"
+  },
+  "prompt_image_anime": {
+    "message": "Anime-Stil"
+  },
+  "prompt_image_icon": {
+    "message": "Icon-Design"
+  },
+  "prompt_image_logo": {
+    "message": "Logo-Design"
+  },
+  "prompt_code": {
+    "message": "Code-Hilfe"
+  },
+  "prompt_code_fix": {
+    "message": "Code reparieren"
+  },
+  "prompt_code_error": {
+    "message": "Fehler debuggen"
+  },
+  "prompt_code_refactor": {
+    "message": "Code refaktorisieren"
+  },
+  "prompt_code_docs": {
+    "message": "Dokumentation hinzufügen"
+  },
+  "prompt_code_tests": {
+    "message": "Tests schreiben"
+  },
+  "prompt_code_review": {
+    "message": "Code-Review"
+  },
+  "prompt_generate": {
+    "message": "Inhalt generieren"
+  },
+  "prompt_generate_ideas": {
+    "message": "Ideen entwickeln"
+  },
+  "prompt_generate_plan": {
+    "message": "Plan erstellen"
+  },
+  "prompt_generate_draft": {
+    "message": "Entwurf schreiben"
+  },
+  "prompt_generate_outline": {
+    "message": "Gliederung erstellen"
+  },
+  "prompt_generate_email": {
+    "message": "E-Mail schreiben"
+  },
+  "prompt_generate_resume": {
+    "message": "Lebenslauf schreiben"
+  },
+  "solve": {
+    "message": "Lösen",
+    "description": "Solve menu item"
+  },
+  "research": {
+    "message": "Recherchieren",
+    "description": "Research menu item"
+  },
+  "summarize": {
+    "message": "Zusammenfassen",
+    "description": "Summarize menu item"
+  },
+  "explain": {
+    "message": "Erklären",
+    "description": "Explain menu item"
+  },
+  "analyze": {
+    "message": "Analysieren",
+    "description": "Analyze menu item"
+  },
+  "create image": {
+    "message": "Bild erstellen",
+    "description": "Create image menu item"
+  },
+  "code": {
+    "message": "Code",
+    "description": "Code menu item"
+  },
+  "generate": {
+    "message": "Generieren",
+    "description": "Generate menu item"
+  },
+  "no_perm": {
+    "message": "funktioniert möglicherweise nicht ohne Berechtigungen"
+  },
+  "reset_success": {
+    "message": "Alle Optionen und Daten wurden zurückgesetzt"
   }
 }

@@ -106,5 +106,212 @@
   "theme_light": {
     "message": "ライト",
     "description": "Light theme option"
+  },
+  "tooltip_options": {
+    "message": "オプション"
+  },
+  "tooltip_experimental": {
+    "message": "実験的機能"
+  },
+  "tooltip_fetch_prompt": {
+    "message": "前回のプロンプト"
+  },
+  "tooltip_current_ai": {
+    "message": "現在のAI"
+  },
+  "tooltip_pick_ai": {
+    "message": "AI選択"
+  },
+  "tooltip_advanced": {
+    "message": "詳細オプション"
+  },
+  "tooltip_upload_file": {
+    "message": "ファイルアップロード"
+  },
+  "tooltip_get_response": {
+    "message": "応答を取得"
+  },
+  "tooltip_send_again": {
+    "message": "再送信"
+  },
+  "tooltip_empty_message": {
+    "message": "空のメッセージ"
+  },
+  "tooltip_search_everywhere": {
+    "message": "すべて検索"
+  },
+  "prompt_solve": {
+    "message": "以下の問題を解決し、ステップごとの論理を説明してください： ",
+    "description": "Help me solve this problem"
+  },
+  "prompt_solve_quick": {
+    "message": "素早い解決策を見つける",
+    "description": "Find a quick solution"
+  },
+  "prompt_solve_check": {
+    "message": "私の解決策を確認する",
+    "description": "Check my solution"
+  },
+  "prompt_solve_fill": {
+    "message": "不足している部分を補完する",
+    "description": "Fill in missing parts"
+  },
+  "prompt_research": {
+    "message": "このトピックを調査する"
+  },
+  "prompt_research_compare": {
+    "message": "異なるアプローチを比較する"
+  },
+  "prompt_research_latest": {
+    "message": "最新情報を探す"
+  },
+  "prompt_summarize": {
+    "message": "簡潔かつ簡潔に要約し、重要な用語を箇条書きにしてください： ",
+    "description": "Summarize briefly and concisely, with bullet points on key terms: "
+  },
+  "prompt_summarize_quick": {
+    "message": "クイック要約"
+  },
+  "prompt_summarize_paraphrase": {
+    "message": "言い換える"
+  },
+  "prompt_summarize_highlight": {
+    "message": "要点をハイライト"
+  },
+  "prompt_summarize_simple": {
+    "message": "簡略化する"
+  },
+  "prompt_explain": {
+    "message": "ステップごとの論理で徹底的に説明し、わかりやすい例を入れてください： ",
+    "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
+  },
+  "prompt_explain_brief": {
+    "message": "簡単な説明"
+  },
+  "prompt_explain_simple": {
+    "message": "分かりやすく説明"
+  },
+  "prompt_explain_detail": {
+    "message": "詳細な説明"
+  },
+  "prompt_analyze": {
+    "message": "以下を分析してください： ",
+    "description": "Analyze the following: "
+  },
+  "prompt_analyze_pros": {
+    "message": "長所と短所"
+  },
+  "prompt_analyze_fact": {
+    "message": "事実確認"
+  },
+  "prompt_analyze_patterns": {
+    "message": "パターンを見つける"
+  },
+  "prompt_analyze_strengths": {
+    "message": "強みと弱み"
+  },
+  "prompt_analyze_errors": {
+    "message": "エラーを探す"
+  },
+  "prompt_image": {
+    "message": "画像を作成"
+  },
+  "prompt_image_photo": {
+    "message": "写真のような画像"
+  },
+  "prompt_image_3d": {
+    "message": "3Dレンダリング"
+  },
+  "prompt_image_2d": {
+    "message": "2Dイラスト"
+  },
+  "prompt_image_anime": {
+    "message": "アニメ風"
+  },
+  "prompt_image_icon": {
+    "message": "アイコンデザイン"
+  },
+  "prompt_image_logo": {
+    "message": "ロゴデザイン"
+  },
+  "prompt_code": {
+    "message": "コードのヘルプ"
+  },
+  "prompt_code_fix": {
+    "message": "コードを修正"
+  },
+  "prompt_code_error": {
+    "message": "エラーをデバッグ"
+  },
+  "prompt_code_refactor": {
+    "message": "コードをリファクタリング"
+  },
+  "prompt_code_docs": {
+    "message": "ドキュメントを追加"
+  },
+  "prompt_code_tests": {
+    "message": "テストを作成"
+  },
+  "prompt_code_review": {
+    "message": "コードレビュー"
+  },
+  "prompt_generate": {
+    "message": "コンテンツを生成"
+  },
+  "prompt_generate_ideas": {
+    "message": "アイデアを出す"
+  },
+  "prompt_generate_plan": {
+    "message": "計画を作成"
+  },
+  "prompt_generate_draft": {
+    "message": "下書きを作成"
+  },
+  "prompt_generate_outline": {
+    "message": "アウトラインを作成"
+  },
+  "prompt_generate_email": {
+    "message": "メールを作成"
+  },
+  "prompt_generate_resume": {
+    "message": "履歴書を作成"
+  },
+  "solve": {
+    "message": "解決",
+    "description": "Solve menu item"
+  },
+  "research": {
+    "message": "調査",
+    "description": "Research menu item"
+  },
+  "summarize": {
+    "message": "要約",
+    "description": "Summarize menu item"
+  },
+  "explain": {
+    "message": "説明",
+    "description": "Explain menu item"
+  },
+  "analyze": {
+    "message": "分析",
+    "description": "Analyze menu item"
+  },
+  "create image": {
+    "message": "画像作成",
+    "description": "Create image menu item"
+  },
+  "code": {
+    "message": "コード",
+    "description": "Code menu item"
+  },
+  "generate": {
+    "message": "生成",
+    "description": "Generate menu item"
+  },
+  "no_perm": {
+    "message": "は権限がないと動作しない可能性があります"
+  },
+  "reset_success": {
+    "message": "すべてのオプションとデータがクリアされました"
   }
 }

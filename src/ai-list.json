@@ -118,100 +118,104 @@
   "prompts": [
     {
       "id": "Solve",
-      "prompt": "Solve the following problem and give step-by-step logic: ",
+      "prompt": "prompt_solve",
       "image": "/assets/images/prompts/solve.svg",
       "suggestions": [
-        "Give a Quick Answer",
-        "Check My Answer",
-        "Fill in the Blanks"
+        "prompt_solve_quick",
+        "prompt_solve_check",
+        "prompt_solve_fill"
       ],
       "replace": true,
       "context": ["editable", "selection"]
     },
     {
       "id": "Research",
-      "prompt": "Research ",
+      "prompt": "prompt_research",
       "image": "/assets/images/prompts/research.svg",
-      "suggestions": ["Compare Options", "Find Latest Info"],
+      "suggestions": ["prompt_research_compare", "prompt_research_latest"],
       "replace": true,
       "context": ["editable", "selection"]
     },
     {
       "id": "Summarize",
-      "prompt": "Summarize briefly and concisely, with bullet points on key terms: ",
+      "prompt": "prompt_summarize",
       "image": "/assets/images/prompts/summarize.svg",
       "suggestions": [
-        "Give a Quick Summary",
-        "Paraphrase",
-        "Highlight Important Terms",
-        "Summarize in Simple Words"
+        "prompt_summarize_quick",
+        "prompt_summarize_paraphrase",
+        "prompt_summarize_highlight",
+        "prompt_summarize_simple"
       ],
       "replace": true,
       "context": ["editable", "selection", "link"]
     },
     {
       "id": "Explain",
-      "prompt": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:",
+      "prompt": "prompt_explain",
       "image": "/assets/images/prompts/explain.svg",
-      "suggestions": ["Explain briefly", "ELI5", "Explain in Detail"],
+      "suggestions": [
+        "prompt_explain_brief",
+        "prompt_explain_simple",
+        "prompt_explain_detail"
+      ],
       "replace": true,
       "context": ["editable", "selection", "link"]
     },
     {
       "id": "Analyze",
-      "prompt": "Analyze the following: ",
+      "prompt": "prompt_analyze",
       "image": "/assets/images/prompts/analyze.svg",
       "suggestions": [
-        "Analyze Pros and Cons",
-        "Fact Check",
-        "Find Patterns or Trends",
-        "Spot Strengths and Weaknesses",
-        "Fix Errors"
+        "prompt_analyze_pros",
+        "prompt_analyze_fact",
+        "prompt_analyze_patterns",
+        "prompt_analyze_strengths",
+        "prompt_analyze_errors"
       ],
       "replace": true,
       "context": ["editable", "selection", "link"]
     },
     {
       "id": "Create Image",
-      "prompt": "Generate an image of ",
+      "prompt": "prompt_image",
       "image": "/assets/images/prompts/image.svg",
       "suggestions": [
-        "a Realistic Photo",
-        "a 3D Render",
-        "a 2D Illustration",
-        "an Anime-Style Image",
-        "an Icon",
-        "a Logo"
+        "prompt_image_photo",
+        "prompt_image_3d",
+        "prompt_image_2d",
+        "prompt_image_anime",
+        "prompt_image_icon",
+        "prompt_image_logo"
       ],
       "replace": false,
       "context": ["editable", "selection"]
     },
     {
       "id": "Code",
-      "prompt": "Code and explain: ",
+      "prompt": "prompt_code",
       "image": "/assets/images/prompts/code.svg",
       "suggestions": [
-        "Fix Errors",
-        "Explain This Error Message",
-        "Refactor",
-        "Generate Code Documentation",
-        "Generate Code Tests",
-        "Review and Comment"
+        "prompt_code_fix",
+        "prompt_code_error",
+        "prompt_code_refactor",
+        "prompt_code_docs",
+        "prompt_code_tests",
+        "prompt_code_review"
       ],
       "replace": true,
       "context": ["editable", "selection"]
     },
     {
       "id": "Generate",
-      "prompt": "Create a plan or idea: ",
+      "prompt": "prompt_generate",
       "image": "/assets/images/prompts/generate.svg",
       "suggestions": [
-        "Brainstorm Ideas",
-        "Make a Plan",
-        "Write a Draft",
-        "Create an Outline",
-        "Write an Email",
-        "Write and improve my Resume"
+        "prompt_generate_ideas",
+        "prompt_generate_plan",
+        "prompt_generate_draft",
+        "prompt_generate_outline",
+        "prompt_generate_email",
+        "prompt_generate_resume"
       ],
       "replace": true,
       "context": ["editable", "selection"]

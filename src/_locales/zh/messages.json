@@ -106,5 +106,212 @@
   "theme_light": {
     "message": "亮色",
     "description": "Light theme option"
+  },
+  "tooltip_options": {
+    "message": "选项"
+  },
+  "tooltip_experimental": {
+    "message": "实验功能"
+  },
+  "tooltip_fetch_prompt": {
+    "message": "获取上一个提示"
+  },
+  "tooltip_current_ai": {
+    "message": "当前AI"
+  },
+  "tooltip_pick_ai": {
+    "message": "选择AI"
+  },
+  "tooltip_advanced": {
+    "message": "高级选项"
+  },
+  "tooltip_upload_file": {
+    "message": "上传文件"
+  },
+  "tooltip_get_response": {
+    "message": "获取回应"
+  },
+  "tooltip_send_again": {
+    "message": "重新发送"
+  },
+  "tooltip_empty_message": {
+    "message": "空消息"
+  },
+  "tooltip_search_everywhere": {
+    "message": "搜索所有"
+  },
+  "prompt_solve": {
+    "message": "解决以下问题并提供逐步的逻辑： ",
+    "description": "Help me solve this problem"
+  },
+  "prompt_solve_quick": {
+    "message": "找到快速解决方案",
+    "description": "Find a quick solution"
+  },
+  "prompt_solve_check": {
+    "message": "检查我的解决方案",
+    "description": "Check my solution"
+  },
+  "prompt_solve_fill": {
+    "message": "填补缺失部分",
+    "description": "Fill in missing parts"
+  },
+  "prompt_research": {
+    "message": "研究这个主题"
+  },
+  "prompt_research_compare": {
+    "message": "比较不同的方法"
+  },
+  "prompt_research_latest": {
+    "message": "查找最新信息"
+  },
+  "prompt_summarize": {
+    "message": "简短且简洁地总结，列出关键术语的项目符号： ",
+    "description": "Summarize briefly and concisely, with bullet points on key terms: "
+  },
+  "prompt_summarize_quick": {
+    "message": "快速总结"
+  },
+  "prompt_summarize_paraphrase": {
+    "message": "重新表述"
+  },
+  "prompt_summarize_highlight": {
+    "message": "突出要点"
+  },
+  "prompt_summarize_simple": {
+    "message": "简化内容"
+  },
+  "prompt_explain": {
+    "message": "详细解释，包含逐步逻辑，并加入易于理解的示例： ",
+    "description": "Explain thoroughly with step-by-step logic and include easy-to-understand examples:"
+  },
+  "prompt_explain_brief": {
+    "message": "简短解释"
+  },
+  "prompt_explain_simple": {
+    "message": "通俗解释"
+  },
+  "prompt_explain_detail": {
+    "message": "详细解释"
+  },
+  "prompt_analyze": {
+    "message": "分析以下内容： ",
+    "description": "Analyze the following: "
+  },
+  "prompt_analyze_pros": {
+    "message": "优缺点分析"
+  },
+  "prompt_analyze_fact": {
+    "message": "事实核查"
+  },
+  "prompt_analyze_patterns": {
+    "message": "寻找模式"
+  },
+  "prompt_analyze_strengths": {
+    "message": "优势和劣势"
+  },
+  "prompt_analyze_errors": {
+    "message": "查找错误"
+  },
+  "prompt_image": {
+    "message": "创建图像"
+  },
+  "prompt_image_photo": {
+    "message": "真实照片风格"
+  },
+  "prompt_image_3d": {
+    "message": "3D渲染"
+  },
+  "prompt_image_2d": {
+    "message": "2D插图"
+  },
+  "prompt_image_anime": {
+    "message": "动漫风格"
+  },
+  "prompt_image_icon": {
+    "message": "图标设计"
+  },
+  "prompt_image_logo": {
+    "message": "标志设计"
+  },
+  "prompt_code": {
+    "message": "代码帮助"
+  },
+  "prompt_code_fix": {
+    "message": "修复代码"
+  },
+  "prompt_code_error": {
+    "message": "调试错误"
+  },
+  "prompt_code_refactor": {
+    "message": "重构代码"
+  },
+  "prompt_code_docs": {
+    "message": "添加文档"
+  },
+  "prompt_code_tests": {
+    "message": "编写测试"
+  },
+  "prompt_code_review": {
+    "message": "代码审查"
+  },
+  "prompt_generate": {
+    "message": "生成内容"
+  },
+  "prompt_generate_ideas": {
+    "message": "头脑风暴"
+  },
+  "prompt_generate_plan": {
+    "message": "创建计划"
+  },
+  "prompt_generate_draft": {
+    "message": "写初稿"
+  },
+  "prompt_generate_outline": {
+    "message": "创建大纲"
+  },
+  "prompt_generate_email": {
+    "message": "写邮件"
+  },
+  "prompt_generate_resume": {
+    "message": "写简历"
+  },
+  "solve": {
+    "message": "解决",
+    "description": "Solve menu item"
+  },
+  "research": {
+    "message": "研究",
+    "description": "Research menu item"
+  },
+  "summarize": {
+    "message": "总结",
+    "description": "Summarize menu item"
+  },
+  "explain": {
+    "message": "解释",
+    "description": "Explain menu item"
+  },
+  "analyze": {
+    "message": "分析",
+    "description": "Analyze menu item"
+  },
+  "create image": {
+    "message": "创建图像",
+    "description": "Create image menu item"
+  },
+  "code": {
+    "message": "代码",
+    "description": "Code menu item"
+  },
+  "generate": {
+    "message": "生成",
+    "description": "Generate menu item"
+  },
+  "no_perm": {
+    "message": "可能无法工作(如果没有权限)"
+  },
+  "reset_success": {
+    "message": "所有选项和数据已清除"
   }
 }

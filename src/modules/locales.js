@@ -4,6 +4,7 @@ import { resetBtn } from "../app.js";
 import { closeBtn } from "./sidebar.js";
 import { suggestDisplay } from "./suggestions.js";
 import { userThemeForm } from "./theme.js";
+import { getSuggestionButtons } from "./suggestions.js";
 // Handle localization
 const DEFAULT_LOCALE = "en";
 let currentLocale = DEFAULT_LOCALE;
@@ -94,6 +95,10 @@ export function updateUIText() {
     let input = label.getAttribute("for");
     label.textContent = t(`theme_${input}`);
   });
+  document.querySelector("#se-label").textContent = t(
+    "tooltip_search_everywhere"
+  );
+  getSuggestionButtons();
 }
 
 // Listen for locale changes

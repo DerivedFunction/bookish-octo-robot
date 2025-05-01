@@ -121,9 +121,6 @@ export async function getSearchEngine() {
         image: selectedEngine
           ? selectedEngine.image
           : "/assets/images/ai/default.svg",
-        description: selectedEngine
-          ? `Search with ${selectedEngine?.name}`
-          : null,
       },
       curSearchBtn,
       null,
@@ -181,7 +178,7 @@ export async function getPermissions(engine) {
       console.log("Script registration failed:", error);
     }
   } else {
-    if (engine.needsPerm) showToast(`${name} may not work without permissions`);
+    if (engine.needsPerm) showToast(`${name} ${t("no_perm")}`);
   }
   await getScriptStatus(engine.name);
 }
@@ -367,7 +364,7 @@ async function goToLink() {
         return;
       } else if (selectedEngine.needsPerm) {
         // We don't have scripts and we need it
-        showToast(`${selectedEngine.name} may not work without permissions`);
+        showToast(`${selectedEngine.name} ${t("no_perm")}`);
         query.value = q;
         queryEvents();
       } else {
