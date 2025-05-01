@@ -1,6 +1,6 @@
 import { nameInput } from "./nameInput.js";
 import { appendSvg } from "./appendSvg.js";
-import { loadJsonData } from "../app.js";
+import { loadJsonData, toggleClass } from "../app.js";
 import {
   getPermissions,
   getScriptStatus,
@@ -15,7 +15,7 @@ optionBtn.addEventListener("click", async () => {
   nameInput.value = localStorage.getItem("name") || "";
   await appendList();
 });
-const sidebar = document.getElementById("sidebar");
+export const sidebar = document.getElementById("sidebar");
 export const exp_sidebar = document.getElementById("scripts-sidebar");
 document.addEventListener("click", (e) => {
   if (!sidebar.contains(e.target) && !optionBtn.contains(e.target)) {
@@ -35,7 +35,12 @@ closeScriptBtn.addEventListener("click", () => {
 });
 const scriptsBtn = document.getElementById("scripts-button");
 scriptsBtn.addEventListener("click", async () => {
+  toggleClass(requiredList.parentElement, false, "highlight");
+  requiredList.querySelectorAll("button").forEach((btn) => {
+    toggleClass(btn, false, "highlight");
+  });
   exp_sidebar.style.display = "block";
+
   await chrome.storage.local.get("unstable").then((e) => {
     console.log("unstable feature status", e?.unstable);
     unstable.checked = e?.unstable || false;
@@ -43,7 +48,14 @@ scriptsBtn.addEventListener("click", async () => {
   const aiList = await getSearchEngineList(); // or cache it if you want
   await refreshCurrentEnabled(aiList);
 });
-const requiredList = document.getElementById("required-scripts-ai");
+export function highlightRequired() {
+  exp_sidebar.style.display = "block";
+  toggleClass(requiredList.parentElement, true, "highlight");
+  requiredList.querySelectorAll("button").forEach((btn) => {
+    toggleClass(btn, true, "highlight");
+  });
+}
+export const requiredList = document.getElementById("required-scripts-ai");
 const imageList = document.getElementById("ai-image-support");
 const scriptsList = document.getElementById("ai-experimental-support");
 export const enableAll = document.getElementById("enable-all-scripts");

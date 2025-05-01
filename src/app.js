@@ -2,6 +2,11 @@ import "./modules/index.js";
 import { query } from "./modules/query.js";
 import { showToast } from "./modules/toaster.js";
 import { initLocales, t } from "./modules/locales.js";
+import {
+  exp_sidebar,
+  highlightRequired,
+  requiredList,
+} from "./modules/sidebar.js";
 
 export const resetBtn = document.getElementById("reset");
 export function toggleButton(button, enabled, style = "enabled") {
@@ -78,6 +83,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       showToast(`${name} ${t("no_perm")}`);
       let { query: text } = await chrome.storage.local.get("query");
       if (text) query.value = text;
+      highlightRequired();
     }
     if (path.includes("none")) {
       let { query: text } = await chrome.storage.local.get("query");

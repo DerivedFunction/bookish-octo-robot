@@ -14,6 +14,7 @@ import { chatBotResponse, responseBox } from "./response.js";
 import { fileUploadBtn } from "./files.js";
 import { setupTooltip } from "./tooltip.js";
 import { t } from "./locales.js";
+import { sidebar } from "./sidebar.js";
 
 // Constants
 const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
@@ -117,6 +118,7 @@ async function handleChatMessage(e, engines) {
 // --- Main Functions ---
 
 export async function appendList() {
+  searchEverywhereList.parentElement.classList.remove("highlight");
   const searchEngines = await getSearchEngineList();
   const selectedEngines = getSearchEverywhere();
   const fragment = document.createDocumentFragment();
@@ -147,7 +149,13 @@ async function handleMultiSearch(textContent, resend = false) {
     Object.keys(searchEverywhere).length === 0 ||
     Object.values(searchEverywhere).every((value) => !value)
   ) {
-    showToast("Search Everywhere has none selected. See Options");
+    sidebar.style.display = "block";
+    toggleClass(searchEverywhereList.parentElement, true, "highlight");
+    searchEverywhereList.querySelectorAll("button").forEach((button) => {
+      // make the border flash blue for 3 seconds
+      toggleClass(button, true, "highlight");
+    });
+    showToast(`${t("tooltip_search_everywhere")}: ${t("tooltip_pick_ai")}`);
     return;
   }
 
@@ -166,7 +174,11 @@ async function handleMultiSearch(textContent, resend = false) {
   for (const engine of searchEngines) {
     if (!searchEverywhere[engine.name]) continue;
     if (queryText.length > engine.limit) {
-      showToast(`Query exceeds character count for ${engine.name}`);
+      showToast(
+        `${engine.name} - ${t("too_long")}: ${queryText.length} > ${
+          engine.limit
+        }`
+      );
       continue;
     }
 

@@ -454,6 +454,17 @@ fieldset {
   border-color: var(--border-color);
 }
 
+.highlight {
+  animation: flash-border 0.25s 12 alternate;
+}
+@keyframes flash-border {
+  0% {
+    border-color: var(--active-color);
+  }
+  100% {
+    border-color: var(--border-color);
+  }
+}
 /* Response container (your original styling) */
 #response-container {
   display: none; /* Assumed to be toggled visible elsewhere */
