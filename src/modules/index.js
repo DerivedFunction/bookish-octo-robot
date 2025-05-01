@@ -1,7 +1,6 @@
 import "./actionButtons.js";
 import "./appendSvg.js";
 import "./backgroundImage.js";
-import "./chatbox.js";
 import "./files.js";
 import "./greetings.js";
 import "./locales.js";
