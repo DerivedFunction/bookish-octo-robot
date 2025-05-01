@@ -2,11 +2,7 @@ import "./modules/index.js";
 import { query } from "./modules/query.js";
 import { showToast } from "./modules/toaster.js";
 import { initLocales, t } from "./modules/locales.js";
-import {
-  exp_sidebar,
-  highlightRequired,
-  requiredList,
-} from "./modules/sidebar.js";
+import { highlightRequired } from "./modules/sidebar.js";
 
 export const resetBtn = document.getElementById("reset");
 export function toggleButton(button, enabled, style = "enabled") {
