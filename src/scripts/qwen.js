@@ -1,5 +1,5 @@
 // script.js Thanks to https://github.com/facebook/react/issues/11488#issuecomment-347775628
-(async () => setTimeout(runAfterFullLoad, 3000))();
+(async () => setTimeout(runAfterFullLoad, 6000))();
 
 const SELECTORS = {
   AI: "Qwen",
