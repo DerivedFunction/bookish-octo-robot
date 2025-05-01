@@ -323,9 +323,6 @@
   "time_weeks": {
     "message": "Semaines"
   },
-  "background_label": {
-    "message": "Arrière-plan"
-  },
   "background_type": {
     "message": "Type d'arrière-plan"
   },
@@ -367,5 +364,29 @@
   },
   "bg_change_refresh": {
     "message": "Changer à l'Actualisation"
+  },
+  "background": {
+    "message": "Arrière-plan"
+  },
+  "upload_image": {
+    "message": "Cliquez pour télécharger..."
+  },
+  "gradient_angle": {
+    "message": "Angle"
+  },
+  "bg_type_default": {
+    "message": "Par défaut"
+  },
+  "bg_type_bg-img": {
+    "message": "Image en ligne (Pexels/Unsplash)"
+  },
+  "bg_type_color": {
+    "message": "Couleur unie"
+  },
+  "bg_type_gradient": {
+    "message": "Dégradé"
+  },
+  "bg_type_own-img": {
+    "message": "Image personnelle"
   }
 }

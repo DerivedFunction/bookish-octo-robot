@@ -314,9 +314,6 @@
   "change_every": {
     "message": "Cambiar Cada"
   },
-  "background_label": {
-    "message": "Fondo"
-  },
   "background_type": {
     "message": "Tipo de Fondo"
   },
@@ -369,7 +366,7 @@
     "message": "Predeterminado"
   },
   "bg_type_bg-img": {
-    "message": "Imagen de Fondo"
+    "message": "Imagen en línea (Pexels/Unsplash)"
   },
   "bg_type_color": {
     "message": "Color Sólido"

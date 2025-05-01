@@ -323,9 +323,6 @@
   "time_weeks": {
     "message": "Weeks"
   },
-  "background_label": {
-    "message": "Background"
-  },
   "background_type": {
     "message": "Background Type"
   },
@@ -381,7 +378,7 @@
     "message": "Default"
   },
   "bg_type_bg-img": {
-    "message": "Background Image"
+    "message": "Online Image (Pexels/Unsplash)"
   },
   "bg_type_color": {
     "message": "Solid Color"

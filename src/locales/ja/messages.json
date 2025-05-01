@@ -323,9 +323,6 @@
   "time_weeks": {
     "message": "週"
   },
-  "background_label": {
-    "message": "背景"
-  },
   "background_type": {
     "message": "背景タイプ"
   },
@@ -381,7 +378,7 @@
     "message": "デフォルト"
   },
   "bg_type_bg-img": {
-    "message": "背景画像"
+    "message": "オンライン画像 (Pexels/Unsplash)"
   },
   "bg_type_color": {
     "message": "単色"

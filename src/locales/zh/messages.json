@@ -323,9 +323,6 @@
   "time_weeks": {
     "message": "周"
   },
-  "background_label": {
-    "message": "背景"
-  },
   "background_type": {
     "message": "背景类型"
   },
@@ -381,7 +378,7 @@
     "message": "默认"
   },
   "bg_type_bg-img": {
-    "message": "背景图片"
+    "message": "在线图片 (Pexels/Unsplash)"
   },
   "bg_type_color": {
     "message": "纯色"
