@@ -80,7 +80,7 @@
       "name": "Qwen",
       "url": "https:/chat.qwen.ai/",
       "image": "/assets/images/ai/qwen.svg",
-      "limit": 100000,
+      "limit": 10000,
       "needsPerm": true,
       "experimental": true,
 
