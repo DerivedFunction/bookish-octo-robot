@@ -1,8 +1,10 @@
 // script.js
 (async () => setTimeout(runAfterFullLoad, 3000))();
+const aiName = "ChatGPT";
 const SELECTORS = {
-  AI: "ChatGPT",
-  lastResponse: "ChatGPTLast",
+  AI: aiName,
+  lastResponse: aiName + "Last",
+  kill: aiName + "Kill",
   textbox: "#prompt-textarea p",
   send: "#composer-submit-button",
   file: "input[type='file']",
@@ -33,6 +35,11 @@ async function runAfterFullLoad() {
 async function handleStorageChange(changes, areaName) {
   // Only react to changes in the 'local' storage area
   if (areaName !== "local") return;
+  if (changes[SELECTORS.kill] && changes[SELECTORS.kill].newValue) {
+    console.log("Killing listener...");
+    chrome.storage.local.remove(SELECTORS.kill);
+    chrome.storage.onChanged.removeListener(handleStorageChange);
+  }
 
   // Check if the main AI trigger key was added or changed
   // This indicates a potential new query or image task

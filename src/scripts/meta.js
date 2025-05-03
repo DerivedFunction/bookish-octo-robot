@@ -1,8 +1,10 @@
 // script.js
 (async () => setTimeout(runAfterFullLoad, 3000))();
+const aiName = "Meta";
 const SELECTORS = {
-  AI: "Meta",
-  lastResponse: "MetaLast",
+  AI: aiName,
+  lastResponse: aiName + "Last",
+  kill: aiName + "Kill",
   textbox: "div[contenteditable='true']",
   send: "div[aria-label='Send Message']",
   file: "input",
@@ -34,6 +36,11 @@ async function runAfterFullLoad() {
 async function handleStorageChange(changes, areaName) {
   // Only react to changes in the 'local' storage area
   if (areaName !== "local") return;
+  if (changes[SELECTORS.kill] && changes[SELECTORS.kill].newValue) {
+    console.log("Killing listener...");
+    chrome.storage.local.remove(SELECTORS.kill);
+    chrome.storage.onChanged.removeListener(handleStorageChange);
+  }
 
   // Check if the main AI trigger key was added or changed
   // This indicates a potential new query or image task
