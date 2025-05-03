@@ -91,7 +91,7 @@ async function getTextInput(maxRetries = 5, retryDelay = 3000) {
   if (!searchQuery) return;
   const curTime = Date.now();
   if (curTime > time + 1000 * 15) return;
-  chrome.runtime.sendMessage({ ping: true });
+  chrome.runtime.sendMessage({ ping: true, name: SELECTORS.AI });
   let attempts = 0;
   counter = 0; //reset the counter
   while (attempts < maxRetries) {
