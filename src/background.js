@@ -76,6 +76,10 @@ function setupEventListeners() {
       let newChat = true;
       if (flags.some((flag) => flag === "@s")) {
         newChat = false;
+        if (flags.length === 1) {
+          await createTab(query, null, newChat);
+          return;
+        }
       }
       for (const flag of flags) {
         const engineName = flag.slice(1).toLowerCase();
