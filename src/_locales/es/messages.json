@@ -131,6 +131,9 @@
   "tooltip_search_everywhere": {
     "message": "Búsqueda en Todas Partes"
   },
+  "tooltip_new_tab": {
+    "message": "Abrir Nueva Pestaña"
+  },
   "prompt_solve": {
     "message": "Resuelva el siguiente problema y proporcione la lógica paso a paso: "
   },

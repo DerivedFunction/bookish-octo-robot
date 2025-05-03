@@ -130,6 +130,9 @@
   "tooltip_search_everywhere": {
     "message": "Search Everywhere"
   },
+  "tooltip_new_tab": {
+    "message": "Open New Tab"
+  },
   "prompt_solve": {
     "message": "Solve the following problem and give step-by-step logic: "
   },

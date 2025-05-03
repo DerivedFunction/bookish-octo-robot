@@ -131,6 +131,9 @@
   "tooltip_search_everywhere": {
     "message": "Suche überall"
   },
+  "tooltip_new_tab": {
+    "message": "Neues Tab öffnen"
+  },
   "prompt_solve": {
     "message": "Lösen Sie das folgende Problem und geben Sie die Logik Schritt für Schritt an: "
   },

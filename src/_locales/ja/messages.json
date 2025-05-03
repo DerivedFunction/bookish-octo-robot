@@ -131,6 +131,9 @@
   "tooltip_search_everywhere": {
     "message": "すべて検索"
   },
+  "tooltip_new_tab": {
+    "message": "新しいタブを開く"
+  },
   "prompt_solve": {
     "message": "以下の問題を解決し、ステップごとの論理を説明してください： "
   },

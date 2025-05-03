@@ -26,7 +26,7 @@ const sendAgain = document.getElementById("send-again");
 const responseContainer = document.getElementById("response-container");
 const responseBtn = document.getElementById("response");
 const multiTools = document.getElementById("multi-tools");
-
+const newTabBtn = document.getElementById("new-tab");
 // State Variables
 export let newClick = true;
 
@@ -239,8 +239,7 @@ async function handleMultiSearch(textContent, resend = false) {
     });
     newClick = false;
     responseContainer.style.display = "block";
-    responseBtn.style.display = "";
-    sendAgain.style.display = "";
+    multiTools.style.display = "";
     const selectedEngines = getSearchEverywhere();
     const fragment = document.createDocumentFragment();
 
@@ -298,14 +297,32 @@ function getResponse() {
       await chrome.storage.local.set({ [engineLast]: true });
   });
 }
+async function openNewTab() {
+  const searchEngines = getSearchEverywhere();
+  const active = false;
+  const aiList = await getSearchEngineList();
+  for (const engine in searchEngines) {
+    const e = aiList.filter((a) => a.name === engine)[0];
+    const url = hostnameToURL(e);
+    if (searchEngines[engine]) {
+      await chrome.storage.local.set({
+        [`${engine}Kill`]: true,
+        [engine]: true,
+      });
+      chrome.tabs.create({ url, active });
+    }
+  }
+  function hostnameToURL(engine) {
+    if (engine.home) return engine.home;
+    else return engine.url.split("?")[0];
+  }
+}
 
 // --- Event Listeners and Initialization ---
 
 document.addEventListener("DOMContentLoaded", async () => {
-  [responseBtn, sendAgain].forEach((btn) => {
-    btn.style.display = "none";
-  });
-  [responseBtn, sendAgain].forEach((btn) => {
+  multiTools.style.display = "none";
+  [responseBtn, sendAgain, newTabBtn].forEach((btn) => {
     setupTooltip(btn, () => true);
   });
   setupTooltip(multiBtn, () => query.value.length === 0);
@@ -327,12 +344,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     sendAgain
   );
+  appendSvg(
+    {
+      image: "assets/images/buttons/new.svg",
+    },
+    newTabBtn
+  );
 
   await appendList();
   multiBtn.addEventListener("click", () => handleMultiSearch());
   responseBtn.addEventListener("click", () => handleGetResponse());
   sendAgain.addEventListener("click", () => handleSendAgain());
-
+  newTabBtn.addEventListener("click", () => openNewTab());
   resetBtn.addEventListener("click", async () => {
     localStorage.removeItem(SEARCH_ENGINE_STORAGE_KEY);
     await appendList();

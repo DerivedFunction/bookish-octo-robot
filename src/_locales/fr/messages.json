@@ -131,6 +131,9 @@
   "tooltip_search_everywhere": {
     "message": "Recherche Partout"
   },
+  "tooltip_new_tab": {
+    "message": "Ouvrir Nouvelle Onglet"
+  },
   "prompt_solve": {
     "message": "Résolvez le problème suivant et fournissez la logique étape par étape: "
   },

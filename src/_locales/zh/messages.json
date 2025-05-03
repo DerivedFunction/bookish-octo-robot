@@ -131,6 +131,9 @@
   "tooltip_search_everywhere": {
     "message": "搜索所有"
   },
+  "tooltip_new_tab": {
+    "message": "打开新标签页"
+  },
   "prompt_solve": {
     "message": "解决以下问题并提供逐步的逻辑"
   },
