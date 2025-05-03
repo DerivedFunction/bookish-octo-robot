@@ -1,7 +1,7 @@
 import { weatherField } from "./weather.js";
 import { nameInput } from "./nameInput.js";
 import { appendSvg } from "./appendSvg.js";
-import { loadJsonData, toggleClass } from "../app.js";
+import { loadJsonData } from "../app.js";
 import {
   getPermissions,
   getScriptStatus,
