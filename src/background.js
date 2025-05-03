@@ -1,6 +1,6 @@
 let sidebarStatus = false;
 let selectedEngine = null;
-let tabReceived = 0;
+let tabResponses = new Map(); // Map to store response timestamps
 let currentLocale = null;
 let localeKeys = null;
 let prompts = [];
@@ -73,6 +73,10 @@ function setupEventListeners() {
       const query = text.slice(startFlags.length).trim();
 
       let matchFound = false;
+      let newChat = true;
+      if (flags.some((flag) => flag === "@s")) {
+        newChat = false;
+      }
       for (const flag of flags) {
         const engineName = flag.slice(1).toLowerCase();
         const ai = aiList.find(
@@ -82,7 +86,7 @@ function setupEventListeners() {
         );
         if (ai) {
           matchFound = true;
-          await createTab(query, ai);
+          await createTab(query, ai, newChat);
         }
       }
       if (matchFound) return;
@@ -192,8 +196,11 @@ function setupEventListeners() {
   );
   chrome.runtime.onMessage.addListener((e) => {
     if (e.ping) {
-      tabReceived++;
-      setTimeout(() => tabReceived--, 1000);
+      const timestamp = Date.now();
+      const responseKey = e.name;
+      tabResponses.set(responseKey, timestamp);
+      // Clean up old responses after 1 second
+      setTimeout(() => tabResponses.delete(responseKey), 1000);
     }
   });
 
@@ -261,7 +268,7 @@ function t(key, substitutions = {}) {
   return text;
 }
 
-async function createTab(query, engine = null) {
+async function createTab(query, engine = null, newChat = true) {
   let curEngine;
   if (engine) curEngine = engine;
   else {
@@ -274,6 +281,8 @@ async function createTab(query, engine = null) {
       });
     return;
   }
+  if (newChat)
+    await chrome.storage.local.set({ [`${curEngine.name}Kill`]: true });
   await chrome.storage.local.set({
     query,
     lastQuery: query,
@@ -285,10 +294,19 @@ async function createTab(query, engine = null) {
     let curEngineScripts = await getScriptStatus(curEngine.name);
     if (curEngine.experimental) {
       if (curEngineScripts) {
+        if (newChat) {
+          url = hostnameToURL(curEngine);
+          chrome.tabs.create({ url });
+          return;
+        }
         const waitForNoPing = () =>
           new Promise((resolve) => {
             let checkInterval = setInterval(() => {
-              if (tabReceived > 0) {
+              // Check if there are any active responses for this engine
+              const hasActiveResponses = Array.from(tabResponses.keys()).some(
+                (key) => key.startsWith(curEngine.name)
+              );
+              if (hasActiveResponses) {
                 clearInterval(checkInterval);
                 resolve(false);
               }
