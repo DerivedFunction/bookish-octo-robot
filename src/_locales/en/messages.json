@@ -305,7 +305,7 @@
     "message": "Target Open Chats/Advanced Search Everywhere"
   },
   "unstable_p": {
-    "message": " Allows tabs opened by this extension to listen and intercept any queries and send data back (if requested by user). You must close those tabs to stop this feature."
+    "message": " Allows tabs opened by this extension to listen and intercept any queries and send data back (if requested by user). You must close those tabs to stop this feature. Turn this off when not in use: Enabling this feature may result in unexpected behavior."
   },
   "enabled_label": {
     "message": "Currently Enabled"

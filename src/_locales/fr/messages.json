@@ -306,7 +306,7 @@
     "message": "Cible : Chats ouverts/Recherche Avancée Partout"
   },
   "unstable_p": {
-    "message": "Permet aux ongtabs ouverts par cette extension d'écouter et d'intercepter toutes les requêtes et de renvoyer des données (si demandé par l'utilisateur). Vous devez fermer ces onglets pour arrêter cette fonctionnalité."
+    "message": "Permet aux ongtabs ouverts par cette extension d'écouter et d'intercepter toutes les requêtes et de renvoyer des données (si demandé par l'utilisateur). Vous devez fermer ces onglets pour arrêter cette fonctionnalité. Désactivez cette fonction lorsque vous ne l'utilisez pas: l'activation de cette fonctionnalité peut entraîner un comportement inattendu."
   },
   "enabled_label": {
     "message": "Actuellement Activé"

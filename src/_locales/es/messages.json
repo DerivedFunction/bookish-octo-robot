@@ -300,7 +300,7 @@
     "message": "Objetivo: Chats abiertos/Búsqueda Avanzada en Todas Partes"
   },
   "unstable_p": {
-    "message": "Permite que las pestañas abiertas por esta extensión escuchen e intercepten cualquier consulta y envíen datos de vuelta (si lo solicita el usuario). Debes cerrar esas pestañas para detener esta función."
+    "message": "Permite que las pestañas abiertas por esta extensión escuchen e intercepten cualquier consulta y envíen datos de vuelta (si lo solicita el usuario). Debes cerrar esas pestañas para detener esta función. Desactive esta opción cuando no esté en uso: habilitar esta función puede generar un comportamiento inesperado."
   },
   "enabled_label": {
     "message": "Actualmente Habilitado"

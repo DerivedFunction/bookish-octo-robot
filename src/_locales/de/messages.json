@@ -306,7 +306,7 @@
     "message": "Ziel: Offene Chats/Erweiterte Suche überall"
   },
   "unstable_p": {
-    "message": "Ermöglicht Tabs, die von dieser Erweiterung geöffnet wurden, Anfragen zu überwachen und Daten zurückzusenden (falls vom Benutzer angefordert). Sie müssen diese Tabs schließen, um diese Funktion zu deaktivieren."
+    "message": "Ermöglicht Tabs, die von dieser Erweiterung geöffnet wurden, Anfragen zu überwachen und Daten zurückzusenden (falls vom Benutzer angefordert). Sie müssen diese Tabs schließen, um diese Funktion zu deaktivieren. Schalten Sie dies aus, wenn es nicht verwendet wird: Das Aktivieren dieser Funktion kann zu unerwartetem Verhalten führen."
   },
   "enabled_label": {
     "message": "Derzeit Aktiviert"
