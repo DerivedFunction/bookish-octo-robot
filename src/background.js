@@ -282,13 +282,13 @@ async function createTab(query, engine = null, newChat = true) {
     return;
   }
   if (newChat)
-    await chrome.storage.local.set({
-      [`${curEngine.name}Kill`]: true,
-      query,
-      lastQuery: query,
-      time: Date.now(),
-      [curEngine.name]: true,
-    });
+    await chrome.storage.local.set({ [`${curEngine.name}Kill`]: true });
+  await chrome.storage.local.set({
+    query,
+    lastQuery: query,
+    time: Date.now(),
+    [curEngine.name]: true,
+  });
   if (curEngine) {
     let url;
     let curEngineScripts = await getScriptStatus(curEngine.name);
