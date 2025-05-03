@@ -55,6 +55,7 @@ async function handleStorageChange(changes, areaName) {
     console.log("Killing listener...");
     chrome.storage.local.remove(SELECTORS.kill);
     chrome.storage.onChanged.removeListener(handleStorageChange);
+    return;
   }
   if (changes[SELECTORS.AI] && changes[SELECTORS.AI].newValue) {
     // Check if the main AI trigger key was added or changed
