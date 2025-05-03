@@ -329,13 +329,11 @@ async function createTab(query, engine = null, newChat = true) {
         if (curEngine.needsPerm) {
           chrome.tabs.create({ url: `index.html#failed-${curEngine.name}` });
         } else {
-          chrome.storage.local.remove("query");
           url = `${curEngine.url}${encodeURIComponent(query)}`;
           chrome.tabs.create({ url: url });
         }
       }
     } else {
-      chrome.storage.local.remove("query");
       url = `${curEngine.url}${encodeURIComponent(query)}`;
       chrome.tabs.create({ url: url });
     }

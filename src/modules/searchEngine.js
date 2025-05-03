@@ -382,7 +382,6 @@ async function goToLink() {
   }
 
   async function getQueryLink() {
-    await chrome.storage.local.remove("query");
     if (!selectedEngine) return;
     let url = `${selectedEngine.url}${encodeURIComponent(q.trim())}`;
     window.location.href = url;
