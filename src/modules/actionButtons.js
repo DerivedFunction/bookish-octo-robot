@@ -43,11 +43,9 @@ goBtn.addEventListener("click", async () => {
       return;
     } else {
       // Kill off any listening processes
-      await chrome.storage.local.set({
-        [`${selectedEngine.name}Kill`]: true,
-      });
       // Run experimental content scripts
       await chrome.storage.local.set({
+        [`${selectedEngine.name}Kill`]: true,
         query: query.value,
         time: Date.now(),
         [selectedEngine.name]: true,
