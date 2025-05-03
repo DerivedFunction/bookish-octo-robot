@@ -279,14 +279,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       } catch (error) {
         console.error("Error in goToLink:", error);
       }
-      chrome.runtime.onMessage.addListener(async (e) => {
-        if (e?.message === "sendQuery") {
-          try {
-            await goToLink();
-          } catch (error) {
-            console.error("Error receiving query", error);
-          }
-        }
+      chrome.storage.onChanged.addListener((changes, areaName) => {
+        if (areaName !== "local") return;
+        if (changes["query"] && changes["query"].newValue) goToLink();
       });
     }
 
@@ -299,6 +294,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       }
       if (e?.message === "Experimental") {
+        hasScripts = e.status;
         toggleClass(curSearchBtn, e.status);
       }
     });
@@ -353,7 +349,11 @@ async function refresh() {
 }
 async function goToLink() {
   let { query: q } = await chrome.storage.local.get("query");
-  if (!q && selectedEngine) window.location.href = getSearchEngineUrl();
+  if (!q && selectedEngine) {
+    // Allow it to listen to queries when opened.
+    await chrome.storage.local.set({ [selectedEngine.name]: true });
+    window.location.href = getSearchEngineUrl();
+  }
   if (selectedEngine && q && q.trim().length > 0) {
     if (selectedEngine.experimental) {
       if (hasScripts) {

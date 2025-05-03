@@ -43,9 +43,11 @@ goBtn.addEventListener("click", async () => {
       return;
     } else {
       // Run experimental content scripts
-      await chrome.storage.local.set({ query: query.value });
-      await chrome.storage.local.set({ time: Date.now() });
-      await chrome.storage.local.set({ [selectedEngine.name]: true });
+      await chrome.storage.local.set({
+        query: query.value,
+        time: Date.now(),
+        [selectedEngine.name]: true,
+      });
       window.location.href = hostname;
       return;
     }

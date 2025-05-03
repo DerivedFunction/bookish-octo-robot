@@ -37,42 +37,29 @@ function setupEventListeners() {
         ? null
         : query.trim();
     if (!query) return;
-    console.log(`Sending ${query} to sidebar...`);
-    chrome.storage.local.set({ query });
-    chrome.storage.local.set({ time: Date.now() });
-    chrome.runtime
-      .sendMessage({
-        message: "sendQuery",
-      })
-      .catch(() => {});
+
     try {
-      console.log("sidebar status", sidebarStatus, "unstable status", unstable);
-      if (!unstable) {
-        browser.sidebarAction.setPanel({ panel: "./index.html#sidebar" });
+      console.log("unstable status", unstable, sidebarStatus);
+      if (!unstable || !sidebarStatus) {
         browser.sidebarAction.open();
-        chrome.storage.local.set({ lastQuery: query });
-        return;
       }
-      if (!sidebarStatus)
-        browser.sidebarAction.open().catch((error) => {
-          console.error("Failed to open sidebar:", error);
-          createTab(query);
-        });
-      chrome.storage.local.set({ [selectedEngine.name]: true });
+      await chrome.storage.local.set({
+        query,
+        [selectedEngine.name]: true,
+        lastQuery: query,
+        time: Date.now(),
+      });
     } catch (error) {
       console.log("In chrome. Creating tab", error);
       createTab(query);
     }
   });
-
   chrome.contextMenus.onClicked.addListener(async (info) => {
-    let firefox = false;
     try {
-      await browser.sidebarAction.isOpen({}).then((e) => (firefox = e));
+      await browser.sidebarAction.isOpen({}).then((e) => (sidebarStatus = e));
     } catch {
-      firefox = false;
+      sidebarStatus = false;
     }
-    sidebarStatus = hasScripts && firefox;
     if (info.menuItemId == "switch" || info.parentMenuItemId == "switch") {
       await switchEngine(info.menuItemId);
       return;
@@ -81,7 +68,6 @@ function setupEventListeners() {
 
   chrome.omnibox.onInputEntered.addListener(async (text) => {
     let query;
-    await chrome.storage.local.set({ time: Date.now() });
     if (text.startsWith("@")) {
       let engineName = text.split(" ")[0].slice(1).toLowerCase();
       for (const ai of aiList) {
@@ -90,14 +76,12 @@ function setupEventListeners() {
           ai.omnibox.includes(engineName)
         ) {
           query = text.slice(engineName.length + 1).trim();
-          await chrome.storage.local.set({ query });
           await createTab(query, ai);
           return;
         }
       }
     }
     query = text.trim();
-    await chrome.storage.local.set({ query });
     await createTab(query);
   });
 
@@ -189,12 +173,11 @@ function setupEventListeners() {
             chrome.runtime.sendMessage({ message: "clearImage" });
           }
           await new Promise((resolve) => setTimeout(resolve, 5000));
-          await chrome.storage.local.remove("query");
+          await chrome.storage.local.remove(["query", "time"]);
         }
       }
     }
   );
-
   chrome.runtime.onMessage.addListener((e) => {
     if (e.ping) {
       tabReceived++;
@@ -279,14 +262,17 @@ async function createTab(query, engine = null) {
       });
     return;
   }
-  chrome.storage.local.set({ lastQuery: query });
+  await chrome.storage.local.set({
+    query,
+    lastQuery: query,
+    time: Date.now(),
+    [curEngine.name]: true,
+  });
   if (curEngine) {
     let url;
     let curEngineScripts = await getScriptStatus(curEngine.name);
     if (curEngine.experimental) {
       if (curEngineScripts) {
-        await chrome.storage.local.set({ [curEngine.name]: true });
-
         const waitForNoPing = () =>
           new Promise((resolve) => {
             let checkInterval = setInterval(() => {
@@ -454,7 +440,7 @@ async function refresh() {
   console.log("Checking for old queries in background.");
   const { time } = await chrome.storage.local.get("time");
   const curTime = Date.now();
-  if (curTime > time + 1000 * 15) {
+  if (curTime > time + 1000 * 5) {
     console.log("Clearing old queries");
     aiList.forEach((ai) => {
       const aiName = ai.name;

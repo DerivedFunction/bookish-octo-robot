@@ -140,7 +140,11 @@ export async function appendList() {
 async function handleMultiSearch(textContent, resend = false) {
   const queryText = textContent ?? query.value;
   if (queryText.length < 1) return;
-  chrome.storage.local.set({ lastQuery: queryText });
+  chrome.storage.local.set({
+    lastQuery: queryText,
+    query: queryText,
+    time: Date.now(),
+  });
   const searchEngines = await getSearchEngineList();
   const searchEverywhere = getSearchEverywhere();
 
@@ -165,11 +169,6 @@ async function handleMultiSearch(textContent, resend = false) {
     scripts.forEach((script) => permissions.push(script.id));
   } catch {
     console.log("Scripting is not enabled.");
-  }
-
-  if (permissions.length > 0) {
-    await chrome.storage.local.set({ query: queryText });
-    await chrome.storage.local.set({ time: Date.now() });
   }
   for (const engine of searchEngines) {
     if (!searchEverywhere[engine.name]) continue;
