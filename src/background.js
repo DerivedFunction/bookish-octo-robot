@@ -67,39 +67,51 @@ function setupEventListeners() {
   });
 
   chrome.omnibox.onInputEntered.addListener(async (text) => {
-    let query;
     if (text.startsWith("@")) {
-      let engineName = text.split(" ")[0].slice(1).toLowerCase();
-      for (const ai of aiList) {
-        if (
-          ai.name.toLowerCase() === engineName ||
-          ai.omnibox.includes(engineName)
-        ) {
-          query = text.slice(engineName.length + 1).trim();
+      const startFlags = text.match(/^(?:@\w+\s*)+/)?.[0] || "";
+      const flags = startFlags.match(/@\w+/g) || [];
+      const query = text.slice(startFlags.length).trim();
+
+      let matchFound = false;
+      for (const flag of flags) {
+        const engineName = flag.slice(1).toLowerCase();
+        const ai = aiList.find(
+          (ai) =>
+            ai.name.toLowerCase() === engineName ||
+            ai.omnibox.includes(engineName)
+        );
+        if (ai) {
+          matchFound = true;
           await createTab(query, ai);
-          return;
         }
       }
+      if (matchFound) return;
     }
-    query = text.trim();
-    await createTab(query);
+    await createTab(text.trim());
   });
 
   chrome.omnibox.onInputChanged.addListener((text, suggest) => {
-    if (text.startsWith("@")) {
-      let engineName = text.split(" ")[0].slice(1).toLowerCase();
-      for (const ai of aiList) {
-        if (
-          ai.name.toLowerCase() === engineName ||
-          ai.omnibox.includes(engineName)
-        ) {
-          chrome.omnibox.setDefaultSuggestion({
-            description: `${t("ask")} ${ai.name} (@${ai.omnibox[0]}, @${
-              ai.omnibox[1]
-            })`,
-          });
-          return;
-        }
+    if (text.includes("@")) {
+      const startFlags = text.match(/^(?:@\w+\s*)+/)?.[0] || "";
+      const flags = startFlags.match(/@\w+/g) || [];
+      const matchedAIs = [];
+
+      for (const flag of flags) {
+        const engineName = flag.slice(1).toLowerCase();
+        const ai = aiList.find(
+          (ai) =>
+            ai.name.toLowerCase() === engineName ||
+            ai.omnibox.includes(engineName)
+        );
+        if (ai) matchedAIs.push(ai);
+      }
+
+      if (matchedAIs.length > 0) {
+        const aiNames = matchedAIs.map((ai) => ai.name).join(", ");
+        chrome.omnibox.setDefaultSuggestion({
+          description: `${t("ask")} ${aiNames}`,
+        });
+        return;
       }
       setDefaultSuggestion();
     } else {
