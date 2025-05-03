@@ -282,13 +282,13 @@ async function createTab(query, engine = null, newChat = true) {
     return;
   }
   if (newChat)
-    await chrome.storage.local.set({ [`${curEngine.name}Kill`]: true });
-  await chrome.storage.local.set({
-    query,
-    lastQuery: query,
-    time: Date.now(),
-    [curEngine.name]: true,
-  });
+    await chrome.storage.local.set({
+      [`${curEngine.name}Kill`]: true,
+      query,
+      lastQuery: query,
+      time: Date.now(),
+      [curEngine.name]: true,
+    });
   if (curEngine) {
     let url;
     let curEngineScripts = await getScriptStatus(curEngine.name);
@@ -468,11 +468,11 @@ async function refresh() {
   console.log("Checking for old queries in background.");
   const { time } = await chrome.storage.local.get("time");
   const curTime = Date.now();
-  if (curTime > time + 1000 * 5) {
+  if (!time || curTime > time + 1000 * 5) {
     console.log("Clearing old queries");
     aiList.forEach((ai) => {
       const aiName = ai.name;
-      chrome.storage.local.remove([aiName, aiName + "Last"]);
+      chrome.storage.local.remove([aiName, aiName + "Last", aiName + "Kill"]);
     });
   }
   chrome.storage.local.remove(["time", "query"]);
