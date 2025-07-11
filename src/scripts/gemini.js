@@ -2,7 +2,12 @@
 (async () => setTimeout(runAfterFullLoad, 3000))();
 const SELECTORS = fetch("ai-list.json")
   .then((res) => res.json())
-  .then((data) => data.selectors);
+  .then((data) => {
+    const url = URL(window.location.href).hostname;
+    // find the matching AI selectors based on the current domain
+    const aiSelectors = data.selectors.find((ai) => ai.url === url);
+    return aiSelectors;
+  });
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;

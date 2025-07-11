@@ -10,31 +10,31 @@
     },
     "ChatGPT": {
       "matches": ["*://*.chatgpt.com/*"],
-      "js": ["/scripts/chatgpt.js"]
+      "js": ["/scripts/react.js"]
     },
     "Grok": {
       "matches": ["*://*.grok.com/*"],
-      "js": ["/scripts/grok.js"]
+      "js": ["/scripts/react.js"]
     },
     "Copilot": {
       "matches": ["*://copilot.microsoft.com/*"],
-      "js": ["/scripts/copilot.js"]
+      "js": ["/scripts/react.js"]
     },
     "Claude": {
       "matches": ["*://*.claude.ai/*"],
-      "js": ["/scripts/claude.js"]
+      "js": ["/scripts/react.js"]
     },
     "Perplexity": {
       "matches": ["*://*.perplexity.ai/*"],
-      "js": ["/scripts/perplexity.js"]
+      "js": ["/scripts/react.js"]
     },
     "Mistral": {
       "matches": ["*://chat.mistral.ai/*"],
-      "js": ["/scripts/mistral.js"]
+      "js": ["/scripts/react.js"]
     },
     "HuggingFace": {
       "matches": ["*://huggingface.co/chat/*"],
-      "js": ["/scripts/hug.js"]
+      "js": ["/scripts/react.js"]
     },
     "Meta": {
       "matches": ["*://*.meta.ai/*"],
@@ -42,7 +42,7 @@
     },
     "Qwen": {
       "matches": ["*://chat.qwen.ai/*"],
-      "js": ["/scripts/qwen.js"]
+      "js": ["/scripts/react.js"]
     }
   },
   "permissionsConfig": {
