@@ -12,7 +12,7 @@ suggestDisplay.addEventListener("change", async (e) => {
   await getSuggestionButtons();
 });
 async function getPrompt() {
-  let x = localStorage.getItem("show-suggestions") || "show";
+  let x = localStorage.getItem("show-suggestions") || "hide";
   if (x === "hide") return null;
   const { prompts: loadedPrompts } = await loadJsonData("ai");
   return loadedPrompts;
@@ -88,7 +88,7 @@ async function findSuggestions(id) {
   suggestionResult.replaceChildren(fragment);
 }
 document.addEventListener("DOMContentLoaded", async () => {
-  const storedDisplay = localStorage.getItem("show-suggestions") || "show";
+  const storedDisplay = localStorage.getItem("show-suggestions") || "hide";
   suggestDisplay.querySelectorAll("input").forEach((option) => {
     if (option.value === storedDisplay) {
       option.checked = true;

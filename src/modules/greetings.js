@@ -17,8 +17,8 @@ export function getGreeting() {
   let y = localStorage.getItem("name");
   let z = localStorage.getItem("greeting");
   if (!z) {
-    localStorage.setItem("greeting", "formal");
-    z = "formal";
+    localStorage.setItem("greeting", "none");
+    z = "none";
   }
   const now = new Date();
   const hour = now.getHours();
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     if (!x) options[2].checked = true;
   } else {
-    options[0].checked = true;
+    options[3].checked = true;
   }
 
   resetBtn.addEventListener("click", async () => {
