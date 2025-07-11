@@ -16,16 +16,9 @@ module.exports = [
   },
   {
     entry: {
-      chatgpt: "./src/scripts/chatgpt.js",
-      gemini: "./src/scripts/gemini.js",
-      deepseek: "./src/scripts/deepseek.js",
-      grok: "./src/scripts/grok.js",
-      copilot: "./src/scripts/copilot.js",
-      claude: "./src/scripts/claude.js",
-      perplexity: "./src/scripts/perplexity.js",
-      mistral: "./src/scripts/mistral.js",
-      huggingface: "./src/scripts/hug.js",
       meta: "./src/scripts/meta.js",
+      react: "./src/scripts/react.js",
+      textcontent: "./src/scripts/textcontent.js",
     },
     output: {
       filename: "[name].js", // Output bundle for each script
