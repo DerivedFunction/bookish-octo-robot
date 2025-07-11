@@ -51,7 +51,7 @@ function setupEventListeners() {
       });
     } catch (error) {
       console.log("In chrome. Creating tab", error);
-      createTab(query);
+      createTab(query, null, false);
     }
   });
   chrome.contextMenus.onClicked.addListener(async (info) => {
@@ -199,6 +199,7 @@ function setupEventListeners() {
     }
   );
   chrome.runtime.onMessage.addListener((e) => {
+    console.log(e);
     if (e.ping) {
       const timestamp = Date.now();
       const responseKey = e.name;
