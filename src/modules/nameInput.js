@@ -1,5 +1,5 @@
 import { toggleButton, resetBtn } from "../app.js";
-import { appendSvg } from "./appendSvg.js";
+import { appendImg } from "./appendImage.js";
 import { getGreeting } from "./greetings.js";
 
 export const nameInput = document.getElementById("name-field");
@@ -15,7 +15,7 @@ nameBtn.addEventListener("click", () => {
 });
 nameInput.addEventListener("input", () => {
   toggleButton(nameBtn, true);
-  appendSvg(
+  appendImg(
     {
       image:
         nameInput.value.length > 0
@@ -26,10 +26,10 @@ nameInput.addEventListener("input", () => {
   );
 });
 document.addEventListener("DOMContentLoaded", () => {
-  appendSvg({ image: "assets/images/buttons/save.svg" }, nameBtn);
+  appendImg({ image: "assets/images/buttons/save.svg" }, nameBtn);
   resetBtn.addEventListener("click", async () => {
     nameInput.value = "";
-    appendSvg({ image: "/assets/images/buttons/save.svg" }, nameBtn);
+    appendImg({ image: "/assets/images/buttons/save.svg" }, nameBtn);
     toggleButton(nameBtn, false);
   });
 });

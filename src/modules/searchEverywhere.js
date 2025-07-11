@@ -3,7 +3,7 @@ import {
   getSearchEngineList,
   searchEnginePickerBtn,
 } from "./searchEngine.js";
-import { appendSvg } from "./appendSvg.js";
+import { appendImg } from "./appendImage.js";
 import { resetBtn, toggleClass } from "../app.js";
 import { query, queryEvents } from "./query.js";
 import { showToast } from "./toaster.js";
@@ -44,7 +44,7 @@ function saveSearchEverywhere(engines) {
 function createToggleButton(engine, isActive, onClick) {
   const button = document.createElement("button");
   toggleClass(button, isActive);
-  appendSvg(
+  appendImg(
     {
       image: engine.image,
     },
@@ -77,7 +77,7 @@ async function handleChatMessage(e, engines) {
   if (e.content) {
     const messageButton = document.createElement("button");
     const engine = engines.find((ai) => ai.name === e.engine);
-    appendSvg(
+    appendImg(
       {
         image: engine.image,
       },
@@ -326,25 +326,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     setupTooltip(btn, () => true);
   });
   setupTooltip(multiBtn, () => query.value.length === 0);
-  appendSvg(
+  appendImg(
     {
       image: "assets/images/buttons/response.svg",
     },
     responseBtn
   );
-  appendSvg(
+  appendImg(
     {
       image: "assets/images/buttons/multi.svg",
     },
     multiBtn
   );
-  appendSvg(
+  appendImg(
     {
       image: "assets/images/buttons/resend.svg",
     },
     sendAgain
   );
-  appendSvg(
+  appendImg(
     {
       image: "assets/images/buttons/new.svg",
     },

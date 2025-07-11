@@ -7,7 +7,7 @@ import {
   selectedEngine,
   getScriptStatus,
 } from "./searchEngine.js";
-import { appendSvg } from "./appendSvg.js";
+import { appendImg } from "./appendImage.js";
 import { showToast } from "./toaster.js";
 import { resetBtn } from "../app.js";
 import { t } from "./locales.js";
@@ -83,9 +83,9 @@ ellipse.addEventListener("click", () => {
   }
 });
 document.addEventListener("DOMContentLoaded", () => {
-  appendSvg({ image: "assets/images/buttons/go.svg" }, goBtn);
-  appendSvg({ image: "assets/images/buttons/ellipse.svg" }, ellipse);
-  appendSvg(
+  appendImg({ image: "assets/images/buttons/go.svg" }, goBtn);
+  appendImg({ image: "assets/images/buttons/ellipse.svg" }, ellipse);
+  appendImg(
     {
       image: "assets/images/buttons/history.svg",
     },

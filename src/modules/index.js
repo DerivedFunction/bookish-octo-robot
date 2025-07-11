@@ -1,5 +1,5 @@
 import "./actionButtons.js";
-import "./appendSvg.js";
+import "./appendImage.js";
 import "./backgroundImage.js";
 import "./files.js";
 import "./greetings.js";

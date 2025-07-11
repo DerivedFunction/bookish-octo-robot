@@ -1,4 +1,4 @@
-import { appendSvg } from "./appendSvg.js";
+import { appendImg } from "./appendImage.js";
 import { setupTooltip } from "./tooltip.js";
 import { showToast } from "./toaster.js";
 import { resetBtn, loadJsonData, toggleClass } from "../app.js";
@@ -42,12 +42,12 @@ export function toggleDropdown(remove = "none") {
       dropdown.classList.toggle("open");
   }
   if (dropdown.classList.contains("open")) {
-    appendSvg(
+    appendImg(
       { image: "/assets/images/buttons/up.svg" },
       searchEnginePickerBtn
     );
   } else {
-    appendSvg(
+    appendImg(
       { image: "/assets/images/buttons/down.svg" },
       searchEnginePickerBtn
     );
@@ -72,7 +72,7 @@ export async function addSearchEngines() {
     container.style.gap = "8px";
 
     // Add inline SVG
-    appendSvg(engine, container, "4px", false, true);
+    appendImg(engine, container, "4px", false, true);
 
     // Add text
     const text = document.createElement("span");
@@ -85,7 +85,7 @@ export async function addSearchEngines() {
       await chrome.storage.local.set({ engine: engine });
       await getSearchEngine(); // Update the button icon immediately
       dropdown.classList.remove("open");
-      appendSvg(
+      appendImg(
         { image: "assets/images/buttons/down.svg" },
         searchEnginePickerBtn
       );
@@ -116,11 +116,11 @@ export async function getSearchEngine() {
   try {
     const { engine } = await chrome.storage.local.get("engine");
     selectedEngine = engine;
-    appendSvg(
+    appendImg(
       {
         image: selectedEngine
           ? selectedEngine.image
-          : "/assets/images/ai/default.svg",
+          : "/assets/images/ai/default.png",
       },
       curSearchBtn,
       null,
@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await refresh();
   try {
     try {
-      appendSvg(
+      appendImg(
         { image: "assets/images/buttons/down.svg" },
         searchEnginePickerBtn
       );

@@ -1,4 +1,4 @@
-import { appendSvg } from "./appendSvg.js";
+import { appendImg } from "./appendImage.js";
 import { t } from "./locales.js";
 import { showToast } from "./toaster.js";
 import { setupTooltip } from "./tooltip.js";
@@ -134,7 +134,7 @@ function addFileToList(filename, blob) {
 
 // On page load, clear all stored data
 document.addEventListener("DOMContentLoaded", async () => {
-  appendSvg({ image: "/assets/images/buttons/paperclip.svg" }, fileUploadBtn);
+  appendImg({ image: "/assets/images/buttons/paperclip.svg" }, fileUploadBtn);
   const data = await chrome.storage.local.get();
   for (const key in data) {
     if (key.startsWith(STORAGE_KEY_PREFIX)) {

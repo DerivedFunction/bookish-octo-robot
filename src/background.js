@@ -505,9 +505,7 @@ async function switchEngine(name) {
   } catch (error) {
     console.log("Using Chrome. Drawing an icon *.png via canvas", error);
     try {
-      const imgblob = await fetch(iconUrl.replace(".svg", ".png")).then((r) =>
-        r.blob()
-      );
+      const imgblob = await fetch(iconUrl).then((r) => r.blob());
       const img = await createImageBitmap(imgblob);
       const canvas = new OffscreenCanvas(32, 32);
       const ctx = canvas.getContext("2d");

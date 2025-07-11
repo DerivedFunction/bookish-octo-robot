@@ -1,5 +1,5 @@
 import { toggleButton, resetBtn } from "../app.js";
-import { appendSvg } from "./appendSvg.js";
+import { appendImg } from "./appendImage.js";
 import { showToast } from "./toaster.js";
 const weather = document.getElementById("weather");
 const weather_exp = 15 * 60 * 1000; // 15 minute expiration
@@ -92,7 +92,7 @@ async function getCoords() {
   const inputValue = weatherField.value.trim();
   if (inputValue.length === 0) {
     clearFields(true);
-    appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn); // Default 20px
+    appendImg({ image: "/assets/images/buttons/save.svg" }, weatherBtn); // Default 20px
     await displayWeather();
     return;
   }
@@ -225,7 +225,7 @@ export async function displayWeather() {
     weatherData.sunset
   )}`;
   weather.textContent = `${temperature}${unitSymbol}`;
-  appendSvg(
+  appendImg(
     {
       image: iconPath,
       size: "40px",
@@ -251,7 +251,7 @@ function clearFields(removeLocation = false) {
 weatherBtn.addEventListener("click", getCoords);
 weatherField.addEventListener("input", () => {
   toggleButton(weatherBtn, true);
-  appendSvg(
+  appendImg(
     {
       image:
         weatherField.value.length > 0
@@ -263,7 +263,7 @@ weatherField.addEventListener("input", () => {
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
-  appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn); // Default 20px
+  appendImg({ image: "/assets/images/buttons/save.svg" }, weatherBtn); // Default 20px
   unitToggle.checked = localStorage.getItem("weather-unit") === "imperial";
   unitToggle.addEventListener("change", async () => {
     const unit = unitToggle.checked ? "imperial" : "metric";
@@ -275,7 +275,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   resetBtn.addEventListener("click", async () => {
     clearFields(true);
-    appendSvg({ image: "/assets/images/buttons/save.svg" }, weatherBtn); // Default 20px
+    appendImg({ image: "/assets/images/buttons/save.svg" }, weatherBtn); // Default 20px
     await displayWeather();
   });
 });

@@ -1,5 +1,5 @@
 import { toggleButton, loadJsonData, resetBtn } from "../app.js";
-import { appendSvg } from "./appendSvg.js";
+import { appendImg } from "./appendImage.js";
 import { t } from "./locales.js";
 
 let expirationTimeout = null;
@@ -431,7 +431,7 @@ function getExpirationDetails(expirationOption, now) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  appendSvg({ image: "assets/images/buttons/save.svg" }, bgBtn);
+  appendImg({ image: "assets/images/buttons/save.svg" }, bgBtn);
 
   const bgOption = getBgOption();
   backgroundSelect.addEventListener("change", () => {

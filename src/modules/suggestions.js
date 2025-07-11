@@ -1,6 +1,6 @@
 import { loadJsonData, toggleButton, resetBtn } from "../app.js";
 import { goBtn } from "./actionButtons.js";
-import { appendSvg } from "./appendSvg.js";
+import { appendImg } from "./appendImage.js";
 import { query, getCharCount } from "./query.js";
 import { t } from "./locales.js";
 
@@ -36,7 +36,7 @@ export async function getSuggestionButtons() {
     btn.id = prompt.id.toLowerCase();
 
     if (prompt.image) {
-      appendSvg({ image: prompt.image }, btn, "4px", false);
+      appendImg({ image: prompt.image }, btn, "4px", false);
     }
 
     btn.addEventListener("click", async () => {

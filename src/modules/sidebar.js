@@ -1,6 +1,6 @@
 import { weatherField } from "./weather.js";
 import { nameInput } from "./nameInput.js";
-import { appendSvg } from "./appendSvg.js";
+import { appendImg } from "./appendImage.js";
 import { loadJsonData } from "../app.js";
 import {
   getPermissions,
@@ -72,7 +72,7 @@ const currentEnabled = document.getElementById("ai-experimental-enabled");
 function createPermissionButton(ai, enable = true) {
   const button = document.createElement("button");
   button.value = ai.name;
-  appendSvg(
+  appendImg(
     {
       image: ai.image,
     },
@@ -120,8 +120,8 @@ unstable.addEventListener("change", async () => {
   });
 });
 document.addEventListener("DOMContentLoaded", async () => {
-  appendSvg({ image: "assets/images/buttons/options.svg" }, optionBtn);
-  appendSvg({ image: "assets/images/buttons/unlocked.svg" }, scriptsBtn);
+  appendImg({ image: "assets/images/buttons/options.svg" }, optionBtn);
+  appendImg({ image: "assets/images/buttons/unlocked.svg" }, scriptsBtn);
   [optionBtn, scriptsBtn].forEach((btn) => {
     setupTooltip(btn);
   });

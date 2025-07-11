@@ -1,6 +1,6 @@
 import { setupTooltip } from "./tooltip.js";
 
-export function appendSvg(
+export function appendImg(
   object,
   container,
   gap = null,
