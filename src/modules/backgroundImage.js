@@ -144,6 +144,16 @@ export const bgColor2 = document.getElementById("solid-color-2");
 export const bgNum = document.getElementById("gradient-number");
 const ownImgInput = document.getElementById("img-file");
 export const ownImgLabel = document.getElementById("img-file-label");
+const clearBtn = document.getElementById("clear-cache");
+clearBtn.addEventListener("click", async () => {
+  await caches.keys().then((keyList) =>
+    Promise.all(
+      keyList.map((key) => {
+        return caches.delete(key);
+      })
+    )
+  );
+});
 
 bgColor.addEventListener("input", () => toggleButton(bgBtn, true));
 bgColor2.addEventListener("input", () => toggleButton(bgBtn, true));
@@ -432,6 +442,7 @@ function getExpirationDetails(expirationOption, now) {
 
 document.addEventListener("DOMContentLoaded", async () => {
   appendImg({ image: "assets/images/buttons/save.svg" }, bgBtn);
+  appendImg({ image: "assets/images/buttons/clear.svg" }, clearBtn);
 
   const bgOption = getBgOption();
   backgroundSelect.addEventListener("change", () => {
