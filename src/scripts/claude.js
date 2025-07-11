@@ -1,15 +1,9 @@
 // script.js
 (async () => setTimeout(runAfterFullLoad, 3000))();
-const aiName = "Claude";
-const SELECTORS = {
-  AI: aiName,
-  lastResponse: aiName + "Last",
-  kill: aiName + "Kill",
-  textbox: "div[enterkeyhint='enter'] p",
-  send: "button[aria-label='Send message']",
-  file: "input",
-  lastHTML: "[data-test-render-count]",
-};
+
+const SELECTORS = fetch("ai-list.json")
+  .then((res) => res.json())
+  .then((data) => data.selectors);
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;

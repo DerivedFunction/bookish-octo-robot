@@ -1,15 +1,8 @@
 // script.js
 (async () => setTimeout(runAfterFullLoad, 3000))();
-const aiName = "Gemini";
-const SELECTORS = {
-  AI: aiName,
-  lastResponse: aiName + "Last",
-  kill: aiName + "Kill",
-  textbox: ".textarea",
-  send: ".send-button",
-  file: "input",
-  lastHTML: ".response-content",
-};
+const SELECTORS = fetch("ai-list.json")
+  .then((res) => res.json())
+  .then((data) => data.selectors);
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;

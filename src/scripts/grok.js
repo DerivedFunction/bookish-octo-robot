@@ -1,15 +1,7 @@
 // script.js Thanks to https://github.com/facebook/react/issues/11488#issuecomment-347775628
 (async () => setTimeout(runAfterFullLoad, 3000))();
 const aiName = "Grok";
-const SELECTORS = {
-  AI: aiName,
-  lastResponse: aiName + "Last",
-  kill: aiName + "Kill",
-  textbox: "textarea",
-  send: "button[type='submit']",
-  file: "input[type='file']",
-  lastHTML: ".last-response",
-};
+const SELECTORS = {};
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;

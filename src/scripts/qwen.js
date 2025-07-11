@@ -1,15 +1,8 @@
 // script.js Thanks to https://github.com/facebook/react/issues/11488#issuecomment-347775628
 (async () => setTimeout(runAfterFullLoad, 6000))();
-const aiName = "Qwen";
-const SELECTORS = {
-  AI: aiName,
-  lastResponse: aiName + "Last",
-  kill: aiName + "Kill",
-  textbox: "textarea",
-  send: "#send-message-button",
-  file: "input[type='file']",
-  lastHTML: "#response-content-container",
-};
+const SELECTORS = fetch("ai-list.json")
+  .then((res) => res.json())
+  .then((data) => data.selectors);
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;

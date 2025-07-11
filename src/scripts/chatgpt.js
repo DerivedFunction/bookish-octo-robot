@@ -1,15 +1,8 @@
 // script.js
 (async () => setTimeout(runAfterFullLoad, 3000))();
-const aiName = "ChatGPT";
-const SELECTORS = {
-  AI: aiName,
-  lastResponse: aiName + "Last",
-  kill: aiName + "Kill",
-  textbox: "#prompt-textarea p",
-  send: "#composer-submit-button",
-  file: "input[type='file']",
-  lastHTML: "article",
-};
+const SELECTORS = fetch("ai-list.json")
+  .then((res) => res.json())
+  .then((data) => data.selectors);
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;

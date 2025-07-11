@@ -7,8 +7,16 @@
       "experimental": true,
       "limit": 39720,
       "fileImage": true,
-
-      "omnibox": ["chatgpt", "cg"]
+      "omnibox": ["chatgpt", "cg"],
+      "selectors": {
+        "AI": "ChatGPT",
+        "lastResponse": "ChatGPTLast",
+        "kill": "ChatGPTKill",
+        "textbox": "#prompt-textarea p",
+        "send": "#composer-submit-button",
+        "file": "input[type='file']",
+        "lastHTML": "article"
+      }
     },
     {
       "name": "Copilot",
@@ -17,7 +25,16 @@
       "experimental": true,
       "limit": 10240,
       "fileImage": true,
-      "omnibox": ["copilot", "cp"]
+      "omnibox": ["copilot", "cp"],
+      "selectors": {
+        "AI": "Copilot",
+        "lastResponse": "CopilotLast",
+        "kill": "CopilotKill",
+        "textbox": "#userInput",
+        "send": "button[title='Submit message']",
+        "file": "input",
+        "lastHTML": "div[role='article']"
+      }
     },
     {
       "name": "Gemini",
@@ -25,9 +42,17 @@
       "image": "/assets/images/ai/gemini.svg",
       "experimental": true,
       "limit": 31022,
-
       "needsPerm": true,
-      "omnibox": ["gemini", "ge"]
+      "omnibox": ["gemini", "ge"],
+      "selectors": {
+        "AI": "Gemini",
+        "lastResponse": "GeminiLast",
+        "kill": "GeminiKill",
+        "textbox": ".textarea",
+        "send": ".send-button",
+        "file": "input",
+        "lastHTML": ".response-content"
+      }
     },
     {
       "name": "Grok",
@@ -36,8 +61,16 @@
       "experimental": true,
       "limit": 100000,
       "fileImage": true,
-
-      "omnibox": ["grok", "gr"]
+      "omnibox": ["grok", "gr"],
+      "selectors": {
+        "AI": "Grok",
+        "lastResponse": "GrokLast",
+        "kill": "GrokKill",
+        "textbox": "textarea",
+        "send": "button[type='submit']",
+        "file": "input[type='file']",
+        "lastHTML": ".last-response"
+      }
     },
     {
       "name": "DeepSeek",
@@ -45,10 +78,18 @@
       "image": "/assets/images/ai/deepseek.svg",
       "experimental": true,
       "limit": 100000,
-
       "needsPerm": true,
       "fileImage": true,
-      "omnibox": ["deepseek", "ds"]
+      "omnibox": ["deepseek", "ds"],
+      "selectors": {
+        "AI": "DeepSeek",
+        "lastResponse": "DeepSeekLast",
+        "kill": "DeepSeekKill",
+        "textbox": "textarea",
+        "send": "._7436101",
+        "file": "input[type='file']",
+        "lastHTML": "div.ds-markdown.ds-markdown--block"
+      }
     },
     {
       "name": "Claude",
@@ -57,8 +98,18 @@
       "experimental": true,
       "limit": 50000,
       "fileImage": true,
-      "omnibox": ["claude", "cl"]
+      "omnibox": ["claude", "cl"],
+      "selectors": {
+        "AI": "Claude",
+        "lastResponse": "ClaudeLast",
+        "kill": "ClaudeKill",
+        "textbox": "div[enterkeyhint='enter'] p",
+        "send": "button[aria-label='Send message']",
+        "file": "input",
+        "lastHTML": "[data-test-render-count]"
+      }
     },
+
     {
       "name": "Perplexity",
       "url": "https://www.perplexity.ai/search/new?q=",
@@ -66,7 +117,16 @@
       "image": "/assets/images/ai/perplexity.svg",
       "experimental": true,
       "limit": 15000,
-      "omnibox": ["perplexity", "pe"]
+      "omnibox": ["perplexity", "pe"],
+      "selectors": {
+        "AI": "Perplexity",
+        "lastResponse": "PerplexityLast",
+        "kill": "PerplexityKill",
+        "textbox": "textarea",
+        "send": "button[aria-label='Submit']",
+        "file": null,
+        "lastHTML": "div.prose"
+      }
     },
     {
       "name": "Mistral",
@@ -74,7 +134,16 @@
       "image": "/assets/images/ai/mistral.svg",
       "experimental": true,
       "limit": 100000,
-      "omnibox": ["mistral", "mi"]
+      "omnibox": ["mistral", "mi"],
+      "selectors": {
+        "AI": "Mistral",
+        "lastResponse": "MistralLast",
+        "kill": "MistralKill",
+        "textbox": "textarea",
+        "send": "button[type='submit']",
+        "file": null,
+        "lastHTML": "div[id]"
+      }
     },
     {
       "name": "Qwen",
@@ -83,9 +152,17 @@
       "limit": 10000,
       "needsPerm": true,
       "experimental": true,
-
       "fileImage": true,
-      "omnibox": ["qwen", "qw"]
+      "omnibox": ["qwen", "qw"],
+      "selectors": {
+        "AI": "Qwen",
+        "lastResponse": "QwenLast",
+        "kill": "QwenKill",
+        "textbox": "textarea",
+        "send": "#send-message-button",
+        "file": "input[type='file']",
+        "lastHTML": "#response-content-container"
+      }
     },
     {
       "name": "Meta",
@@ -94,8 +171,16 @@
       "limit": 15000,
       "experimental": true,
       "fileImage": true,
-
-      "omnibox": ["meta", "me"]
+      "omnibox": ["meta", "me"],
+      "selectors": {
+        "AI": "Meta",
+        "lastResponse": "MetaLast",
+        "kill": "MetaKill",
+        "textbox": "div[contenteditable='true']",
+        "send": "div[aria-label='Send Message']",
+        "file": "input",
+        "lastHTML": ".x78zum5.xdt5ytf div[dir='auto']"
+      }
     },
     {
       "name": "HuggingFace",
@@ -103,8 +188,16 @@
       "image": "/assets/images/ai/hug.svg",
       "experimental": true,
       "limit": 15000,
-
-      "omnibox": ["huggingface", "hf"]
+      "omnibox": ["huggingface", "hf"],
+      "selectors": {
+        "AI": "HuggingFace",
+        "lastResponse": "HuggingFaceLast",
+        "kill": "HuggingFaceKill",
+        "textbox": "textarea[placeholder='Ask anything']",
+        "send": "button[name='submit']",
+        "file": null,
+        "lastHTML": "[data-message-role='assistant']"
+      }
     },
     {
       "name": "Google (AI mode)",
