@@ -104,9 +104,12 @@ async function getTextInput(maxRetries = 5, retryDelay = 3000) {
         tracker.setValue(lastValue);
       }
       element.dispatchEvent(event);
-
-      await clickButton();
-      return;
+      let clicked = await clickButton();
+      if (clicked) {
+        return;
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, retryDelay)); // Wait before retry
+      }
     } else {
       console.log(`Element not found. Retrying after ${retryDelay}ms.`);
       attempts++;
@@ -126,10 +129,11 @@ async function clickButton() {
     button.click();
     console.log(`Clicked button: ${button}`);
     update();
+    return true;
   } else {
     console.log(`Button not found`);
+    return false;
   }
-  return;
 }
 function update() {
   // Send a message after the button click
