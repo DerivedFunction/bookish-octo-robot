@@ -30,7 +30,7 @@
     },
     "Mistral": {
       "matches": ["*://chat.mistral.ai/*"],
-      "js": ["/scripts/react.js"]
+      "js": ["/scripts/textContent.js"]
     },
     "HuggingFace": {
       "matches": ["*://huggingface.co/chat/*"],

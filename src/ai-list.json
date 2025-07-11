@@ -139,7 +139,7 @@
         "AI": "Mistral",
         "lastResponse": "MistralLast",
         "kill": "MistralKill",
-        "textbox": "textarea",
+        "textbox": "div[contenteditable='true'] p",
         "send": "button[type='submit']",
         "file": null,
         "lastHTML": "div[id]"
