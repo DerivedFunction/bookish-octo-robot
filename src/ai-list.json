@@ -103,7 +103,7 @@
         "AI": "Claude",
         "lastResponse": "ClaudeLast",
         "kill": "ClaudeKill",
-        "textbox": "div[enterkeyhint='enter'] p",
+        "textbox": "div[contenteditable='true'] p",
         "send": "button[aria-label='Send message']",
         "file": "input",
         "lastHTML": "[data-test-render-count]"
