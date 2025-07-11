@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_appName__",
   "short_name": "Tabbed",
-  "version": "1.0.8.2",
+  "version": "1.0.9.0",
   "description": "__MSG_appDesc__",
   "icons": {
     "16": "assets/images/icon.png",
@@ -37,5 +37,11 @@
     "*://*.huggingface.co/chat/*",
     "*://*.meta.ai/*"
   ],
-  "default_locale": "en"
+  "default_locale": "en",
+  "web_accessible_resources": [
+    {
+      "resources": ["ai-list.json"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

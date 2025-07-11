@@ -2,15 +2,15 @@
   "scriptConfigs": {
     "Gemini": {
       "matches": ["*://gemini.google.com/*"],
-      "js": ["/scripts/gemini.js"]
+      "js": ["/scripts/textContent.js"]
     },
     "DeepSeek": {
       "matches": ["*://chat.deepseek.com/*"],
-      "js": ["/scripts/deepseek.js"]
+      "js": ["/scripts/react.js"]
     },
     "ChatGPT": {
       "matches": ["*://*.chatgpt.com/*"],
-      "js": ["/scripts/react.js"]
+      "js": ["/scripts/textContent.js"]
     },
     "Grok": {
       "matches": ["*://*.grok.com/*"],
@@ -22,7 +22,7 @@
     },
     "Claude": {
       "matches": ["*://*.claude.ai/*"],
-      "js": ["/scripts/react.js"]
+      "js": ["/scripts/textContent.js"]
     },
     "Perplexity": {
       "matches": ["*://*.perplexity.ai/*"],

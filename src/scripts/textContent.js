@@ -1,4 +1,4 @@
-// script.js Thanks to https://github.com/facebook/react/issues/11488#issuecomment-347775628
+// script.js
 (async () => {
   const response = await fetch(new URL(chrome.runtime.getURL("ai-list.json")));
   if (!response.ok) {
@@ -24,6 +24,7 @@ async function runAfterFullLoad() {
     }
     console.log("Running query injection.");
     await getImage();
+
     await getTextInput();
     let { unstable } = await chrome.storage.local.get("unstable");
     if (!unstable) return;
@@ -58,7 +59,6 @@ async function handleStorageChange(changes, areaName) {
     await getLastResponse(); // This function checks internally and removes the key if processed.
   }
 }
-
 async function getLastResponse() {
   let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get(
     SELECTORS.lastResponse
@@ -81,41 +81,32 @@ async function getTextInput(maxRetries = 5, retryDelay = 3000) {
   } = await chrome.storage.local.get(["query", "time", SELECTORS.AI]);
   await chrome.storage.local.remove(SELECTORS.AI); //remove immediately off the queue
   const searchQuery = (curAI ? query : "")?.trim();
-
   if (!searchQuery) return;
   const curTime = Date.now();
   if (curTime > time + 1000 * 15) return;
-  chrome.runtime.sendMessage({ ping: true, name: SELECTORS.AI });
+  chrome.runtime.sendMessage({
+    ping: true,
+    name: SELECTORS.AI,
+  });
   let attempts = 0;
   counter = 0; //reset the counter
   while (attempts < maxRetries) {
     element = document.querySelector(SELECTORS.textbox);
     console.log(`Attempt ${attempts + 1}: Injecting Query`);
+
     if (element) {
-      // Simulate input for React compatibility
-      let lastValue = element.value || "";
-      element.value = searchQuery;
-
-      let event = new Event("input", { bubbles: true });
-      event.simulated = true; // Hack for React 15
-
-      // Hack for React 16+ _valueTracker
-      let tracker = element._valueTracker;
-      if (tracker) {
-        tracker.setValue(lastValue);
-      }
-      element.dispatchEvent(event);
-
-      await clickButton();
+      element.textContent = searchQuery;
+      clickButton();
       return;
     } else {
       console.log(`Element not found. Retrying after ${retryDelay}ms.`);
       attempts++;
       if (attempts < maxRetries) {
-        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+        await new Promise((resolve) => setTimeout(resolve, retryDelay)); // Wait before retry
       }
     }
   }
+
   console.error(`Failed to find element after ${maxRetries} attempts.`);
   update();
 }
@@ -146,8 +137,8 @@ async function getImage() {
   );
   const STORAGE_KEY_PREFIX = "pasted-file-";
   const fileUploadInput = document.querySelector(SELECTORS.file);
-  if (!curAI || !fileUploadInput) return;
   const dataTransfer = new DataTransfer();
+  if (!curAI || !fileUploadInput) return;
   // Map MIME types to file extensions
   const mimeToExtension = {
     "image/png": ".png",
@@ -218,7 +209,6 @@ async function getImage() {
 
   // Assign files to the input
   console.log("Files assigned:", dataTransfer.files);
-  console.log("File input:", fileUploadInput);
   if (dataTransfer.files.length > 0) {
     fileUploadInput.files = dataTransfer.files;
     // Trigger change event to notify listeners

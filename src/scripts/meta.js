@@ -1,13 +1,16 @@
 // script.js
-(async () => setTimeout(runAfterFullLoad, 3000))();
-const SELECTORS = fetch("ai-list.json")
-  .then((res) => res.json())
-  .then((data) => {
-    const url = URL(window.location.href).hostname;
-    // find the matching AI selectors based on the current domain
-    const aiSelectors = data.selectors.find((ai) => ai.url === url);
-    return aiSelectors;
-  });
+(async () => {
+  const response = await fetch(new URL(chrome.runtime.getURL("ai-list.json")));
+  if (!response.ok) {
+    throw new Error("Failed to load AI list data");
+  }
+  const data = await response.json();
+  const url = new URL(window.location.href).hostname;
+  SELECTORS = data["ai-list"].find((ai) => ai.url.includes(url)).selectors;
+  setTimeout(runAfterFullLoad, 3000);
+})();
+
+let SELECTORS;
 const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
