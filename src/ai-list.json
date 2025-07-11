@@ -69,7 +69,7 @@
         "textbox": "textarea",
         "send": "button[type='submit']",
         "file": "input[type='file']",
-        "lastHTML": ".last-response"
+        "lastHTML": "#last-reply-container .response-content-markdown"
       }
     },
     {
