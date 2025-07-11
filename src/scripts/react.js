@@ -11,7 +11,6 @@
 })();
 
 let SELECTORS;
-const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
 
@@ -228,3 +227,5 @@ async function getImage() {
     console.log("No valid files to assign to input");
   }
 }
+
+// Call this when listener is activated (e.g., after chrome.storage.onChanged.addListener)

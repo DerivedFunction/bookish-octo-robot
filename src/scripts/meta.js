@@ -11,7 +11,6 @@
 })();
 
 let SELECTORS;
-const MAX_COUNTER = 3000;
 let counter = 0;
 let element;
 
