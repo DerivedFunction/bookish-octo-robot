@@ -249,6 +249,9 @@ function setupEventListeners() {
   });
 }
 
+// Start initialization
+initialize().catch(console.error);
+
 // Remove the simple t() function and replace with proper i18n handling
 function t(key, substitutions = {}) {
   key = key.toLowerCase().replace(" ", "_").replace("-", "_");
