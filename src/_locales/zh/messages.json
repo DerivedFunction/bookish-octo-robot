@@ -429,9 +429,12 @@
     "message": "实验站点搜索网址"
   },
   "exp_desc": {
-    "message": "需要实验性功能/脚本来解析链接。"
+    "message": "需要实验性功能/脚本来解析URL。"
   },
   "learn_more": {
     "message": "了解更多："
+  },
+  "delay_prompt": {
+    "message": "设置提示注入重试之间的延迟"
   }
 }

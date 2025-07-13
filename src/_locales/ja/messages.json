@@ -429,9 +429,12 @@
     "message": "実験的なサイト検索URL"
   },
   "exp_desc": {
-    "message": "URL を解析するには実験的な機能/スクリプトが必要です。"
+    "message": "URLを解析するには実験的な機能/スクリプトが必要です。"
   },
   "learn_more": {
-    "message": "もっと詳しく知る： "
+    "message": "詳細情報: "
+  },
+  "delay_prompt": {
+    "message": "プロンプト注入の再試行間隔を設定する"
   }
 }

@@ -429,9 +429,12 @@
     "message": "Experimentelle Site-Such-URL"
   },
   "exp_desc": {
-    "message": "Erfordert experimentelle Funktionen/Skripting zum Parsen der URL."
+    "message": "Erfordert experimentelle Funktionen/Skripte zum Parsen der URL."
   },
   "learn_more": {
     "message": "Mehr erfahren: "
+  },
+  "delay_prompt": {
+    "message": "Verzögerung zwischen den Wiederholungsversuchen für die Prompt-Injektion festlegen"
   }
 }

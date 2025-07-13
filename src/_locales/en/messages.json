@@ -432,5 +432,8 @@
   },
   "learn_more": {
     "message": "Learn More: "
+  },
+  "delay_prompt": {
+    "message": "Set delay between retries for prompt injection"
   }
 }

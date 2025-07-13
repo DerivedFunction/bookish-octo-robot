@@ -429,9 +429,12 @@
     "message": "URL de búsqueda del sitio experimental"
   },
   "exp_desc": {
-    "message": "Requiere funciones/secuencias de comandos experimentales para analizar la URL."
+    "message": "Requiere funciones/scripts experimentales para analizar la URL."
   },
   "learn_more": {
     "message": "Más información: "
+  },
+  "delay_prompt": {
+    "message": "Establecer el retraso entre reintentos para la inyección de prompt"
   }
 }

@@ -74,7 +74,7 @@ export const delayCount = document.getElementById("delay-count");
 export let delay = localStorage.getItem("delay") || 3000;
 delayCount.addEventListener("click", () => {
   delay =
-    parseInt(prompt("Set delay between retries (ms):", "3000")) ||
+    parseInt(prompt(`${t("delay_prompt")} (ms):`, "3000")) ||
     localStorage.getItem("delay") ||
     3000;
   localStorage.setItem("delay", delay ?? 3000);
@@ -88,8 +88,9 @@ document.addEventListener("DOMContentLoaded", () => {
   resetBtn.addEventListener("click", () => {
     delayCount.textContent = "";
     delay = 3000;
+    chrome.storage.local.remove("delay");
+    localStorage.removeItem("delay");
   });
-  chrome.storage.local.remove("delay");
 });
 
 chrome.runtime.onMessage.addListener((e) => {

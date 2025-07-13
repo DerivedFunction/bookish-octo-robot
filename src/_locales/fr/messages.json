@@ -432,6 +432,9 @@
     "message": "Nécessite des fonctionnalités/scripts expérimentaux pour analyser l'URL."
   },
   "learn_more": {
-    "message": "Apprendre encore plus: "
+    "message": "En savoir plus : "
+  },
+  "delay_prompt": {
+    "message": "Définir le délai entre les tentatives d'injection de prompt"
   }
 }
