@@ -2,7 +2,7 @@ import { appendImg } from "./appendImage.js";
 import { setupTooltip } from "./tooltip.js";
 import { showToast } from "./toaster.js";
 import { resetBtn, loadJsonData, toggleClass } from "../app.js";
-import { query, queryEvents } from "./query.js";
+import { delay, delayCount, query, queryEvents } from "./query.js";
 import { t } from "./locales.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
@@ -200,6 +200,7 @@ export async function getScriptStatus(name = null) {
   // If there is no name (default to selected), or the name matches our current selected one, then change the look
   if (!name || (selectedEngine && name === selectedEngine?.name)) {
     toggleClass(curSearchBtn, hasScripts);
+    delayCount.textContent = hasScripts ? `${delay}ms` : "";
     chrome.runtime.sendMessage({
       message: "Experimental",
       engine: selectedEngine,

@@ -10,12 +10,14 @@
   SELECTORS = data["ai-list"].find((ai) =>
     ai.url.includes(urlHostname)
   ).selectors;
-  setTimeout(runAfterFullLoad, 3000);
+  DELAY = chrome.storage.local.get("delay") ?? 3000;
+  setTimeout(runAfterFullLoad, DELAY);
 })();
 
 let SELECTORS;
 let counter = 0;
 let element;
+let DELAY;
 
 async function runAfterFullLoad() {
   chrome.storage.local.get(SELECTORS.AI).then(async (e) => {
@@ -76,7 +78,7 @@ async function getLastResponse() {
     engine: SELECTORS.AI,
   });
 }
-async function getTextInput(maxRetries = 5, retryDelay = 3000) {
+async function getTextInput(maxRetries = 5, retryDelay = DELAY) {
   const {
     query,
     time,

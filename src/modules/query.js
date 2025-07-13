@@ -1,6 +1,6 @@
 import { goBtn } from "./actionButtons.js";
-import { toggleButton } from "../app.js";
-import { suggestDisplay, suggestionResult } from "./suggestions.js";
+import { toggleButton, resetBtn } from "../app.js";
+import { suggestionResult } from "./suggestions.js";
 import { multiBtn, newClick } from "./searchEverywhere.js";
 import { selectedEngine, toggleDropdown } from "./searchEngine.js";
 import { hasScripts } from "./searchEngine.js";
@@ -70,7 +70,30 @@ export function getCharCount() {
   }
 }
 export const charCount = document.getElementById("char-count");
+export const delayCount = document.getElementById("delay-count");
+export let delay = localStorage.getItem("delay") || 3000;
+delayCount.addEventListener("click", () => {
+  delay =
+    parseInt(prompt("Set delay between retries (ms):", "3000")) ||
+    localStorage.getItem("delay") ||
+    3000;
+  localStorage.setItem("delay", delay ?? 3000);
+  delayCount.textContent = `${delay}ms`;
+  chrome.storage.local.set({ delay: delay });
+});
 document.addEventListener("DOMContentLoaded", () => {
+  if (!delay) localStorage.setItem("delay", 3000);
   query.value = "";
   queryEvents();
+  resetBtn.addEventListener("click", () => {
+    delayCount.textContent = "";
+    delay = 3000;
+  });
+  chrome.storage.local.remove("delay");
+});
+
+chrome.runtime.onMessage.addListener((e) => {
+  if (e?.message === "Experimental") {
+    delayCount.textContent = e.status ? `${delay}ms` : "";
+  }
 });
