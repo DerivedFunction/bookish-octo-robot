@@ -417,19 +417,19 @@
     "message": "Commande Omnibox"
   },
   "omni_desc": {
-    "message": "Utilisez la commande omnibox intégrée de l'extension"
+    "message": "Utilisez la commande omnibox intégrée de l'extension."
   },
   "def_label": {
     "message": "URL de recherche du site"
   },
   "def_desc": {
-    "message": "Créer un raccourci de moteur de recherche personnalisé"
+    "message": "Créer un raccourci de moteur de recherche personnalisé."
   },
   "exp_label": {
     "message": "URL de recherche du site expérimental"
   },
   "exp_desc": {
-    "message": "Nécessite des fonctionnalités/scripts expérimentaux pour analyser l'URL"
+    "message": "Nécessite des fonctionnalités/scripts expérimentaux pour analyser l'URL."
   },
   "learn_more": {
     "message": "Apprendre encore plus: "

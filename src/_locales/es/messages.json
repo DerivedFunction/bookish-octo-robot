@@ -417,19 +417,19 @@
     "message": "Comando Omnibox"
   },
   "omni_desc": {
-    "message": "Utilice el comando omnibox integrado de la extensión"
+    "message": "Utilice el comando omnibox integrado de la extensión."
   },
   "def_label": {
     "message": "URL de búsqueda del sitio"
   },
   "def_desc": {
-    "message": "Crear un acceso directo a un motor de búsqueda personalizado"
+    "message": "Crear un acceso directo a un motor de búsqueda personalizado."
   },
   "exp_label": {
     "message": "URL de búsqueda del sitio experimental"
   },
   "exp_desc": {
-    "message": "Requiere funciones/secuencias de comandos experimentales para analizar la URL"
+    "message": "Requiere funciones/secuencias de comandos experimentales para analizar la URL."
   },
   "learn_more": {
     "message": "Más información: "

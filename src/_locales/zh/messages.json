@@ -417,19 +417,19 @@
     "message": "多功能框命令"
   },
   "omni_desc": {
-    "message": "使用扩展程序内置的多功能框命令"
+    "message": "使用扩展程序内置的多功能框命令。"
   },
   "def_label": {
     "message": "站内搜索网址"
   },
   "def_desc": {
-    "message": "创建自定义搜索引擎快捷方式"
+    "message": "创建自定义搜索引擎快捷方式。"
   },
   "exp_label": {
     "message": "实验站点搜索网址"
   },
   "exp_desc": {
-    "message": "需要实验性功能/脚本来解析链接"
+    "message": "需要实验性功能/脚本来解析链接。"
   },
   "learn_more": {
     "message": "了解更多："

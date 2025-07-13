@@ -417,19 +417,19 @@
     "message": "Omnibox-Befehl"
   },
   "omni_desc": {
-    "message": "Verwenden Sie den in der Erweiterung integrierten Omnibox-Befehl"
+    "message": "Verwenden Sie den in der Erweiterung integrierten Omnibox-Befehl."
   },
   "def_label": {
     "message": "Site-Such-URL"
   },
   "def_desc": {
-    "message": "Erstellen Sie eine benutzerdefinierte Suchmaschinenverknüpfung"
+    "message": "Erstellen Sie eine benutzerdefinierte Suchmaschinenverknüpfung."
   },
   "exp_label": {
     "message": "Experimentelle Site-Such-URL"
   },
   "exp_desc": {
-    "message": "Erfordert experimentelle Funktionen/Skripting zum Parsen der URL"
+    "message": "Erfordert experimentelle Funktionen/Skripting zum Parsen der URL."
   },
   "learn_more": {
     "message": "Mehr erfahren: "
