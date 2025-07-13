@@ -19,8 +19,11 @@
       time: Date.now(),
     });
   }
-  DELAY = chrome.storage.local.get("delay") ?? 3000;
-  setTimeout(runAfterFullLoad, DELAY);
+  chrome.storage.local.get("delay").then((e) => {
+    DELAY = e.delay ?? 3000;
+    console.log("Delay set", DELAY);
+    setTimeout(runAfterFullLoad, DELAY);
+  });
 })();
 
 let SELECTORS;

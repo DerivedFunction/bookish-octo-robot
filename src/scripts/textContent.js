@@ -13,14 +13,17 @@
   // Parse the url for the 'prompt' paremeter
   const prompt = new URLSearchParams(url.search).get("prompt");
   if (prompt) {
-    chrome.storage.local.set({
+    await chrome.storage.local.set({
       [SELECTORS.AI]: true,
       query: prompt,
       time: Date.now(),
     });
   }
-  DELAY = chrome.storage.local.get("delay") ?? 3000;
-  setTimeout(runAfterFullLoad, DELAY);
+  chrome.storage.local.get("delay").then((e) => {
+    DELAY = e.delay ?? 3000;
+    console.log("Delay set", DELAY);
+    setTimeout(runAfterFullLoad, DELAY);
+  });
 })();
 
 let SELECTORS;
