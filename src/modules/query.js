@@ -5,6 +5,7 @@ import { multiBtn, newClick } from "./searchEverywhere.js";
 import { selectedEngine, toggleDropdown } from "./searchEngine.js";
 import { hasScripts } from "./searchEngine.js";
 import { t } from "./locales.js";
+import { setupTooltip } from "./tooltip.js";
 
 export const query = document.getElementById("search");
 
@@ -85,6 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!delay) localStorage.setItem("delay", 3000);
   query.value = "";
   queryEvents();
+  setupTooltip(delayCount);
   resetBtn.addEventListener("click", () => {
     delayCount.textContent = "";
     delay = 3000;
