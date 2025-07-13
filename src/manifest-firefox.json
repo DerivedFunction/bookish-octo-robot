@@ -54,7 +54,8 @@
     "*://chat.qwen.ai/*",
     "*://chat.mistral.ai/*",
     "*://*.huggingface.co/chat/*",
-    "*://*.meta.ai/*"
+    "*://*.meta.ai/*",
+    "*://coral.cohere.com/*"
   ],
   "default_locale": "en",
   "web_accessible_resources": [

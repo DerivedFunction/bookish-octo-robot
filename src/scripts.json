@@ -43,6 +43,10 @@
     "Qwen": {
       "matches": ["*://chat.qwen.ai/*"],
       "js": ["/scripts/react.js"]
+    },
+    "Cohere": {
+      "matches": ["*://coral.cohere.com/*"],
+      "js": ["/scripts/react.js"]
     }
   },
   "permissionsConfig": {
@@ -89,6 +93,10 @@
     "Qwen": {
       "permissions": ["scripting"],
       "origins": ["*://chat.qwen.ai/*"]
+    },
+    "Cohere": {
+      "permissions": ["scripting"],
+      "origins": ["*://coral.cohere.com/*"]
     }
   },
   "full": {
@@ -105,7 +113,8 @@
         "*://chat.qwen.ai/*",
         "*://chat.mistral.ai/*",
         "*://*.huggingface.co/chat/*",
-        "*://*.meta.ai/*"
+        "*://*.meta.ai/*",
+        "*://coral.cohere.com/*"
       ]
     }
   }
