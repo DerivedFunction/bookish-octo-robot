@@ -1,11 +1,9 @@
 # Tabbed: AI chatbot in New Tab and Sidebar
 
 A new tab page with an AI-like user interface. Note: You may have to sign in to the respective AI chatbot for it to work. Stop paying and sending your data to third-parties when you can directly use the AI chatbot with this extension.
-
-[![Microsoft Edge](https://img.shields.io/badge/Edge-active-green.svg)](https://microsoftedge.microsoft.com/addons/detail/tabbed-ai-chatbot-in-new/jbhemcgchnpebmchepbcjfmneagnpnpa)
 [![Google Chrome](https://img.shields.io/badge/Chrome-active-green.svg)](https://chromewebstore.google.com/detail/jbpmodbjedoloelbepnpfhjoohjjkand)
 [![Mozilla Firefox](https://img.shields.io/badge/Firefox-active-green.svg)](https://addons.mozilla.org/en-US/firefox/addon/tabbed/)
-[![Current Version](https://img.shields.io/badge/Github-1.0.9.0-green.svg)](https://github.com/DerivedFunction/bookish-octo-robot/)
+[![Current Version](https://img.shields.io/badge/Github-1.0.9.1-green.svg)](https://github.com/DerivedFunction/bookish-octo-robot/)
 
 ## Youtube Video
 
@@ -59,8 +57,7 @@ chmod +x dev.sh
 - [Qwen](https://chat.qwen.ai/) (Experimental)
 - [Gemini](https://gemini.google.com/app) (Experimental)
 - [Claude](https://claude.ai/new) (requires manual clicking)
-- [Meta](https://meta.ai) (requires manual clicking)
-- [Google (AI Mode)](https://google.com)
+- [Meta](https://meta.ai) (Experimental)
 
 ### Basic
 
@@ -93,7 +90,7 @@ chmod +x dev.sh
 
 ## Experimental Features (in Experimental)
 
-- **Gemini**, **DeepSeek**, and **Qwen** is currently supported using Experimental content scripts (Permissions: scripting). You can revoke them at any time by pressing "reset" or the "beaker" button.
+- **Gemini**, **DeepSeek**, **Meta** and **Qwen** is currently supported using Experimental content scripts (Permissions: scripting). You can revoke them at any time by pressing "reset" or the "beaker" button.
 - Send longer queries
 - Send Queries to the same chat
 - Paste Images into the prompt.
