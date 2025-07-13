@@ -81,7 +81,7 @@ async function getLastResponse() {
     engine: SELECTORS.AI,
   });
 }
-async function getTextInput(maxRetries = 5, retryDelay = DELAY) {
+async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
   const {
     query,
     time,
