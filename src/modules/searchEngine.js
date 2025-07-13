@@ -17,14 +17,15 @@ searchEnginePickerBtn.addEventListener("click", () => {
 });
 curSearchBtn.addEventListener("click", async () => {
   if (!selectedEngine) {
-    toggleDropdown();
+    toggleDropdown("open");
   } else window.location.href = getSearchEngineUrl();
 });
 
 document.addEventListener("click", (e) => {
   if (
     !dropdown.contains(e.target) &&
-    !searchEnginePickerBtn.contains(e.target)
+    !searchEnginePickerBtn.contains(e.target) &&
+    !curSearchBtn.contains(e.target)
   ) {
     toggleDropdown("remove");
   }
@@ -120,7 +121,7 @@ export async function getSearchEngine() {
       {
         image: selectedEngine
           ? selectedEngine.image
-          : "/assets/images/ai/default.png",
+          : "/assets/images/icon/icon32.png",
       },
       curSearchBtn,
       null,
@@ -313,14 +314,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         try {
-          await chrome.action.setIcon({ path: "/assets/images/icon.svg" });
+          await chrome.action.setIcon({ path: "/assets/images/icon/icon.svg" });
         } catch (error) {
           console.error("Error setting action icon:", error);
         }
 
         try {
           await browser.sidebarAction.setIcon({
-            path: "/assets/images/icon.svg",
+            path: "/assets/images/icon/icon.svg",
           });
         } catch (error) {}
       } catch (error) {
