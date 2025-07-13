@@ -134,6 +134,9 @@
   "tooltip_new_tab": {
     "message": "打开新标签页"
   },
+  "tooltip_search_engine": {
+    "message": "将AI聊天机器人设置为默认搜索引擎"
+  },
   "prompt_solve": {
     "message": "解决以下问题并提供逐步的逻辑"
   },
@@ -406,5 +409,29 @@
   },
   "bg_type_own_img": {
     "message": "自定义图片"
+  },
+  "url_info": {
+    "message": "您可以使用 AI 聊天机器人地址栏（多功能框）。"
+  },
+  "omni_label": {
+    "message": "多功能框命令"
+  },
+  "omni_desc": {
+    "message": "使用扩展程序内置的多功能框命令"
+  },
+  "def_label": {
+    "message": "站内搜索网址"
+  },
+  "def_desc": {
+    "message": "创建自定义搜索引擎快捷方式"
+  },
+  "exp_label": {
+    "message": "实验站点搜索网址"
+  },
+  "exp_desc": {
+    "message": "需要实验性功能/脚本来解析链接"
+  },
+  "learn_more": {
+    "message": "了解更多："
   }
 }

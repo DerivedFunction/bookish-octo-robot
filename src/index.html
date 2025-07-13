@@ -25,6 +25,11 @@
           data-tooltip="tooltip_experimental"
         ></button>
         <button
+          id="search-button"
+          class="bg-text transparent-item"
+          data-tooltip="tooltip_search_engine"
+        ></button>
+        <button
           id="history-button"
           class="bg-text transparent-item"
           data-tooltip="tooltip_fetch_prompt"
@@ -63,6 +68,41 @@
         <button id="enable-all-scripts"></button>
         <button id="revoke-all-scripts"></button>
         <button id="close-scripts"></button>
+      </div>
+    </div>
+    <div id="url-sidebar" class="sidebar">
+      <h1></h1>
+      <p></p>
+      <div class="section horizontal-container" id="url-buttons"></div>
+      <div class="section">
+        <fieldset id="omniboxCmd">
+          <label>Omnibox Command</label>
+          <input type="text" class="input-field" readonly />
+          <span>Use the extension's built in omnibox command</span>
+        </fieldset>
+        <fieldset id="defaultUrls">
+          <label></label>
+          <input type="text" class="input-field" readonly />
+          <span></span>
+        </fieldset>
+        <fieldset id="searchUrls">
+          <label></label>
+          <input type="text" class="input-field" readonly />
+          <span></span>
+        </fieldset>
+      </div>
+      <div class="horizontal-container">
+        <span id="learn_more">Learn more:</span>
+        <button>
+          <a href="https://support.google.com/chrome/answer/95426"
+            >Google Chrome</a
+          ></button
+        ><button>
+          <a
+            href="https://support.mozilla.org/kb/add-or-remove-search-engine-firefox"
+            >Firefox
+          </a>
+        </button>
       </div>
     </div>
     <div id="sidebar" class="sidebar">

@@ -134,6 +134,9 @@
   "tooltip_new_tab": {
     "message": "新しいタブを開く"
   },
+  "tooltip_search_engine": {
+    "message": "AIチャットボットをデフォルトの検索エンジンに設定する"
+  },
   "prompt_solve": {
     "message": "以下の問題を解決し、ステップごとの論理を説明してください： "
   },
@@ -406,5 +409,29 @@
   },
   "bg_type_own_img": {
     "message": "カスタム画像"
+  },
+  "url_info": {
+    "message": "アドレスバー（オムニボックス）で AI チャットボットを使用できます。"
+  },
+  "omni_label": {
+    "message": "オムニボックスコマンド"
+  },
+  "omni_desc": {
+    "message": "拡張機能に組み込まれているオムニボックスコマンドを使用する"
+  },
+  "def_label": {
+    "message": "サイト検索URL"
+  },
+  "def_desc": {
+    "message": "カスタム検索エンジンのショートカットを作成する"
+  },
+  "exp_label": {
+    "message": "実験的なサイト検索URL"
+  },
+  "exp_desc": {
+    "message": "URL を解析するには実験的な機能/スクリプトが必要です"
+  },
+  "learn_more": {
+    "message": "もっと詳しく知る： "
   }
 }

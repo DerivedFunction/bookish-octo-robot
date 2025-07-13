@@ -134,6 +134,9 @@
   "tooltip_new_tab": {
     "message": "Ouvrir Nouvelle Onglet"
   },
+  "tooltip_search_engine": {
+    "message": "Définir AI Chatbot comme moteur de recherche par défaut"
+  },
   "prompt_solve": {
     "message": "Résolvez le problème suivant et fournissez la logique étape par étape: "
   },
@@ -406,5 +409,29 @@
   },
   "bg_type_own_img": {
     "message": "Image personnelle"
+  },
+  "url_info": {
+    "message": "Vous pouvez utiliser un chatbot IA dans la barre d'adresse (omnibox)."
+  },
+  "omni_label": {
+    "message": "Commande Omnibox"
+  },
+  "omni_desc": {
+    "message": "Utilisez la commande omnibox intégrée de l'extension"
+  },
+  "def_label": {
+    "message": "URL de recherche du site"
+  },
+  "def_desc": {
+    "message": "Créer un raccourci de moteur de recherche personnalisé"
+  },
+  "exp_label": {
+    "message": "URL de recherche du site expérimental"
+  },
+  "exp_desc": {
+    "message": "Nécessite des fonctionnalités/scripts expérimentaux pour analyser l'URL"
+  },
+  "learn_more": {
+    "message": "Apprendre encore plus: "
   }
 }

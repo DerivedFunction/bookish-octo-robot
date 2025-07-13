@@ -133,6 +133,9 @@
   "tooltip_new_tab": {
     "message": "Open New Tab"
   },
+  "tooltip_search_engine": {
+    "message": "Set AI Chatbot as Search Engine"
+  },
   "prompt_solve": {
     "message": "Solve the following problem and give step-by-step logic: "
   },
@@ -405,5 +408,29 @@
   },
   "bg_type_own_img": {
     "message": "Own Image"
+  },
+  "url_info": {
+    "message": "You can use an AI chatbot the address bar (omnibox)."
+  },
+  "omni_label": {
+    "message": "Omnibox Command"
+  },
+  "omni_desc": {
+    "message": "Use the extension's built in omnibox command"
+  },
+  "def_label": {
+    "message": "Site Search URL"
+  },
+  "def_desc": {
+    "message": "Create a custom search engine shortcut"
+  },
+  "exp_label": {
+    "message": "Experimental Site Search URL"
+  },
+  "exp_desc": {
+    "message": "Requires experimental features/scripting to parse the URL"
+  },
+  "learn_more": {
+    "message": "Learn More: "
   }
 }

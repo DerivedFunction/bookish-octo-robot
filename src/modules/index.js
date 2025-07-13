@@ -9,6 +9,7 @@ import "./query.js";
 import "./response.js";
 import "./searchEngine.js";
 import "./searchEverywhere.js";
+import "./searchUrl.js";
 import "./sidebar.js";
 import "./suggestions.js";
 import "./theme.js";

@@ -134,6 +134,9 @@
   "tooltip_new_tab": {
     "message": "Neues Tab öffnen"
   },
+  "tooltip_search_engine": {
+    "message": "KI-Chatbot als Standardsuchmaschine festlegen"
+  },
   "prompt_solve": {
     "message": "Lösen Sie das folgende Problem und geben Sie die Logik Schritt für Schritt an: "
   },
@@ -406,5 +409,29 @@
   },
   "bg_type_own_img": {
     "message": "Eigenes Bild"
+  },
+  "url_info": {
+    "message": "Sie können einen KI-Chatbot in der Adressleiste (Omnibox) verwenden."
+  },
+  "omni_label": {
+    "message": "Omnibox-Befehl"
+  },
+  "omni_desc": {
+    "message": "Verwenden Sie den in der Erweiterung integrierten Omnibox-Befehl"
+  },
+  "def_label": {
+    "message": "Site-Such-URL"
+  },
+  "def_desc": {
+    "message": "Erstellen Sie eine benutzerdefinierte Suchmaschinenverknüpfung"
+  },
+  "exp_label": {
+    "message": "Experimentelle Site-Such-URL"
+  },
+  "exp_desc": {
+    "message": "Erfordert experimentelle Funktionen/Skripting zum Parsen der URL"
+  },
+  "learn_more": {
+    "message": "Mehr erfahren: "
   }
 }
