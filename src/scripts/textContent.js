@@ -5,8 +5,20 @@
     throw new Error("Failed to load AI list data");
   }
   const data = await response.json();
-  const url = new URL(window.location.href).hostname;
-  SELECTORS = data["ai-list"].find((ai) => ai.url.includes(url)).selectors;
+  const url = new URL(window.location.href);
+  const urlHostname = url.hostname;
+  SELECTORS = data["ai-list"].find((ai) =>
+    ai.url.includes(urlHostname)
+  ).selectors;
+  // Parse the url for the 'prompt' paremeter
+  const prompt = new URLSearchParams(url.search).get("prompt");
+  if (prompt) {
+    chrome.storage.local.set({
+      [SELECTORS.AI]: true,
+      query: prompt,
+      time: Date.now(),
+    });
+  }
   setTimeout(runAfterFullLoad, 3000);
 })();
 

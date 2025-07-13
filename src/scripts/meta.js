@@ -5,8 +5,11 @@
     throw new Error("Failed to load AI list data");
   }
   const data = await response.json();
-  const url = new URL(window.location.href).hostname;
-  SELECTORS = data["ai-list"].find((ai) => ai.url.includes(url)).selectors;
+  const url = new URL(window.location.href);
+  const urlHostname = url.hostname;
+  SELECTORS = data["ai-list"].find((ai) =>
+    ai.url.includes(urlHostname)
+  ).selectors;
   setTimeout(runAfterFullLoad, 3000);
 })();
 
