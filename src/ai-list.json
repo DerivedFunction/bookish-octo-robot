@@ -169,6 +169,7 @@
       "url": "https://www.meta.ai/?q=",
       "image": "/assets/images/ai/meta.png",
       "limit": 15000,
+      "needsPerm": true,
       "experimental": true,
       "fileImage": true,
       "omnibox": ["meta", "me"],
@@ -198,14 +199,6 @@
         "file": null,
         "lastHTML": "[data-message-role='assistant']"
       }
-    },
-    {
-      "name": "Google (AI mode)",
-      "url": "https://www.google.com/search?udm=50&q=",
-      "home": "https://www.google.com/search?udm=50",
-      "image": "/assets/images/ai/google.png",
-      "limit": 15000,
-      "omnibox": ["google", "go"]
     }
   ],
   "prompts": [
