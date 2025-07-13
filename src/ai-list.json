@@ -166,7 +166,7 @@
     },
     {
       "name": "Meta",
-      "url": "https://www.meta.ai/?q=",
+      "url": "https://www.meta.ai/",
       "image": "/assets/images/ai/meta.png",
       "limit": 15000,
       "needsPerm": true,
