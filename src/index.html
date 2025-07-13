@@ -15,19 +15,9 @@
     <div id="header">
       <div class="horizontal-container">
         <button
-          id="options-button"
+          id="settings-slider"
           class="bg-text transparent-item"
           data-tooltip="tooltip_options"
-        ></button>
-        <button
-          id="scripts-button"
-          class="bg-text transparent-item"
-          data-tooltip="tooltip_experimental"
-        ></button>
-        <button
-          id="search-button"
-          class="bg-text transparent-item"
-          data-tooltip="tooltip_search_engine"
         ></button>
         <button
           id="history-button"
@@ -39,6 +29,23 @@
         <h2 class="bg-text"><span id="time"></span></h2>
         <h2 class="bg-text"><span id="weather"></span></h2>
       </div>
+    </div>
+    <div id="slider">
+      <button
+        id="options-button"
+        class="bg-text transparent-item"
+        data-tooltip="tooltip_options"
+      ></button>
+      <button
+        id="scripts-button"
+        class="bg-text transparent-item"
+        data-tooltip="tooltip_experimental"
+      ></button>
+      <button
+        id="search-button"
+        class="bg-text transparent-item"
+        data-tooltip="tooltip_search_engine"
+      ></button>
     </div>
     <div id="scripts-sidebar" class="sidebar">
       <h1></h1>
@@ -76,30 +83,34 @@
       <div class="section horizontal-container" id="url-buttons"></div>
       <div class="section">
         <fieldset id="omniboxCmd">
-          <label>Omnibox Command</label>
+          <label></label>
           <input type="text" class="input-field" readonly />
-          <span>Use the extension's built in omnibox command</span>
+          <span class="small-text"></span>
         </fieldset>
         <fieldset id="defaultUrls">
           <label></label>
           <input type="text" class="input-field" readonly />
-          <span></span>
+          <span class="small-text"></span>
         </fieldset>
         <fieldset id="searchUrls">
           <label></label>
           <input type="text" class="input-field" readonly />
-          <span></span>
+          <span class="small-text"></span>
         </fieldset>
+        <button id="close-urls"></button>
       </div>
-      <div class="horizontal-container">
+      <div class="horizontal-container small-text">
         <span id="learn_more">Learn more:</span>
         <button>
-          <a href="https://support.google.com/chrome/answer/95426"
+          <a
+            href="https://support.google.com/chrome/answer/95426"
+            class="small-text"
             >Google Chrome</a
           ></button
         ><button>
           <a
             href="https://support.mozilla.org/kb/add-or-remove-search-engine-firefox"
+            class="small-text"
             >Firefox
           </a>
         </button>

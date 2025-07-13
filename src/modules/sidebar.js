@@ -119,10 +119,31 @@ unstable.addEventListener("change", async () => {
     value: unstable.checked,
   });
 });
+
+const sliderBtn = document.getElementById("settings-slider");
+const slider = document.querySelector("#slider");
+let sliderNotVis = true; // Track state
+sliderBtn.addEventListener("click", () => {
+  const buttons = slider.querySelectorAll("button");
+  buttons.forEach((btn, i) => {
+    setTimeout(() => {
+      if (sliderNotVis) {
+        btn.classList.remove("slide-in");
+        btn.classList.add("slide-out");
+      } else {
+        btn.classList.remove("slide-out");
+        btn.classList.add("slide-in");
+      }
+    }, i * 100); // Staggered delay
+  });
+  sliderNotVis = !sliderNotVis; // Toggle the state
+});
+
 document.addEventListener("DOMContentLoaded", async () => {
   appendImg({ image: "assets/images/buttons/options.svg" }, optionBtn);
   appendImg({ image: "assets/images/buttons/unlocked.svg" }, scriptsBtn);
-  [optionBtn, scriptsBtn].forEach((btn) => {
+  appendImg({ image: "assets/images/buttons/settings.svg" }, sliderBtn);
+  [optionBtn, scriptsBtn, sliderBtn].forEach((btn) => {
     setupTooltip(btn);
   });
   const aiList = await getSearchEngineList();

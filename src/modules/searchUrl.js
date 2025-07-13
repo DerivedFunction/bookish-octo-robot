@@ -55,14 +55,22 @@ document.addEventListener("DOMContentLoaded", () => {
     omni.querySelector("span").textContent = t("omni_desc");
 
     urlField.querySelector("label").textContent = t("exp_label");
-    urlField.querySelector("span").textContent = t("exp_desc");
+    urlField.querySelector("span").textContent = `${t("def_desc")} ${t(
+      "exp_desc"
+    )} `;
 
     defaultField.querySelector("label").textContent = t("def_label");
     defaultField.querySelector("span").textContent = t("def_desc");
     document.querySelector("#learn_more").textContent = t("learn_more");
+    closeUrls.textContent = t("close_button");
   });
   appendList();
 });
+const closeUrls = document.getElementById("close-urls");
+closeUrls.addEventListener("click", () => {
+  urlsideBar.style.display = "none";
+});
+
 document.addEventListener("click", (e) => {
   if (!urlsideBar.contains(e.target) && !urlBtn.contains(e.target)) {
     urlsideBar.style.display = "none";
