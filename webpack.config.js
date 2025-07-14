@@ -18,7 +18,7 @@ module.exports = [
     entry: {
       meta: "./src/scripts/meta.js",
       react: "./src/scripts/react.js",
-      textcontent: "./src/scripts/textcontent.js",
+      textcontent: "./src/scripts/textContent.js",
     },
     output: {
       filename: "[name].js", // Output bundle for each script
