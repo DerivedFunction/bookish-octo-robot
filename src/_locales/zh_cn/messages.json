@@ -1,0 +1,440 @@
+{
+  "appName": {
+    "message": "Tabbed: AI聊天机器人"
+  },
+  "appDesc": {
+    "message": "重新定义新标签页。使用 ChatGPT、Claude、DeepSeek、Grok 等工具直接搜索。"
+  },
+  "greeting_morning": {
+    "message": "早上好"
+  },
+  "greeting_afternoon": {
+    "message": "下午好"
+  },
+  "greeting_evening": {
+    "message": "晚上好"
+  },
+  "greeting_hello": {
+    "message": "你好"
+  },
+  "greeting_help": {
+    "message": "今天我能为您做什么？"
+  },
+  "search_placeholder": {
+    "message": "我能为您做什么？"
+  },
+  "welcome_name": {
+    "message": "$GREETING$，$NAME$。",
+
+    "placeholders": {
+      "greeting": {
+        "content": "$1"
+      },
+      "name": {
+        "content": "$2"
+      }
+    }
+  },
+  "welcome": {
+    "message": "$GREETING$。",
+
+    "placeholders": {
+      "greeting": {
+        "content": "$1"
+      }
+    }
+  },
+  "reset_button": {
+    "message": "重置为默认值"
+  },
+  "close_button": {
+    "message": "关闭"
+  },
+  "options_title": {
+    "message": "选项"
+  },
+  "name_label": {
+    "message": "姓名"
+  },
+  "greeting_type_label": {
+    "message": "问候类型"
+  },
+  "formal_option": {
+    "message": "正式"
+  },
+  "informal_option": {
+    "message": "非正式"
+  },
+  "custom_option": {
+    "message": "自定义"
+  },
+  "none_option": {
+    "message": "无"
+  },
+  "enter_custom_greeting": {
+    "message": "请输入您的自定义问候语"
+  },
+  "show_suggestions_label": {
+    "message": "显示建议"
+  },
+  "sug_show": {
+    "message": "显示"
+  },
+  "sug_hide": {
+    "message": "隐藏"
+  },
+  "lang": {
+    "message": "语言"
+  },
+  "theme": {
+    "message": "主题"
+  },
+  "theme_auto": {
+    "message": "自动"
+  },
+  "theme_dark": {
+    "message": "暗色"
+  },
+  "theme_light": {
+    "message": "亮色"
+  },
+  "tooltip_options": {
+    "message": "选项"
+  },
+  "tooltip_experimental": {
+    "message": "实验功能"
+  },
+  "tooltip_fetch_prompt": {
+    "message": "获取上一个提示"
+  },
+  "tooltip_current_ai": {
+    "message": "当前AI"
+  },
+  "tooltip_pick_ai": {
+    "message": "选择AI"
+  },
+  "tooltip_advanced": {
+    "message": "高级选项"
+  },
+  "tooltip_upload_file": {
+    "message": "上传文件"
+  },
+  "tooltip_get_response": {
+    "message": "获取回应"
+  },
+  "tooltip_send_again": {
+    "message": "重新发送"
+  },
+  "tooltip_empty_message": {
+    "message": "空消息"
+  },
+  "tooltip_search_everywhere": {
+    "message": "搜索所有"
+  },
+  "tooltip_new_tab": {
+    "message": "打开新标签页"
+  },
+  "tooltip_search_engine": {
+    "message": "将AI聊天机器人设置为默认搜索引擎"
+  },
+  "prompt_solve": {
+    "message": "解决以下问题并提供逐步的逻辑"
+  },
+  "prompt_solve_quick": {
+    "message": "提供快速回答"
+  },
+  "prompt_solve_check": {
+    "message": "检查我的回答"
+  },
+  "prompt_solve_fill": {
+    "message": "填补缺失部分"
+  },
+  "prompt_research": {
+    "message": "研究这个主题"
+  },
+  "prompt_research_compare": {
+    "message": "比较不同的方法"
+  },
+  "prompt_research_latest": {
+    "message": "查找最新信息"
+  },
+  "prompt_summarize": {
+    "message": "简短且简洁地总结，列出关键术语的项目符号： "
+  },
+  "prompt_summarize_quick": {
+    "message": "提供快速总结"
+  },
+  "prompt_summarize_paraphrase": {
+    "message": "重新表述"
+  },
+  "prompt_summarize_highlight": {
+    "message": "突出要点"
+  },
+  "prompt_explain": {
+    "message": "详细解释，包含逐步逻辑，并加入易于理解的示例： "
+  },
+  "prompt_explain_brief": {
+    "message": "简短解释"
+  },
+  "prompt_explain_detail": {
+    "message": "详细解释"
+  },
+  "prompt_analyze": {
+    "message": "分析以下内容： "
+  },
+  "prompt_analyze_pros": {
+    "message": "优缺点分析"
+  },
+  "prompt_analyze_fact": {
+    "message": "事实核查"
+  },
+  "prompt_analyze_patterns": {
+    "message": "寻找模式"
+  },
+  "prompt_analyze_strengths": {
+    "message": "优势和劣势"
+  },
+  "prompt_analyze_errors": {
+    "message": "查找错误"
+  },
+  "prompt_image": {
+    "message": "创建图像"
+  },
+  "prompt_code": {
+    "message": "编写代码并解释： "
+  },
+  "prompt_code_fix": {
+    "message": "修复代码错误"
+  },
+  "prompt_code_error": {
+    "message": "解释此错误消息"
+  },
+  "prompt_code_refactor": {
+    "message": "重构代码"
+  },
+  "prompt_code_docs": {
+    "message": "生成代码文档"
+  },
+  "prompt_code_tests": {
+    "message": "生成代码测试"
+  },
+  "prompt_code_review": {
+    "message": "审查并评论代码"
+  },
+  "prompt_generate": {
+    "message": "创建计划或想法： "
+  },
+  "prompt_generate_ideas": {
+    "message": "头脑风暴"
+  },
+  "prompt_generate_plan": {
+    "message": "创建计划"
+  },
+  "prompt_generate_draft": {
+    "message": "写初稿"
+  },
+  "prompt_generate_outline": {
+    "message": "创建大纲"
+  },
+  "prompt_generate_email": {
+    "message": "写邮件"
+  },
+  "prompt_generate_resume": {
+    "message": "写简历"
+  },
+  "solve": {
+    "message": "解决"
+  },
+  "research": {
+    "message": "研究"
+  },
+  "summarize": {
+    "message": "总结"
+  },
+  "explain": {
+    "message": "解释"
+  },
+  "analyze": {
+    "message": "分析"
+  },
+  "create_image": {
+    "message": "创建图像"
+  },
+  "code": {
+    "message": "代码"
+  },
+  "generate": {
+    "message": "生成"
+  },
+  "ask": {
+    "message": "询问"
+  },
+  "ask_ai": {
+    "message": "询问AI"
+  },
+  "paste_selection": {
+    "message": "粘贴选择"
+  },
+  "switch_ai": {
+    "message": "切换AI"
+  },
+  "no_perm": {
+    "message": "可能无法工作(如果没有权限)"
+  },
+  "reset_success": {
+    "message": "所有选项和数据已清除"
+  },
+  "file_limit": {
+    "message": "无法存储文件：超出 4MB 的总大小限制。"
+  },
+  "enable_all": {
+    "message": "全部启用"
+  },
+  "revoke_all": {
+    "message": "全部撤销"
+  },
+  "scripts_desc": {
+    "message": "需要权限才能使用实验性内容脚本以增强功能。此功能为实验性，可能无法按预期工作，且不用于基本功能。点击每个图标以启用/禁用它们。"
+  },
+  "supported_label": {
+    "message": "支持的AI聊天机器人"
+  },
+  "required_label": {
+    "message": "使用需要权限"
+  },
+  "image_support_label": {
+    "message": "图像支持"
+  },
+  "unstable_label": {
+    "message": "目标：开放聊天/高级全域搜索"
+  },
+  "unstable_p": {
+    "message": "允许此扩展打开的标签监听和拦截任何查询，并根据用户请求发送数据。必须关闭这些标签以停止此功能。不使用时请关闭此功能：启用此功能可能会导致意外行为。"
+  },
+  "enabled_label": {
+    "message": "目前已启用"
+  },
+  "too_long": {
+    "message": "当前提示过长。"
+  },
+  "weather": {
+    "message": "天气"
+  },
+  "weather_placeholder": {
+    "message": "坐标、邮政编码或名称"
+  },
+  "unit_toggle": {
+    "message": "使用 °F 而不是 °C"
+  },
+  "time_format": {
+    "message": "选择时间格式"
+  },
+  "time_hours": {
+    "message": "小时"
+  },
+  "time_minutes": {
+    "message": "分钟"
+  },
+  "time_seconds": {
+    "message": "秒"
+  },
+  "time_days": {
+    "message": "天"
+  },
+  "time_weeks": {
+    "message": "周"
+  },
+  "background_type": {
+    "message": "背景类型"
+  },
+  "background_default": {
+    "message": "默认"
+  },
+  "background_image": {
+    "message": "随机图片"
+  },
+  "background_solid": {
+    "message": "纯色"
+  },
+  "background_gradient": {
+    "message": "渐变色"
+  },
+  "background_custom": {
+    "message": "自定义图片"
+  },
+  "background_update": {
+    "message": "更新频率"
+  },
+  "background_never": {
+    "message": "从不"
+  },
+  "background_startup": {
+    "message": "启动时"
+  },
+  "background_daily": {
+    "message": "每天"
+  },
+  "background_hourly": {
+    "message": "每小时"
+  },
+  "change_every": {
+    "message": "每"
+  },
+  "bg_change_never": {
+    "message": "从不更换图片"
+  },
+  "bg_change_refresh": {
+    "message": "刷新时更换"
+  },
+  "background": {
+    "message": "背景"
+  },
+  "upload_image": {
+    "message": "点击上传..."
+  },
+  "gradient_angle": {
+    "message": "角度"
+  },
+  "bg_type_default": {
+    "message": "默认"
+  },
+  "bg_type_bg_img": {
+    "message": "在线图片 (Pexels/Unsplash)"
+  },
+  "bg_type_color": {
+    "message": "纯色"
+  },
+  "bg_type_gradient": {
+    "message": "渐变"
+  },
+  "bg_type_own_img": {
+    "message": "自定义图片"
+  },
+  "url_info": {
+    "message": "您可以使用 AI 聊天机器人地址栏（多功能框）。"
+  },
+  "omni_label": {
+    "message": "多功能框命令"
+  },
+  "omni_desc": {
+    "message": "使用扩展程序内置的多功能框命令。"
+  },
+  "def_label": {
+    "message": "站内搜索网址"
+  },
+  "def_desc": {
+    "message": "创建自定义搜索引擎快捷方式。"
+  },
+  "exp_label": {
+    "message": "实验站点搜索网址"
+  },
+  "exp_desc": {
+    "message": "需要实验性功能/脚本来解析URL。"
+  },
+  "learn_more": {
+    "message": "了解更多："
+  },
+  "delay_prompt": {
+    "message": "设置提示注入重试之间的延迟"
+  }
+}
