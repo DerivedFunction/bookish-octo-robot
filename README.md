@@ -7,7 +7,7 @@ A new tab page with an AI-like user interface. Note: You may have to sign in to 
 
 ## Youtube Video
 
-[![Sample 1](./samples/Sample_1.png)](https://www.youtube.com/watch?v=PDgovF1dNBg)
+[![Sample 1](./Promo/Marquee.png)](https://www.youtube.com/watch?v=PDgovF1dNBg)
 
 ## Compile and Package from Source
 
@@ -58,20 +58,23 @@ chmod +x dev.sh
 - [Gemini](https://gemini.google.com/app) (Experimental)
 - [Claude](https://claude.ai/new) (requires manual clicking)
 - [Meta](https://meta.ai) (Experimental)
+- [Cohere](https://coral.cohere.com)
 
 ### Basic
 
 - Clean UI adapted from ChatGPT and Grok
 - Ability to switch between different AI chatbots/websites.
 - Powerful **Search Everywhere** allows the same query to simultaneously run on multiple AI chatbots
+  ![Sample 3](./Promo/promo-3.png)
 - Paste text into the prompt
 - Eight default suggestion ideas to save time on commands.
 - Click on the Extension Icon:
   - To launch your current AI chatbot in a new Tab.
 - Omnibox with keyword `tb`. (Try typing `tb @cg Hello` in the address bar)
+  ![promo-4](./Promo/promo-4.png)
 - Permissions are optional but extend the basic features. You can revoke them any time by pressing "reset" in the options menu.
 - Context menus provide suggestions as your browse and select text.
-  ![Sample 5](./samples/Sample_5.png)
+  ![promo-2](./Promo/promo-2.png)
 
 ### Sidebar features (Firefox Only)
 
@@ -86,7 +89,7 @@ chmod +x dev.sh
 - Set the background Image using Unsplash/Pexels, or your own image.
 - Fade the chatbox after inactivity
 
-  ![Sample 2](./samples/Sample_2.png)
+  ![promo-1](./Promo/promo-1.png)
 
 ## Experimental Features (in Experimental)
 
@@ -95,5 +98,4 @@ chmod +x dev.sh
 - Send Queries to the same chat
 - Paste Images into the prompt.
 - Advanced Search Everywhere function
-  ![Sample 3](./samples/Sample_3.png)
-  ![Sample 4](./samples/Sample_4.png)
+  ![promo-5](./Promo/promo-5.png)
