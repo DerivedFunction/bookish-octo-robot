@@ -195,25 +195,26 @@
         "kill": "CohereKill",
         "textbox": "textarea[id='composer']",
         "send": "div[data-component='Composer'] button",
-        "file": null,
+        "file": "input[type='file']",
         "lastHTML": ".message:last-child"
       }
     },
     {
-      "name": "HuggingFace",
-      "url": "https://huggingface.co/chat/?q=",
-      "image": "/assets/images/ai/hug.png",
+      "name": "Kimi",
+      "url": "https://www.kimi.com/",
+      "image": "/assets/images/ai/kimi.png",
       "experimental": true,
-      "limit": 15000,
-      "omnibox": ["huggingface", "hf"],
+      "fileImage": true,
+      "limit": 100000,
+      "omnibox": ["kimi", "ki"],
       "selectors": {
-        "AI": "HuggingFace",
-        "lastResponse": "HuggingFaceLast",
-        "kill": "HuggingFaceKill",
-        "textbox": "textarea[placeholder='Ask anything']",
-        "send": "button[name='submit']",
-        "file": null,
-        "lastHTML": "[data-message-role='assistant']"
+        "AI": "Kimi",
+        "lastResponse": "KimiLast",
+        "kill": "KimiKill",
+        "textbox": "div[contenteditable='true']",
+        "send": ".send-button",
+        "file": "input[type='file']",
+        "lastHTML": ".chat-content-item-assistant:last-child:last-child"
       }
     }
   ],

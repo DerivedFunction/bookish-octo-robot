@@ -32,9 +32,9 @@
       "matches": ["*://chat.mistral.ai/*"],
       "js": ["/scripts/textContent.js"]
     },
-    "HuggingFace": {
-      "matches": ["*://huggingface.co/chat/*"],
-      "js": ["/scripts/react.js"]
+    "Kimi": {
+      "matches": ["*://*.kimi.com/*"],
+      "js": ["/scripts/meta.js"]
     },
     "Meta": {
       "matches": ["*://*.meta.ai/*"],
@@ -82,9 +82,9 @@
       "permissions": ["scripting"],
       "origins": ["*://chat.mistral.ai/*"]
     },
-    "HuggingFace": {
+    "Kimi": {
       "permissions": ["scripting"],
-      "origins": ["*://*.huggingface.co/chat/*"]
+      "origins": ["*://*.kimi.com/*"]
     },
     "Meta": {
       "permissions": ["scripting"],
@@ -112,7 +112,7 @@
         "*://chat.deepseek.com/*",
         "*://chat.qwen.ai/*",
         "*://chat.mistral.ai/*",
-        "*://*.huggingface.co/chat/*",
+        "*://*.kimi.com/*",
         "*://*.meta.ai/*",
         "*://coral.cohere.com/*"
       ]

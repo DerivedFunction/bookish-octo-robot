@@ -10,6 +10,15 @@
   SELECTORS = data["ai-list"].find((ai) =>
     ai.url.includes(urlHostname)
   ).selectors;
+  // Parse the url for the 'prompt' paremeter
+  const prompt = new URLSearchParams(url.search).get("prompt");
+  if (prompt) {
+    chrome.storage.local.set({
+      [SELECTORS.AI]: true,
+      query: prompt,
+      time: Date.now(),
+    });
+  }
   chrome.storage.local.get("delay").then((e) => {
     DELAY = e.delay ?? 3000;
     console.log("Delay set", DELAY);
