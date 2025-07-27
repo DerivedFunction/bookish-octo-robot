@@ -1,23 +1,25 @@
 {
-  "ai-list": [
-    {
-      "name": "ChatGPT",
-      "url": "https://chatgpt.com/?q=",
-      "image": "/assets/images/ai/chatgpt.png",
-      "experimental": true,
-      "limit": 39720,
-      "fileImage": true,
+  "ai-list": [{
+    "name": "ChatGPT",
+    "url": "https://chatgpt.com/?q=",
+    "image": "/assets/images/ai/chatgpt.png",
+    "experimental": true,
+    "limit": 39720,
+    "fileImage": true,
       "omnibox": ["chatgpt", "cg"],
       "selectors": {
         "AI": "ChatGPT",
         "lastResponse": "ChatGPTLast",
         "kill": "ChatGPTKill",
-        "textbox": "#prompt-textarea p",
+        "textbox": [
+          {
+            "scriptType": "contenteditable"
+          }
+        ],
         "send": "#composer-submit-button",
         "file": "input[type='file']",
         "lastHTML": "article"
-      },
-      "scriptType": "textContent"
+      }
     },
     {
       "name": "Copilot",
@@ -31,12 +33,16 @@
         "AI": "Copilot",
         "lastResponse": "CopilotLast",
         "kill": "CopilotKill",
-        "textbox": "#userInput",
+        "textbox": [
+          {
+            "scriptType": "react",
+            "textbox": "#userInput"
+          }
+        ],
         "send": "button[title='Submit message']",
         "file": "input",
         "lastHTML": "div[role='article']"
-      },
-      "scriptType": "react"
+      }
     },
     {
       "name": "Gemini",
@@ -50,12 +56,15 @@
         "AI": "Gemini",
         "lastResponse": "GeminiLast",
         "kill": "GeminiKill",
-        "textbox": ".textarea",
+        "textbox": [
+          {
+            "scriptType": "contenteditable"
+          }
+        ],
         "send": ".send-button",
         "file": "input",
         "lastHTML": ".response-content"
-      },
-      "scriptType": "textContent"
+      }
     },
     {
       "name": "Grok",
@@ -69,12 +78,19 @@
         "AI": "Grok",
         "lastResponse": "GrokLast",
         "kill": "GrokKill",
-        "textbox": "textarea",
+        "textbox": [
+          {
+            "scriptType": "react",
+            "textbox": "textarea"
+          },
+          {
+            "scriptType": "contenteditable"
+          }
+        ],
         "send": "button[type='submit']",
         "file": "input[type='file']",
         "lastHTML": "#last-reply-container .response-content-markdown"
-      },
-      "scriptType": "react"
+      }
     },
     {
       "name": "DeepSeek",
@@ -89,12 +105,16 @@
         "AI": "DeepSeek",
         "lastResponse": "DeepSeekLast",
         "kill": "DeepSeekKill",
-        "textbox": "textarea",
+        "textbox": [
+          {
+            "scriptType": "react",
+            "textbox": "textarea"
+          }
+        ],
         "send": "._7436101",
         "file": "input[type='file']",
         "lastHTML": "div.ds-markdown.ds-markdown--block"
-      },
-      "scriptType": "react"
+      }
     },
     {
       "name": "Claude",
@@ -108,12 +128,15 @@
         "AI": "Claude",
         "lastResponse": "ClaudeLast",
         "kill": "ClaudeKill",
-        "textbox": "div[contenteditable='true'] p",
+        "textbox": [
+          {
+            "scriptType": "contenteditable"
+          }
+        ],
         "send": "button[aria-label='Send message']",
         "file": "input",
         "lastHTML": "[data-test-render-count]"
-      },
-      "scriptType": "textContent"
+      }
     },
 
     {
@@ -129,12 +152,15 @@
         "AI": "Perplexity",
         "lastResponse": "PerplexityLast",
         "kill": "PerplexityKill",
-        "textbox": "#ask-input",
+        "textbox": [
+          {
+            "scriptType": "contenteditable"
+          }
+        ],
         "send": "button[aria-label='Submit']",
         "file": "input[type='file']",
         "lastHTML": "div.prose"
-      },
-      "scriptType": "meta"
+      }
     },
     {
       "name": "Mistral",
@@ -148,12 +174,15 @@
         "AI": "Mistral",
         "lastResponse": "MistralLast",
         "kill": "MistralKill",
-        "textbox": "div[contenteditable='true'] p",
+        "textbox": [
+          {
+            "scriptType": "contenteditable"
+          }
+        ],
         "send": "button[type='submit']",
         "file": "input[type='file']",
         "lastHTML": "div[id]"
-      },
-      "scriptType": "textContent"
+      }
     },
     {
       "name": "Qwen",
@@ -168,12 +197,16 @@
         "AI": "Qwen",
         "lastResponse": "QwenLast",
         "kill": "QwenKill",
-        "textbox": "textarea",
+        "textbox": [
+          {
+            "scriptType": "react",
+            "textbox": "textarea"
+          }
+        ],
         "send": "#send-message-button",
         "file": "input[type='file']",
         "lastHTML": "#response-content-container"
-      },
-      "scriptType": "react"
+      }
     },
     {
       "name": "Meta",
@@ -187,12 +220,15 @@
         "AI": "Meta",
         "lastResponse": "MetaLast",
         "kill": "MetaKill",
-        "textbox": "div[contenteditable='true']",
+        "textbox": [
+          {
+            "scriptType": "contenteditable"
+          }
+        ],
         "send": "div[aria-label='Send Message']",
         "file": "input",
         "lastHTML": ".x78zum5.xdt5ytf div[dir='auto']"
-      },
-      "scriptType": "meta"
+      }
     },
     {
       "name": "Cohere",
@@ -206,12 +242,16 @@
         "AI": "Cohere",
         "lastResponse": "CohereLast",
         "kill": "CohereKill",
-        "textbox": "textarea[id='composer']",
+        "textbox": [
+          {
+            "scriptType": "react",
+            "textbox": "textarea[id='composer']"
+          }
+        ],
         "send": "div[data-component='Composer'] button",
         "file": "input[type='file']",
         "lastHTML": ".message:last-child"
-      },
-      "scriptType": "react"
+      }
     },
     {
       "name": "Kimi",
@@ -226,12 +266,15 @@
         "AI": "Kimi",
         "lastResponse": "KimiLast",
         "kill": "KimiKill",
-        "textbox": "div[contenteditable='true']",
+        "textbox": [
+          {
+            "scriptType": "contenteditable"
+          }
+        ],
         "send": ".send-button",
         "file": "input[type='file']",
         "lastHTML": ".chat-content-item-assistant:last-child:last-child"
-      },
-      "scriptType": "meta"
+      }
     }
   ],
   "prompts": [

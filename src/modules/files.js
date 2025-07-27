@@ -82,6 +82,7 @@ fileUploadInput.addEventListener("change", async () => {
       addFileToList(uniqueFilename, file); // Use unique filename
     }
   }
+  fileUploadInput.value = ""; // Clear the input after processing
 });
 
 // Handle pasted images

@@ -8,8 +8,21 @@
   const url = new URL(window.location.href);
   const urlHostname = url.hostname;
   const aiConfig = data["ai-list"].find((ai) => ai.url.includes(urlHostname));
-  SELECTORS = aiConfig.selectors;
-  SCRIPT_TYPE = aiConfig.scriptType || 'textContent'; // Default to textContent if not specified
+  
+  // Handle multiple selector configurations
+  if (Array.isArray(aiConfig.selectors.textbox)) {
+    selectorConfigs = aiConfig.selectors.textbox.map(config => ({
+      ...aiConfig.selectors,
+      textbox: config.textbox,
+      scriptType: config.scriptType
+    }));
+    SELECTORS = selectorConfigs[0];
+    SCRIPT_TYPE = selectorConfigs[0].scriptType;
+  } else {
+    SELECTORS = aiConfig.selectors;
+    SCRIPT_TYPE = aiConfig.scriptType || 'textContent';
+    selectorConfigs = [{...SELECTORS, scriptType: SCRIPT_TYPE}];
+  }
 
   // Parse the url for the 'prompt' parameter
   const prompt = new URLSearchParams(url.search).get("prompt");
@@ -32,6 +45,8 @@ let SCRIPT_TYPE;
 let counter = 0;
 let element;
 let DELAY;
+let currentSelectorIndex = 0;
+let selectorConfigs = [];
 
 async function runAfterFullLoad() {
   chrome.storage.local.get(SELECTORS.AI).then(async (e) => {
@@ -98,52 +113,76 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
   
   let attempts = 0;
   counter = 0;
+  let success = false;
   
   while (attempts < maxRetries) {
-    element = document.querySelector(SELECTORS.textbox);
-    console.log(`Attempt ${attempts + 1}: Injecting Query`);
+    // Try each selector configuration in turn
+    for (let i = 0; i < selectorConfigs.length; i++) {
+      const currentConfig = selectorConfigs[(currentSelectorIndex + i) % selectorConfigs.length];
+      const selector = currentConfig.scriptType === 'contenteditable' ? 
+        "div[contenteditable='true']" : currentConfig.textbox;
+      element = document.querySelector(selector);
+      console.log(`Attempt ${attempts + 1}, Config ${(currentSelectorIndex + i) % selectorConfigs.length + 1}: Injecting Query`);
 
-    if (element) {
-      switch (SCRIPT_TYPE) {
-        case 'react':
-          // React-specific input handling
-          let lastValue = element.value || "";
-          element.value = searchQuery;
+      if (element) {
+        switch (currentConfig.scriptType) {
+          case 'react':
+            // React-specific input handling
+            let lastValue = element.value || "";
+            element.value = searchQuery;
 
-          let event = new Event("input", { bubbles: true });
-          event.simulated = true;
+            let event = new Event("input", { bubbles: true });
+            event.simulated = true;
 
-          let tracker = element._valueTracker;
-          if (tracker) {
-            tracker.setValue(lastValue);
-          }
-          element.dispatchEvent(event);
-          break;
+            let tracker = element._valueTracker;
+            if (tracker) {
+              tracker.setValue(lastValue);
+            }
+            element.dispatchEvent(event);
+            break;
 
-        case 'meta':
-          element.focus();
-          const beforeInputEvent = new InputEvent("beforeinput", {
-            inputType: "insertText",
-            data: searchQuery,
-            bubbles: true,
-            cancelable: true,
-          });
-          element.dispatchEvent(beforeInputEvent);
-          getMetaListener();
-          break;
+          case 'contenteditable':
+            element.focus();
+            // Try meta injection first
+            const beforeInputEvent = new InputEvent("beforeinput", {
+              inputType: "insertText",
+              data: searchQuery,
+              bubbles: true,
+              cancelable: true,
+            });
+            element.dispatchEvent(beforeInputEvent);
+            getMetaListener();
+            
+            // Check if text was injected (use innerText/textContent to see visible text)
+            setTimeout(() => {
+              const visibleText = element.innerText || element.textContent;
+              if (!visibleText?.includes(searchQuery)) {
+                // Fallback to direct textContent if meta injection failed
+                element.textContent = searchQuery;
+                const inputEvent = new InputEvent("input", {
+                  inputType: "insertText",
+                  data: searchQuery,
+                  bubbles: true,
+                  cancelable: true,
+                });
+                element.dispatchEvent(inputEvent);
+              }
+            }, 100); // Small delay to check injection
+            break;
+        }
 
-        default: // textContent
-          element.textContent = searchQuery;
-          break;
+        let clicked = await clickButton();
+        if (clicked) {
+          // Remember successful configuration for next time
+          currentSelectorIndex = (currentSelectorIndex + i) % selectorConfigs.length;
+          success = true;
+          return;
+        }
       }
+    }
 
-      let clicked = await clickButton();
-      if (clicked) {
-        return;
-      }
-      await new Promise((resolve) => setTimeout(resolve, retryDelay));
-    } else {
-      console.log(`Element not found. Retrying after ${retryDelay}ms.`);
+    if (!success) {
+      console.log(`No configuration worked. Retrying after ${retryDelay}ms.`);
       attempts++;
       if (attempts < maxRetries) {
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
@@ -154,6 +193,8 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
   console.error(`Failed to find element after ${maxRetries} attempts.`);
   update();
 }
+
+
 
 function getMetaListener() {
   element?.addEventListener("beforeinput", (event) => {
