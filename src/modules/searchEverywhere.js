@@ -333,7 +333,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   newTabBtn.addEventListener("click", () => openNewTab());
   searchEverywhereBtn.addEventListener("click", async () => {
     showFileBtn = true;
-    responseContainer.style.display = "none";
     [multiBtn, searchEverywhereList, fileUploadBtn].forEach((e) => {
       e.style.display = "";
     });

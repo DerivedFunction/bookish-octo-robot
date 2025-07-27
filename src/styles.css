@@ -553,10 +553,9 @@ fieldset {
 }
 
 
-@media (max-width: 970px) {
+@media (max-width: 768px) {
   #response-container {
     display: block;
-
   }
   #navigation {
     margin: 0 20px;
@@ -565,6 +564,10 @@ fieldset {
   #search-engine-dropdown {
     bottom: 120px;
   }
+  .suggestions-container {
+    display: none;
+  }
+
 }
 
 #search-everywhere-list{
