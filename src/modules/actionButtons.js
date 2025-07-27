@@ -43,6 +43,7 @@ goBtn.addEventListener("click", async () => {
       return;
     } else {
       // Kill off any listening processes
+      await chrome.storage.local.remove(`${selectedEngine.name}Kill`);
       // Run experimental content scripts
       await chrome.storage.local.set({
         [`${selectedEngine.name}Kill`]: true,

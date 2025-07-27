@@ -55,12 +55,14 @@ async function runAfterFullLoad() {
       console.log("Orphan process. Exiting...");
       return;
     }
+    
     console.log("Running query injection.");
     await getImage();
     await getTextInput();
     let { unstable } = await chrome.storage.local.get("unstable");
     if (!unstable) return;
     console.log("Unstable Feature activated. listening...");
+    await chrome.storage.local.remove(SELECTORS.kill);
     chrome.storage.onChanged.addListener(handleStorageChange);
   });
 }
@@ -73,7 +75,6 @@ async function handleStorageChange(changes, areaName) {
     chrome.storage.onChanged.removeListener(handleStorageChange);
     return;
   }
-
   if (changes[SELECTORS.AI] && changes[SELECTORS.AI].newValue) {
     await getImage();
     await getTextInput();
