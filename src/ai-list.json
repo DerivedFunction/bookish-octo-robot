@@ -17,7 +17,7 @@
             "scriptType": "contenteditable"
           }
         ],
-        "send": "#composer-submit-button",
+        "send": "button:not(:disabled)#composer-submit-button",
         "file": "input[type='file']",
         "lastHTML": "article"
       }
@@ -39,7 +39,7 @@
             "scriptType": "contenteditable"
           }
         ],
-        "send": "button[aria-label='Send message']",
+        "send": "button:not(:disabled)[aria-label='Send message']",
         "file": "input",
         "lastHTML": "[data-test-render-count]"
       }
@@ -61,7 +61,7 @@
             "scriptType": "contenteditable"
           }
         ],
-        "send": ".send-button",
+        "send": "button:not([aria-disabled='true']).send-button",
         "file": "input",
         "lastHTML": ".response-content"
       }
@@ -87,7 +87,7 @@
             "scriptType": "contenteditable"
           }
         ],
-        "send": "button[type='submit']",
+        "send": "button:not(:disabled)[type='submit']",
         "file": "input[type='file']",
         "lastHTML": "#last-reply-container .response-content-markdown"
       }
@@ -111,7 +111,7 @@
             "textbox": "textarea"
           }
         ],
-        "send": "._7436101",
+        "send": "div:not([aria-disabled='true'])._7436101",
         "file": "input[type='file']",
         "lastHTML": "div.ds-markdown.ds-markdown--block"
       }
@@ -134,7 +134,7 @@
             "textbox": "#userInput"
           }
         ],
-        "send": "button[title='Submit message']",
+        "send": "button:not(:disabled)[title='Submit message']",
         "file": "input",
         "lastHTML": "div[role='article']"
       }
@@ -157,7 +157,7 @@
             "scriptType": "contenteditable"
           }
         ],
-        "send": "button[aria-label='Submit']",
+        "send": "button:not(:disabled)[aria-label='Submit']",
         "file": "input[type='file']",
         "lastHTML": "div.prose"
       }
@@ -179,7 +179,7 @@
             "scriptType": "contenteditable"
           }
         ],
-        "send": "button[type='submit']",
+        "send": "button:not([aria-disabled='true'])[type='submit']",
         "file": "input[type='file']",
         "lastHTML": "div[id]"
       }
@@ -203,7 +203,7 @@
             "textbox": "textarea"
           }
         ],
-        "send": "#send-message-button",
+        "send": "button:not(:disabled)#send-message-button",
         "file": "input[type='file']",
         "lastHTML": "#response-content-container"
       }
@@ -225,7 +225,7 @@
             "scriptType": "contenteditable"
           }
         ],
-        "send": "div[aria-label='Send Message']",
+        "send": "div[aria-label='Send Message']:not([aria-disabled='true'])",
         "file": "input",
         "lastHTML": ".x78zum5.xdt5ytf div[dir='auto']"
       }
@@ -271,9 +271,32 @@
             "scriptType": "contenteditable"
           }
         ],
-        "send": ".send-button",
+        "send": ".send-button-container:not(.disabled)",
         "file": "input[type='file']",
         "lastHTML": ".chat-content-item-assistant:last-child:last-child"
+      }
+    },{
+      "name": "Poe",
+      "url": "https://www.poe.com/",
+      "image": "/assets/images/ai/poe.png",
+      "experimental": true,
+      "fileImage": true,
+      "needsPerm": true,
+      "limit": 100000,
+      "omnibox": ["poe", "po"],
+      "selectors": {
+        "AI": "Poe",
+        "lastResponse": "PoeLast",
+        "kill": "PoeKill",
+        "textbox": [
+          {
+            "scriptType": "react",
+            "textbox": "textarea"
+          }
+        ],
+        "send": "button:not(:disabled)[aria-label='Send message']",
+        "file": "input[type='file']",
+        "lastHTML": ".ChatMessagesView_tupleGroupContainer__LSCLm .ChatMessagesView_messageTuple__Jh5lQ:last-child"
       }
     }
   ],

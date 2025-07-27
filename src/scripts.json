@@ -47,6 +47,10 @@
     "Cohere": {
       "matches": ["*://coral.cohere.com/*"],
       "js": ["/scripts/injector.js"]
+    },
+    "Poe": {
+      "matches": ["*://*.poe.com/*"],
+      "js": ["/scripts/injector.js"]
     }
   },
   "permissionsConfig": {
@@ -97,6 +101,10 @@
     "Cohere": {
       "permissions": ["scripting"],
       "origins": ["*://coral.cohere.com/*"]
+    },
+    "Poe": {
+      "permissions": ["scripting"],
+      "origins": ["*://*.poe.com/*"]
     }
   },
   "full": {
@@ -114,7 +122,8 @@
         "*://chat.mistral.ai/*",
         "*://*.kimi.com/*",
         "*://*.meta.ai/*",
-        "*://coral.cohere.com/*"
+        "*://coral.cohere.com/*",
+        "*://*.poe.com/*"
       ]
     }
   }

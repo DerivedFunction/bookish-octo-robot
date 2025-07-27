@@ -36,7 +36,8 @@
     "*://chat.mistral.ai/*",
     "*://*.kimi.com/*",
     "*://*.meta.ai/*",
-    "*://coral.cohere.com/*"
+    "*://coral.cohere.com/*",
+    "*://*.poe.com/*"
   ],
   "default_locale": "en",
   "web_accessible_resources": [
