@@ -283,7 +283,7 @@
       "fileImage": true,
       "needsPerm": true,
       "limit": 100000,
-      "omnibox": ["poe", "po"],
+      "omnibox": ["poe", "p"],
       "selectors": {
         "AI": "Poe",
         "lastResponse": "PoeLast",
@@ -297,6 +297,29 @@
         "send": "button:not(:disabled)[aria-label='Send message']",
         "file": "input[type='file']",
         "lastHTML": ".ChatMessagesView_tupleGroupContainer__LSCLm .ChatMessagesView_messageTuple__Jh5lQ:last-child"
+      }
+    },
+    {
+      "name": "You",
+      "url": "https://www.you.com/search?q=",
+      "image": "/assets/images/ai/you.png",
+      "experimental": true,
+      "fileImage": true,
+      "limit": 100000,
+      "omnibox": ["you", "y"],
+      "selectors": {
+        "AI": "You",
+        "lastResponse": "YouLast",
+        "kill": "YouKill",
+        "textbox": [
+          {
+            "scriptType": "react",
+            "textbox": "textarea"
+          }
+        ],
+        "send": "button:not(:disabled)[aria-label='Submit query']",
+        "file": "input[type='file']",
+        "lastHTML": "#chat-history .p38mfy1:last-child .p38mfyb"
       }
     }
   ],

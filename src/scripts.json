@@ -51,6 +51,10 @@
     "Poe": {
       "matches": ["*://*.poe.com/*"],
       "js": ["/scripts/injector.js"]
+    },
+    "You": {
+      "matches": ["*://*.you.com/*"],
+      "js": ["/scripts/injector.js"]
     }
   },
   "permissionsConfig": {
@@ -105,6 +109,10 @@
     "Poe": {
       "permissions": ["scripting"],
       "origins": ["*://*.poe.com/*"]
+    },
+    "You": {
+      "permissions": ["scripting"],
+      "origins": ["*://*.you.com/*"]
     }
   },
   "full": {
@@ -123,7 +131,8 @@
         "*://*.kimi.com/*",
         "*://*.meta.ai/*",
         "*://coral.cohere.com/*",
-        "*://*.poe.com/*"
+        "*://*.poe.com/*",
+        "*://*.you.com/*"
       ]
     }
   }

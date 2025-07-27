@@ -5,6 +5,7 @@ import { resetBtn, loadJsonData, toggleClass } from "../app.js";
 import { query, queryEvents } from "./query.js";
 import { t } from "./locales.js";
 import { fileUploadBtn } from "./files.js";
+import { showFileBtn } from "./searchEverywhere.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
 
@@ -210,7 +211,8 @@ export async function getScriptStatus(name = null) {
     if (hasScripts && selectedEngine.fileImage) {
       fileUploadBtn.style.display = "";
     } else {
-      fileUploadBtn.style.display = "none";
+      if (!showFileBtn)
+        fileUploadBtn.style.display = "none";
     }
     queryEvents();
     return hasScripts;

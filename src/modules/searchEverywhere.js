@@ -221,8 +221,11 @@ async function handleMultiSearch(textContent, resend = false) {
     });
     newClick = false;
     responseContainer.style.display = "block";
-    multiTools.style.display = "";
-    searchEverywhereList.style.display = "";
+    [
+      multiTools, searchEverywhereList, fileUploadBtn
+    ].forEach((e) => {
+      e.style.display = "";
+    });
   }
   query.style.maxHeight = "50px";
   Array.from(responseContainer.children).forEach((child) => {
@@ -287,7 +290,7 @@ async function openNewTab() {
 }
 
 // --- Event Listeners and Initialization ---
-
+export let showFileBtn = false;
 document.addEventListener("DOMContentLoaded", async () => {
   [multiBtn,multiTools,searchEverywhereList].forEach((e) => {
     e.style.display = "none";
@@ -329,6 +332,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   sendAgain.addEventListener("click", () => handleSendAgain());
   newTabBtn.addEventListener("click", () => openNewTab());
   searchEverywhereBtn.addEventListener("click", async () => {
+    showFileBtn = true;
+    responseContainer.style.display = "none";
     [multiBtn, searchEverywhereList, fileUploadBtn].forEach((e) => {
       e.style.display = "";
     });

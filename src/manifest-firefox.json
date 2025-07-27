@@ -56,7 +56,8 @@
     "*://*.kimi.com/*",
     "*://*.meta.ai/*",
     "*://coral.cohere.com/*",
-    "*://*.poe.com/*"
+    "*://*.poe.com/*",
+    "*://*.you.com/*"
   ],
   "default_locale": "en",
   "web_accessible_resources": [
