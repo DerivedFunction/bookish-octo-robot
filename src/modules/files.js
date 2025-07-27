@@ -60,6 +60,10 @@ async function storeFile(filename, file) {
           data: reader.result,
           type: file.type,
           size: file.size,
+          fileExtension: // get the last part of the filename after the last dot
+            filename.includes(".")
+              ? filename.split(".").pop()
+              : ""
         },
       });
       resolve(uniqueFilename); // Return the unique filename
@@ -94,6 +98,13 @@ document.addEventListener("paste", async (event) => {
       if (uniqueFilename) {
         addFileToList(uniqueFilename, file); // Use unique filename
       }
+    } else {
+      // all files are ok
+      const file = item.getAsFile();
+      const uniqueFilename = await storeFile(file.name, file);
+      if (uniqueFilename) {
+        addFileToList(uniqueFilename, file); // Use unique filename
+      }
     }
   }
 });
@@ -118,6 +129,12 @@ function addFileToList(filename, blob) {
     img.style.objectFit = "contain";
     img.style.display = "block";
     container.appendChild(img);
+  } else {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.textContent = filename;
+    container.appendChild(a);
   }
 
   // Tooltip shows the filename

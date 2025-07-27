@@ -2,51 +2,51 @@
   "scriptConfigs": {
     "Gemini": {
       "matches": ["*://gemini.google.com/*"],
-      "js": ["/scripts/textContent.js"]
+      "js": ["/scripts/injector.js"]
     },
     "DeepSeek": {
       "matches": ["*://chat.deepseek.com/*"],
-      "js": ["/scripts/react.js"]
+      "js": ["/scripts/injector.js"]
     },
     "ChatGPT": {
       "matches": ["*://*.chatgpt.com/*"],
-      "js": ["/scripts/textContent.js"]
+      "js": ["/scripts/injector.js"]
     },
     "Grok": {
       "matches": ["*://*.grok.com/*"],
-      "js": ["/scripts/react.js"]
+      "js": ["/scripts/injector.js"]
     },
     "Copilot": {
       "matches": ["*://copilot.microsoft.com/*"],
-      "js": ["/scripts/react.js"]
+      "js": ["/scripts/injector.js"]
     },
     "Claude": {
       "matches": ["*://*.claude.ai/*"],
-      "js": ["/scripts/textContent.js"]
+      "js": ["/scripts/injector.js"]
     },
     "Perplexity": {
       "matches": ["*://*.perplexity.ai/*"],
-      "js": ["/scripts/meta.js"]
+      "js": ["/scripts/injector.js"]
     },
     "Mistral": {
       "matches": ["*://chat.mistral.ai/*"],
-      "js": ["/scripts/textContent.js"]
+      "js": ["/scripts/injector.js"]
     },
     "Kimi": {
       "matches": ["*://*.kimi.com/*"],
-      "js": ["/scripts/meta.js"]
+      "js": ["/scripts/injector.js"]
     },
     "Meta": {
       "matches": ["*://*.meta.ai/*"],
-      "js": ["/scripts/meta.js"]
+      "js": ["/scripts/injector.js"]
     },
     "Qwen": {
       "matches": ["*://chat.qwen.ai/*"],
-      "js": ["/scripts/react.js"]
+      "js": ["/scripts/injector.js"]
     },
     "Cohere": {
       "matches": ["*://coral.cohere.com/*"],
-      "js": ["/scripts/react.js"]
+      "js": ["/scripts/injector.js"]
     }
   },
   "permissionsConfig": {

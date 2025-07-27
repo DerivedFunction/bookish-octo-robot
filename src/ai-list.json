@@ -16,7 +16,8 @@
         "send": "#composer-submit-button",
         "file": "input[type='file']",
         "lastHTML": "article"
-      }
+      },
+      "scriptType": "textContent"
     },
     {
       "name": "Copilot",
@@ -34,7 +35,8 @@
         "send": "button[title='Submit message']",
         "file": "input",
         "lastHTML": "div[role='article']"
-      }
+      },
+      "scriptType": "react"
     },
     {
       "name": "Gemini",
@@ -52,7 +54,8 @@
         "send": ".send-button",
         "file": "input",
         "lastHTML": ".response-content"
-      }
+      },
+      "scriptType": "textContent"
     },
     {
       "name": "Grok",
@@ -70,7 +73,8 @@
         "send": "button[type='submit']",
         "file": "input[type='file']",
         "lastHTML": "#last-reply-container .response-content-markdown"
-      }
+      },
+      "scriptType": "react"
     },
     {
       "name": "DeepSeek",
@@ -89,7 +93,8 @@
         "send": "._7436101",
         "file": "input[type='file']",
         "lastHTML": "div.ds-markdown.ds-markdown--block"
-      }
+      },
+      "scriptType": "react"
     },
     {
       "name": "Claude",
@@ -107,7 +112,8 @@
         "send": "button[aria-label='Send message']",
         "file": "input",
         "lastHTML": "[data-test-render-count]"
-      }
+      },
+      "scriptType": "textContent"
     },
 
     {
@@ -117,6 +123,7 @@
       "image": "/assets/images/ai/perplexity.png",
       "experimental": true,
       "limit": 15000,
+      "fileImage": true,
       "omnibox": ["perplexity", "pe"],
       "selectors": {
         "AI": "Perplexity",
@@ -124,9 +131,10 @@
         "kill": "PerplexityKill",
         "textbox": "#ask-input",
         "send": "button[aria-label='Submit']",
-        "file": null,
+        "file": "input[type='file']",
         "lastHTML": "div.prose"
-      }
+      },
+      "scriptType": "meta"
     },
     {
       "name": "Mistral",
@@ -134,6 +142,7 @@
       "image": "/assets/images/ai/mistral.png",
       "experimental": true,
       "limit": 100000,
+      "fileImage": true,
       "omnibox": ["mistral", "mi"],
       "selectors": {
         "AI": "Mistral",
@@ -141,9 +150,10 @@
         "kill": "MistralKill",
         "textbox": "div[contenteditable='true'] p",
         "send": "button[type='submit']",
-        "file": null,
+        "file": "input[type='file']",
         "lastHTML": "div[id]"
-      }
+      },
+      "scriptType": "textContent"
     },
     {
       "name": "Qwen",
@@ -162,7 +172,8 @@
         "send": "#send-message-button",
         "file": "input[type='file']",
         "lastHTML": "#response-content-container"
-      }
+      },
+      "scriptType": "react"
     },
     {
       "name": "Meta",
@@ -180,13 +191,15 @@
         "send": "div[aria-label='Send Message']",
         "file": "input",
         "lastHTML": ".x78zum5.xdt5ytf div[dir='auto']"
-      }
+      },
+      "scriptType": "meta"
     },
     {
       "name": "Cohere",
       "url": "https://coral.cohere.com/?q=",
       "image": "/assets/images/ai/cohere.png",
       "experimental": true,
+      "fileImage": true,
       "limit": 15000,
       "omnibox": ["cohere", "ch"],
       "selectors": {
@@ -197,7 +210,8 @@
         "send": "div[data-component='Composer'] button",
         "file": "input[type='file']",
         "lastHTML": ".message:last-child"
-      }
+      },
+      "scriptType": "react"
     },
     {
       "name": "Kimi",
@@ -216,7 +230,8 @@
         "send": ".send-button",
         "file": "input[type='file']",
         "lastHTML": ".chat-content-item-assistant:last-child:last-child"
-      }
+      },
+      "scriptType": "meta"
     }
   ],
   "prompts": [
