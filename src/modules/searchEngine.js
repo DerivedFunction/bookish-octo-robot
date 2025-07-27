@@ -4,6 +4,7 @@ import { showToast } from "./toaster.js";
 import { resetBtn, loadJsonData, toggleClass } from "../app.js";
 import { query, queryEvents } from "./query.js";
 import { t } from "./locales.js";
+import { fileUploadBtn } from "./files.js";
 export const curSearchBtn = document.getElementById("currentEngine");
 const dropdown = document.getElementById("search-engine-dropdown");
 
@@ -206,6 +207,11 @@ export async function getScriptStatus(name = null) {
       engine: selectedEngine,
       status: hasScripts,
     });
+    if (hasScripts && selectedEngine.fileImage) {
+      fileUploadBtn.style.display = "";
+    } else {
+      fileUploadBtn.style.display = "none";
+    }
     queryEvents();
     return hasScripts;
   }
