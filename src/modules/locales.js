@@ -136,6 +136,7 @@ export function updateUIText() {
     t("unstable_label");
   exp_sidebar.querySelector("#unstable-section p").textContent =
     t("unstable_p");
+  exp_sidebar.querySelector("#delay-label").textContent = `${t("delay_prompt")}: `;
   enableAll.textContent = t("enable_all");
   revokeAll.textContent = t("revoke_all");
 
@@ -151,6 +152,7 @@ export function updateUIText() {
   });
   localeSelect.querySelector("option[value='default']").textContent =
     t("background_default");
+  
 }
 
 // Listen for locale changes

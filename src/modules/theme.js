@@ -41,5 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
     userThemeForm.querySelectorAll("input").forEach((option) => {
       option.checked = false;
     });
+   // check if system prefers dark mode
+    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+    document.body.setAttribute(
+      "data-theme",
+      prefersDarkScheme.matches ? "dark" : "light"
+    );
   });
 });

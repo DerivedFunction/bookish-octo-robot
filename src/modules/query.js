@@ -5,7 +5,6 @@ import { multiBtn, newClick } from "./searchEverywhere.js";
 import { selectedEngine, toggleDropdown } from "./searchEngine.js";
 import { hasScripts } from "./searchEngine.js";
 import { t } from "./locales.js";
-import { setupTooltip } from "./tooltip.js";
 
 export const query = document.getElementById("search");
 
@@ -83,21 +82,15 @@ delayCount.addEventListener("click", () => {
   chrome.storage.local.set({ delay: delay });
 });
 document.addEventListener("DOMContentLoaded", () => {
+  delayCount.textContent = `${delay}ms`;
   charCount.style.display = "none";
   if (!delay) localStorage.setItem("delay", 3000);
   query.value = "";
   queryEvents();
-  setupTooltip(delayCount);
   resetBtn.addEventListener("click", () => {
-    delayCount.textContent = "";
+    delayCount.textContent = "3000ms";
     delay = 3000;
     chrome.storage.local.remove("delay");
     localStorage.removeItem("delay");
   });
-});
-
-chrome.runtime.onMessage.addListener((e) => {
-  if (e?.message === "Experimental") {
-    delayCount.textContent = e.status ? `${delay}ms` : "";
-  }
 });

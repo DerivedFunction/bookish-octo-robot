@@ -5,10 +5,10 @@ import {
 } from "./searchEngine.js";
 import { appendImg } from "./appendImage.js";
 import { resetBtn, toggleClass } from "../app.js";
-import { charCount, delayCount, query, queryEvents } from "./query.js";
+import { charCount, query, queryEvents } from "./query.js";
 import { showToast } from "./toaster.js";
 import { greetingContainer } from "./greetings.js";
-import { ellipse, goBtn } from "./actionButtons.js";
+import { goBtn } from "./actionButtons.js";
 import { suggestionContainer } from "./suggestions.js";
 import { chatBotResponse, responseBox } from "./response.js";
 import { setupTooltip } from "./tooltip.js";
@@ -222,7 +222,6 @@ async function handleMultiSearch(textContent, resend = false) {
     responseContainer.style.display = "block";
     multiTools.style.display = "";
     searchEverywhereList.style.display = "";
-    delayCount.style.display = "";
   }
   query.style.maxHeight = "50px";
   Array.from(responseContainer.children).forEach((child) => {
@@ -332,7 +331,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     [multiBtn, searchEverywhereList].forEach((e) => {
       e.style.display = "";
     });
-    delayCount.style.display = "block";
     [curSearchBtn,goBtn, searchEnginePickerBtn, charCount].forEach((e) => {
       e.style.display = "none";
     });
