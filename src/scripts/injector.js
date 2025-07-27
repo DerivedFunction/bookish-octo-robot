@@ -241,7 +241,7 @@ function update() {
 async function getImage() {
   const { [SELECTORS.AI]: curAI } = await chrome.storage.local.get(SELECTORS.AI);
   const STORAGE_KEY_PREFIX = "pasted-file-";
-  const fileUploadInput = document.querySelector("input");
+  const fileUploadInput = document.querySelector("input[type='file']");
   if (!curAI || !fileUploadInput) return;
   const dataTransfer = new DataTransfer();
 
@@ -291,6 +291,7 @@ async function getImage() {
     fileUploadInput.files = dataTransfer.files;
     const event = new Event("change", { bubbles: true });
     fileUploadInput.dispatchEvent(event);
+    await Promise.resolve(new Promise((resolve) => setTimeout(resolve, 1000)))
   } else {
     console.log("No valid files to assign to input");
   }

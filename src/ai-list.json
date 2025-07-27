@@ -18,7 +18,7 @@
           }
         ],
         "send": "button:not(:disabled)#composer-submit-button",
-        "file": "input[type='file']",
+        
         "lastHTML": "article"
       }
     },
@@ -88,7 +88,7 @@
           }
         ],
         "send": "button:not(:disabled)[type='submit']",
-        "file": "input[type='file']",
+        
         "lastHTML": "#last-reply-container .response-content-markdown"
       }
     },
@@ -112,7 +112,7 @@
           }
         ],
         "send": "div:not([aria-disabled='true'])._7436101",
-        "file": "input[type='file']",
+        
         "lastHTML": "div.ds-markdown.ds-markdown--block"
       }
     },
@@ -158,7 +158,7 @@
           }
         ],
         "send": "button:not(:disabled)[aria-label='Submit']",
-        "file": "input[type='file']",
+        
         "lastHTML": "div.prose"
       }
     },
@@ -180,7 +180,7 @@
           }
         ],
         "send": "button:not([aria-disabled='true'])[type='submit']",
-        "file": "input[type='file']",
+        
         "lastHTML": "div[id]"
       }
     },
@@ -204,7 +204,7 @@
           }
         ],
         "send": "button:not(:disabled)#send-message-button",
-        "file": "input[type='file']",
+        
         "lastHTML": "#response-content-container"
       }
     },
@@ -249,7 +249,7 @@
           }
         ],
         "send": "div[data-component='Composer'] button",
-        "file": "input[type='file']",
+        
         "lastHTML": ".message:last-child"
       }
     },
@@ -272,7 +272,7 @@
           }
         ],
         "send": ".send-button-container:not(.disabled)",
-        "file": "input[type='file']",
+        
         "lastHTML": ".chat-content-item-assistant:last-child:last-child"
       }
     },{
@@ -295,7 +295,7 @@
           }
         ],
         "send": "button:not(:disabled)[aria-label='Send message']",
-        "file": "input[type='file']",
+        
         "lastHTML": ".ChatMessagesView_tupleGroupContainer__LSCLm .ChatMessagesView_messageTuple__Jh5lQ:last-child"
       }
     },
@@ -318,7 +318,7 @@
           }
         ],
         "send": "button:not(:disabled)[aria-label='Submit query']",
-        "file": "input[type='file']",
+        
         "lastHTML": "#chat-history .p38mfy1:last-child .p38mfyb"
       }
     }
