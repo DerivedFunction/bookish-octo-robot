@@ -422,7 +422,7 @@ fieldset {
   padding: 0;
   margin: 0;
   gap: 5px;
-  flex-wrap: wrap;
+  overflow-x: auto;
   font-size: x-small;
 }
 
