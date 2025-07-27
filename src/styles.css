@@ -1,21 +1,6 @@
 :root {
-  /* Light mode default variables */
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --background: #f5f5f5;
-  --item-bg: #ffffff;
-  --text-color: #333;
-  --main-text-color: #000;
-  --secondary-text-color: #666;
-  --border-color: #ddd;
-  --hover-bg: #e8e8e8;
-  --active-bg: #d8d8d8;
-  --shadow-color: rgba(0, 0, 0, 0.05);
-  --shadow-hover: rgba(0, 0, 0, 0.1);
-  --border-hover: #bbb;
-  --accent-color: #000;
-  --active-color: #3b82f6;
-  --warning-color: #ffa500;
-  --danger-color: #ff4d4f;
   --scrollbar-width: 8px;
   --border-radius: 10px;
 }
@@ -24,26 +9,11 @@
   :root {
     /* Dark mode variables */
     --background: #262624;
-    --item-bg: #2d2d2d;
-    --text-color: #e0e0e0;
-    --main-text-color: #fff;
-    --secondary-text-color: #aaa;
-    --border-color: #444;
-    --hover-bg: #383838;
-    --active-bg: #252525;
-    --shadow-color: rgba(0, 0, 0, 0.3);
-    --shadow-hover: rgba(0, 0, 0, 0.5);
-    --border-hover: #666;
-    --accent-color: #fff;
-    --active-color: #60a5fa;
-    --warning-color: #ffa500;
-    --danger-color: #ff4d4f;
-  
   }
 }
+
 [data-theme="light"] {
   /* Light mode default variables */
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --background: #f5f5f5;
   --item-bg: #ffffff;
   --text-color: #333;
@@ -63,7 +33,6 @@
 }
 [data-theme="dark"] {
   /* Dark mode variables */
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --background: #262624;
   --item-bg: #2d2d2d;
   --text-color: #e0e0e0;
@@ -79,7 +48,6 @@
   --active-color: #60a5fa;
   --warning-color: #ffa500;
   --danger-color: #ff4d4f;
-
 }
 
 body {

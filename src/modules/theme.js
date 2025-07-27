@@ -3,7 +3,13 @@ export const userThemeForm = document.getElementById("user-theme");
 userThemeForm.addEventListener("change", async (e) => {
   localStorage.setItem("user-theme", e.target.value);
   if (e.target.value === "auto") {
-    document.body.removeAttribute("data-theme");
+   document.body.removeAttribute("data-theme");
+   // check if system prefers dark mode
+   const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+   document.body.setAttribute(
+     "data-theme",
+     prefersDarkScheme.matches ? "dark" : "light"
+   );
     return;
   }
   const lightTheme = e.target.value === "true";
@@ -18,6 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   if (storedTheme === "auto") {
     document.body.removeAttribute("data-theme");
+    // check if system prefers dark mode
+    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+    document.body.setAttribute(
+      "data-theme",
+      prefersDarkScheme.matches ? "dark" : "light"
+    );
   } else {
     document.body.setAttribute(
       "data-theme",
