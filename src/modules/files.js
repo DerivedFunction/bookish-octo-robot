@@ -149,7 +149,7 @@ function addFileToList(filename, blob) {
 
 // On page load, clear all stored data
 document.addEventListener("DOMContentLoaded", async () => {
-  appendImg({ image: "/assets/images/buttons/paperclip.svg" }, fileUploadBtn);
+  appendImg({ image: "/assets/images/buttons/plus.svg" }, fileUploadBtn);
   const data = await chrome.storage.local.get();
   for (const key in data) {
     if (key.startsWith(STORAGE_KEY_PREFIX)) {

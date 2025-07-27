@@ -16,6 +16,10 @@
   --active-color: #3b82f6;
   --warning-color: #ffa500;
   --danger-color: #ff4d4f;
+  --scrollbar-width: 8px;
+  --scrollbar-track: #f1f1f1;
+  --scrollbar-thumb: #888;
+  --scrollbar-thumb-hover: #555;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -36,6 +40,11 @@
     --active-color: #60a5fa;
     --warning-color: #ffa500;
     --danger-color: #ff4d4f;
+    --scrollbar-width: 8px;
+    --scrollbar-track: #333;
+    --scrollbar-thumb: #666;
+    --scrollbar-thumb-hover: #999;
+  
   }
 }
 [data-theme="light"] {
@@ -56,6 +65,11 @@
   --active-color: #3b82f6;
   --warning-color: #ffa500;
   --danger-color: #ff4d4f;
+  --scrollbar-width: 8px;
+  --scrollbar-track: #f1f1f1;
+  --scrollbar-thumb: #888;
+  --scrollbar-thumb-hover: #555;
+
 }
 [data-theme="dark"] {
   /* Dark mode variables */
@@ -75,6 +89,11 @@
   --active-color: #60a5fa;
   --warning-color: #ffa500;
   --danger-color: #ff4d4f;
+  --scrollbar-width: 8px;
+  --scrollbar-track: #333;
+  --scrollbar-thumb: #666;
+  --scrollbar-thumb-hover: #999;
+
 }
 
 body {
@@ -94,10 +113,10 @@ a {
 }
 button,
 .button-format {
-  padding: 8px 8px;
+  padding: 6px 6px;
   font-size: 1rem;
   width: fit-content;
-  border: 1px solid var(--border-color);
+  border: 1px solid transparent;
   border-radius: 28px;
   background: var(--item-bg);
   color: var(--text-color);
@@ -179,6 +198,7 @@ h2 {
   top: 15%;
   left: 0;
   width: 100%;
+  min-width: 300px;
   max-width: 900px;
   margin: 0 auto;
   z-index: 10;
@@ -233,6 +253,7 @@ h2 {
 }
 
 .submit {
+  border-color: var(--border-color);
   color: var(--text-color);
 }
 
@@ -552,7 +573,7 @@ fieldset {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-100%);
+    transform: translateX(-150%);
   }
 }
 
@@ -565,5 +586,33 @@ fieldset {
 }
 
 #slider button {
-  transform: translateX(-100%);
+  transform: translateX(-150%);
+}
+
+#search-everywhere-list {
+  flex-wrap: wrap;
+}
+
+::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+    height: var(--scrollbar-width)
+}
+
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+    border-radius: var(--scrollbar-width)
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: var(--scrollbar-width)
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover)
+}
+
+html {
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    scrollbar-width: thin
 }

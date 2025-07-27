@@ -72,31 +72,18 @@ goBtn.addEventListener("click", async () => {
 });
 export const ellipse = document.getElementById("ellipse");
 export const extras = document.getElementById("extra-stuff");
-ellipse.addEventListener("click", () => {
-  if (
-    extras.style.display === "none" ||
-    getComputedStyle(extras).display === "none"
-  ) {
-    extras.style.display = ""; // or whatever display value you want
-  } else {
-    extras.style.display = "none";
-  }
-});
 document.addEventListener("DOMContentLoaded", () => {
   appendImg({ image: "assets/images/buttons/go.svg" }, goBtn);
-  appendImg({ image: "assets/images/buttons/ellipse.svg" }, ellipse);
   appendImg(
     {
       image: "assets/images/buttons/history.svg",
     },
     historyBtn
-  );
-  extras.style.display = "none";
-  [ellipse, historyBtn].forEach((btn) => {
+  );;
+  [historyBtn].forEach((btn) => {
     setupTooltip(btn);
   });
   setupTooltip(goBtn, () => query.value.length === 0);
   resetBtn.addEventListener("click", async () => {
-    extras.style.display = "none";
   });
 });
