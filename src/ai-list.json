@@ -18,7 +18,6 @@
           }
         ],
         "send": "button:not(:disabled)#composer-submit-button",
-        
         "lastHTML": "article"
       }
     },
@@ -62,8 +61,8 @@
           }
         ],
         "send": "button:not([aria-disabled='true']).send-button",
-        "file": "input",
-        "lastHTML": ".response-content"
+        "lastHTML": ".response-content",
+        "noFile": true
       }
     },
     {
@@ -112,7 +111,6 @@
           }
         ],
         "send": "div:not([aria-disabled='true'])._7436101",
-        
         "lastHTML": "div.ds-markdown.ds-markdown--block"
       }
     },
@@ -135,7 +133,6 @@
           }
         ],
         "send": "button:not(:disabled)[title='Submit message']",
-        "file": "input",
         "lastHTML": "div[role='article']"
       }
     },
@@ -168,7 +165,6 @@
       "image": "/assets/images/ai/mistral.png",
       "experimental": true,
       "limit": 100000,
-      "fileImage": true,
       "omnibox": ["mistral", "mi"],
       "selectors": {
         "AI": "Mistral",
@@ -180,7 +176,7 @@
           }
         ],
         "send": "button:not([aria-disabled='true'])[type='submit']",
-        
+        "noFile": true,
         "lastHTML": "div[id]"
       }
     },

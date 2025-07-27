@@ -242,7 +242,7 @@ async function getImage() {
   const { [SELECTORS.AI]: curAI } = await chrome.storage.local.get(SELECTORS.AI);
   const STORAGE_KEY_PREFIX = "pasted-file-";
   const fileUploadInput = document.querySelector("input[type='file']");
-  if (!curAI || !fileUploadInput) return;
+  if (!curAI || !fileUploadInput || SELECTORS.noFile) return;
   const dataTransfer = new DataTransfer();
 
   const data = await chrome.storage.local.get();
