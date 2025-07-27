@@ -13,6 +13,7 @@ import { suggestionContainer } from "./suggestions.js";
 import { chatBotResponse, responseBox } from "./response.js";
 import { setupTooltip } from "./tooltip.js";
 import { t } from "./locales.js";
+import { fileUploadBtn } from "./files.js";
 
 // Constants
 const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
@@ -328,7 +329,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   sendAgain.addEventListener("click", () => handleSendAgain());
   newTabBtn.addEventListener("click", () => openNewTab());
   searchEverywhereBtn.addEventListener("click", async () => {
-    [multiBtn, searchEverywhereList].forEach((e) => {
+    [multiBtn, searchEverywhereList, fileUploadBtn].forEach((e) => {
       e.style.display = "";
     });
     [curSearchBtn,goBtn, searchEnginePickerBtn, charCount].forEach((e) => {
