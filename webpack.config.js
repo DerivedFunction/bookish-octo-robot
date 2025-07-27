@@ -16,9 +16,7 @@ module.exports = [
   },
   {
     entry: {
-      meta: "./src/scripts/meta.js",
-      react: "./src/scripts/react.js",
-      textcontent: "./src/scripts/textContent.js",
+      injector: "./src/scripts/injector.js", // Entry point for the injector script
     },
     output: {
       filename: "[name].js", // Output bundle for each script
