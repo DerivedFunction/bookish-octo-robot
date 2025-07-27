@@ -1,11 +1,12 @@
 {
-  "ai-list": [{
-    "name": "ChatGPT",
-    "url": "https://chatgpt.com/?q=",
-    "image": "/assets/images/ai/chatgpt.png",
-    "experimental": true,
-    "limit": 39720,
-    "fileImage": true,
+  "ai-list": [
+    {
+      "name": "ChatGPT",
+      "url": "https://chatgpt.com/?q=",
+      "image": "/assets/images/ai/chatgpt.png",
+      "experimental": true,
+      "limit": 39720,
+      "fileImage": true,
       "omnibox": ["chatgpt", "cg"],
       "selectors": {
         "AI": "ChatGPT",
@@ -22,26 +23,25 @@
       }
     },
     {
-      "name": "Copilot",
-      "url": "https://copilot.microsoft.com/?q=",
-      "image": "/assets/images/ai/copilot.png",
+      "name": "Claude",
+      "url": "https://claude.ai/new?q=",
+      "image": "/assets/images/ai/claude.png",
       "experimental": true,
-      "limit": 10240,
+      "limit": 50000,
       "fileImage": true,
-      "omnibox": ["copilot", "cp"],
+      "omnibox": ["claude", "cl"],
       "selectors": {
-        "AI": "Copilot",
-        "lastResponse": "CopilotLast",
-        "kill": "CopilotKill",
+        "AI": "Claude",
+        "lastResponse": "ClaudeLast",
+        "kill": "ClaudeKill",
         "textbox": [
           {
-            "scriptType": "react",
-            "textbox": "#userInput"
+            "scriptType": "contenteditable"
           }
         ],
-        "send": "button[title='Submit message']",
+        "send": "button[aria-label='Send message']",
         "file": "input",
-        "lastHTML": "div[role='article']"
+        "lastHTML": "[data-test-render-count]"
       }
     },
     {
@@ -117,28 +117,28 @@
       }
     },
     {
-      "name": "Claude",
-      "url": "https://claude.ai/new?q=",
-      "image": "/assets/images/ai/claude.png",
+      "name": "Copilot",
+      "url": "https://copilot.microsoft.com/?q=",
+      "image": "/assets/images/ai/copilot.png",
       "experimental": true,
-      "limit": 50000,
+      "limit": 10240,
       "fileImage": true,
-      "omnibox": ["claude", "cl"],
+      "omnibox": ["copilot", "cp"],
       "selectors": {
-        "AI": "Claude",
-        "lastResponse": "ClaudeLast",
-        "kill": "ClaudeKill",
+        "AI": "Copilot",
+        "lastResponse": "CopilotLast",
+        "kill": "CopilotKill",
         "textbox": [
           {
-            "scriptType": "contenteditable"
+            "scriptType": "react",
+            "textbox": "#userInput"
           }
         ],
-        "send": "button[aria-label='Send message']",
+        "send": "button[title='Submit message']",
         "file": "input",
-        "lastHTML": "[data-test-render-count]"
+        "lastHTML": "div[role='article']"
       }
     },
-
     {
       "name": "Perplexity",
       "url": "https://www.perplexity.ai/search/new?q=",
