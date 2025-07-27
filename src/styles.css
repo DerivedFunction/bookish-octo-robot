@@ -251,7 +251,6 @@ h2 {
 }
 #search-engine-dropdown {
   position: absolute;
-  left: 0;
 }
 .dropdown-content.open {
   display: block; /* Show when active */
@@ -554,6 +553,9 @@ fieldset {
   #navigation {
     margin: 0 20px;
     
+  }
+  #search-engine-dropdown {
+    bottom: 120px;
   }
 }
 
