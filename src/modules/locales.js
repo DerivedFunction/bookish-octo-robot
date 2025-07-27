@@ -112,9 +112,6 @@ export function updateUIText() {
   userThemeForm.querySelectorAll("label").forEach((label) => {
     label.textContent = t(`theme_${label.getAttribute("for")}`);
   });
-  document.querySelector("#se-label").textContent = t(
-    "tooltip_search_everywhere"
-  );
   weatherField.parentElement.previousElementSibling.textContent = t("weather");
   weatherField.placeholder = t("weather_placeholder");
   unitLabel.querySelector("label").textContent = t("unit_toggle");
@@ -133,7 +130,7 @@ export function updateUIText() {
   exp_sidebar.querySelector("#required-label").textContent =
     t("required_label");
   exp_sidebar.querySelector("#image-support-label").textContent = t(
-    "image_support_label"
+    "tooltip_upload_file"
   );
   exp_sidebar.querySelector("#unstable-section label").textContent =
     t("unstable_label");

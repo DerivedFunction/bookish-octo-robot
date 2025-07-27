@@ -8,7 +8,6 @@ import {
   getSearchEngineList,
   removePermissions,
 } from "./searchEngine.js";
-import { appendList } from "./searchEverywhere.js";
 import { setupTooltip } from "./tooltip.js";
 export const optionBtn = document.getElementById("options-button");
 optionBtn.addEventListener("click", async () => {
@@ -16,7 +15,6 @@ optionBtn.addEventListener("click", async () => {
   nameInput.value = localStorage.getItem("name") || "";
   let x = JSON.parse(localStorage.getItem("location"));
   weatherField.value = x ? x.inputValue : "";
-  await appendList();
 });
 export const sidebar = document.getElementById("sidebar");
 export const exp_sidebar = document.getElementById("scripts-sidebar");

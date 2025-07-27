@@ -17,9 +17,6 @@
   "greeting_hello": {
     "message": "Salut"
   },
-  "greeting_help": {
-    "message": "Comment puis-je vous aider aujourd'hui?"
-  },
   "search_placeholder": {
     "message": "Que puis-je faire pour vous?"
   },
@@ -301,9 +298,6 @@
   },
   "required_label": {
     "message": "Nécessite des autorisations pour utiliser"
-  },
-  "image_support_label": {
-    "message": "Support d'image"
   },
   "unstable_label": {
     "message": "Cible : Chats ouverts/Recherche Avancée Partout"

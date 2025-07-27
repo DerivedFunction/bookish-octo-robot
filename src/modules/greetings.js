@@ -13,7 +13,6 @@ greeting.addEventListener("change", async (e) => {
 });
 export function getGreeting() {
   let x = document.getElementById("greeting");
-  let x2 = document.getElementById("secondary");
   let y = localStorage.getItem("name");
   let z = localStorage.getItem("greeting");
   if (!z) {
@@ -47,7 +46,6 @@ export function getGreeting() {
   x.textContent = y
     ? t("welcome_name", { GREETING: greeting, NAME: y })
     : t("welcome", { GREETING: greeting });
-  x2.textContent = greeting ? t("greeting_help") : "";
 }
 document.addEventListener("DOMContentLoaded", () => {
   const storedGreeting = localStorage.getItem("greeting");

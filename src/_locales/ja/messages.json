@@ -17,9 +17,6 @@
   "greeting_hello": {
     "message": "やあ"
   },
-  "greeting_help": {
-    "message": "今日は何をお手伝いできますか？"
-  },
   "search_placeholder": {
     "message": "ご用件をお聞かせください"
   },
@@ -301,9 +298,6 @@
   },
   "required_label": {
     "message": "使用には権限が必要"
-  },
-  "image_support_label": {
-    "message": "画像サポート"
   },
   "unstable_label": {
     "message": "対象：オープンなチャット/高度などこでも検索"

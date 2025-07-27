@@ -17,9 +17,6 @@
   "greeting_hello": {
     "message": "Hola"
   },
-  "greeting_help": {
-    "message": "¿Cómo puedo ayudarte hoy?"
-  },
   "search_placeholder": {
     "message": "¿Qué puedo hacer por ti?"
   },
@@ -295,9 +292,6 @@
   },
   "required_label": {
     "message": "Requiere permisos para usar"
-  },
-  "image_support_label": {
-    "message": "Soporte de imágenes"
   },
   "unstable_label": {
     "message": "Objetivo: Chats abiertos/Búsqueda Avanzada en Todas Partes"

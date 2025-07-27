@@ -46,6 +46,11 @@
         class="bg-text transparent-item"
         data-tooltip="tooltip_search_engine"
       ></button>
+      <button
+        id="search-everywhere-button"
+        class="bg-text transparent-item"
+        data-tooltip="tooltip_search_everywhere"
+      ></button>
     </div>
     <div id="scripts-sidebar" class="sidebar">
       <h1></h1>
@@ -248,10 +253,6 @@
           </fieldset>
         </form>
       </div>
-      <div class="section">
-        <span id="se-label"></span>
-        <div id="search-everywhere-list" class="horizontal-container"></div>
-      </div>
       <div class="horizontal-container section">
         <span id="lang">Language</span>
         <select id="locale-select">
@@ -276,7 +277,6 @@
         <h1 id="greeting-container">
           <span id="greeting" class="bg-text"></span>
           <span id="name" class="bg-text"></span>
-          <span id="secondary" class="bg-text"></span>
         </h1>
         <div id="response-container"></div>
         <div id="chatbox">
@@ -337,6 +337,7 @@
                         data-tooltip="tooltip_new_tab"
                       ></button>
                     </div>
+                    <div id="search-everywhere-list" class="horizontal-container"></div>
                   </div>
                 </div>
               </div>

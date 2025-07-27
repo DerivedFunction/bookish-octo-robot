@@ -5,22 +5,21 @@ import {
 } from "./searchEngine.js";
 import { appendImg } from "./appendImage.js";
 import { resetBtn, toggleClass } from "../app.js";
-import { query, queryEvents } from "./query.js";
+import { charCount, delayCount, query, queryEvents } from "./query.js";
 import { showToast } from "./toaster.js";
 import { greetingContainer } from "./greetings.js";
 import { ellipse, goBtn } from "./actionButtons.js";
 import { suggestionContainer } from "./suggestions.js";
 import { chatBotResponse, responseBox } from "./response.js";
-import { fileUploadBtn } from "./files.js";
 import { setupTooltip } from "./tooltip.js";
 import { t } from "./locales.js";
-import { sidebar } from "./sidebar.js";
 
 // Constants
 const SEARCH_ENGINE_STORAGE_KEY = "search-everywhere";
 
 // DOM Elements
 const searchEverywhereList = document.getElementById("search-everywhere-list");
+const searchEverywhereBtn = document.getElementById("search-everywhere-button");
 export const multiBtn = document.getElementById("multi-go");
 const sendAgain = document.getElementById("send-again");
 const responseContainer = document.getElementById("response-container");
@@ -118,7 +117,6 @@ async function handleChatMessage(e, engines) {
 // --- Main Functions ---
 
 export async function appendList() {
-  searchEverywhereList.parentElement.classList.remove("highlight");
   const searchEngines = await getSearchEngineList();
   const selectedEngines = getSearchEverywhere();
   const fragment = document.createDocumentFragment();
@@ -133,7 +131,6 @@ export async function appendList() {
     });
     fragment.appendChild(button);
   });
-
   searchEverywhereList.replaceChildren(fragment);
 }
 
@@ -142,21 +139,6 @@ async function handleMultiSearch(textContent, resend = false) {
   if (queryText.length < 1) return;
   const searchEngines = await getSearchEngineList();
   const searchEverywhere = getSearchEverywhere();
-
-  if (
-    !searchEverywhere ||
-    Object.keys(searchEverywhere).length === 0 ||
-    Object.values(searchEverywhere).every((value) => !value)
-  ) {
-    sidebar.style.display = "block";
-    toggleClass(searchEverywhereList.parentElement, true, "highlight");
-    searchEverywhereList.querySelectorAll("button").forEach((button) => {
-      // make the border flash blue for 3 seconds
-      toggleClass(button, true, "highlight");
-    });
-    showToast(`${t("tooltip_search_everywhere")}: ${t("tooltip_pick_ai")}`);
-    return;
-  }
 
   const permissions = [];
   try {
@@ -229,32 +211,18 @@ async function handleMultiSearch(textContent, resend = false) {
     [
       greetingContainer,
       curSearchBtn,
-      ellipse,
       suggestionContainer,
       searchEnginePickerBtn,
       goBtn,
-      fileUploadBtn,
+      charCount,
     ].forEach((e) => {
       e.style.display = "none";
     });
     newClick = false;
     responseContainer.style.display = "block";
     multiTools.style.display = "";
-    const selectedEngines = getSearchEverywhere();
-    const fragment = document.createDocumentFragment();
-
-    searchEngines.forEach((engine) => {
-      const isActive = selectedEngines[engine.name] ?? false;
-      if (!isActive) return;
-      const button = createToggleButton(engine, isActive, (btn) => {
-        const updatedState = !btn.classList.contains("active");
-        toggleClass(btn, updatedState);
-        selectedEngines[engine.name] = updatedState;
-        saveSearchEverywhere(selectedEngines);
-      });
-      fragment.appendChild(button);
-    });
-    multiTools.appendChild(fragment);
+    searchEverywhereList.style.display = "";
+    delayCount.style.display = "";
   }
   query.style.maxHeight = "50px";
   Array.from(responseContainer.children).forEach((child) => {
@@ -321,8 +289,10 @@ async function openNewTab() {
 // --- Event Listeners and Initialization ---
 
 document.addEventListener("DOMContentLoaded", async () => {
-  multiTools.style.display = "none";
-  [responseBtn, sendAgain, newTabBtn].forEach((btn) => {
+  [multiBtn,multiTools,searchEverywhereList].forEach((e) => {
+    e.style.display = "none";
+  });
+  [responseBtn, sendAgain, newTabBtn, searchEverywhereBtn].forEach((btn) => {
     setupTooltip(btn, () => true);
   });
   setupTooltip(multiBtn, () => query.value.length === 0);
@@ -350,17 +320,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     newTabBtn
   );
+  appendImg({
+    image: "assets/images/buttons/multi.svg",
+  }, searchEverywhereBtn);
 
-  await appendList();
   multiBtn.addEventListener("click", () => handleMultiSearch());
   responseBtn.addEventListener("click", () => handleGetResponse());
   sendAgain.addEventListener("click", () => handleSendAgain());
   newTabBtn.addEventListener("click", () => openNewTab());
+  searchEverywhereBtn.addEventListener("click", async () => {
+    [multiBtn, searchEverywhereList].forEach((e) => {
+      e.style.display = "";
+    });
+    delayCount.style.display = "block";
+    [curSearchBtn,goBtn, searchEnginePickerBtn, charCount].forEach((e) => {
+      e.style.display = "none";
+    });
+  });
   resetBtn.addEventListener("click", async () => {
     localStorage.removeItem(SEARCH_ENGINE_STORAGE_KEY);
-    await appendList();
   });
-
+  await appendList();
   const engines = await getSearchEngineList();
   let { unstable } = await chrome.storage.local.get("unstable");
   const messageListener = (e) => handleChatMessage(e, engines);

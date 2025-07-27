@@ -130,9 +130,7 @@ function addFileToList(filename, blob) {
     img.style.display = "block";
     container.appendChild(img);
   } else {
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
+    const a = document.createElement("div");
     a.textContent = filename;
     container.appendChild(a);
   }
