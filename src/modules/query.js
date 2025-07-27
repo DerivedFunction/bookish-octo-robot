@@ -83,6 +83,7 @@ delayCount.addEventListener("click", () => {
   chrome.storage.local.set({ delay: delay });
 });
 document.addEventListener("DOMContentLoaded", () => {
+  charCount.style.display = "none";
   if (!delay) localStorage.setItem("delay", 3000);
   query.value = "";
   queryEvents();
