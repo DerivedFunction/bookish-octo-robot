@@ -93,10 +93,10 @@
       user-select: text;
       pointer-events: auto;
     }
-    #grab-text-btn img {
+    .invert {
       filter: none;
     }
-    :host([data-theme="dark"]) #grab-text-btn img {
+    :host([data-theme="dark"]) .invert {
       filter: invert(1);
     }
     ::-webkit-scrollbar {
@@ -219,7 +219,7 @@
   const btnClose = document.createElement("button");
   btnClose.id = "widget-close";
   btnClose.textContent = "x";
-  btnClose.style.cssText = "width: 32px; height: 32px; font-size: 16px;";
+  btnClose.style.cssText = "width: 32px; height: 32px; font-size: 12px;";
 
   // Grab text button
   const btnGrab = document.createElement("button");
@@ -227,14 +227,27 @@
   btnGrab.style.cssText = "width: 32px; height: 32px;";
 
   const grabImg = document.createElement("img");
+  grabImg.classList.add("invert");
   grabImg.src = chrome.runtime.getURL("./assets/images/buttons/picker.svg");
   grabImg.style.cssText = "width: 16px; height: 16px;";
   btnGrab.appendChild(grabImg);
+
+  // Zapper button
+  const btnZap = document.createElement("button");
+  btnZap.id = "zapper-btn";
+  btnZap.style.cssText = "width: 32px; height: 32px;";
+
+  const zapImg = document.createElement("img");
+  zapImg.classList.add("invert");
+  zapImg.src = chrome.runtime.getURL("./assets/images/buttons/zapper.svg");
+  zapImg.style.cssText = "width: 16px; height: 16px;";
+  btnZap.appendChild(zapImg);
 
   // Assemble buttons
   buttonGroup.appendChild(btnMinimize);
   buttonGroup.appendChild(btnClose);
   buttonGroup.appendChild(btnGrab);
+  buttonGroup.appendChild(btnZap);
   topRow.appendChild(buttonGroup);
 
   // Text area container
@@ -348,7 +361,67 @@
     }
   });
 
+  // Zapper functionality
+  widgetShadow.getElementById("zapper-btn").addEventListener("click", () => {
+    if (isZapperMode) {
+      stopZapperMode();
+    } else {
+      startZapperMode();
+    }
+  });
+
+  let isZapperMode = false;
+
+  function startZapperMode() {
+    stopGrabMode();
+    isZapperMode = true;
+    originalCursor = document.body.style.cursor;
+    document.body.style.cursor = "pointer";
+
+    const zapBtn = widgetShadow.getElementById("zapper-btn");
+    zapBtn.style.background = "var(--active-bg)";
+    zapBtn.style.borderColor = "var(--active-color)";
+    zapBtn.style.boxShadow = "0 0 5px var(--active-color)";
+    document.addEventListener("mouseover", handleMouseOver, true);
+    document.addEventListener("mouseout", handleMouseOut, true);
+    document.addEventListener("click", handleZapperClick, true);
+  }
+
+  function stopZapperMode() {
+    isZapperMode = false;
+    document.body.style.cursor = originalCursor;
+
+    const zapBtn = widgetShadow.getElementById("zapper-btn");
+    zapBtn.style.background = "var(--item-bg)";
+    zapBtn.style.borderColor = "var(--border-color)";
+    zapBtn.style.boxShadow = "none";
+
+    cleanup();
+  }
+
+  function handleZapperClick(e) {
+    if (
+      !isZapperMode ||
+      e
+        .composedPath()
+        .some((el) => el === widget || el.id === "custom-popup-widget")
+    ) {
+      return;
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const target = e.target;
+    if (target && target.parentNode) {
+      target.parentNode.removeChild(target);
+    }
+
+    stopZapperMode();
+  }
+
   function startGrabMode() {
+    stopZapperMode();
     isGrabMode = true;
     originalCursor = document.body.style.cursor;
     document.body.style.cursor = "crosshair";
@@ -376,19 +449,19 @@
   }
 
   function cleanup() {
-    document.removeEventListener("mouseover", handleMouseOver, true);
-    document.removeEventListener("mouseout", handleMouseOut, true);
-    document.removeEventListener("click", handleElementClick, true);
-
     if (hoverOverlay) {
       hoverOverlay.remove();
       hoverOverlay = null;
     }
+    document.removeEventListener("mouseover", handleMouseOver, true);
+    document.removeEventListener("mouseout", handleMouseOut, true);
+    document.removeEventListener("click", handleElementClick, true);
+    document.removeEventListener("click", handleZapperClick, true);
   }
 
   function handleMouseOver(e) {
     if (
-      !isGrabMode ||
+      (!isGrabMode && !isZapperMode) ||
       e
         .composedPath()
         .some((el) => el === widget || el.id === "custom-popup-widget")
@@ -417,7 +490,7 @@
   }
 
   function handleMouseOut(e) {
-    if (!isGrabMode) return;
+    if (!isGrabMode && !isZapperMode) return;
 
     if (
       hoverOverlay &&
