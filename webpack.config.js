@@ -17,6 +17,7 @@ module.exports = [
   {
     entry: {
       injector: "./src/scripts/injector.js", // Entry point for the injector script
+      popup: "./src/scripts/popup.js", // Entry point for the popup script
     },
     output: {
       filename: "[name].js", // Output bundle for each script

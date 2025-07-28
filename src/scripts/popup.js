@@ -91,7 +91,7 @@
       color: var(--text-color);
       font-family: var(--font);
       font-size: 12px;
-      resize: vertical;
+      resize: none;
       outline: none;
       display: inline-block;
       text-align: left;
@@ -140,9 +140,10 @@
         transition: all 0.3s ease;
         border: 1px solid var(--border-color);
     `;
-  minimized.innerHTML = `<img src="${chrome.runtime.getURL(
-    "./assets/images/icon/icon32.png"
-  )}">`;
+  const minimizedImg = document.createElement("img");
+  minimizedImg.src = chrome.runtime.getURL("./assets/images/icon/icon16.png");
+  minimizedImg.alt = "Minimized icon";
+  minimized.appendChild(minimizedImg);
   document.body.appendChild(minimized);
 
   // Create the expanded widget
@@ -168,28 +169,92 @@
         display: none;
     `;
 
-  // Widget HTML content
-  widget.innerHTML = `
-        <div style="padding: 16px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <div style="display: flex; gap: 8px;">
-                    <button id="widget-minimize" style="width: 32px; height: 32px; font-size: 12px;">−</button>
-                    <button id="widget-close" style="width: 32px; height: 32px; font-size: 16px;">×</button>
-                    <button id="grab-text-btn" style="width: 32px; height: 32px;">
-                        <img src="${chrome.runtime.getURL(
-                          "./assets/images/buttons/picker.svg"
-                        )}" style="width: 20px; height: 20px;">
-                    </button>
-                </div>
-            </div>
-            <div id="extracted-text-area">
-                <div>
-                    <textarea id="extracted-text"></textarea>
-                </div>
-                <div id="ai-list" style="display: flex; gap: 8px; flex-wrap: wrap; padding-right: 4px; margin-top: 8px;"></div>
-            </div>
-        </div>
-    `;
+  const fragment = document.createDocumentFragment();
+
+  // Container
+  const container = document.createElement("div");
+  container.style.cssText = "padding: 16px;";
+
+  // Top button row
+  const topRow = document.createElement("div");
+  topRow.style.cssText = `
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+`;
+
+  // Button group
+  const buttonGroup = document.createElement("div");
+  buttonGroup.style.cssText = "display: flex; gap: 8px;";
+
+  // Minimize button
+  const btnMinimize = document.createElement("button");
+  btnMinimize.id = "widget-minimize";
+  btnMinimize.textContent = "−";
+  btnMinimize.style.cssText = "width: 32px; height: 32px; font-size: 16px;";
+
+  // Close button
+  const btnClose = document.createElement("button");
+  btnClose.id = "widget-close";
+  btnClose.textContent = "×";
+  btnClose.style.cssText = "width: 32px; height: 32px; font-size: 16px;";
+
+  // Grab text button
+  const btnGrab = document.createElement("button");
+  btnGrab.id = "grab-text-btn";
+  btnGrab.style.cssText = "width: 32px; height: 32px;";
+
+  const grabImg = document.createElement("img");
+  grabImg.src = chrome.runtime.getURL("./assets/images/buttons/picker.svg");
+  grabImg.style.cssText = "width: 16px; height: 16px;";
+  btnGrab.appendChild(grabImg);
+
+  // Assemble buttons
+  buttonGroup.appendChild(btnMinimize);
+  buttonGroup.appendChild(btnClose);
+  buttonGroup.appendChild(btnGrab);
+  topRow.appendChild(buttonGroup);
+
+  // Text area container
+  const extractedArea = document.createElement("div");
+  extractedArea.id = "extracted-text-area";
+
+  // Inner styled box
+  const innerDiv = document.createElement("div");
+  innerDiv.style.cssText = `
+  background: var(--item-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 8px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  text-align: center;
+`;
+
+  // Textarea
+  const textarea = document.createElement("textarea");
+  textarea.id = "extracted-text";
+  innerDiv.appendChild(textarea);
+
+  // AI list container
+  const ai_list = document.createElement("div");
+  ai_list.id = "ai-list";
+  ai_list.style.cssText = `
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-right: 4px;
+  margin-top: 8px;
+`;
+
+  // Assemble all
+  extractedArea.appendChild(innerDiv);
+  extractedArea.appendChild(ai_list);
+
+  container.appendChild(topRow);
+  container.appendChild(extractedArea);
+  fragment.appendChild(container);
+  widget.appendChild(fragment);
 
   // Add widget to page
   document.body.appendChild(widget);
