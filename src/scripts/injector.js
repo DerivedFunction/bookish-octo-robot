@@ -152,7 +152,7 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
               cancelable: true,
             });
             element.dispatchEvent(beforeInputEvent);
-            getMetaListener();
+            const cleanupFn = getMetaListener();
             
             // Check if text was injected (use innerText/textContent to see visible text)
             setTimeout(() => {
@@ -169,6 +169,9 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
                 element.dispatchEvent(inputEvent);
               }
             }, 100); // Small delay to check injection
+
+            // Schedule cleanup after button click
+            setTimeout(cleanupFn, 2000); // Delay cleanup until after button click (1s) + extra time
             break;
         }
 
@@ -198,7 +201,9 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
 
 
 function getMetaListener() {
-  element?.addEventListener("beforeinput", (event) => {
+  let insertedNode = null;
+  
+  const listener = (event) => {
     if (event.inputType === "insertText") {
       event.preventDefault();
       const newText = event.data;
@@ -207,14 +212,28 @@ function getMetaListener() {
       if (selection && selection.rangeCount) {
         const range = selection.getRangeAt(0);
         range.deleteContents();
-        range.insertNode(document.createTextNode(newText));
+        const textNode = document.createTextNode(newText);
+        range.insertNode(textNode);
+        insertedNode = textNode;
         selection.removeAllRanges();
         selection.addRange(range);
       } else {
-        element.appendChild(document.createTextNode(newText));
+        const textNode = document.createTextNode(newText);
+        element.appendChild(textNode);
+        insertedNode = textNode;
       }
     }
-  });
+  };
+  
+  element?.addEventListener("beforeinput", listener);
+  
+  // Return cleanup function that removes both the listener and the node
+  return () => {
+    element?.removeEventListener("beforeinput", listener);
+    if (insertedNode?.parentNode) {
+      insertedNode.parentNode.removeChild(insertedNode);
+    }
+  };
 }
 
 async function clickButton() {

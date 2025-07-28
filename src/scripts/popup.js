@@ -3,21 +3,20 @@
   if (window.customPopupWidget) return;
   window.customPopupWidget = true;
 
-  // Inject CSS for theme variables
-  const style = document.createElement("style");
-  style.textContent = `
-    :root {
+  // Common stylesheet text
+  const styleText = `
+    :host {
       --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --background: #f5f5f5;
       --border-radius: 10px;
       --scrollbar-width: 3px;
     }
     @media (prefers-color-scheme: dark) {
-      :root {
+      :host {
         --background: #262624;
       }
     }
-    [data-theme="light"] {
+    :host([data-theme="light"]) {
       --item-bg: #ffffff;
       --text-color: #333;
       --main-text-color: #000;
@@ -34,7 +33,7 @@
       --scrollbar-thumb: #888;
       --scrollbar-thumb-hover: #555;
     }
-    [data-theme="dark"] {
+    :host([data-theme="dark"]) {
       --item-bg: #2d2d2d;
       --text-color: #e0e0e0;
       --main-text-color: #fff;
@@ -50,11 +49,6 @@
       --scrollbar-track: #333;
       --scrollbar-thumb: #666;
       --scrollbar-thumb-hover: #999;
-    }
-    #custom-popup-widget, #custom-popup-minimized {
-      font-family: var(--font);
-      background: var(--background);
-      color: var(--text-color);
     }
     button {
       padding: 6px 6px;
@@ -96,11 +90,13 @@
       display: inline-block;
       text-align: left;
       max-height: 200px;
+      user-select: text;
+      pointer-events: auto;
     }
     #grab-text-btn img {
       filter: none;
     }
-    [data-theme="dark"] #grab-text-btn img {
+    :host([data-theme="dark"]) #grab-text-btn img {
       filter: invert(1);
     }
     ::-webkit-scrollbar {
@@ -119,34 +115,49 @@
       background: var(--scrollbar-thumb-hover);
     }
   `;
-  document.head.appendChild(style);
 
   // Create the minimized widget (initial state)
   const minimized = document.createElement("div");
   minimized.id = "custom-popup-minimized";
-  minimized.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        box-shadow: 0 4px 20px var(--shadow-color);
-        z-index: 10000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border: 1px solid var(--border-color);
-    `;
+  const minimizedShadow = minimized.attachShadow({ mode: "open" });
+
+  // Add styles to minimized shadow root
+  const minimizedStyles = document.createElement("style");
+  minimizedStyles.textContent =
+    styleText +
+    `
+    :host {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      box-shadow: 0 4px 20px var(--shadow-color);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border-color);
+      background: var(--background);
+      color: var(--text-color);
+      font-family: var(--font);
+    }
+    img {
+      width: 16px;
+      height: 16px;
+    }
+  `;
+  minimizedShadow.appendChild(minimizedStyles);
   const minimizedImg = document.createElement("img");
   minimizedImg.src = chrome.runtime.getURL("./assets/images/icon/icon16.png");
   minimizedImg.alt = "Minimized icon";
-  minimized.appendChild(minimizedImg);
+  minimizedShadow.appendChild(minimizedImg);
   document.body.appendChild(minimized);
 
-  // Create the expanded widget
+  // Create the expanded widget with shadow DOM
   const widget = document.createElement("div");
   widget.id = "custom-popup-widget";
   widget.dataset.theme =
@@ -154,20 +165,30 @@
     window.matchMedia("(prefers-color-scheme: dark)").matches
       ? "dark"
       : "light";
+  const widgetShadow = widget.attachShadow({ mode: "open" });
 
-  // Widget styles
-  widget.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        width: 350px;
-        border-radius: var(--border-radius);
-        box-shadow: 0 8px 32px var(--shadow-color);
-        z-index: 10000;
-        transition: all 0.3s ease;
-        border: 1px solid var(--border-color);
-        display: none;
-    `;
+  // Add styles to widget shadow root
+  const widgetStyles = document.createElement("style");
+  widgetStyles.textContent =
+    styleText +
+    `
+    :host {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 350px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 8px 32px var(--shadow-color);
+      z-index: 10000;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border-color);
+      display: none;
+      background: var(--background);
+      color: var(--text-color);
+      font-family: var(--font);
+    }
+  `;
+  widgetShadow.appendChild(widgetStyles);
 
   const fragment = document.createDocumentFragment();
 
@@ -178,11 +199,11 @@
   // Top button row
   const topRow = document.createElement("div");
   topRow.style.cssText = `
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-`;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  `;
 
   // Button group
   const buttonGroup = document.createElement("div");
@@ -223,29 +244,33 @@
   // Inner styled box
   const innerDiv = document.createElement("div");
   innerDiv.style.cssText = `
-  background: var(--item-bg);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  padding: 8px;
-  box-shadow: 0 2px 4px var(--shadow-color);
-  text-align: center;
-`;
+    background: var(--item-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 8px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    text-align: center;
+  `;
 
   // Textarea
   const textarea = document.createElement("textarea");
   textarea.id = "extracted-text";
+  // Prevent mousedown events on textarea from bubbling to widget
+  textarea.addEventListener("mousedown", (e) => {
+    e.stopPropagation();
+  });
   innerDiv.appendChild(textarea);
 
   // AI list container
   const ai_list = document.createElement("div");
   ai_list.id = "ai-list";
   ai_list.style.cssText = `
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  padding-right: 4px;
-  margin-top: 8px;
-`;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-right: 4px;
+    margin-top: 8px;
+  `;
 
   // Assemble all
   extractedArea.appendChild(innerDiv);
@@ -254,7 +279,7 @@
   container.appendChild(topRow);
   container.appendChild(extractedArea);
   fragment.appendChild(container);
-  widget.appendChild(fragment);
+  widgetShadow.appendChild(fragment);
 
   // Add widget to page
   document.body.appendChild(widget);
@@ -291,10 +316,12 @@
     widget.style.display = "block";
     widget.style.top = `${minPos.top}px`;
     widget.style.right = `${minPos.right}px`;
+    const textArea = widgetShadow.getElementById("extracted-text");
+    textArea.focus(); // Focus textarea when widget is expanded
   });
 
   // Close widget
-  document.getElementById("widget-close").addEventListener("click", () => {
+  widgetShadow.getElementById("widget-close").addEventListener("click", () => {
     cleanup();
     widget.remove();
     minimized.remove();
@@ -302,16 +329,18 @@
   });
 
   // Minimize widget
-  document.getElementById("widget-minimize").addEventListener("click", () => {
-    cleanup();
-    widget.style.display = "none";
-    minimized.style.display = "flex";
-    minimized.style.top = `${widget.style.top}`;
-    minimized.style.right = `${widget.style.right}`;
-  });
+  widgetShadow
+    .getElementById("widget-minimize")
+    .addEventListener("click", () => {
+      cleanup();
+      widget.style.display = "none";
+      minimized.style.display = "flex";
+      minimized.style.top = `${widget.style.top}`;
+      minimized.style.right = `${widget.style.right}`;
+    });
 
   // Grab text functionality
-  document.getElementById("grab-text-btn").addEventListener("click", () => {
+  widgetShadow.getElementById("grab-text-btn").addEventListener("click", () => {
     if (isGrabMode) {
       stopGrabMode();
     } else {
@@ -324,7 +353,7 @@
     originalCursor = document.body.style.cursor;
     document.body.style.cursor = "crosshair";
 
-    const grabBtn = document.getElementById("grab-text-btn");
+    const grabBtn = widgetShadow.getElementById("grab-text-btn");
     grabBtn.style.background = "var(--active-bg)";
     grabBtn.style.borderColor = "var(--active-color)";
     grabBtn.style.boxShadow = "0 0 5px var(--active-color)";
@@ -338,7 +367,7 @@
     isGrabMode = false;
     document.body.style.cursor = originalCursor;
 
-    const grabBtn = document.getElementById("grab-text-btn");
+    const grabBtn = widgetShadow.getElementById("grab-text-btn");
     grabBtn.style.background = "var(--item-bg)";
     grabBtn.style.borderColor = "var(--border-color)";
     grabBtn.style.boxShadow = "none";
@@ -358,7 +387,13 @@
   }
 
   function handleMouseOver(e) {
-    if (!isGrabMode || e.target.closest("#custom-popup-widget")) return;
+    if (
+      !isGrabMode ||
+      e
+        .composedPath()
+        .some((el) => el === widget || el.id === "custom-popup-widget")
+    )
+      return;
 
     if (hoverOverlay) {
       hoverOverlay.remove();
@@ -367,29 +402,44 @@
     const rect = e.target.getBoundingClientRect();
     hoverOverlay = document.createElement("div");
     hoverOverlay.style.cssText = `
-            position: fixed;
-            top: ${rect.top}px;
-            left: ${rect.left}px;
-            width: ${rect.width}px;
-            height: ${rect.height}px;
-            background: rgba(128, 128, 128, 0.3);
-            border: 2px solid #808080;
-            pointer-events: none;
-            z-index: 9999;
-            border-radius: 4px;
-        `;
+      position: fixed;
+      top: ${rect.top}px;
+      left: ${rect.left}px;
+      width: ${rect.width}px;
+      height: ${rect.height}px;
+      background: rgba(128, 128, 128, 0.3);
+      border: 2px solid #808080;
+      pointer-events: none;
+      z-index: 9999;
+      border-radius: 4px;
+    `;
     document.body.appendChild(hoverOverlay);
   }
 
   function handleMouseOut(e) {
     if (!isGrabMode) return;
 
-    if (hoverOverlay && !e.relatedTarget?.closest("#custom-popup-widget")) {
+    if (
+      hoverOverlay &&
+      (!e.relatedTarget ||
+        !e.relatedTarget.composedPath ||
+        !e.relatedTarget
+          .composedPath()
+          .some((el) => el === widget || el.id === "custom-popup-widget"))
+    ) {
+      hoverOverlay.remove();
+      hoverOverlay = null;
     }
   }
 
   function handleElementClick(e) {
-    if (!isGrabMode || e.target.closest("#custom-popup-widget")) return;
+    if (
+      !isGrabMode ||
+      e
+        .composedPath()
+        .some((el) => el === widget || el.id === "custom-popup-widget")
+    )
+      return;
 
     e.preventDefault();
     e.stopPropagation();
@@ -405,15 +455,18 @@
       textContent = alt || title || placeholder || value || "[No text content]";
     }
 
-    document.getElementById("extracted-text").value = textContent;
-    document.getElementById("extracted-text-area").style.display = "block";
+    const textArea = widgetShadow.getElementById("extracted-text");
+    const extractedArea = widgetShadow.getElementById("extracted-text-area");
+    textArea.value = textContent;
+    extractedArea.style.display = "block";
+    textArea.focus(); // Focus the textarea to indicate it is editable
     showAISuggestions();
 
     stopGrabMode();
   }
 
   async function showAISuggestions() {
-    const aiArea = document.getElementById("ai-list");
+    const aiArea = widgetShadow.getElementById("ai-list");
     aiArea.innerHTML = "";
 
     aiList.forEach((ai) => {
@@ -444,7 +497,7 @@
       });
       button.addEventListener("click", async () => {
         curAI = ai;
-        const prompt = document.getElementById("extracted-text").value;
+        const prompt = widgetShadow.getElementById("extracted-text").value;
         chrome.runtime.sendMessage({
           message: "newPrompt",
           prompt: prompt,
@@ -494,12 +547,15 @@
   let startX, startY, startLeft, startTop;
 
   widget.addEventListener("mousedown", (e) => {
-    if (
-      e.target.tagName === "BUTTON" ||
-      e.target.tagName === "TEXTAREA" ||
-      isGrabMode
-    )
-      return;
+    // Check if the event originated from the textarea or a button
+    const isTextareaOrButton = e.composedPath().some((el) => {
+      return (
+        (el.tagName && el.tagName.toLowerCase() === "textarea") ||
+        (el.tagName && el.tagName.toLowerCase() === "button") ||
+        isGrabMode
+      );
+    });
+    if (isTextareaOrButton) return;
 
     isDragging = true;
     startX = e.clientX;
