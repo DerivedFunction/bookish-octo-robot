@@ -211,8 +211,7 @@ export async function getScriptStatus(name = null) {
     if (hasScripts && selectedEngine.fileImage) {
       fileUploadBtn.style.display = "";
     } else {
-      if (!showFileBtn)
-        fileUploadBtn.style.display = "none";
+      if (!showFileBtn) fileUploadBtn.style.display = "none";
     }
     queryEvents();
     return hasScripts;
@@ -311,7 +310,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       try {
         await chrome.storage.local.remove("engine");
         selectedEngine = null;
-
         await removePermissions(true);
 
         try {
@@ -321,14 +319,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         try {
-          await chrome.action.setIcon({ path: "/assets/images/icon/icon.svg" });
+          await chrome.action.setIcon({
+            path: "/assets/images/icon/icon32.png",
+          });
         } catch (error) {
           console.error("Error setting action icon:", error);
         }
 
         try {
           await browser.sidebarAction.setIcon({
-            path: "/assets/images/icon/icon.svg",
+            path: "/assets/images/icon/icon32.png",
           });
         } catch (error) {}
       } catch (error) {
