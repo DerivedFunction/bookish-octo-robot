@@ -3,6 +3,124 @@
   if (window.customPopupWidget) return;
   window.customPopupWidget = true;
 
+  // Inject CSS for theme variables
+  const style = document.createElement("style");
+  style.textContent = `
+    :root {
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --background: #f5f5f5;
+      --border-radius: 10px;
+      --scrollbar-width: 3px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --background: #262624;
+      }
+    }
+    [data-theme="light"] {
+      --item-bg: #ffffff;
+      --text-color: #333;
+      --main-text-color: #000;
+      --secondary-text-color: #666;
+      --border-color: #ddd;
+      --hover-bg: #e8e8e8;
+      --active-bg: #d8d8d8;
+      --shadow-color: rgba(0, 0, 0, 0.05);
+      --shadow-hover: rgba(0, 0, 0, 0.1);
+      --border-hover: #bbb;
+      --accent-color: #000;
+      --active-color: #3b82f6;
+      --scrollbar-track: #f1f1f1;
+      --scrollbar-thumb: #888;
+      --scrollbar-thumb-hover: #555;
+    }
+    [data-theme="dark"] {
+      --item-bg: #2d2d2d;
+      --text-color: #e0e0e0;
+      --main-text-color: #fff;
+      --secondary-text-color: #aaa;
+      --border-color: #444;
+      --hover-bg: #383838;
+      --active-bg: #252525;
+      --shadow-color: rgba(0, 0, 0, 0.3);
+      --shadow-hover: rgba(0, 0, 0, 0.5);
+      --border-hover: #666;
+      --accent-color: #fff;
+      --active-color: #60a5fa;
+      --scrollbar-track: #333;
+      --scrollbar-thumb: #666;
+      --scrollbar-thumb-hover: #999;
+    }
+    #custom-popup-widget, #custom-popup-minimized {
+      font-family: var(--font);
+      background: var(--background);
+      color: var(--text-color);
+    }
+    button {
+      padding: 6px 6px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      background: var(--item-bg);
+      color: var(--text-color);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    button:hover {
+      background: var(--hover-bg);
+      border-color: var(--border-hover);
+    }
+    button:active {
+      background: var(--active-bg);
+    }
+    #extracted-text-area div {
+      background: var(--item-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: 8px;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      text-align: center;
+    }
+    #extracted-text {
+      width: 90%;
+      height: 60px;
+      background: transparent;
+      border: none;
+      color: var(--text-color);
+      font-family: var(--font);
+      font-size: 12px;
+      resize: vertical;
+      outline: none;
+      display: inline-block;
+      text-align: left;
+      max-height: 200px;
+    }
+    #grab-text-btn img {
+      filter: none;
+    }
+    [data-theme="dark"] #grab-text-btn img {
+      filter: invert(1);
+    }
+    ::-webkit-scrollbar {
+      width: var(--scrollbar-width);
+      height: var(--scrollbar-width);
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--scrollbar-track);
+      border-radius: var(--scrollbar-width);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: var(--scrollbar-width);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-thumb-hover);
+    }
+  `;
+  document.head.appendChild(style);
+
   // Create the minimized widget (initial state)
   const minimized = document.createElement("div");
   minimized.id = "custom-popup-minimized";
@@ -10,42 +128,43 @@
         position: fixed;
         top: 20px;
         right: 20px;
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, #b0b0b0 0%, #808080 100%);
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 20px var(--shadow-color);
         z-index: 10000;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
     `;
   minimized.innerHTML = `<img src="${chrome.runtime.getURL(
     "./assets/images/icon/icon32.png"
-  )}"></img>`;
+  )}">`;
   document.body.appendChild(minimized);
 
   // Create the expanded widget
   const widget = document.createElement("div");
   widget.id = "custom-popup-widget";
+  widget.dataset.theme =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
 
   // Widget styles
   widget.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
-        width: 300px;
-        background: linear-gradient(135deg, #b0b0b0 0%, #808080 100%);
-        border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        width: 350px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 8px 32px var(--shadow-color);
         z-index: 10000;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        color: #333;
         transition: all 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         display: none;
     `;
 
@@ -54,79 +173,20 @@
         <div style="padding: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <div style="display: flex; gap: 8px;">
-                    <button id="widget-minimize" style="
-                        background: rgba(0, 0, 0, 0.1);
-                        border: 1px solid rgba(0, 0, 0, 0.2);
-                        border-radius: 6px;
-                        width: 32px;
-                        height: 32px;
-                        color: #333;
-                        cursor: pointer;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 12px;
-                        transition: background 0.2s;
-                    " onmouseover="this.style.background='rgba(0,0,0,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.1)'">−</button>
-                    <button id="widget-close" style="
-                        background: rgba(0, 0, 0, 0.1);
-                        border: 1px solid rgba(0, 0, 0, 0.2);
-                        border-radius: 6px;
-                        width: 32px;
-                        height: 32px;
-                        color: #333;
-                        cursor: pointer;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 16px;
-                        transition: background 0.2s;
-                    " onmouseover="this.style.background='rgba(0,0,0,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.1)'">×</button>
-                    <button id="grab-text-btn" style="
-                        background: rgba(0, 0, 0, 0.1);
-                        border: 1px solid rgba(0, 0, 0, 0.2);
-                        border-radius: 6px;
-                        width: 32px;
-                        height: 32px;
-                        color: #333;
-                        cursor: pointer;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        transition: background 0.2s;
-                    ">
+                    <button id="widget-minimize" style="width: 32px; height: 32px; font-size: 12px;">−</button>
+                    <button id="widget-close" style="width: 32px; height: 32px; font-size: 16px;">×</button>
+                    <button id="grab-text-btn" style="width: 32px; height: 32px;">
                         <img src="${chrome.runtime.getURL(
                           "./assets/images/buttons/picker.svg"
                         )}" style="width: 20px; height: 20px;">
                     </button>
                 </div>
             </div>
-            
             <div id="extracted-text-area">
-                <div style="background: #f5f5f5; border-radius: 12px; padding: 8px; border: 1px solid #ccc;">
-                    <textarea id="extracted-text" style="
-                        width: 100%;
-                        height: 60px;
-                        background: transparent;
-                        border: none;
-                        padding: 8px;
-                        color: #333;
-                        font-size: 12px;
-                        font-family: monospace;
-                        resize: vertical;
-                        margin-bottom: 12px;
-                        box-sizing: border-box;
-                        outline: none;
-                    "></textarea>
+                <div>
+                    <textarea id="extracted-text"></textarea>
                 </div>
-                
-                <div id="ai-list" style="
-                    display: flex;
-                    gap: 8px;
-                    flex-wrap: wrap;
-                    padding-right: 4px;
-                ">
-                </div>
+                <div id="ai-list" style="display: flex; gap: 8px; flex-wrap: wrap; padding-right: 4px; margin-top: 8px;"></div>
             </div>
         </div>
     `;
@@ -140,6 +200,7 @@
   let hoverOverlay = null;
   let aiList = [];
   let prompts = [];
+  let minPos = { top: 20, right: 20 };
 
   // Load AI list and prompts
   async function loadAIList() {
@@ -163,6 +224,8 @@
   minimized.addEventListener("click", () => {
     minimized.style.display = "none";
     widget.style.display = "block";
+    widget.style.top = `${minPos.top}px`;
+    widget.style.right = `${minPos.right}px`;
   });
 
   // Close widget
@@ -178,6 +241,8 @@
     cleanup();
     widget.style.display = "none";
     minimized.style.display = "flex";
+    minimized.style.top = `${widget.style.top}`;
+    minimized.style.right = `${widget.style.right}`;
   });
 
   // Grab text functionality
@@ -195,11 +260,10 @@
     document.body.style.cursor = "crosshair";
 
     const grabBtn = document.getElementById("grab-text-btn");
-    grabBtn.style.background = "rgba(200, 200, 200, 0.9)";
-    grabBtn.style.borderColor = "#4CAF50";
-    grabBtn.style.boxShadow = "0 0 5px #4CAF50";
+    grabBtn.style.background = "var(--active-bg)";
+    grabBtn.style.borderColor = "var(--active-color)";
+    grabBtn.style.boxShadow = "0 0 5px var(--active-color)";
 
-    // Add event listeners for element selection
     document.addEventListener("mouseover", handleMouseOver, true);
     document.addEventListener("mouseout", handleMouseOut, true);
     document.addEventListener("click", handleElementClick, true);
@@ -210,20 +274,18 @@
     document.body.style.cursor = originalCursor;
 
     const grabBtn = document.getElementById("grab-text-btn");
-    grabBtn.style.background = "rgba(0, 0, 0, 0.1)";
-    grabBtn.style.borderColor = "rgba(0, 0, 0, 0.2)";
+    grabBtn.style.background = "var(--item-bg)";
+    grabBtn.style.borderColor = "var(--border-color)";
     grabBtn.style.boxShadow = "none";
 
     cleanup();
   }
 
   function cleanup() {
-    // Remove event listeners
     document.removeEventListener("mouseover", handleMouseOver, true);
     document.removeEventListener("mouseout", handleMouseOut, true);
     document.removeEventListener("click", handleElementClick, true);
 
-    // Remove hover overlay
     if (hoverOverlay) {
       hoverOverlay.remove();
       hoverOverlay = null;
@@ -233,12 +295,10 @@
   function handleMouseOver(e) {
     if (!isGrabMode || e.target.closest("#custom-popup-widget")) return;
 
-    // Remove existing overlay
     if (hoverOverlay) {
       hoverOverlay.remove();
     }
 
-    // Create hover overlay
     const rect = e.target.getBoundingClientRect();
     hoverOverlay = document.createElement("div");
     hoverOverlay.style.cssText = `
@@ -260,7 +320,6 @@
     if (!isGrabMode) return;
 
     if (hoverOverlay && !e.relatedTarget?.closest("#custom-popup-widget")) {
-      // Keep overlay when moving to widget
     }
   }
 
@@ -270,27 +329,21 @@
     e.preventDefault();
     e.stopPropagation();
 
-    // Extract text content
     const element = e.target;
     let textContent = element.textContent?.trim() || "";
 
-    // If no text content, try to get useful attributes
     if (!textContent) {
       const alt = element.getAttribute("alt");
       const title = element.getAttribute("title");
       const placeholder = element.getAttribute("placeholder");
       const value = element.value;
-
       textContent = alt || title || placeholder || value || "[No text content]";
     }
 
-    // Display extracted text
     document.getElementById("extracted-text").value = textContent;
     document.getElementById("extracted-text-area").style.display = "block";
-    // Show AI suggestions
     showAISuggestions();
 
-    // Stop grab mode
     stopGrabMode();
   }
 
@@ -298,39 +351,31 @@
     const aiArea = document.getElementById("ai-list");
     aiArea.innerHTML = "";
 
-    // Add AI chat options
     aiList.forEach((ai) => {
       const button = document.createElement("button");
       button.style.cssText = `
-        background: rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        border-radius: 6px;
+        background: var(--item-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
         padding: 8px;
-        color: #333;
+        color: var(--text-color);
         cursor: pointer;
         font-size: 13px;
         display: flex;
         align-items: center;
         gap: 8px;
-        transition: all 0.2s;
+        transition: all 0.2s ease;
       `;
-
       const img = document.createElement("img");
       img.src = chrome.runtime.getURL(ai.image);
-      img.style.cssText = `
-        width: 16px;
-        height: 16px;
-        border-radius: 4px;
-      `;
-
+      img.style.cssText = `width: 16px; height: 16px; border-radius: 4px;`;
       button.appendChild(img);
 
       button.addEventListener("mouseover", () => {
-        button.style.background = "rgba(0, 0, 0, 0.2)";
+        button.style.background = "var(--hover-bg)";
       });
-
       button.addEventListener("mouseout", () => {
-        button.style.background = "rgba(0, 0, 0, 0.1)";
+        button.style.background = "var(--item-bg)";
       });
       button.addEventListener("click", async () => {
         curAI = ai;
@@ -353,8 +398,8 @@
     isDraggingMin = true;
     startXMin = e.clientX;
     startYMin = e.clientY;
-    startLeftMin = parseInt(window.getComputedStyle(minimized).right);
-    startTopMin = parseInt(window.getComputedStyle(minimized).top);
+    startLeftMin = parseInt(window.getComputedStyle(minimized).right) || 20;
+    startTopMin = parseInt(window.getComputedStyle(minimized).top) || 20;
 
     minimized.style.cursor = "grabbing";
     e.preventDefault();
@@ -366,8 +411,10 @@
     const deltaX = startXMin - e.clientX;
     const deltaY = e.clientY - startYMin;
 
-    minimized.style.right = startLeftMin + deltaX + "px";
-    minimized.style.top = startTopMin + deltaY + "px";
+    minPos.right = startLeftMin + deltaX;
+    minPos.top = startTopMin + deltaY;
+    minimized.style.right = `${minPos.right}px`;
+    minimized.style.top = `${minPos.top}px`;
   });
 
   document.addEventListener("mouseup", () => {
@@ -392,8 +439,8 @@
     isDragging = true;
     startX = e.clientX;
     startY = e.clientY;
-    startLeft = parseInt(window.getComputedStyle(widget).right);
-    startTop = parseInt(window.getComputedStyle(widget).top);
+    startLeft = parseInt(window.getComputedStyle(widget).right) || minPos.right;
+    startTop = parseInt(window.getComputedStyle(widget).top) || minPos.top;
 
     widget.style.cursor = "grabbing";
     e.preventDefault();
@@ -403,16 +450,18 @@
     if (!isDragging) return;
 
     const deltaX = startX - e.clientX;
-    deltaY = e.clientY - startY;
+    const deltaY = e.clientY - startY;
 
-    widget.style.right = startLeft + deltaX + "px";
-    widget.style.top = startTop + deltaY + "px";
+    widget.style.right = `${startLeft + deltaX}px`;
+    widget.style.top = `${startTop + deltaY}px`;
   });
 
   document.addEventListener("mouseup", () => {
     if (isDragging) {
       isDragging = false;
       widget.style.cursor = "default";
+      minPos.right = parseInt(widget.style.right) || minPos.right;
+      minPos.top = parseInt(widget.style.top) || minPos.top;
     }
   });
 
