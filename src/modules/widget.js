@@ -27,7 +27,6 @@ export async function updateButtonIcon() {
     // if the 'scripting' permission hasn't been granted or the API isn't available yet.
     hasPopup = false;
     appendImg({ image: "/assets/images/buttons/noweb.svg" }, widgetBtn);
-    widgetBtn.title = "Side widget disabled (permission pending)"; // More informative tooltip
   }
 }
 
