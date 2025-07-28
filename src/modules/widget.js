@@ -3,9 +3,10 @@ import { setupTooltip } from "./tooltip.js";
 
 export const widgetBtn = document.getElementById("widget-btn");
 const scriptId = "popup"; // Define the ID of the script we want to toggle
+let hasPopup = false;
 
 // Function to update the button icon based on script registration status
-async function updateButtonIcon() {
+export async function updateButtonIcon() {
   try {
     // Attempt to get registered scripts. This call itself might fail if scripting permissions
     // are truly missing or the API isn't ready in some rare edge cases.
@@ -14,7 +15,7 @@ async function updateButtonIcon() {
     const isScriptRegistered = registeredScripts.some(
       (script) => script.id === scriptId
     );
-
+    hasPopup = isScriptRegistered;
     if (isScriptRegistered) {
       appendImg({ image: "/assets/images/buttons/web.svg" }, widgetBtn); // Script is enabled, show 'web.svg'
     } else {
@@ -23,76 +24,48 @@ async function updateButtonIcon() {
   } catch (error) {
     // This catch block handles errors from chrome.scripting.getRegisteredContentScripts()
     // if the 'scripting' permission hasn't been granted or the API isn't available yet.
+    hasPopup = false;
     appendImg({ image: "/assets/images/buttons/noweb.svg" }, widgetBtn);
     widgetBtn.title = "Side widget disabled (permission pending)"; // More informative tooltip
-  } finally {
-    setupTooltip(widgetBtn); // Ensure tooltip is always set up
   }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
   await updateButtonIcon();
+  setupTooltip(widgetBtn);
 });
 
 widgetBtn.addEventListener("click", async () => {
-  // Define permissions needed for this specific script
-  const permissionsToRequest = {
-    permissions: ["scripting"],
-    origins: ["*://*/*"], // Keep this specific for popup.js if needed
-  };
-
   try {
-    // Check if 'scripting' permission is already granted.
-    // This is robust because chrome.permissions API is generally available earlier.
-    const hasScriptingPermission = await chrome.permissions.contains({
-      permissions: ["scripting"],
-    });
-
-    let granted = false;
-    if (!hasScriptingPermission) {
-      // If 'scripting' permission is NOT globally granted, request it.
-      // This is the point where the user will see the permission prompt.
-      granted = await chrome.permissions.request(permissionsToRequest);
-      if (!granted) {
-        console.log(
-          "Scripting permission denied by user. Cannot register content script."
-        );
-        // Update UI to reflect it's still disabled after denial
-        await updateButtonIcon();
-        return; // Exit if permission isn't granted
-      }
-      console.log("Scripting permission granted.");
-    } else {
-      // If scripting permission is already granted, we can proceed.
-      granted = true;
-    }
-
     // Now that we know 'scripting' permission is granted, we can reliably
-    // check and toggle the *specific* content script.
-    if (granted) {
-      const registeredScripts =
-        await chrome.scripting.getRegisteredContentScripts();
-      const isScriptRegistered = registeredScripts.some(
-        (script) => script.id === scriptId
-      );
 
-      if (isScriptRegistered) {
-        // If the script is registered, unregister it
-        await chrome.scripting.unregisterContentScripts({ ids: [scriptId] });
-        console.log(`Content script '${scriptId}' unregistered.`);
-      } else {
-        // Register the content script
-        await chrome.scripting.registerContentScripts([
-          {
-            id: scriptId,
-            matches: ["*://*/*"],
-            js: ["/scripts/popup.js"],
-            runAt: "document_end",
-            allFrames: true,
-          },
-        ]);
-        console.log(`Content script '${scriptId}' registered.`);
-      }
+    if (hasPopup) {
+      // If the script is registered, unregister it
+      await chrome.scripting.unregisterContentScripts({ ids: [scriptId] });
+      console.log(`Content script '${scriptId}' unregistered.`);
+      hasPopup = false;
+    } else {
+      // Register the content script
+      const granted = await chrome.permissions.request({
+        permissions: ["scripting"],
+        origins: ["*://*/*"],
+      });
+      if (granted)
+        try {
+          await chrome.scripting.registerContentScripts([
+            {
+              id: scriptId,
+              matches: ["*://*/*"],
+              js: ["/scripts/popup.js"],
+              runAt: "document_end",
+              allFrames: true,
+            },
+          ]);
+          console.log(`Content script '${scriptId}' registered.`);
+          hasPopup = true;
+        } catch (error) {
+          console.log("Script registration failed:", error);
+        }
     }
   } catch (error) {
     // This catch block handles errors during the permission request or content script operations.
@@ -105,5 +78,14 @@ widgetBtn.addEventListener("click", async () => {
   } finally {
     // Always update the button icon to reflect the final state after the click action
     await updateButtonIcon();
+    chrome.runtime.sendMessage({
+      message: "updatePopup"
+    })
   }
 });
+
+chrome.runtime.onMessage.addListener((request) => {
+  if (request.message === "updatePopup") {
+    updateButtonIcon();
+  }
+})

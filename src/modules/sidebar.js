@@ -9,6 +9,7 @@ import {
   removePermissions,
 } from "./searchEngine.js";
 import { setupTooltip } from "./tooltip.js";
+import { updateButtonIcon } from "./widget.js";
 export const optionBtn = document.getElementById("options-button");
 optionBtn.addEventListener("click", async () => {
   sidebar.style.display = "block";
@@ -135,6 +136,7 @@ sliderBtn.addEventListener("click", () => {
     }, i * 100); // Staggered delay
   });
   sliderNotVis = !sliderNotVis; // Toggle the state
+  updateButtonIcon();
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
