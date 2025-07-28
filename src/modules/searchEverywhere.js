@@ -288,7 +288,7 @@ async function openNewTab() {
     else return engine.url.split("?")[0];
   }
 }
-
+export let everyWhereMode = false;
 // --- Event Listeners and Initialization ---
 export let showFileBtn = false;
 document.addEventListener("DOMContentLoaded", async () => {
@@ -333,9 +333,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   newTabBtn.addEventListener("click", () => openNewTab());
   searchEverywhereBtn.addEventListener("click", async () => {
     showFileBtn = true;
-    [multiBtn, searchEverywhereList, fileUploadBtn].forEach((e) => {
-      e.style.display = "";
-    });
+    everyWhereMode = true;
+    [multiBtn, searchEverywhereList, fileUploadBtn].forEach(
+      (e) => {
+        e.style.display = "";
+      }
+    );
     [curSearchBtn,goBtn, searchEnginePickerBtn, charCount].forEach((e) => {
       e.style.display = "none";
     });

@@ -1,7 +1,7 @@
 import { goBtn } from "./actionButtons.js";
 import { toggleButton, resetBtn } from "../app.js";
 import { suggestionResult } from "./suggestions.js";
-import { multiBtn, newClick } from "./searchEverywhere.js";
+import { everyWhereMode, multiBtn, newClick } from "./searchEverywhere.js";
 import { selectedEngine, toggleDropdown } from "./searchEngine.js";
 import { hasScripts } from "./searchEngine.js";
 import { t } from "./locales.js";
@@ -32,7 +32,7 @@ query.addEventListener("keydown", (e) => {
     e.preventDefault();
 
     if (!goBtn.disabled && query.value.length < getLimit()) {
-      if (newClick) goBtn.click();
+      if (newClick && !everyWhereMode) goBtn.click();
       else multiBtn.click();
     } else if (goBtn.disabled) {
       if (!newClick) {
