@@ -212,13 +212,13 @@
   // Minimize button
   const btnMinimize = document.createElement("button");
   btnMinimize.id = "widget-minimize";
-  btnMinimize.textContent = "−";
+  btnMinimize.textContent = "-";
   btnMinimize.style.cssText = "width: 32px; height: 32px; font-size: 16px;";
 
   // Close button
   const btnClose = document.createElement("button");
   btnClose.id = "widget-close";
-  btnClose.textContent = "×";
+  btnClose.textContent = "x";
   btnClose.style.cssText = "width: 32px; height: 32px; font-size: 16px;";
 
   // Grab text button
@@ -432,36 +432,126 @@
     }
   }
 
+  // Helper function to check if an element is visible
+  function isElementVisible(el) {
+    if (!el) return false;
+
+    // If the node is not an Element (e.g., it's a Text node),
+    // its visibility is determined by its parent Element.
+    // We assume it's "visible" at its own level for the purpose of this check,
+    // and rely on the parent check below to filter out truly hidden text.
+    if (el.nodeType !== Node.ELEMENT_NODE) {
+      return true;
+    }
+
+    // Check for display: none, visibility: hidden, or opacity: 0
+    const style = window.getComputedStyle(el);
+    if (
+      style.display === "none" ||
+      style.visibility === "hidden" ||
+      parseFloat(style.opacity) === 0
+    ) {
+      return false;
+    }
+
+    // Check if the element has no dimensions (e.g., empty div, hidden by layout)
+    if (el.offsetWidth === 0 && el.offsetHeight === 0) {
+      return false;
+    }
+
+    // Recursively check parent elements for visibility. If any parent is hidden, the element is also considered hidden.
+    let current = el.parentElement;
+    while (current) {
+      const parentStyle = window.getComputedStyle(current);
+      if (
+        parentStyle.display === "none" ||
+        parentStyle.visibility === "hidden" ||
+        parseFloat(parentStyle.opacity) === 0
+      ) {
+        return false;
+      }
+      current = current.parentElement;
+    }
+
+    return true;
+  }
+
+  // New helper function to recursively collect all visible text from an element and its visible descendants
+  function getVisibleText(el) {
+    // If the element itself is not visible, or doesn't exist, return an empty string.
+    // This check now correctly handles Element nodes and passes Text nodes through.
+    if (!el || !isElementVisible(el)) {
+      return "";
+    }
+
+    let textParts = [];
+
+    // If it's a text node, add its value directly if not just whitespace
+    if (el.nodeType === Node.TEXT_NODE) {
+      const text = el.nodeValue?.trim();
+      if (text) {
+        textParts.push(text);
+      }
+    } else if (el.nodeType === Node.ELEMENT_NODE) {
+      // If it's an input or textarea element, get its value
+      if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+        const value = el.value?.trim();
+        if (value) {
+          textParts.push(value);
+        }
+      } else {
+        // For other element types, iterate through its child nodes
+        // This ensures we process direct text content and recursively process visible child elements
+        for (const childNode of el.childNodes) {
+          // Recursively call getVisibleText for each child node
+          const childVisibleText = getVisibleText(childNode);
+          if (childVisibleText) {
+            textParts.push(childVisibleText);
+          }
+        }
+      }
+    }
+
+    // Join all collected text parts with a single space
+    return textParts.join(" ");
+  }
+
   function handleElementClick(e) {
+    // Check if grab mode is active and if the click is not on the widget itself
     if (
       !isGrabMode ||
       e
         .composedPath()
         .some((el) => el === widget || el.id === "custom-popup-widget")
-    )
+    ) {
       return;
+    }
 
+    // Prevent default browser behavior and stop event propagation
     e.preventDefault();
     e.stopPropagation();
 
     const element = e.target;
-    let textContent = element.textContent?.trim() || "";
+    // Use the new getVisibleText function to extract all visible text from the clicked element and its children
+    let textContent = getVisibleText(element);
 
-    if (!textContent) {
-      const alt = element.getAttribute("alt");
-      const title = element.getAttribute("title");
-      const placeholder = element.getAttribute("placeholder");
-      const value = element.value;
-      textContent = alt || title || placeholder || value || "[No text content]";
-    }
-
+    // Get the textarea and the container for extracted text from the shadow DOM
     const textArea = widgetShadow.getElementById("extracted-text");
     const extractedArea = widgetShadow.getElementById("extracted-text-area");
-    textArea.value = textContent;
-    extractedArea.style.display = "block";
-    textArea.focus(); // Focus the textarea to indicate it is editable
-    showAISuggestions();
 
+    // Append the extracted text to the textarea, adding a space separator if needed
+    if (textContent) {
+      // Ensure there's a space if content already exists, then trim extra spaces
+      textArea.value = `${textArea.value.trim()} ${textContent}`.trim();
+    }
+
+    // Make the extracted text area visible
+    extractedArea.style.display = "block";
+
+    // Focus the textarea to indicate it is editable
+    textArea.focus();
+
+    // Stop grab mode after an element is clicked and text is extracted
     stopGrabMode();
   }
 
