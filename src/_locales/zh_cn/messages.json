@@ -430,5 +430,8 @@
   },
   "delay_prompt": {
     "message": "设置提示注入重试之间的延迟"
+  },
+  "tooltip_widget": {
+    "message": "切换侧边小组件"
   }
 }

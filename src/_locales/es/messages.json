@@ -430,5 +430,8 @@
   },
   "delay_prompt": {
     "message": "Establecer el retraso entre reintentos para la inyección de prompt"
+  },
+  "tooltip_widget": {
+    "message": "Alternar widget lateral"
   }
 }

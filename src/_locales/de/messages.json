@@ -430,5 +430,8 @@
   },
   "delay_prompt": {
     "message": "Verzögerung zwischen den Wiederholungsversuchen für die Prompt-Injektion festlegen"
+  },
+  "tooltip_widget": {
+    "message": "Seiten-Widget umschalten"
   }
 }

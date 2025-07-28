@@ -429,5 +429,8 @@
   },
   "delay_prompt": {
     "message": "Set delay between retries for prompt injection"
+  },
+  "tooltip_widget":{
+    "message": "Toggle side widget"
   }
 }
