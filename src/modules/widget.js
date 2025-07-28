@@ -35,19 +35,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   await updateButtonIcon();
   setupTooltip(widgetBtn);
   resetBtn.addEventListener("click", async () => {
-    const PERMISSIONS = {
-      permissions: ["scripting"],
-    };
-    hasPopup = false;
-    await chrome.scripting.unregisterContentScripts({ ids: [scriptId] });
-    updateButtonIcon();
-    // Check if any scripts remain
-    const remainingScripts =
-      await chrome.scripting.getRegisteredContentScripts();
-    if (remainingScripts.length === 0) {
-      await chrome.permissions.remove(PERMISSIONS);
-      console.log("Removed permissions:", PERMISSIONS);
+    try {
+      const PERMISSIONS = {
+        permissions: ["scripting"],
+      };
+      await chrome.scripting.unregisterContentScripts({ ids: [scriptId] });
+      // Check if any scripts remain
+      const remainingScripts =
+        await chrome.scripting.getRegisteredContentScripts();
+      if (remainingScripts.length === 0) {
+        await chrome.permissions.remove(PERMISSIONS);
+        console.log("Removed permissions:", PERMISSIONS);
+      }
+    } catch {
+      // No scripting permissions or no popup enabled
     }
+    hasPopup = false;
+    updateButtonIcon();
   });
 });
 
