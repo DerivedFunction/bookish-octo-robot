@@ -232,6 +232,17 @@
   grabImg.style.cssText = "width: 16px; height: 16px;";
   btnGrab.appendChild(grabImg);
 
+  // Eye button
+  const btnEye = document.createElement("button");
+  btnEye.id = "grab-text-btn";
+  btnEye.style.cssText = "width: 32px; height: 32px;";
+
+  const eyeImg = document.createElement("img");
+  eyeImg.classList.add("invert");
+  eyeImg.src = chrome.runtime.getURL("./assets/images/buttons/eye.svg");
+  eyeImg.style.cssText = "width: 16px; height: 16px;";
+  btnEye.appendChild(eyeImg);
+
   // Zapper button
   const btnZap = document.createElement("button");
   btnZap.id = "zapper-btn";
@@ -244,11 +255,16 @@
   btnZap.appendChild(zapImg);
 
   // Assemble buttons
-  buttonGroup.appendChild(btnMinimize);
-  buttonGroup.appendChild(btnClose);
-  buttonGroup.appendChild(btnGrab);
-  buttonGroup.appendChild(btnZap);
+  [btnMinimize, btnClose, btnGrab, btnZap, btnEye].forEach((btn) => {
+    buttonGroup.appendChild(btn);
+  });
   topRow.appendChild(buttonGroup);
+  btnEye.addEventListener("click", () => {
+    visibleOnly = !visibleOnly;
+    btnEye.querySelector("img").src = chrome.runtime.getURL(
+      `./assets/images/buttons/${visibleOnly ? `eye` : `noeye`}.svg`
+    );
+  });
 
   // Text area container
   const extractedArea = document.createElement("div");
@@ -299,6 +315,7 @@
 
   // Widget state
   let isGrabMode = false;
+  let visibleOnly = true;
   let originalCursor = "";
   let hoverOverlay = null;
   let aiList = [];
@@ -508,6 +525,7 @@
   // Helper function to check if an element is visible
   function isElementVisible(el) {
     if (!el) return false;
+    if (!visibleOnly) return true;
 
     // If the node is not an Element (e.g., it's a Text node),
     // its visibility is determined by its parent Element.
@@ -528,7 +546,7 @@
     }
 
     // Check if the element has no dimensions (e.g., empty div, hidden by layout)
-    if (el.offsetWidth === 0 && el.offsetHeight === 0) {
+    if (visibleOnly && el.offsetWidth === 0 && el.offsetHeight === 0) {
       return false;
     }
 

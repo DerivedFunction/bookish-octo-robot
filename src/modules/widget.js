@@ -1,3 +1,4 @@
+import { resetBtn } from "../app.js";
 import { appendImg } from "./appendImage.js";
 import { setupTooltip } from "./tooltip.js";
 
@@ -33,6 +34,21 @@ export async function updateButtonIcon() {
 document.addEventListener("DOMContentLoaded", async () => {
   await updateButtonIcon();
   setupTooltip(widgetBtn);
+  resetBtn.addEventListener("click", async () => {
+    const PERMISSIONS = {
+      permissions: ["scripting"],
+    };
+    hasPopup = false;
+    await chrome.scripting.unregisterContentScripts({ ids: [scriptId] });
+    updateButtonIcon();
+    // Check if any scripts remain
+    const remainingScripts =
+      await chrome.scripting.getRegisteredContentScripts();
+    if (remainingScripts.length === 0) {
+      await chrome.permissions.remove(PERMISSIONS);
+      console.log("Removed permissions:", PERMISSIONS);
+    }
+  });
 });
 
 widgetBtn.addEventListener("click", async () => {
@@ -79,8 +95,8 @@ widgetBtn.addEventListener("click", async () => {
     // Always update the button icon to reflect the final state after the click action
     await updateButtonIcon();
     chrome.runtime.sendMessage({
-      message: "updatePopup"
-    })
+      message: "updatePopup",
+    });
   }
 });
 
@@ -88,4 +104,4 @@ chrome.runtime.onMessage.addListener((request) => {
   if (request.message === "updatePopup") {
     updateButtonIcon();
   }
-})
+});
