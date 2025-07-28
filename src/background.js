@@ -549,3 +549,15 @@ function setDefaultSuggestion() {
     });
   }
 }
+
+chrome.runtime.onMessage.addListener(async (message) => {
+  if (message.message === "newPrompt") {
+    await chrome.storage.local.set({
+      query: message.prompt,
+      [message.ai.name]: true,
+      lastQuery: message.prompt,
+      time: Date.now(),
+    });
+    createTab(message.prompt, message.ai, false);
+  }
+})

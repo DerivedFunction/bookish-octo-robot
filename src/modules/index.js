@@ -17,3 +17,4 @@ import "./toaster.js";
 import "./tooltip.js";
 import "./updateTime.js";
 import "./weather.js";
+import "./widget.js"

@@ -38,12 +38,13 @@
     "*://*.meta.ai/*",
     "*://coral.cohere.com/*",
     "*://*.poe.com/*",
-    "*://*.you.com/*"
+    "*://*.you.com/*",
+    "*://*/*"
   ],
   "default_locale": "en",
   "web_accessible_resources": [
     {
-      "resources": ["ai-list.json"],
+      "resources": ["ai-list.json", "scripts/popup.js", "assets/images/**/*"],
       "matches": ["<all_urls>"]
     }
   ]
