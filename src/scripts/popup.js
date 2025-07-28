@@ -546,7 +546,7 @@
     }
 
     // Check if the element has no dimensions (e.g., empty div, hidden by layout)
-    if (visibleOnly && el.offsetWidth === 0 && el.offsetHeight === 0) {
+    if (el.offsetWidth === 0 && el.offsetHeight === 0) {
       return false;
     }
 
@@ -590,11 +590,11 @@
         if (value) {
           textParts.push(value);
         }
-      } else {
+      } else if (!(el.tagName === "STYLE" || el.tagName === "SCRIPT")) {
         // For other element types, iterate through its child nodes
         // This ensures we process direct text content and recursively process visible child elements
         for (const childNode of el.childNodes) {
-          // Recursively call getVisibleText for each child node
+          // Recursively call getVisibleText for each child node, so long it is not a script
           const childVisibleText = getVisibleText(childNode);
           if (childVisibleText) {
             textParts.push(childVisibleText);
