@@ -118,7 +118,7 @@ async function deleteFile(filename, liElement) {
 
 function addFileToList(filename, blob) {
   const li = document.createElement("li");
-
+  li.classList.add("list-item");
   // Create a container for the tooltip and visual element
   const container = document.createElement("div");
   container.style.cursor = "pointer";

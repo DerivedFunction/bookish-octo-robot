@@ -63,7 +63,7 @@ export async function addSearchEngines() {
   const fragment = document.createDocumentFragment();
   searchEngines.forEach((engine) => {
     const listItem = document.createElement("li");
-    listItem.className = "search-engine-option";
+    listItem.classList.add("search-engine-option", "list-item");
     listItem.setAttribute("data-link", engine.url);
     if (engine.experimental !== undefined) {
       listItem.setAttribute("data-exp", engine.experimental);

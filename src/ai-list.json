@@ -138,8 +138,8 @@
     },
     {
       "name": "Perplexity",
-      "url": "https://www.perplexity.ai/search/new?q=",
-      "home": "https://www.perplexity.ai/",
+      "url": "https://perplexity.ai/search/new?q=",
+      "home": "https://perplexity.ai/",
       "image": "/assets/images/ai/perplexity.png",
       "experimental": true,
       "limit": 15000,
@@ -206,7 +206,7 @@
     },
     {
       "name": "Meta",
-      "url": "https://www.meta.ai/?prompt=",
+      "url": "https://meta.ai/?prompt=",
       "image": "/assets/images/ai/meta.png",
       "limit": 15000,
       "experimental": true,
@@ -251,7 +251,7 @@
     },
     {
       "name": "Kimi",
-      "url": "https://www.kimi.com/",
+      "url": "https://kimi.com/",
       "image": "/assets/images/ai/kimi.png",
       "experimental": true,
       "fileImage": true,
@@ -273,7 +273,7 @@
       }
     },{
       "name": "Poe",
-      "url": "https://www.poe.com/",
+      "url": "https://poe.com/",
       "image": "/assets/images/ai/poe.png",
       "experimental": true,
       "fileImage": true,
@@ -297,7 +297,7 @@
     },
     {
       "name": "You",
-      "url": "https://www.you.com/search?q=",
+      "url": "https://you.com/search?q=",
       "image": "/assets/images/ai/you.png",
       "experimental": true,
       "fileImage": true,

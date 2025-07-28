@@ -262,7 +262,7 @@ h2 {
   display: block; /* Show when active */
 }
 
-li {
+.list-item {
   list-style: none;
   padding: 8px 12px;
   cursor: pointer;
@@ -270,7 +270,7 @@ li {
   transition: background 0.2s ease;
 }
 
-li:hover {
+.list-item:hover {
   background: var(--hover-bg);
   border-radius: 10px; /* Rounded hover effect */
 }
@@ -337,7 +337,7 @@ select:focus {
   box-shadow: 0 0 4px var(--accent-color);
 }
 
-option {
+.option-item {
   background: var(--item-bg);
   color: var(--text-color);
   font-family: inherit;
