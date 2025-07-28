@@ -87,7 +87,7 @@
           }
         ],
         "send": "button:not(:disabled)[type='submit']",
-        
+
         "lastHTML": "#last-reply-container .response-content-markdown"
       }
     },
@@ -155,7 +155,7 @@
           }
         ],
         "send": "button:not(:disabled)[aria-label='Submit']",
-        
+
         "lastHTML": "div.prose"
       }
     },
@@ -200,7 +200,6 @@
           }
         ],
         "send": "button:not(:disabled)#send-message-button",
-        
         "lastHTML": "#response-content-container"
       }
     },
@@ -245,7 +244,7 @@
           }
         ],
         "send": "div[data-component='Composer'] button",
-        
+
         "lastHTML": ".message:last-child"
       }
     },
@@ -268,10 +267,11 @@
           }
         ],
         "send": ".send-button-container:not(.disabled)",
-        
+
         "lastHTML": ".chat-content-item-assistant:last-child:last-child"
       }
-    },{
+    },
+    {
       "name": "Poe",
       "url": "https://poe.com/",
       "image": "/assets/images/ai/poe.png",
@@ -291,7 +291,7 @@
           }
         ],
         "send": "button:not(:disabled)[aria-label='Send message']",
-        
+
         "lastHTML": ".ChatMessagesView_tupleGroupContainer__LSCLm .ChatMessagesView_messageTuple__Jh5lQ:last-child"
       }
     },
@@ -314,7 +314,7 @@
           }
         ],
         "send": "button:not(:disabled)[aria-label='Submit query']",
-        
+
         "lastHTML": "#chat-history .p38mfy1:last-child .p38mfyb"
       }
     }

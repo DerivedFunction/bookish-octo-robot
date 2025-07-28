@@ -6,23 +6,17 @@
   }
   const data = await response.json();
   const url = new URL(window.location.href);
-  const urlHostname = url.hostname;
+  const urlHostname = url.hostname.replace("www.", "");
   const aiConfig = data["ai-list"].find((ai) => ai.url.includes(urlHostname));
-  
+
   // Handle multiple selector configurations
-  if (Array.isArray(aiConfig.selectors.textbox)) {
-    selectorConfigs = aiConfig.selectors.textbox.map(config => ({
-      ...aiConfig.selectors,
-      textbox: config.textbox,
-      scriptType: config.scriptType
-    }));
-    SELECTORS = selectorConfigs[0];
-    SCRIPT_TYPE = selectorConfigs[0].scriptType;
-  } else {
-    SELECTORS = aiConfig.selectors;
-    SCRIPT_TYPE = aiConfig.scriptType || 'textContent';
-    selectorConfigs = [{...SELECTORS, scriptType: SCRIPT_TYPE}];
-  }
+  selectorConfigs = aiConfig.selectors.textbox.map((config) => ({
+    ...aiConfig.selectors,
+    textbox: config.textbox,
+    scriptType: config.scriptType,
+  }));
+  SELECTORS = selectorConfigs[0];
+  SCRIPT_TYPE = selectorConfigs[0].scriptType;
 
   // Parse the url for the 'prompt' parameter
   const prompt = new URLSearchParams(url.search).get("prompt");
@@ -55,7 +49,7 @@ async function runAfterFullLoad() {
       console.log("Orphan process. Exiting...");
       return;
     }
-    
+
     console.log("Running query injection.");
     await getImage();
     await getTextInput();
@@ -80,13 +74,18 @@ async function handleStorageChange(changes, areaName) {
     await getTextInput();
   }
 
-  if (changes[SELECTORS.lastResponse] && changes[SELECTORS.lastResponse].newValue) {
+  if (
+    changes[SELECTORS.lastResponse] &&
+    changes[SELECTORS.lastResponse].newValue
+  ) {
     await getLastResponse();
   }
 }
 
 async function getLastResponse() {
-  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get(SELECTORS.lastResponse);
+  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get(
+    SELECTORS.lastResponse
+  );
   await chrome.storage.local.remove(SELECTORS.lastResponse);
   if (!getLast) return;
   let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
@@ -106,28 +105,35 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
   } = await chrome.storage.local.get(["query", "time", SELECTORS.AI]);
   await chrome.storage.local.remove(SELECTORS.AI);
   const searchQuery = (curAI ? query : "")?.trim();
-  
+
   if (!searchQuery) return;
   const curTime = Date.now();
   if (curTime > time + 1000 * 15) return;
   chrome.runtime.sendMessage({ ping: true, name: SELECTORS.AI });
-  
+
   let attempts = 0;
   counter = 0;
   let success = false;
-  
+
   while (attempts < maxRetries) {
     // Try each selector configuration in turn
     for (let i = 0; i < selectorConfigs.length; i++) {
-      const currentConfig = selectorConfigs[(currentSelectorIndex + i) % selectorConfigs.length];
-      const selector = currentConfig.scriptType === 'contenteditable' ? 
-        "div[contenteditable='true']" : currentConfig.textbox;
+      const currentConfig =
+        selectorConfigs[(currentSelectorIndex + i) % selectorConfigs.length];
+      const selector =
+        currentConfig.scriptType === "contenteditable"
+          ? "div[contenteditable='true']"
+          : currentConfig.textbox;
       element = document.querySelector(selector);
-      console.log(`Attempt ${attempts + 1}, Config ${(currentSelectorIndex + i) % selectorConfigs.length + 1}: Injecting Query`);
+      console.log(
+        `Attempt ${attempts + 1}, Config ${
+          ((currentSelectorIndex + i) % selectorConfigs.length) + 1
+        }: Injecting Query`
+      );
 
       if (element) {
         switch (currentConfig.scriptType) {
-          case 'react':
+          case "react":
             // React-specific input handling
             let lastValue = element.value || "";
             element.value = searchQuery;
@@ -142,7 +148,7 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
             element.dispatchEvent(event);
             break;
 
-          case 'contenteditable':
+          case "contenteditable":
             element.focus();
             // Try meta injection first
             const beforeInputEvent = new InputEvent("beforeinput", {
@@ -153,7 +159,7 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
             });
             element.dispatchEvent(beforeInputEvent);
             const cleanupFn = getMetaListener();
-            
+
             // Check if text was injected (use innerText/textContent to see visible text)
             setTimeout(() => {
               const visibleText = element.innerText || element.textContent;
@@ -178,7 +184,8 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
         let clicked = await clickButton();
         if (clicked) {
           // Remember successful configuration for next time
-          currentSelectorIndex = (currentSelectorIndex + i) % selectorConfigs.length;
+          currentSelectorIndex =
+            (currentSelectorIndex + i) % selectorConfigs.length;
           success = true;
           return;
         }
@@ -198,11 +205,9 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
   update();
 }
 
-
-
 function getMetaListener() {
   let insertedNode = null;
-  
+
   const listener = (event) => {
     if (event.inputType === "insertText") {
       event.preventDefault();
@@ -224,9 +229,9 @@ function getMetaListener() {
       }
     }
   };
-  
+
   element?.addEventListener("beforeinput", listener);
-  
+
   // Return cleanup function that removes both the listener and the node
   return () => {
     element?.removeEventListener("beforeinput", listener);
@@ -258,7 +263,9 @@ function update() {
 }
 
 async function getImage() {
-  const { [SELECTORS.AI]: curAI } = await chrome.storage.local.get(SELECTORS.AI);
+  const { [SELECTORS.AI]: curAI } = await chrome.storage.local.get(
+    SELECTORS.AI
+  );
   const STORAGE_KEY_PREFIX = "pasted-file-";
   const fileUploadInput = document.querySelector("input[type='file']");
   if (!curAI || !fileUploadInput || SELECTORS.noFile) return;
@@ -272,7 +279,8 @@ async function getImage() {
         const filename = key.replace(STORAGE_KEY_PREFIX, "");
         const fileData = data[key].data;
 
-        const [, mimeType, base64String] = fileData.match(/^data:([^;]+);base64,(.+)$/) || [];
+        const [, mimeType, base64String] =
+          fileData.match(/^data:([^;]+);base64,(.+)$/) || [];
         if (!mimeType || !base64String) {
           console.error(`Invalid data URI format for key ${key}`);
           continue;
@@ -292,7 +300,9 @@ async function getImage() {
 
         const blob = new Blob([bytes], { type: mimeType });
         const extension = data[key].fileExtension;
-        const finalFilename = filename.endsWith(extension) ? filename : `${filename}${extension}`;
+        const finalFilename = filename.endsWith(extension)
+          ? filename
+          : `${filename}${extension}`;
 
         const file = new File([blob], finalFilename, {
           type: mimeType,
@@ -310,7 +320,7 @@ async function getImage() {
     fileUploadInput.files = dataTransfer.files;
     const event = new Event("change", { bubbles: true });
     fileUploadInput.dispatchEvent(event);
-    await Promise.resolve(new Promise((resolve) => setTimeout(resolve, 1000)))
+    await Promise.resolve(new Promise((resolve) => setTimeout(resolve, 1000)));
   } else {
     console.log("No valid files to assign to input");
   }
