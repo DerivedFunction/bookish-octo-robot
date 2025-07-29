@@ -325,7 +325,7 @@ async function getImage() {
     fileUploadInput.files = dataTransfer.files;
     const event = new Event("change", { bubbles: true });
     fileUploadInput.dispatchEvent(event);
-    await Promise.resolve(new Promise((resolve) => setTimeout(resolve, 1000)));
+    await Promise.resolve(new Promise((resolve) => setTimeout(resolve, 2000)));
   } else {
     console.log("No valid files to assign to input");
   }
