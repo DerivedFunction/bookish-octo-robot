@@ -55,6 +55,10 @@
     "You": {
       "matches": ["*://*.you.com/*"],
       "js": ["/scripts/injector.js"]
+    },
+    "Z": {
+      "matches": ["*://chat.z.ai/*"],
+      "js": ["/scripts/injector.js"]
     }
   },
   "permissionsConfig": {
@@ -113,6 +117,10 @@
     "You": {
       "permissions": ["scripting"],
       "origins": ["*://*.you.com/*"]
+    },
+    "Z": {
+      "permissions": ["scripting"],
+      "origins": ["*://chat.z.ai/*"]
     }
   },
   "full": {
@@ -132,7 +140,8 @@
         "*://*.meta.ai/*",
         "*://coral.cohere.com/*",
         "*://*.poe.com/*",
-        "*://*.you.com/*"
+        "*://*.you.com/*",
+        "*://chat.z.ai/*"
       ]
     }
   }

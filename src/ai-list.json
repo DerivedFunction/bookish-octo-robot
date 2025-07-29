@@ -270,6 +270,28 @@
 
         "lastHTML": ".chat-content-item-assistant:last-child:last-child"
       }
+    }, {
+      "name": "Z",
+      "url": "https://chat.z.ai/?q=",
+      "image": "/assets/images/ai/z.png",
+      "experimental": true,
+      "fileImage": true,
+      "limit": 100000,
+      "omnibox": ["zh", "z"],
+      "selectors": {
+        "AI": "Z",
+        "lastResponse": "ZLast",
+        "kill": "ZKill",
+        "textbox": [
+          {
+            "scriptType": "react",
+            "textbox": "textarea"
+          }
+        ],
+        "send": "#send-message-button:not(.disabled)",
+
+        "lastHTML": "#messages-container .flex.group:last-child .chat-assistant"
+      }
     },
     {
       "name": "Poe",
