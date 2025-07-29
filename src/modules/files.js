@@ -102,6 +102,7 @@ document.addEventListener("paste", async (event) => {
     } else {
       // all files are ok
       const file = item.getAsFile();
+      if (!file) return;
       const uniqueFilename = await storeFile(file.name, file);
       if (uniqueFilename) {
         addFileToList(uniqueFilename, file); // Use unique filename
