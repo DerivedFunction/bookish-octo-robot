@@ -2,7 +2,7 @@
   // Prevent multiple instances
   if (window.customPopupWidget) return;
   window.customPopupWidget = true;
-
+  const IMG_DIR = "./assets/images/buttons/";
   // Common stylesheet text
   const styleText = `
     :host {
@@ -212,68 +212,69 @@
   // Minimize button
   const btnMinimize = document.createElement("button");
   btnMinimize.id = "widget-minimize";
-  btnMinimize.textContent = "-";
-  btnMinimize.style.cssText = "width: 32px; height: 32px; font-size: 16px;";
+  const minImg = document.createElement("img");
+  minImg.src = chrome.runtime.getURL(`${IMG_DIR}mini.svg`);
+  btnMinimize.appendChild(minImg);
 
   // Close button
   const btnClose = document.createElement("button");
   btnClose.id = "widget-close";
-  btnClose.textContent = "x";
-  btnClose.style.cssText = "width: 32px; height: 32px; font-size: 12px;";
+  const closeImg = document.createElement("img");
+  closeImg.src = chrome.runtime.getURL(`${IMG_DIR}close.svg`);
+  btnClose.appendChild(closeImg);
 
   // Grab text button
   const btnGrab = document.createElement("button");
   btnGrab.id = "grab-text-btn";
-  btnGrab.style.cssText = "width: 32px; height: 32px;";
-
   const grabImg = document.createElement("img");
-  grabImg.classList.add("invert");
-  grabImg.src = chrome.runtime.getURL("./assets/images/buttons/picker.svg");
-  grabImg.style.cssText = "width: 16px; height: 16px;";
+  grabImg.src = chrome.runtime.getURL(`${IMG_DIR}picker.svg`);
   btnGrab.appendChild(grabImg);
 
   // Eye button
   const btnEye = document.createElement("button");
   btnEye.id = "eye-btn";
-  btnEye.style.cssText = "width: 32px; height: 32px;";
-
   const eyeImg = document.createElement("img");
-  eyeImg.classList.add("invert");
-  eyeImg.src = chrome.runtime.getURL("./assets/images/buttons/eye.svg");
-  eyeImg.style.cssText = "width: 16px; height: 16px;";
+  eyeImg.src = chrome.runtime.getURL(`${IMG_DIR}eye.svg`);
   btnEye.appendChild(eyeImg);
 
   // Zapper button
   const btnZap = document.createElement("button");
   btnZap.id = "zapper-btn";
-  btnZap.style.cssText = "width: 32px; height: 32px;";
-
   const zapImg = document.createElement("img");
-  zapImg.classList.add("invert");
-  zapImg.src = chrome.runtime.getURL("./assets/images/buttons/zapper.svg");
-  zapImg.style.cssText = "width: 16px; height: 16px;";
+  zapImg.src = chrome.runtime.getURL(`${IMG_DIR}zapper.svg`);
   btnZap.appendChild(zapImg);
 
-  // Zapper button
+  // query button
   const btnQuery = document.createElement("button");
   btnQuery.id = "query-btn";
-  btnQuery.style.cssText = "width: 32px; height: 32px;";
 
   const curImg = document.createElement("img");
-  curImg.classList.add("invert");
-  curImg.src = chrome.runtime.getURL("./assets/images/buttons/cursor.svg");
-  curImg.style.cssText = "width: 16px; height: 16px;";
+  curImg.src = chrome.runtime.getURL(`${IMG_DIR}cursor.svg`);
   btnQuery.appendChild(curImg);
 
+  // reload query button
+  const btnReload = document.createElement("button");
+  btnReload.id = "reload-btn";
+
+  const relImg = document.createElement("img");
+  relImg.src = chrome.runtime.getURL(`${IMG_DIR}selector.svg`);
+  btnReload.appendChild(relImg);
+
   // Assemble buttons
-  [btnMinimize, btnClose, btnGrab, btnZap, btnEye, btnQuery].forEach((btn) => {
-    buttonGroup.appendChild(btn);
-  });
+  [btnMinimize, btnClose, btnGrab, btnEye, btnQuery, btnReload, btnZap].forEach(
+    (btn) => {
+      btn.style.cssText += "width: 32px; height: 32px;";
+      const img = btn.querySelector("img");
+      img.classList.add("invert");
+      img.style.cssText = "width: 14px; height: 14px;";
+      buttonGroup.appendChild(btn);
+    }
+  );
   topRow.appendChild(buttonGroup);
   btnEye.addEventListener("click", () => {
     visibleOnly = !visibleOnly;
     btnEye.querySelector("img").src = chrome.runtime.getURL(
-      `./assets/images/buttons/${visibleOnly ? `eye` : `noeye`}.svg`
+      `${IMG_DIR}${visibleOnly ? `eye` : `noeye`}.svg`
     );
   });
 
@@ -305,13 +306,31 @@
     if (query) {
       const element = document.querySelector(query);
       if (element) {
+        btnQuery.title = query;
         textarea.value = getVisibleText(element);
       } else {
+        btnQuery.title = ""
         textarea.value = "";
       }
       textarea.focus();
     }
   });
+  btnReload.addEventListener("click", () => {
+    // reload the query data from btn query
+    const query = btnQuery.title?.trim() || "";
+    if (query.length > 0) {
+      const element = document.querySelector(query);
+      if (element) {
+        textarea.value = getVisibleText(element);
+      } else {
+        btnQuery.click();
+      }
+      textarea.focus();
+    } else {
+      btnQuery.click();
+    }
+  });
+
   // AI list container
   const ai_list = document.createElement("div");
   ai_list.id = "ai-list";
@@ -341,7 +360,6 @@
   let originalCursor = "";
   let hoverOverlay = null;
   let aiList = [];
-  let prompts = [];
   let minPos = { top: 20, right: 20 };
 
   // Load AI list and prompts
@@ -351,7 +369,6 @@
       if (!response.ok) throw new Error("Failed to load AI list");
       const data = await response.json();
       aiList = data["ai-list"];
-      prompts = data["prompts"];
     } catch (error) {
       console.error("Error loading AI list:", error);
     }
@@ -368,7 +385,7 @@
     widget.style.display = "block";
     widget.style.top = `${minPos.top}px`;
     widget.style.right = `${minPos.right}px`;
-    
+
     textarea.focus(); // Focus textarea when widget is expanded
   });
 
@@ -415,7 +432,6 @@
     originalCursor = document.body.style.cursor;
     document.body.style.cursor = "pointer";
 
-   
     btnZap.style.background = "var(--active-bg)";
     btnZap.style.borderColor = "var(--active-color)";
     btnZap.style.boxShadow = "0 0 5px var(--active-color)";
@@ -640,11 +656,10 @@
     // Use the new getVisibleText function to extract all visible text from the clicked element and its children
     let textContent = getVisibleText(element);
 
-   
     // Append the extracted text to the textarea, adding a space separator if needed
     if (textContent) {
       // Ensure there's a space if content already exists, then trim extra spaces
-      textarea.value = `${textArea.value.trim()} ${textContent}`.trim();
+      textarea.value = `${textarea.value.trim()} ${textContent}`.trim();
     }
 
     // Make the extracted text area visible
