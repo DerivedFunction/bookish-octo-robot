@@ -3,7 +3,8 @@ import { t } from "./locales.js";
 
 export function setupTooltip(element, condition = () => true, message = null) {
   const hideTooltip = () => {
-    tooltip.style.display = "none";
+    // don't hide if the mouse is on the tooltip
+    if (!tooltip.matches(":hover")) tooltip.style.display = "none";
   };
 
   element.addEventListener("mouseover", () => {
