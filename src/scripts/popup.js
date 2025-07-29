@@ -234,7 +234,7 @@
 
   // Eye button
   const btnEye = document.createElement("button");
-  btnEye.id = "grab-text-btn";
+  btnEye.id = "eye-btn";
   btnEye.style.cssText = "width: 32px; height: 32px;";
 
   const eyeImg = document.createElement("img");
@@ -254,8 +254,19 @@
   zapImg.style.cssText = "width: 16px; height: 16px;";
   btnZap.appendChild(zapImg);
 
+  // Zapper button
+  const btnQuery = document.createElement("button");
+  btnQuery.id = "query-btn";
+  btnQuery.style.cssText = "width: 32px; height: 32px;";
+
+  const curImg = document.createElement("img");
+  curImg.classList.add("invert");
+  curImg.src = chrome.runtime.getURL("./assets/images/buttons/cursor.svg");
+  curImg.style.cssText = "width: 16px; height: 16px;";
+  btnQuery.appendChild(curImg);
+
   // Assemble buttons
-  [btnMinimize, btnClose, btnGrab, btnZap, btnEye].forEach((btn) => {
+  [btnMinimize, btnClose, btnGrab, btnZap, btnEye, btnQuery].forEach((btn) => {
     buttonGroup.appendChild(btn);
   });
   topRow.appendChild(buttonGroup);
@@ -289,7 +300,18 @@
     e.stopPropagation();
   });
   innerDiv.appendChild(textarea);
-
+  btnQuery.addEventListener("click", () => {
+    const query = window.prompt("document.querySelector('')", "");
+    if (query) {
+      const element = document.querySelector(query);
+      if (element) {
+        textarea.value = getVisibleText(element);
+      } else {
+        textarea.value = "";
+      }
+      textarea.focus();
+    }
+  });
   // AI list container
   const ai_list = document.createElement("div");
   ai_list.id = "ai-list";
@@ -346,12 +368,12 @@
     widget.style.display = "block";
     widget.style.top = `${minPos.top}px`;
     widget.style.right = `${minPos.right}px`;
-    const textArea = widgetShadow.getElementById("extracted-text");
-    textArea.focus(); // Focus textarea when widget is expanded
+    
+    textarea.focus(); // Focus textarea when widget is expanded
   });
 
   // Close widget
-  widgetShadow.getElementById("widget-close").addEventListener("click", () => {
+  btnClose.addEventListener("click", () => {
     cleanup();
     widget.remove();
     minimized.remove();
@@ -359,18 +381,16 @@
   });
 
   // Minimize widget
-  widgetShadow
-    .getElementById("widget-minimize")
-    .addEventListener("click", () => {
-      cleanup();
-      widget.style.display = "none";
-      minimized.style.display = "flex";
-      minimized.style.top = `${widget.style.top}`;
-      minimized.style.right = `${widget.style.right}`;
-    });
+  btnMinimize.addEventListener("click", () => {
+    cleanup();
+    widget.style.display = "none";
+    minimized.style.display = "flex";
+    minimized.style.top = `${widget.style.top}`;
+    minimized.style.right = `${widget.style.right}`;
+  });
 
   // Grab text functionality
-  widgetShadow.getElementById("grab-text-btn").addEventListener("click", () => {
+  btnGrab.addEventListener("click", () => {
     if (isGrabMode) {
       stopGrabMode();
     } else {
@@ -379,7 +399,7 @@
   });
 
   // Zapper functionality
-  widgetShadow.getElementById("zapper-btn").addEventListener("click", () => {
+  btnZap.addEventListener("click", () => {
     if (isZapperMode) {
       stopZapperMode();
     } else {
@@ -395,10 +415,10 @@
     originalCursor = document.body.style.cursor;
     document.body.style.cursor = "pointer";
 
-    const zapBtn = widgetShadow.getElementById("zapper-btn");
-    zapBtn.style.background = "var(--active-bg)";
-    zapBtn.style.borderColor = "var(--active-color)";
-    zapBtn.style.boxShadow = "0 0 5px var(--active-color)";
+   
+    btnZap.style.background = "var(--active-bg)";
+    btnZap.style.borderColor = "var(--active-color)";
+    btnZap.style.boxShadow = "0 0 5px var(--active-color)";
     document.addEventListener("mouseover", handleMouseOver, true);
     document.addEventListener("mouseout", handleMouseOut, true);
     document.addEventListener("click", handleZapperClick, true);
@@ -407,11 +427,9 @@
   function stopZapperMode() {
     isZapperMode = false;
     document.body.style.cursor = originalCursor;
-
-    const zapBtn = widgetShadow.getElementById("zapper-btn");
-    zapBtn.style.background = "var(--item-bg)";
-    zapBtn.style.borderColor = "var(--border-color)";
-    zapBtn.style.boxShadow = "none";
+    btnZap.style.background = "var(--item-bg)";
+    btnZap.style.borderColor = "var(--border-color)";
+    btnZap.style.boxShadow = "none";
 
     cleanup();
   }
@@ -442,11 +460,9 @@
     isGrabMode = true;
     originalCursor = document.body.style.cursor;
     document.body.style.cursor = "crosshair";
-
-    const grabBtn = widgetShadow.getElementById("grab-text-btn");
-    grabBtn.style.background = "var(--active-bg)";
-    grabBtn.style.borderColor = "var(--active-color)";
-    grabBtn.style.boxShadow = "0 0 5px var(--active-color)";
+    btnGrab.style.background = "var(--active-bg)";
+    btnGrab.style.borderColor = "var(--active-color)";
+    btnGrab.style.boxShadow = "0 0 5px var(--active-color)";
 
     document.addEventListener("mouseover", handleMouseOver, true);
     document.addEventListener("mouseout", handleMouseOut, true);
@@ -456,11 +472,9 @@
   function stopGrabMode() {
     isGrabMode = false;
     document.body.style.cursor = originalCursor;
-
-    const grabBtn = widgetShadow.getElementById("grab-text-btn");
-    grabBtn.style.background = "var(--item-bg)";
-    grabBtn.style.borderColor = "var(--border-color)";
-    grabBtn.style.boxShadow = "none";
+    btnGrab.style.background = "var(--item-bg)";
+    btnGrab.style.borderColor = "var(--border-color)";
+    btnGrab.style.boxShadow = "none";
 
     cleanup();
   }
@@ -626,21 +640,18 @@
     // Use the new getVisibleText function to extract all visible text from the clicked element and its children
     let textContent = getVisibleText(element);
 
-    // Get the textarea and the container for extracted text from the shadow DOM
-    const textArea = widgetShadow.getElementById("extracted-text");
-    const extractedArea = widgetShadow.getElementById("extracted-text-area");
-
+   
     // Append the extracted text to the textarea, adding a space separator if needed
     if (textContent) {
       // Ensure there's a space if content already exists, then trim extra spaces
-      textArea.value = `${textArea.value.trim()} ${textContent}`.trim();
+      textarea.value = `${textArea.value.trim()} ${textContent}`.trim();
     }
 
     // Make the extracted text area visible
     extractedArea.style.display = "block";
 
     // Focus the textarea to indicate it is editable
-    textArea.focus();
+    textarea.focus();
 
     // Stop grab mode after an element is clicked and text is extracted
     stopGrabMode();
@@ -678,7 +689,7 @@
       });
       button.addEventListener("click", async () => {
         curAI = ai;
-        const prompt = widgetShadow.getElementById("extracted-text").value;
+        const prompt = textarea.value;
         chrome.runtime.sendMessage({
           message: "newPrompt",
           prompt: prompt,
