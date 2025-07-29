@@ -94,7 +94,7 @@ document.addEventListener("paste", async (event) => {
     if (item.type.startsWith("image/")) {
       const file = item.getAsFile();
       const filename = file.name || `pasted-${Date.now()}.png`;
-
+      if (!filename || !file) return;
       const uniqueFilename = await storeFile(filename, file);
       if (uniqueFilename) {
         addFileToList(uniqueFilename, file); // Use unique filename
