@@ -10,12 +10,15 @@
   const aiConfig = data["ai-list"].find((ai) => ai.url.includes(urlHostname));
 
   // Handle multiple selector configurations
-  selectorConfigs = aiConfig.selectors.textbox.map((config) => ({
-    ...aiConfig.selectors,
-    textbox: config.textbox,
-    scriptType: config.scriptType,
-  }));
-  SELECTORS = selectorConfigs[0];
+  selectorConfigs = [
+    {
+      scriptType: "react",
+    },
+    {
+      scriptType: "contenteditable",
+    },
+  ];
+  SELECTORS = aiConfig.selectors;
   SCRIPT_TYPE = selectorConfigs[0].scriptType;
 
   // Parse the url for the 'prompt' parameter
@@ -123,7 +126,7 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
       const selector =
         currentConfig.scriptType === "contenteditable"
           ? "div[contenteditable='true']"
-          : currentConfig.textbox;
+          : "textarea";
       element = document.querySelector(selector);
       console.log(
         `Attempt ${attempts + 1}, Config ${

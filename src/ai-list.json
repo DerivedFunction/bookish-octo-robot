@@ -12,11 +12,7 @@
         "AI": "ChatGPT",
         "lastResponse": "ChatGPTLast",
         "kill": "ChatGPTKill",
-        "textbox": [
-          {
-            "scriptType": "contenteditable"
-          }
-        ],
+       
         "send": "button:not(:disabled)#composer-submit-button",
         "lastHTML": "article"
       }
@@ -33,13 +29,8 @@
         "AI": "Claude",
         "lastResponse": "ClaudeLast",
         "kill": "ClaudeKill",
-        "textbox": [
-          {
-            "scriptType": "contenteditable"
-          }
-        ],
+       
         "send": "button:not(:disabled)[aria-label='Send message']",
-        "file": "input",
         "lastHTML": "[data-test-render-count]"
       }
     },
@@ -55,11 +46,7 @@
         "AI": "Gemini",
         "lastResponse": "GeminiLast",
         "kill": "GeminiKill",
-        "textbox": [
-          {
-            "scriptType": "contenteditable"
-          }
-        ],
+       
         "send": "button:not([aria-disabled='true']).send-button",
         "lastHTML": ".response-content",
         "noFile": true
@@ -77,17 +64,7 @@
         "AI": "Grok",
         "lastResponse": "GrokLast",
         "kill": "GrokKill",
-        "textbox": [
-          {
-            "scriptType": "react",
-            "textbox": "textarea"
-          },
-          {
-            "scriptType": "contenteditable"
-          }
-        ],
         "send": "button:not(:disabled)[type='submit']",
-
         "lastHTML": "#last-reply-container .response-content-markdown"
       }
     },
@@ -104,12 +81,7 @@
         "AI": "DeepSeek",
         "lastResponse": "DeepSeekLast",
         "kill": "DeepSeekKill",
-        "textbox": [
-          {
-            "scriptType": "react",
-            "textbox": "textarea"
-          }
-        ],
+        
         "send": "div:not([aria-disabled='true'])._7436101",
         "lastHTML": "div.ds-markdown.ds-markdown--block"
       }
@@ -126,12 +98,6 @@
         "AI": "Copilot",
         "lastResponse": "CopilotLast",
         "kill": "CopilotKill",
-        "textbox": [
-          {
-            "scriptType": "react",
-            "textbox": "#userInput"
-          }
-        ],
         "send": "button:not(:disabled)[title='Submit message']",
         "lastHTML": "div[role='article']"
       }
@@ -149,11 +115,7 @@
         "AI": "Perplexity",
         "lastResponse": "PerplexityLast",
         "kill": "PerplexityKill",
-        "textbox": [
-          {
-            "scriptType": "contenteditable"
-          }
-        ],
+       
         "send": "button:not(:disabled)[aria-label='Submit']",
 
         "lastHTML": "div.prose"
@@ -170,11 +132,6 @@
         "AI": "Mistral",
         "lastResponse": "MistralLast",
         "kill": "MistralKill",
-        "textbox": [
-          {
-            "scriptType": "contenteditable"
-          }
-        ],
         "send": "button:not([aria-disabled='true'])[type='submit']",
         "noFile": true,
         "lastHTML": "div[id]"
@@ -193,12 +150,7 @@
         "AI": "Qwen",
         "lastResponse": "QwenLast",
         "kill": "QwenKill",
-        "textbox": [
-          {
-            "scriptType": "react",
-            "textbox": "textarea"
-          }
-        ],
+        
         "send": "button:not(:disabled)#send-message-button",
         "lastHTML": "#response-content-container"
       }
@@ -209,19 +161,13 @@
       "image": "/assets/images/ai/meta.png",
       "limit": 15000,
       "experimental": true,
-      "fileImage": true,
       "omnibox": ["meta", "me"],
       "selectors": {
         "AI": "Meta",
         "lastResponse": "MetaLast",
         "kill": "MetaKill",
-        "textbox": [
-          {
-            "scriptType": "contenteditable"
-          }
-        ],
+        "noFile": true,
         "send": "div[aria-label='Send Message']:not([aria-disabled='true'])",
-        "file": "input",
         "lastHTML": ".x78zum5.xdt5ytf div[dir='auto']"
       }
     },
@@ -261,11 +207,7 @@
         "AI": "Kimi",
         "lastResponse": "KimiLast",
         "kill": "KimiKill",
-        "textbox": [
-          {
-            "scriptType": "contenteditable"
-          }
-        ],
+       
         "send": ".send-button-container:not(.disabled)",
 
         "lastHTML": ".chat-content-item-assistant:last-child:last-child"
@@ -282,12 +224,7 @@
         "AI": "Z",
         "lastResponse": "ZLast",
         "kill": "ZKill",
-        "textbox": [
-          {
-            "scriptType": "react",
-            "textbox": "textarea"
-          }
-        ],
+        
         "send": "#send-message-button:not(.disabled)",
 
         "lastHTML": "#messages-container .flex.group:last-child .chat-assistant"
@@ -306,12 +243,7 @@
         "AI": "Poe",
         "lastResponse": "PoeLast",
         "kill": "PoeKill",
-        "textbox": [
-          {
-            "scriptType": "react",
-            "textbox": "textarea"
-          }
-        ],
+        
         "send": "button:not(:disabled)[aria-label='Send message']",
 
         "lastHTML": ".ChatMessagesView_tupleGroupContainer__LSCLm .ChatMessagesView_messageTuple__Jh5lQ:last-child"
@@ -329,12 +261,7 @@
         "AI": "You",
         "lastResponse": "YouLast",
         "kill": "YouKill",
-        "textbox": [
-          {
-            "scriptType": "react",
-            "textbox": "textarea"
-          }
-        ],
+        
         "send": "button:not(:disabled)[aria-label='Submit query']",
 
         "lastHTML": "#chat-history .p38mfy1:last-child .p38mfyb"
