@@ -564,7 +564,7 @@ fieldset {
   #search-engine-dropdown {
     bottom: 120px;
   }
-  .suggestions-container {
+  .suggestions-container, #greeting-container {
     display: none;
   }
 
