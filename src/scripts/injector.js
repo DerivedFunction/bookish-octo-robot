@@ -56,6 +56,7 @@ async function runAfterFullLoad() {
     }
 
     console.log("Running query injection.");
+    chrome.runtime.sendMessage({ ping: true, name: SELECTORS.AI });
     await getImage();
     await getTextInput();
     let { unstable } = await chrome.storage.local.get("unstable");
@@ -75,6 +76,7 @@ async function handleStorageChange(changes, areaName) {
     return;
   }
   if (changes[SELECTORS.AI] && changes[SELECTORS.AI].newValue) {
+    chrome.runtime.sendMessage({ ping: true, name: SELECTORS.AI });
     await getImage();
     await getTextInput();
   }
@@ -114,7 +116,6 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
   if (!searchQuery) return;
   const curTime = Date.now();
   if (curTime > time + 1000 * 15) return;
-  chrome.runtime.sendMessage({ ping: true, name: SELECTORS.AI });
 
   let attempts = 0;
   counter = 0;
