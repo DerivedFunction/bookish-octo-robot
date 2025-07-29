@@ -19,6 +19,8 @@
     },
   ];
   SELECTORS = aiConfig.selectors;
+  SELECTORS.kill = `${SELECTORS.AI}Kill`;
+  SELECTORS.lastResponse = `${SELECTORS.AI}Last`;
   SCRIPT_TYPE = selectorConfigs[0].scriptType;
 
   // Parse the url for the 'prompt' parameter

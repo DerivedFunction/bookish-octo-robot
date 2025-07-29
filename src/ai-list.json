@@ -9,10 +9,7 @@
       "fileImage": true,
       "omnibox": ["chatgpt", "cg"],
       "selectors": {
-        "AI": "ChatGPT",
-        "lastResponse": "ChatGPTLast",
-        "kill": "ChatGPTKill",
-       
+        "AI": "ChatGPT",       
         "send": "button:not(:disabled)#composer-submit-button",
         "lastHTML": "article"
       }
@@ -26,10 +23,7 @@
       "fileImage": true,
       "omnibox": ["claude", "cl"],
       "selectors": {
-        "AI": "Claude",
-        "lastResponse": "ClaudeLast",
-        "kill": "ClaudeKill",
-       
+        "AI": "Claude",       
         "send": "button:not(:disabled)[aria-label='Send message']",
         "lastHTML": "[data-test-render-count]"
       }
@@ -43,10 +37,7 @@
       "needsPerm": true,
       "omnibox": ["gemini", "ge"],
       "selectors": {
-        "AI": "Gemini",
-        "lastResponse": "GeminiLast",
-        "kill": "GeminiKill",
-       
+        "AI": "Gemini",       
         "send": "button:not([aria-disabled='true']).send-button",
         "lastHTML": ".response-content",
         "noFile": true
@@ -62,8 +53,6 @@
       "omnibox": ["grok", "gr"],
       "selectors": {
         "AI": "Grok",
-        "lastResponse": "GrokLast",
-        "kill": "GrokKill",
         "send": "button:not(:disabled)[type='submit']",
         "lastHTML": "#last-reply-container .response-content-markdown"
       }
@@ -79,9 +68,6 @@
       "omnibox": ["deepseek", "ds"],
       "selectors": {
         "AI": "DeepSeek",
-        "lastResponse": "DeepSeekLast",
-        "kill": "DeepSeekKill",
-        
         "send": "div:not([aria-disabled='true'])._7436101",
         "lastHTML": "div.ds-markdown.ds-markdown--block"
       }
@@ -96,8 +82,6 @@
       "omnibox": ["copilot", "cp"],
       "selectors": {
         "AI": "Copilot",
-        "lastResponse": "CopilotLast",
-        "kill": "CopilotKill",
         "send": "button:not(:disabled)[title='Submit message']",
         "lastHTML": "div[role='article']"
       }
@@ -113,11 +97,7 @@
       "omnibox": ["perplexity", "pe"],
       "selectors": {
         "AI": "Perplexity",
-        "lastResponse": "PerplexityLast",
-        "kill": "PerplexityKill",
-       
         "send": "button:not(:disabled)[aria-label='Submit']",
-
         "lastHTML": "div.prose"
       }
     },
@@ -130,8 +110,6 @@
       "omnibox": ["mistral", "mi"],
       "selectors": {
         "AI": "Mistral",
-        "lastResponse": "MistralLast",
-        "kill": "MistralKill",
         "send": "button:not([aria-disabled='true'])[type='submit']",
         "noFile": true,
         "lastHTML": "div[id]"
@@ -148,9 +126,6 @@
       "omnibox": ["qwen", "qw"],
       "selectors": {
         "AI": "Qwen",
-        "lastResponse": "QwenLast",
-        "kill": "QwenKill",
-        
         "send": "button:not(:disabled)#send-message-button",
         "lastHTML": "#response-content-container"
       }
@@ -164,8 +139,6 @@
       "omnibox": ["meta", "me"],
       "selectors": {
         "AI": "Meta",
-        "lastResponse": "MetaLast",
-        "kill": "MetaKill",
         "noFile": true,
         "send": "div[aria-label='Send Message']:not([aria-disabled='true'])",
         "lastHTML": ".x78zum5.xdt5ytf div[dir='auto']"
@@ -181,16 +154,7 @@
       "omnibox": ["cohere", "ch"],
       "selectors": {
         "AI": "Cohere",
-        "lastResponse": "CohereLast",
-        "kill": "CohereKill",
-        "textbox": [
-          {
-            "scriptType": "react",
-            "textbox": "textarea[id='composer']"
-          }
-        ],
         "send": "div[data-component='Composer'] button",
-
         "lastHTML": ".message:last-child"
       }
     },
@@ -205,11 +169,7 @@
       "omnibox": ["kimi", "ki"],
       "selectors": {
         "AI": "Kimi",
-        "lastResponse": "KimiLast",
-        "kill": "KimiKill",
-       
         "send": ".send-button-container:not(.disabled)",
-
         "lastHTML": ".chat-content-item-assistant:last-child:last-child"
       }
     }, {
@@ -222,11 +182,7 @@
       "omnibox": ["zh", "z"],
       "selectors": {
         "AI": "Z",
-        "lastResponse": "ZLast",
-        "kill": "ZKill",
-        
         "send": "#send-message-button:not(.disabled)",
-
         "lastHTML": "#messages-container .flex.group:last-child .chat-assistant"
       }
     },
@@ -241,11 +197,7 @@
       "omnibox": ["poe", "p"],
       "selectors": {
         "AI": "Poe",
-        "lastResponse": "PoeLast",
-        "kill": "PoeKill",
-        
         "send": "button:not(:disabled)[aria-label='Send message']",
-
         "lastHTML": ".ChatMessagesView_tupleGroupContainer__LSCLm .ChatMessagesView_messageTuple__Jh5lQ:last-child"
       }
     },
@@ -258,12 +210,8 @@
       "limit": 100000,
       "omnibox": ["you", "y"],
       "selectors": {
-        "AI": "You",
-        "lastResponse": "YouLast",
-        "kill": "YouKill",
-        
+        "AI": "You",  
         "send": "button:not(:disabled)[aria-label='Submit query']",
-
         "lastHTML": "#chat-history .p38mfy1:last-child .p38mfyb"
       }
     }
