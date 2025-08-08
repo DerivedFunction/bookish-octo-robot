@@ -97,9 +97,37 @@ async function getLastResponse() {
   if (!getLast) return;
   let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
   if (lastResponse.length === 0) return;
-  let content = lastResponse[lastResponse.length - 1].innerHTML;
+  let sourceElement = lastResponse[lastResponse.length - 1];
+  // Create a new element
+  const newElement = document.createElement("div");
+
+  // Function to apply computed styles to an element and its children
+  function applyComputedStyles(source, target) {
+    // Get computed styles for the source element
+    const computedStyles = window.getComputedStyle(source);
+
+    // Apply computed styles to the target element
+    for (let i = 0; i < computedStyles.length; i++) {
+      const property = computedStyles[i];
+      target.style[property] = computedStyles.getPropertyValue(property);
+    }
+
+    // Copy content
+    target.innerHTML = source.innerHTML;
+
+    // Recursively apply computed styles to all children
+    const sourceChildren = source.children;
+    const targetChildren = target.children;
+
+    for (let i = 0; i < sourceChildren.length; i++) {
+      applyComputedStyles(sourceChildren[i], targetChildren[i]);
+    }
+  }
+
+  // Apply computed styles to the new element and its children
+  applyComputedStyles(sourceElement, newElement);
   chrome.runtime.sendMessage({
-    lastResponse: content,
+    lastResponse: newElement.innerHTML,
     engine: SELECTORS.AI,
   });
 }

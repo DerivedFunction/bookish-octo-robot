@@ -86,6 +86,7 @@ async function handleChatMessage(e, engines) {
       false,
       true
     );
+
     const parser = new DOMParser();
     const doc = parser.parseFromString(e.content, "text/html");
     const parsedElement = document.createElement("div");
@@ -96,6 +97,7 @@ async function handleChatMessage(e, engines) {
 
     messageButton.addEventListener("click", () => {
       responseBox.replaceChildren(parsedElement);
+      //responseBox.replaceChildren(e.content);
       chatBotResponse.style.display = "block";
     });
 
@@ -221,9 +223,7 @@ async function handleMultiSearch(textContent, resend = false) {
     });
     newClick = false;
     responseContainer.style.display = "block";
-    [
-      multiTools, searchEverywhereList, fileUploadBtn
-    ].forEach((e) => {
+    [multiTools, searchEverywhereList, fileUploadBtn].forEach((e) => {
       e.style.display = "";
     });
   }
@@ -292,7 +292,7 @@ export let everyWhereMode = false;
 // --- Event Listeners and Initialization ---
 export let showFileBtn = false;
 document.addEventListener("DOMContentLoaded", async () => {
-  [multiBtn,multiTools,searchEverywhereList].forEach((e) => {
+  [multiBtn, multiTools, searchEverywhereList].forEach((e) => {
     e.style.display = "none";
   });
   [responseBtn, sendAgain, newTabBtn, searchEverywhereBtn].forEach((btn) => {
@@ -323,9 +323,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
     newTabBtn
   );
-  appendImg({
-    image: "assets/images/buttons/multi.svg",
-  }, searchEverywhereBtn);
+  appendImg(
+    {
+      image: "assets/images/buttons/multi.svg",
+    },
+    searchEverywhereBtn
+  );
 
   multiBtn.addEventListener("click", () => handleMultiSearch());
   responseBtn.addEventListener("click", () => handleGetResponse());
@@ -334,12 +337,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   searchEverywhereBtn.addEventListener("click", async () => {
     showFileBtn = true;
     everyWhereMode = true;
-    [multiBtn, searchEverywhereList, fileUploadBtn].forEach(
-      (e) => {
-        e.style.display = "";
-      }
-    );
-    [curSearchBtn,goBtn, searchEnginePickerBtn, charCount].forEach((e) => {
+    [multiBtn, searchEverywhereList, fileUploadBtn].forEach((e) => {
+      e.style.display = "";
+    });
+    [curSearchBtn, goBtn, searchEnginePickerBtn, charCount].forEach((e) => {
       e.style.display = "none";
     });
   });

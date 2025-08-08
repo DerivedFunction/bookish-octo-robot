@@ -218,6 +218,7 @@ function setupEventListeners() {
 
   chrome.runtime.onMessage.addListener((e) => {
     if (e.lastResponse) {
+      console.log(e.lastResponse);
       function stripAttributes(html) {
         html = html.replace(/<svg[^>]*?>.*?<\/svg>/gis, "");
 
@@ -243,7 +244,7 @@ function setupEventListeners() {
       }
 
       chrome.runtime.sendMessage({
-        content: stripAttributes(e.lastResponse),
+        content: e.lastResponse, // stripAttributes(e.lastResponse),
         engine: e.engine,
       });
     }
@@ -560,4 +561,4 @@ chrome.runtime.onMessage.addListener(async (message) => {
     });
     createTab(message.prompt, message.ai, false);
   }
-})
+});
