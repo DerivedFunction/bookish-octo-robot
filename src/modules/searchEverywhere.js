@@ -95,13 +95,8 @@ async function handleChatMessage(e, engines) {
     parsedElement.appendChild(body);
     parsedElement.style.background = "var(--item-bg)";
 
-    messageButton.addEventListener("click", () => {
-      responseBox.replaceChildren(parsedElement);
-      //responseBox.replaceChildren(e.content);
-      chatBotResponse.style.display = "block";
-    });
-
     let chatbotMessages = responseContainer.lastElementChild;
+    const chatbotMessageContainer = document.createElement("div");
     if (
       !chatbotMessages ||
       !chatbotMessages.classList.contains("chatbot-messages") ||
@@ -110,8 +105,15 @@ async function handleChatMessage(e, engines) {
       chatbotMessages = document.createElement("div");
       chatbotMessages.classList.add("chatbot-messages");
       chatbotMessages.classList.add("horizontal-container");
+
       responseContainer.appendChild(chatbotMessages);
+      responseContainer.appendChild(chatbotMessageContainer);
     }
+    messageButton.addEventListener("click", () => {
+      chatbotMessageContainer.replaceChildren(parsedElement);
+      //responseBox.replaceChildren(e.content);
+      // chatBotResponse.style.display = "block";
+    });
     chatbotMessages.appendChild(messageButton);
     responseContainer.scrollTo(0, responseContainer.scrollHeight);
   }
