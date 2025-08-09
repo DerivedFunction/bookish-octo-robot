@@ -80,19 +80,17 @@ async function handleStorageChange(changes, areaName) {
     await getImage();
     await getTextInput();
   }
-
   if (
     changes[SELECTORS.lastResponse] &&
     changes[SELECTORS.lastResponse].newValue
   ) {
-    await getLastResponse();
+    watchForResponseCompletion();
   }
 }
 
 async function getLastResponse() {
-  let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
-  if (lastResponse.length === 0) return;
-  let sourceElement = lastResponse[lastResponse.length - 1];
+  let sourceElement = document.querySelector(SELECTORS.lastHTML);
+  if (!sourceElement) return false;
   // Create a new element
   const newElement = document.createElement("div");
 
@@ -100,13 +98,13 @@ async function getLastResponse() {
   function applyComputedStyles(source, target) {
     // Get computed styles for the source element
     const computedStyles = window.getComputedStyle(source);
-
     // Apply computed styles to the target element
     for (let i = 0; i < computedStyles.length; i++) {
       const property = computedStyles[i];
       target.style[property] = computedStyles.getPropertyValue(property);
     }
     // Copy content
+    target.className=""
     target.innerHTML = source.innerHTML;
 
     // Recursively apply computed styles to all children
@@ -120,12 +118,10 @@ async function getLastResponse() {
 
   // Apply computed styles to the new element and its children
   applyComputedStyles(sourceElement, newElement);
-
   chrome.runtime.sendMessage({
     lastResponse: newElement.innerHTML,
     engine: SELECTORS.AI,
   });
-  sourceElement.setAttribute("processed", "true");
 }
 
 async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
@@ -286,10 +282,33 @@ async function clickButton() {
   }
 }
 
+let countdown = 10;
+let intervalId = null; // Store the interval ID to manage it globally
+
+const poll = async () => {
+  await getLastResponse();
+  countdown--;
+  if (countdown === 0) {  
+    // Clear the interval when countdown reaches 0
+    clearInterval(intervalId);
+    intervalId = null; // Reset the interval ID
+    return;
+  }
+};
+
+const startPolling = () => {
+  if (!intervalId) {
+    // Ensure only one interval is running
+    intervalId = setInterval(poll, DELAY);
+  }
+};
+
 function watchForResponseCompletion() {
-  setInterval(() => {
-    getLastResponse();
-  }, DELAY);
+  countdown += 10;
+  if (countdown > 0 && !intervalId) {
+    // Restart polling if countdown is reset and no interval is running
+    startPolling();
+  }
 }
 
 function update() {

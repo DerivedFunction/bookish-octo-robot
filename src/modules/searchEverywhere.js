@@ -10,7 +10,6 @@ import { showToast } from "./toaster.js";
 import { greetingContainer } from "./greetings.js";
 import { goBtn } from "./actionButtons.js";
 import { suggestionContainer } from "./suggestions.js";
-import { chatBotResponse, responseBox } from "./response.js";
 import { setupTooltip } from "./tooltip.js";
 import { t } from "./locales.js";
 import { fileUploadBtn } from "./files.js";
@@ -55,16 +54,6 @@ function createToggleButton(engine, isActive, onClick) {
   );
   button.addEventListener("click", () => onClick(button));
   return button;
-}
-
-function deleteLastMessage() {
-  const lastResponse = responseContainer.querySelectorAll(
-    ".chatbot-messages:not(.KEEP)"
-  );
-  lastResponse.forEach((element) => {
-    responseContainer.removeChild(element);
-  });
-  generateNewChatbotContainer();
 }
 
 async function handleChatMessage(e, engines) {
@@ -270,7 +259,6 @@ async function handleMultiSearch(textContent, resend = false) {
 }
 
 async function handleGetResponse() {
-  deleteLastMessage();
   getResponse();
   responseContainer.scrollTo(0, responseContainer.scrollHeight);
 }
@@ -288,6 +276,7 @@ function getResponse() {
   const activeEngines = getSearchEverywhere();
   Object.keys(activeEngines).forEach(async (engine) => {
     const engineLast = engine + "Last";
+    await chrome.storage.local.remove(engineLast);
     if (activeEngines[engine])
       await chrome.storage.local.set({ [engineLast]: true });
   });
