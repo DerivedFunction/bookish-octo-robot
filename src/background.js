@@ -13,6 +13,14 @@ let hasScripts = false;
 async function initialize() {
   await getLocale();
   selectedEngine = await getSearchEngine();
+  if (selectedEngine) {
+    const iconUrl = chrome.runtime.getURL(selectedEngine.image);
+    if (!iconUrl) return;
+    try {
+      await chrome.action.setIcon({ path: iconUrl });
+      await browser.sidebarAction.setIcon({ path: iconUrl });
+    } catch {}
+  }
   await getPrompts();
 
   // Set up event listeners after initialization
@@ -489,19 +497,7 @@ async function switchEngine(name) {
     await chrome.action.setIcon({ path: iconUrl });
     browser.sidebarAction.setIcon({ path: iconUrl });
   } catch (error) {
-    console.log("Using Chrome. Drawing an icon *.png via canvas", error);
-    try {
-      const imgblob = await fetch(iconUrl).then((r) => r.blob());
-      const img = await createImageBitmap(imgblob);
-      const canvas = new OffscreenCanvas(32, 32);
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      await chrome.action.setIcon({ imageData: imageData });
-    } catch (error) {
-      console.error("Error setting extension icon:", error);
-    }
+    console.log("Using Chrome.", error);
   }
 }
 async function getScriptStatus(name = null) {
