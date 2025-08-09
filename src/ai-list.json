@@ -155,7 +155,7 @@
       "selectors": {
         "AI": "Cohere",
         "send": "div[data-component='Composer'] button",
-        "lastHTML": ".message:last-child"
+        "lastHTML": ".message:last-child [data-component='MessageContent']"
       }
     },
     {

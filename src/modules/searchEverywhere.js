@@ -58,11 +58,13 @@ function createToggleButton(engine, isActive, onClick) {
 }
 
 function deleteLastMessage() {
-  const lastResponse = responseContainer.querySelectorAll(".chatbot-messages:not(.KEEP)");
+  const lastResponse = responseContainer.querySelectorAll(
+    ".chatbot-messages:not(.KEEP)"
+  );
   lastResponse.forEach((element) => {
     responseContainer.removeChild(element);
   });
-
+  generateNewChatbotContainer();
 }
 
 async function handleChatMessage(e, engines) {
@@ -83,37 +85,40 @@ async function handleChatMessage(e, engines) {
     const doc = parser.parseFromString(e.content, "text/html");
     const parsedElement = document.createElement("div");
     const body = doc.body;
+    body.style["overflow-x"] = "auto";
     parsedElement.appendChild(body);
 
     // We only want one of each: chatbotMessages stores the buttons
-    let chatbotMessages = responseContainer.querySelector(".chatbot-buttons:not(.KEEP)");
+    let chatbotMessages = responseContainer.querySelector(
+      ".chatbot-buttons:not(.KEEP)"
+    );
     // chatbotresponsebox displays the messages from each buton click.
     let chatbotResponseBox = responseContainer.querySelector(
       ".chatbot-response-container:not(.KEEP)"
     );
-    if (!chatbotMessages) {
-      chatbotMessages = document.createElement("div");
-      chatbotMessages.classList.add(
-        "chatbot-messages",
-        "horizontal-container",
-        "chatbot-buttons"
-      );
-      responseContainer.appendChild(chatbotMessages);
-    }
-    if (!chatbotResponseBox) {
-      chatbotResponseBox = document.createElement("div");
-      chatbotResponseBox.classList.add(
-        "chatbot-messages",
-        "chatbot-response-container",
-      );
-      responseContainer.appendChild(chatbotResponseBox);
-    }
     messageButton.addEventListener("click", () => {
       chatbotResponseBox.replaceChildren(parsedElement);
     });
     chatbotMessages.appendChild(messageButton);
     responseContainer.scrollTo(0, responseContainer.scrollHeight);
   }
+}
+
+function generateNewChatbotContainer() {
+  const chatbotMessages = document.createElement("div");
+  chatbotMessages.classList.add(
+    "chatbot-messages",
+    "horizontal-container",
+    "chatbot-buttons"
+  );
+
+  const chatbotResponseBox = document.createElement("div");
+  chatbotResponseBox.classList.add(
+    "chatbot-messages",
+    "chatbot-response-container"
+  );
+  responseContainer.appendChild(chatbotMessages);
+  responseContainer.appendChild(chatbotResponseBox);
 }
 
 // --- Main Functions ---
@@ -240,7 +245,9 @@ async function handleMultiSearch(textContent, resend = false) {
   messageWrapper.addEventListener("click", () => {
     messageWrapper.classList.toggle("shrink");
   });
+
   responseContainer.appendChild(messageWrapper);
+  generateNewChatbotContainer();
   responseContainer.scrollTo(0, responseContainer.scrollHeight);
 }
 
