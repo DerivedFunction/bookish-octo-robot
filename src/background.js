@@ -178,7 +178,10 @@ function setupEventListeners() {
         for (const ai of aiList) {
           const aiName = ai.name;
           const run = `${aiName}Run`;
-          if (keys.hasOwnProperty(run) && keys[run] === true) {
+          if (
+            (keys.hasOwnProperty(run) && keys[run] === true) ||
+            (keys.hasOwnProperty(aiName) && keys[aiName] === true)
+          ) {
             noneEnabled = false;
             break;
           }
