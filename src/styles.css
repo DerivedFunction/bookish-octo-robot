@@ -117,7 +117,7 @@ button:active {
   background: none;
   border: none;
   height: 50px;
-  z-index: 70;
+  z-index: 49;
 }
 #header .horizontal-container {
   margin: 10px;
@@ -575,7 +575,7 @@ fieldset {
 #slider {
   position: fixed;
   top: 50px;
-  z-index: 50;
+  z-index: 48;
 }
 
 ::-webkit-scrollbar {
