@@ -199,7 +199,7 @@
       "selectors": {
         "AI": "Poe",
         "send": "button:not(:disabled)[aria-label='Send message']",
-        "lastHTML": ".ChatMessagesView_tupleGroupContainer__LSCLm .ChatMessagesView_messageTuple__Jh5lQ:last-child"
+        "lastHTML": ".ChatMessagesView_tupleGroupContainer__LSCLm .ChatMessagesView_messageTuple__Jh5lQ:last-child .Message_leftSideMessageBubble__VPdk6"
       }
     },
     {
