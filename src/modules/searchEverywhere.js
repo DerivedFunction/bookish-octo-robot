@@ -227,7 +227,6 @@ async function handleMultiSearch(textContent, resend = false) {
 
   if (!resend) {
     query.value = keep ? queryText : "";
-    queryEvents();
   }
 
   let { unstable } = await chrome.storage.local.get("unstable");
@@ -252,9 +251,9 @@ async function handleMultiSearch(textContent, resend = false) {
   }
   query.style.maxHeight = "50px";
   if (length < 1) {
-    queryEvents();
     return;
   }
+  queryEvents();
   Array.from(responseContainer.children).forEach((child) => {
     if (!child.classList.contains("KEEP")) {
       child.classList.add("KEEP");
