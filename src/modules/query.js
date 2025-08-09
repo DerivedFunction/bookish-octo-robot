@@ -53,7 +53,7 @@ export function queryEvents() {
   let x = query.value.length > 0;
   let y = selectedEngine?.url;
   toggleButton(goBtn, x && y);
-  toggleButton(multiBtn, x);
+  toggleButton(multiBtn, x || (everyWhereMode && newClick));
   getCharCount();
 }
 export const MAX_LIMIT = 8000; // max char count

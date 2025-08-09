@@ -77,6 +77,7 @@ async function handleChatMessage(e, engines) {
     let chatbotResponseBox = responseContainer.querySelector(
       ".chatbot-response-container:not(.KEEP)"
     );
+    if (!chatbotMessages || !chatbotResponseBox) return;
     let messageButton = chatbotMessages.querySelector(
       `.${e.engine}.chatbot-button`
     );
@@ -154,7 +155,7 @@ export async function appendList() {
 
 async function handleMultiSearch(textContent, resend = false) {
   const queryText = textContent ?? query.value;
-  if (queryText.length < 1) return;
+  const length = queryText.length;
   const searchEngines = await getSearchEngineList();
   const searchEverywhere = getSearchEverywhere();
 
@@ -188,9 +189,14 @@ async function handleMultiSearch(textContent, resend = false) {
   let keep = false;
   const active = false;
   for (const engine of searchEngines) {
-    if (queryText.length > engine.limit) continue;
+    if (length > engine.limit) continue;
     if (!searchEverywhere[engine.name]) continue;
-    const url = `${engine.url}${encodeURIComponent(queryText)}`;
+    const url =
+      length > 0
+        ? `${engine.url}${encodeURIComponent(queryText)}`
+        : engine.home
+        ? engine.home
+        : engine.url.split("?")[0];
     const hasPermission = permissions.includes(engine.name);
     if (hasPermission) {
       if (!engine.experimental) {
@@ -243,6 +249,10 @@ async function handleMultiSearch(textContent, resend = false) {
     });
   }
   query.style.maxHeight = "50px";
+  if (length < 1) {
+    queryEvents();
+    return;
+  }
   Array.from(responseContainer.children).forEach((child) => {
     if (!child.classList.contains("KEEP")) {
       child.classList.add("KEEP");
@@ -324,7 +334,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
   appendImg(
     {
-      image: "assets/images/buttons/multi.svg",
+      image: "assets/images/buttons/go.svg",
     },
     multiBtn
   );
@@ -354,6 +364,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   searchEverywhereBtn.addEventListener("click", async () => {
     showFileBtn = true;
     everyWhereMode = true;
+    queryEvents();
     [multiBtn, searchEverywhereList, fileUploadBtn].forEach((e) => {
       e.style.display = "";
     });

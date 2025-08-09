@@ -32,7 +32,6 @@
   --scrollbar-track: #f1f1f1;
   --scrollbar-thumb: #888;
   --scrollbar-thumb-hover: #555;
-
 }
 [data-theme="dark"] {
   /* Dark mode variables */
@@ -118,8 +117,9 @@ button:active {
   background: none;
   border: none;
   height: 50px;
+  z-index: 70;
 }
-#header .horizontal-container{
+#header .horizontal-container {
   margin: 10px;
 }
 
@@ -552,54 +552,52 @@ fieldset {
   transform: translateX(-150%);
 }
 
-
 @media (max-width: 768px) {
   #response-container {
     display: block;
   }
   #navigation {
     margin: 0 20px;
-    
   }
   #search-engine-dropdown {
     bottom: 120px;
   }
-  .suggestions-container, #greeting-container {
+  .suggestions-container,
+  #greeting-container {
     display: none;
   }
-
 }
 
-#search-everywhere-list{
+#search-everywhere-list {
   justify-content: center;
   flex-wrap: wrap;
 }
 #slider {
   position: fixed;
   top: 50px;
+  z-index: 50;
 }
 
-
 ::-webkit-scrollbar {
-    width: var(--scrollbar-width);
-    height: var(--scrollbar-width)
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--scrollbar-track);
-    border-radius: var(--scrollbar-width)
+  background: var(--scrollbar-track);
+  border-radius: var(--scrollbar-width);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-    border-radius: var(--scrollbar-width)
+  background: var(--scrollbar-thumb);
+  border-radius: var(--scrollbar-width);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-thumb-hover)
+  background: var(--scrollbar-thumb-hover);
 }
 
 html {
-    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-    scrollbar-width: thin
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
 }

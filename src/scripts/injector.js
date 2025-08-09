@@ -85,6 +85,7 @@ async function handleStorageChange(changes, areaName) {
     changes[SELECTORS.lastResponse] &&
     changes[SELECTORS.lastResponse].newValue
   ) {
+    lastFinalHTML = {};
     watchForResponseCompletion();
   }
 }
@@ -130,6 +131,12 @@ async function getLastResponse() {
             !isNaN(numericValue) && numericValue > threshold
               ? `${threshold}px`
               : value;
+        }
+        if (property === "opacity") {
+          const opacityValue = parseFloat(value);
+          if (!isNaN(opacityValue) && opacityValue < 1) {
+            value = "1"; // Fully opaque
+          }
         }
         target.style[property] = value;
       }
