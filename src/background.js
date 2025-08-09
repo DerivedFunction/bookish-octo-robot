@@ -177,7 +177,8 @@ function setupEventListeners() {
 
         for (const ai of aiList) {
           const aiName = ai.name;
-          if (keys.hasOwnProperty(aiName) && keys[aiName] === true) {
+          const run = `${aiName}Run`;
+          if (keys.hasOwnProperty(run) && keys[run] === true) {
             noneEnabled = false;
             break;
           }
@@ -454,7 +455,12 @@ async function refresh() {
     console.log("Clearing old queries");
     aiList.forEach((ai) => {
       const aiName = ai.name;
-      chrome.storage.local.remove([aiName, aiName + "Last", aiName + "Kill"]);
+      chrome.storage.local.remove([
+        aiName,
+        aiName + "Last",
+        aiName + "Kill",
+        aiName + "Run",
+      ]);
     });
   }
   chrome.storage.local.remove(["time", "query"]);

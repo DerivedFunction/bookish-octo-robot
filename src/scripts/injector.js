@@ -21,20 +21,26 @@
   SELECTORS = aiConfig.selectors;
   SELECTORS.kill = `${SELECTORS.AI}Kill`;
   SELECTORS.lastResponse = `${SELECTORS.AI}Last`;
+  SELECTORS.run = `${SELECTORS.AI}Run`;
   SCRIPT_TYPE = selectorConfigs[0].scriptType;
 
   // Parse the url for the 'prompt' parameter
   const prompt = new URLSearchParams(url.search).get("prompt");
   if (prompt) {
     await chrome.storage.local.set({
-      [SELECTORS.AI]: true,
+      [SELECTORS.run]: true,
       query: prompt,
       time: Date.now(),
     });
   }
-  chrome.storage.local.get("delay").then((e) => {
+  chrome.storage.local.get("delay").then(async (e) => {
     DELAY = e.delay ?? 3000;
     console.log("Delay set", DELAY);
+    let orphan = await chrome.storage.local.get(SELECTORS.AI);
+    if (!orphan) {
+      console.log("Orphan process. Exiting...");
+      return;
+    }
     setTimeout(runAfterFullLoad);
   });
 })();
@@ -48,23 +54,17 @@ let currentSelectorIndex = 0;
 let selectorConfigs = [];
 
 async function runAfterFullLoad() {
-  chrome.storage.local.get(SELECTORS.AI).then(async (e) => {
-    let orphan = e[SELECTORS.AI];
-    if (!orphan) {
-      console.log("Orphan process. Exiting...");
-      return;
-    }
-    console.log("Running query injection.");
-    chrome.runtime.sendMessage({ ping: true, name: SELECTORS.AI });
-    await Promise.resolve(new Promise((resolve) => setTimeout(resolve, DELAY)));
-    await getImage();
-    await getTextInput();
-    let { unstable } = await chrome.storage.local.get("unstable");
-    if (!unstable) return;
-    console.log("Unstable Feature activated. listening...");
-    await chrome.storage.local.remove(SELECTORS.kill);
-    chrome.storage.onChanged.addListener(handleStorageChange);
-  });
+  console.log("Running query injection.");
+  chrome.runtime.sendMessage({ ping: true, name: SELECTORS.AI });
+  await chrome.storage.local.set({ [SELECTORS.run]: true });
+  await Promise.resolve(new Promise((resolve) => setTimeout(resolve, DELAY)));
+  await getImage();
+  await getTextInput();
+  let { unstable } = await chrome.storage.local.get("unstable");
+  if (!unstable) return;
+  console.log("Unstable Feature activated. listening...");
+  await chrome.storage.local.remove(SELECTORS.kill);
+  chrome.storage.onChanged.addListener(handleStorageChange);
 }
 
 async function handleStorageChange(changes, areaName) {
@@ -77,6 +77,7 @@ async function handleStorageChange(changes, areaName) {
   }
   if (changes[SELECTORS.AI] && changes[SELECTORS.AI].newValue) {
     chrome.runtime.sendMessage({ ping: true, name: SELECTORS.AI });
+    await chrome.storage.local.set({ [SELECTORS.run]: true });
     await getImage();
     await getTextInput();
   }
@@ -169,15 +170,12 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
   } = await chrome.storage.local.get(["query", "time", SELECTORS.AI]);
   await chrome.storage.local.remove(SELECTORS.AI);
   const searchQuery = (curAI ? query : "")?.trim();
-
   if (!searchQuery) return;
   const curTime = Date.now();
   if (curTime > time + 1000 * 15) return;
-
   let attempts = 0;
   counter = 0;
   let success = false;
-
   while (attempts < maxRetries) {
     // Try each selector configuration in turn
     for (let i = 0; i < selectorConfigs.length; i++) {
@@ -310,6 +308,7 @@ async function clickButton() {
   if (button) {
     button.click();
     console.log(`Clicked button: ${button}`);
+    chrome.storage.local.remove([SELECTORS.run]);
     update();
     watchForResponseCompletion();
     return true;
