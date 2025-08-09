@@ -69,18 +69,6 @@ function deleteLastMessage() {
 
 async function handleChatMessage(e, engines) {
   if (e.content) {
-    const messageButton = document.createElement("button");
-    const engine = engines.find((ai) => ai.name === e.engine);
-    appendImg(
-      {
-        image: engine.image,
-      },
-      messageButton,
-      "5px",
-      false,
-      true
-    );
-
     const parser = new DOMParser();
     const doc = parser.parseFromString(e.content, "text/html");
     const parsedElement = document.createElement("div");
@@ -96,11 +84,41 @@ async function handleChatMessage(e, engines) {
     let chatbotResponseBox = responseContainer.querySelector(
       ".chatbot-response-container:not(.KEEP)"
     );
+    let messageButton = chatbotMessages.querySelector(
+      `.${e.engine}.chatbot-button`
+    );
+    if (!messageButton) {
+      messageButton = document.createElement("button");
+      messageButton.classList.add("chatbot-button", e.engine);
+      const engine = engines.find((ai) => ai.name === e.engine);
+      appendImg(
+        {
+          image: engine.image,
+        },
+        messageButton,
+        "5px",
+        false,
+        true
+      );
+      chatbotMessages.appendChild(messageButton);
+    } else {
+      // remove old event listeners
+      messageButton.removeEventListener("click", () => {});
+    }
     messageButton.addEventListener("click", () => {
+      chatbotMessages
+        .querySelector(".chatbot-button.active")
+        ?.classList.remove("active");
+      messageButton.classList.add("active");
       chatbotResponseBox.replaceChildren(parsedElement);
     });
-    chatbotMessages.appendChild(messageButton);
-    responseContainer.scrollTo(0, responseContainer.scrollHeight);
+    // If there are no active ones or it is the active one, click on it
+    const activeButtons = chatbotMessages.querySelector(
+      ".chatbot-button.active"
+    );
+    if (!activeButtons || activeButtons === messageButton) {
+      messageButton.click();
+    }
   }
 }
 

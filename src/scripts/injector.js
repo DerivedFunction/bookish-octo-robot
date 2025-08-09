@@ -90,11 +90,6 @@ async function handleStorageChange(changes, areaName) {
 }
 
 async function getLastResponse() {
-  let { [SELECTORS.lastResponse]: getLast } = await chrome.storage.local.get(
-    SELECTORS.lastResponse
-  );
-  await chrome.storage.local.remove(SELECTORS.lastResponse);
-  if (!getLast) return;
   let lastResponse = document.querySelectorAll(SELECTORS.lastHTML);
   if (lastResponse.length === 0) return;
   let sourceElement = lastResponse[lastResponse.length - 1];
@@ -130,6 +125,7 @@ async function getLastResponse() {
     lastResponse: newElement.innerHTML,
     engine: SELECTORS.AI,
   });
+  sourceElement.setAttribute("processed", "true");
 }
 
 async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
@@ -282,11 +278,18 @@ async function clickButton() {
     button.click();
     console.log(`Clicked button: ${button}`);
     update();
+    watchForResponseCompletion();
     return true;
   } else {
     console.log(`Button not found`);
     return false;
   }
+}
+
+function watchForResponseCompletion() {
+  setInterval(() => {
+    getLastResponse();
+  }, DELAY);
 }
 
 function update() {
