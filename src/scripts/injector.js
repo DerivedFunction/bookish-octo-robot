@@ -36,7 +36,10 @@
   chrome.storage.local.get("delay").then(async (e) => {
     DELAY = e.delay ?? 3000;
     console.log("Delay set", DELAY);
-    let orphan = await chrome.storage.local.get(SELECTORS.AI);
+    let { [SELECTORS.AI]: orphan } = await chrome.storage.local.get(
+      SELECTORS.AI
+    );
+    console.log(orphan);
     if (!orphan) {
       console.log("Orphan process. Exiting...");
       return;
