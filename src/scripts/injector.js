@@ -111,7 +111,6 @@ async function getLastResponse() {
       const property = computedStyles[i];
       target.style[property] = computedStyles.getPropertyValue(property);
     }
-
     // Copy content
     target.innerHTML = source.innerHTML;
 
@@ -126,6 +125,7 @@ async function getLastResponse() {
 
   // Apply computed styles to the new element and its children
   applyComputedStyles(sourceElement, newElement);
+
   chrome.runtime.sendMessage({
     lastResponse: newElement.innerHTML,
     engine: SELECTORS.AI,

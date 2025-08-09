@@ -58,19 +58,11 @@ function createToggleButton(engine, isActive, onClick) {
 }
 
 function deleteLastMessage() {
-  const children = Array.from(responseContainer.children);
-  const lastChatbotMessages = children
-    .slice()
-    .reverse()
-    .find(
-      (child) =>
-        child.classList.contains("chatbot-messages") &&
-        !child.classList.contains("KEEP")
-    );
+  const lastResponse = responseContainer.querySelectorAll(".chatbot-messages:not(.KEEP)");
+  lastResponse.forEach((element) => {
+    responseContainer.removeChild(element);
+  });
 
-  if (lastChatbotMessages) {
-    lastChatbotMessages.remove();
-  }
 }
 
 async function handleChatMessage(e, engines) {
@@ -91,28 +83,33 @@ async function handleChatMessage(e, engines) {
     const doc = parser.parseFromString(e.content, "text/html");
     const parsedElement = document.createElement("div");
     const body = doc.body;
-    body.style.whiteSpace = "pre-wrap";
     parsedElement.appendChild(body);
-    parsedElement.style.background = "var(--item-bg)";
 
-    let chatbotMessages = responseContainer.lastElementChild;
-    const chatbotMessageContainer = document.createElement("div");
-    if (
-      !chatbotMessages ||
-      !chatbotMessages.classList.contains("chatbot-messages") ||
-      chatbotMessages.classList.contains("KEEP")
-    ) {
+    // We only want one of each: chatbotMessages stores the buttons
+    let chatbotMessages = responseContainer.querySelector(".chatbot-buttons:not(.KEEP)");
+    // chatbotresponsebox displays the messages from each buton click.
+    let chatbotResponseBox = responseContainer.querySelector(
+      ".chatbot-response-container:not(.KEEP)"
+    );
+    if (!chatbotMessages) {
       chatbotMessages = document.createElement("div");
-      chatbotMessages.classList.add("chatbot-messages");
-      chatbotMessages.classList.add("horizontal-container");
-
+      chatbotMessages.classList.add(
+        "chatbot-messages",
+        "horizontal-container",
+        "chatbot-buttons"
+      );
       responseContainer.appendChild(chatbotMessages);
-      responseContainer.appendChild(chatbotMessageContainer);
+    }
+    if (!chatbotResponseBox) {
+      chatbotResponseBox = document.createElement("div");
+      chatbotResponseBox.classList.add(
+        "chatbot-messages",
+        "chatbot-response-container",
+      );
+      responseContainer.appendChild(chatbotResponseBox);
     }
     messageButton.addEventListener("click", () => {
-      chatbotMessageContainer.replaceChildren(parsedElement);
-      //responseBox.replaceChildren(e.content);
-      // chatBotResponse.style.display = "block";
+      chatbotResponseBox.replaceChildren(parsedElement);
     });
     chatbotMessages.appendChild(messageButton);
     responseContainer.scrollTo(0, responseContainer.scrollHeight);

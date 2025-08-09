@@ -11,7 +11,7 @@
       "selectors": {
         "AI": "ChatGPT",       
         "send": "button:not(:disabled)#composer-submit-button",
-        "lastHTML": "article"
+        "lastHTML": "article[data-turn='assistant'] [data-message-author-role]"
       }
     },
     {
@@ -83,7 +83,7 @@
       "selectors": {
         "AI": "Copilot",
         "send": "button:not(:disabled)[title='Submit message']",
-        "lastHTML": "div[role='article']"
+        "lastHTML": "div[role='article'] div div.max-w-chat"
       }
     },
     {
