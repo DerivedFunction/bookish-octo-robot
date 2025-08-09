@@ -63,6 +63,7 @@ async function handleChatMessage(e, engines) {
     const parsedElement = document.createElement("div");
     const body = doc.body;
     body.style["overflow-x"] = "auto";
+    body.style["padding"] = "8px";
     parsedElement.appendChild(body);
 
     // We only want one of each: chatbotMessages stores the buttons

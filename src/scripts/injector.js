@@ -35,7 +35,7 @@
   chrome.storage.local.get("delay").then((e) => {
     DELAY = e.delay ?? 3000;
     console.log("Delay set", DELAY);
-    setTimeout(runAfterFullLoad, DELAY);
+    setTimeout(runAfterFullLoad);
   });
 })();
 
@@ -54,9 +54,9 @@ async function runAfterFullLoad() {
       console.log("Orphan process. Exiting...");
       return;
     }
-
     console.log("Running query injection.");
     chrome.runtime.sendMessage({ ping: true, name: SELECTORS.AI });
+    await Promise.resolve(new Promise((resolve) => setTimeout(resolve, DELAY)));
     await getImage();
     await getTextInput();
     let { unstable } = await chrome.storage.local.get("unstable");
@@ -87,41 +87,76 @@ async function handleStorageChange(changes, areaName) {
     watchForResponseCompletion();
   }
 }
+let lastFinalHTML = {};
+let finalComputedHTML = {};
 
 async function getLastResponse() {
-  let sourceElement = document.querySelector(SELECTORS.lastHTML);
-  if (!sourceElement) return false;
-  // Create a new element
-  const newElement = document.createElement("div");
+  const finalHTML = {};
+  let hasChanges = false;
+  const finalElement = document.createElement("div");
 
-  // Function to apply computed styles to an element and its children
-  function applyComputedStyles(source, target) {
-    // Get computed styles for the source element
-    const computedStyles = window.getComputedStyle(source);
-    // Apply computed styles to the target element
-    for (let i = 0; i < computedStyles.length; i++) {
-      const property = computedStyles[i];
-      target.style[property] = computedStyles.getPropertyValue(property);
+  for (const element of Array.from(SELECTORS.lastHTML)) {
+    const sourceElements = document.querySelectorAll(
+      `${element.trim().replace("/", "\\/")}`
+    );
+    const sourceElement = sourceElements[sourceElements.length - 1];
+
+    if (!sourceElement) continue;
+
+    const currentHTML = sourceElement.innerHTML;
+    finalHTML[element] = currentHTML;
+
+    if (lastFinalHTML[element] === currentHTML) {
+      finalElement.appendChild(finalComputedHTML[element].cloneNode(true));
+      continue;
     }
-    // Copy content
-    target.className=""
-    target.innerHTML = source.innerHTML;
 
-    // Recursively apply computed styles to all children
-    const sourceChildren = source.children;
-    const targetChildren = target.children;
+    // Change detected
+    hasChanges = true;
 
-    for (let i = 0; i < sourceChildren.length; i++) {
-      applyComputedStyles(sourceChildren[i], targetChildren[i]);
+    const newElement = document.createElement("div");
+
+    function applyComputedStyles(source, target) {
+      const computedStyles = window.getComputedStyle(source);
+      for (let i = 0; i < computedStyles.length; i++) {
+        const property = computedStyles[i];
+        let value = computedStyles.getPropertyValue(property);
+
+        if (property.startsWith("padding") || property.startsWith("margin")) {
+          const numericValue = parseFloat(value);
+          const threshold = 8;
+          value =
+            !isNaN(numericValue) && numericValue > threshold
+              ? `${threshold}px`
+              : value;
+        }
+        target.style[property] = value;
+      }
+
+      target.className = "";
+      target.innerHTML = source.innerHTML;
+
+      const sourceChildren = source.children;
+      const targetChildren = target.children;
+      for (let i = 0; i < sourceChildren.length; i++) {
+        applyComputedStyles(sourceChildren[i], targetChildren[i]);
+      }
     }
+
+    applyComputedStyles(sourceElement, newElement);
+    finalComputedHTML[element] = newElement;
+    lastFinalHTML[element] = currentHTML;
+    finalElement.appendChild(newElement);
   }
 
-  // Apply computed styles to the new element and its children
-  applyComputedStyles(sourceElement, newElement);
-  chrome.runtime.sendMessage({
-    lastResponse: newElement.innerHTML,
-    engine: SELECTORS.AI,
-  });
+  if (hasChanges) {
+    chrome.runtime.sendMessage({
+      lastResponse: finalElement.innerHTML,
+      engine: SELECTORS.AI,
+    });
+  } else {
+    console.log("No changes detected")
+  }
 }
 
 async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
@@ -288,7 +323,7 @@ let intervalId = null; // Store the interval ID to manage it globally
 const poll = async () => {
   await getLastResponse();
   countdown--;
-  if (countdown === 0) {  
+  if (countdown === 0) {
     // Clear the interval when countdown reaches 0
     clearInterval(intervalId);
     intervalId = null; // Reset the interval ID

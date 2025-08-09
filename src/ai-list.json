@@ -11,7 +11,9 @@
       "selectors": {
         "AI": "ChatGPT",
         "send": "button:not(:disabled)#composer-submit-button",
-        "lastHTML": "article[data-turn='assistant'] [data-message-author-role]"
+        "lastHTML": [
+          "article[data-turn='assistant'] [data-message-author-role]"
+        ]
       }
     },
     {
@@ -25,7 +27,7 @@
       "selectors": {
         "AI": "Claude",
         "send": "button:not(:disabled)[aria-label='Send message']",
-        "lastHTML": "[data-test-render-count]"
+        "lastHTML": ["[data-is-streaming]"]
       }
     },
     {
@@ -39,7 +41,7 @@
       "selectors": {
         "AI": "Gemini",
         "send": "button:not([aria-disabled='true']).send-button",
-        "lastHTML": ".response-content",
+        "lastHTML": [".response-content"],
         "noFile": true
       }
     },
@@ -54,7 +56,7 @@
       "selectors": {
         "AI": "Grok",
         "send": "button:not(:disabled)[type='submit']",
-        "lastHTML": "#last-reply-container .response-content-markdown"
+        "lastHTML": ["#last-reply-container .response-content-markdown"]
       }
     },
     {
@@ -69,7 +71,7 @@
       "selectors": {
         "AI": "DeepSeek",
         "send": "div:not([aria-disabled='true'])._7436101",
-        "lastHTML": "div.ds-markdown.ds-markdown--block"
+        "lastHTML": ["div.ds-markdown.ds-markdown--block"]
       }
     },
     {
@@ -83,7 +85,7 @@
       "selectors": {
         "AI": "Copilot",
         "send": "button:not(:disabled)[title='Submit message']",
-        "lastHTML": "div[role='article'] div div.max-w-chat"
+        "lastHTML": [".group/ai-message-item"]
       }
     },
     {
@@ -98,7 +100,7 @@
       "selectors": {
         "AI": "Perplexity",
         "send": "button:not(:disabled)[aria-label='Submit']",
-        "lastHTML": "div.prose"
+        "lastHTML": ["div.prose"]
       }
     },
     {
@@ -112,7 +114,7 @@
         "AI": "Mistral",
         "send": "button:not([aria-disabled='true'])[type='submit']",
         "noFile": true,
-        "lastHTML": "div[data-message-part-type='answer']"
+        "lastHTML": ["div[data-message-part-type='answer']"]
       }
     },
     {
@@ -127,7 +129,7 @@
       "selectors": {
         "AI": "Qwen",
         "send": "button:not(:disabled)#send-message-button",
-        "lastHTML": "#response-content-container"
+        "lastHTML": ["#response-content-container"]
       }
     },
     {
@@ -141,7 +143,7 @@
         "AI": "Meta",
         "noFile": true,
         "send": "div[aria-label='Send Message']:not([aria-disabled='true'])",
-        "lastHTML": ".x78zum5.xdt5ytf div[dir='auto']"
+        "lastHTML": [".x78zum5.xdt5ytf div[dir='auto']"]
       }
     },
     {
@@ -155,7 +157,7 @@
       "selectors": {
         "AI": "Cohere",
         "send": "div[data-component='Composer'] button",
-        "lastHTML": ".message:last-child [data-component='MessageContent']"
+        "lastHTML": [".message:last-child [data-component='MessageContent']"]
       }
     },
     {
@@ -170,7 +172,7 @@
       "selectors": {
         "AI": "Kimi",
         "send": ".send-button-container:not(.disabled)",
-        "lastHTML": ".chat-content-item-assistant:last-child:last-child"
+        "lastHTML": [".chat-content-item-assistant:last-child:last-child"]
       }
     },
     {
@@ -184,7 +186,9 @@
       "selectors": {
         "AI": "Z",
         "send": "#send-message-button:not(.disabled)",
-        "lastHTML": "#messages-container .flex.group:last-child .chat-assistant"
+        "lastHTML": [
+          "#messages-container .flex.group:last-child .chat-assistant"
+        ]
       }
     },
     {
@@ -199,7 +203,9 @@
       "selectors": {
         "AI": "Poe",
         "send": "button:not(:disabled)[aria-label='Send message']",
-        "lastHTML": ".ChatMessagesView_tupleGroupContainer__LSCLm .ChatMessagesView_messageTuple__Jh5lQ:last-child .Message_leftSideMessageBubble__VPdk6"
+        "lastHTML": [
+          ".ChatMessagesView_tupleGroupContainer__LSCLm .ChatMessagesView_messageTuple__Jh5lQ:last-child .Message_leftSideMessageBubble__VPdk6"
+        ]
       }
     },
     {
@@ -213,7 +219,7 @@
       "selectors": {
         "AI": "You",
         "send": "button:not(:disabled)[aria-label='Submit query']",
-        "lastHTML": "#chat-history .p38mfy1:last-child .p38mfyb"
+        "lastHTML": ["#chat-history .p38mfy1:last-child .p38mfyb"]
       }
     }
   ],

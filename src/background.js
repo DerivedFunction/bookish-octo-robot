@@ -218,31 +218,6 @@ function setupEventListeners() {
 
   chrome.runtime.onMessage.addListener((e) => {
     if (e.lastResponse) {
-      console.log(e.lastResponse);
-      function stripAttributes(html) {
-        html = html.replace(/<svg[^>]*?>.*?<\/svg>/gis, "");
-
-        html = html.replace(/<([a-z]+)([^>]*)>/gi, (match, tagName, attrs) => {
-          tagName = tagName.toLowerCase();
-
-          if (tagName === "a") {
-            const hrefMatch = attrs.match(/\s*href\s*=\s*(['"])(.*?)\1/i);
-            return hrefMatch ? `<a href="${hrefMatch[2]}">` : `<a>`;
-          }
-
-          if (tagName === "img") {
-            const srcMatch = attrs.match(/\s*src\s*=\s*(['"])(.*?)\1/i);
-            if (srcMatch) {
-              return `<img src="${srcMatch[2]}" style="max-width:150px; max-height:150px; height:auto; width:auto;">`;
-            }
-            return `<img style="max-width:150px; max-height:150px; height:auto; width:auto;">`;
-          }
-
-          return `<${tagName}>`;
-        });
-        return html;
-      }
-
       chrome.runtime.sendMessage({
         content: e.lastResponse, // stripAttributes(e.lastResponse),
         engine: e.engine,
