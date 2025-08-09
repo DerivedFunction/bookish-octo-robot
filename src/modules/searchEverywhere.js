@@ -167,9 +167,11 @@ async function handleMultiSearch(textContent, resend = false) {
     console.log("Scripting is not enabled.");
   }
   let args = {};
-  args.lastQuery = queryText;
-  args.query = queryText;
-  args.time = Date.now();
+  if (length > 0) {
+    args.lastQuery = queryText;
+    args.query = queryText;
+    args.time = Date.now();
+  }
   for (const engine of searchEngines) {
     if (!searchEverywhere[engine.name]) continue;
     if (queryText.length > engine.limit) {
