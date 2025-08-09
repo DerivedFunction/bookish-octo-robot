@@ -221,6 +221,7 @@ function setupEventListeners() {
       chrome.runtime.sendMessage({
         content: e.lastResponse, // stripAttributes(e.lastResponse),
         engine: e.engine,
+        color: e.color,
       });
     }
   });

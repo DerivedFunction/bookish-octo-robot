@@ -124,7 +124,7 @@ async function getLastResponse() {
 
         if (property.startsWith("padding") || property.startsWith("margin")) {
           const numericValue = parseFloat(value);
-          const threshold = 8;
+          const threshold = 20;
           value =
             !isNaN(numericValue) && numericValue > threshold
               ? `${threshold}px`
@@ -150,12 +150,14 @@ async function getLastResponse() {
   }
 
   if (hasChanges) {
+    const bg = document.querySelector(SELECTORS.bgColor) ?? document.body;
     chrome.runtime.sendMessage({
       lastResponse: finalElement.innerHTML,
       engine: SELECTORS.AI,
+      color: window.getComputedStyle(bg)["backgroundColor"],
     });
   } else {
-    console.log("No changes detected")
+    console.log("No changes detected");
   }
 }
 

@@ -62,8 +62,11 @@ async function handleChatMessage(e, engines) {
     const doc = parser.parseFromString(e.content, "text/html");
     const parsedElement = document.createElement("div");
     const body = doc.body;
+    parsedElement.style["backgroundColor"] = e.color;
+    body.style["backgroundColor"] = "transparent";
     body.style["overflow-x"] = "auto";
-    body.style["padding"] = "8px";
+    parsedElement.style["padding"] = "8px";
+    parsedElement.style["margin-top"] = "8px";
     parsedElement.appendChild(body);
 
     // We only want one of each: chatbotMessages stores the buttons
