@@ -140,6 +140,9 @@ button:active {
   align-items: center; /* Vertical centering */
   min-height: 100vh; /* Full viewport height */
 }
+.wrap {
+  flex-wrap: wrap;
+}
 
 h1 {
   font-weight: inherit;
