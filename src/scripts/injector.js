@@ -28,7 +28,7 @@
   const prompt = new URLSearchParams(url.search).get("prompt");
   if (prompt) {
     await chrome.storage.local.set({
-      [SELECTORS.run]: true,
+      [SELECTORS.AI]: true,
       query: prompt,
       time: Date.now(),
     });
