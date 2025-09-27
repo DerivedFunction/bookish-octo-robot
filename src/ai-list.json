@@ -141,7 +141,7 @@
       "selectors": {
         "AI": "Meta",
         "noFile": true,
-        "send": "div[aria-label='Send Message']:not([aria-disabled='true'])",
+        "send": "div[aria-label='Send']:not([aria-disabled='true'])",
         "lastHTML": [".x78zum5.xdt5ytf div[dir='auto']"]
       }
     },

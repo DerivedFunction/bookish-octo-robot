@@ -258,8 +258,8 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
           currentSelectorIndex =
             (currentSelectorIndex + i) % selectorConfigs.length;
           success = true;
-          return;
         }
+        return;
       }
     }
 
