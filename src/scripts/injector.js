@@ -195,7 +195,19 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
         currentConfig.scriptType === "contenteditable"
           ? "div[contenteditable='true']"
           : "textarea";
-      element = document.querySelector(selector);
+      const elements = Array.from(document.querySelectorAll(selector));
+      element = elements.find(isVisible);
+
+      function isVisible(el) {
+        if (!el) return false;
+        const style = window.getComputedStyle(el);
+        if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') {
+          return false;
+        }
+        // Check if the element has dimensions and is within the viewport
+        const rect = el.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0;
+      }
       console.log(
         `Attempt ${attempts + 1}, Config ${
           ((currentSelectorIndex + i) % selectorConfigs.length) + 1
@@ -234,6 +246,7 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
             // Check if text was injected (use innerText/textContent to see visible text)
             setTimeout(() => {
               const visibleText = element.textContent;
+              console.log("Visible Text:", visibleText)
               if (!visibleText?.includes(searchQuery)) {
                 // Fallback to direct textContent if meta injection failed
                 element.textContent = searchQuery;
@@ -251,7 +264,6 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
             setTimeout(cleanupFn, 2000); // Delay cleanup until after button click (1s) + extra time
             break;
         }
-
         let clicked = await clickButton();
         if (clicked) {
           // Remember successful configuration for next time
