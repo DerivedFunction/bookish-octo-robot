@@ -233,7 +233,7 @@ async function getTextInput(maxRetries = 15, retryDelay = DELAY) {
 
             // Check if text was injected (use innerText/textContent to see visible text)
             setTimeout(() => {
-              const visibleText = element.innerText || element.textContent;
+              const visibleText = element.textContent;
               if (!visibleText?.includes(searchQuery)) {
                 // Fallback to direct textContent if meta injection failed
                 element.textContent = searchQuery;
